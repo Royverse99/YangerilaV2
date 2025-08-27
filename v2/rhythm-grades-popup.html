@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rhythm Grades</title>
+  <style>
+    /* --- Body & Container --- */
+    body {
+      background-color: #2c464a;
+      color: #ffffff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .content {
+      max-width: 800px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h1 {
+      color: #7AE7C7; /* theme accent */
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      color: #ffffff;
+      font-size: 24px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    p {
+      line-height: 1.6;
+      font-size: 16px;
+      margin-bottom: 12px;
+      text-align: left;
+    }
+
+    ul {
+      padding-left: 20px;
+      margin: 5px 0 10px 0;
+    }
+
+    /* --- Accordion --- */
+    .accordion {
+      background-color: #1c1c1c;
+      color: #ffffff;
+      cursor: pointer;
+      padding: 16px 24px;
+      width: 100%;
+      border: none;
+      outline: none;
+      text-align: left;
+      font-size: 18px;
+      border-radius: 8px;
+      margin: 10px 0;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .accordion:hover, .accordion.active {
+      color: #7AE7C7;
+    }
+
+    .panel {
+      background-color: #232323;
+      color: #ffffff;
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.3s ease;
+      padding: 0 24px;
+      border-radius: 0 0 8px 8px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    /* Scrollbar for panel */
+    .panel::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .panel::-webkit-scrollbar-thumb {
+      background-color: #7AE7C7;
+      border-radius: 3px;
+    }
+
+    /* --- Grade Highlights --- */
+    .grade-title {
+      font-weight: bold;
+      color: #7AE7C7;
+      margin: 8px 0 4px 0;
+    }
+
+    .highlight {
+      color: #7AE7C7;
+      font-weight: bold;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="content">
+  <h1>Rhythm Grades</h1>
+  <p>Rhythm guitar playing technique<br>
+  Rhythm guitar is the backbone of most songs — the most played guitar technique in the world and one of the easiest to start with. It provides the musical accompaniment that supports a singer’s performance and fills out the sound in an ensemble. From intimate acoustic sets to chart-topping pop hits, rhythm guitar remains a favorite among countless artists worldwide. If you imagine yourself singing and performing with your friends, family, or even your fans — rhythm is where your journey begins.</p>
+
+  <!-- Rhythm Grade 1 Accordion -->
+  <button class="accordion">Rhythm Grade 1</button>
+  <div class="panel">
+    <p class="grade-title">Duration:</p>
+    <p>3 Semesters (18 months)</p>
+    <p class="grade-title">Fee:</p>
+    <p>INR 3200 per month</p>
+    <p>Yangerila’s Rhythm Grade 1 is designed for fast-paced progress, allowing students to start playing and performing much sooner than usual. Alongside essential rhythm techniques, the course also covers music theory, basic singing tips, and beginner lead guitar skills. It’s the perfect program crafted with complete musicianship in mind.</p>
+    <p class="highlight">What You’ll Learn:</p>
+    <ul>
+      <li>Rhythm building fundamentals</li>
+      <li>Open chord shapes (major, minor, 7th)</li>
+      <li>Left- and right-hand coordination</li>
+      <li>Strumming patterns in various time signatures</li>
+      <li>Barre chords & movable shapes</li>
+      <li>Singing while playing guitar</li>
+      <li>Major and minor scales</li>
+      <li>Identifying the scale of a song</li>
+      <li>Diatonic chords and their applications</li>
+      <li>Transposing songs to different keys</li>
+      <li>Beginner lead guitar melodies</li>
+    </ul>
+    <p class="highlight">Upon Completion:</p>
+    <p>After completing this grade, our students can confidently perform their favorite songs, whether for friends, family, or in group jams. They gain a solid grasp of scales, keys, and time signatures, and can easily transpose pieces into their desired keys. By the end, beginners transform into well-rounded, expressive rhythm guitar players and performers, ready to take the stage or lead a singalong anywhere.</p>
+  </div>
+
+  <!-- Rhythm Grade 2 Accordion -->
+  <button class="accordion">Rhythm Grade 2</button>
+  <div class="panel">
+    <p class="grade-title">Duration:</p>
+    <p>2 Semesters (12 months)</p>
+    <p class="grade-title">Fee:</p>
+    <p>INR 4000 per month</p>
+    <p>Yangerila’s Rhythm Grade 2 takes your rhythm guitar playing to the next level, introducing a fresh, more percussive and expressive style. You’ll learn a variety of rhythmic expressions — including percussive sounds on the guitar body — that allow you to bring more groove, depth, and musicality into your solo guitar performances.</p>
+    <p class="highlight">Prerequisite:</p>
+    <p>To apply for this course, you must have completed Yangerila’s Rhythm Grade 1. If you’ve successfully completed Grade 1, please contact your Student Relations Manager (SRM) or your teacher to apply for this grade.</p>
+    <p><strong>More grades launching soon!!!</strong></p>
+  </div>
+
+</div>
+
+<script>
+  // Accordion toggle
+  const accordions = document.querySelectorAll('.accordion');
+  accordions.forEach(acc => {
+    acc.addEventListener('click', () => {
+      acc.classList.toggle('active');
+      const panel = acc.nextElementSibling;
+      if (panel.style.maxHeight) {
+        panel.style.maxHeight = null;
+      } else {
+        panel.style.maxHeight = panel.scrollHeight + "px";
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

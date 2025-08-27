@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Smooth Accordion with Reordering</title>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        display: flex;
+        justify-content: center;
+        min-height: 100vh;
+    }
+
+    .accordion-container {
+        width: 90%;
+        max-width: 900px;
+        margin: 20px auto;
+    }
+
+    .accordion {
+        background: #fff;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        overflow: hidden;
+        transition: all 0.4s ease;
+        position: relative;
+    }
+
+    .accordion-header {
+        padding: 15px;
+        background: #333;
+        color: #fff;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 18px;
+        user-select: none;
+    }
+
+    .accordion-header:hover {
+        background: #444;
+    }
+
+    .arrow {
+        transition: transform 0.3s ease;
+    }
+    .accordion.open .arrow {
+        transform: rotate(90deg);
+    }
+
+    .accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease, padding 0.4s ease;
+        background: #fafafa;
+        padding: 0 15px;
+    }
+    .accordion-content.open {
+        padding: 15px;
+        max-height: 70vh; 
+        overflow-y: auto;
+    }
+
+    /* Sub-accordion */
+    .sub-accordion {
+        background: #eaeaea;
+        margin: 8px 0;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+    .sub-header {
+        padding: 10px;
+        background: #555;
+        color: #fff;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 16px;
+        user-select: none;
+    }
+
+    .sub-header:hover {
+        background: #666;
+    }
+
+    .sub-arrow {
+        transition: transform 0.3s ease;
+    }
+    .sub-accordion.open .sub-arrow {
+        transform: rotate(90deg);
+    }
+
+    .sub-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease, padding 0.4s ease;
+        background: #f0f0f0;
+        padding: 0 10px;
+    }
+    .sub-content.open {
+        padding: 10px;
+        max-height: 50vh;
+        overflow-y: auto;
+    }
+
+    /* Scrollbar styling */
+    .accordion-content::-webkit-scrollbar,
+    .sub-content::-webkit-scrollbar {
+        width: 8px;
+    }
+    .accordion-content::-webkit-scrollbar-thumb,
+    .sub-content::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 4px;
+    }
+    .accordion-content::-webkit-scrollbar-thumb:hover,
+    .sub-content::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+</style>
+</head>
+<body>
+<div class="accordion-container">
+
+    <!-- Accordion 1 -->
+    <div class="accordion" data-index="0">
+        <div class="accordion-header">Why choose Yangerila Creative Studio over others?<span class="arrow">▶</span></div>
+        <div class="accordion-content">
+            <div class="sub-accordion">
+                <div class="sub-header">Why choose Yangerila? <span class="sub-arrow">▶</span></div>
+                <div class="sub-content">
+                    Superior Courses: With over 20 years of teaching experience, we have crafted courses that are far more effective and performance-driven than standard online lessons. Our structured approach ensures students progress efficiently while enjoying the learning journey.
+
+Expert Teachers: We carefully select and train only the best instructors. While our teaching team may be small, each teacher is highly skilled, experienced, and dedicated to helping students succeed.
+
+Innovative Tools & Techniques: We are redefining online guitar learning. Our Advanced Modular Grading Structure, Smart Sheets, and Batch Hub create a seamless and interactive learning experience that feels premium and personalized.
+
+Fast Progress: Combining exceptional teachers, innovative teaching methods, and comprehensive support, Yangerila students achieve rapid skill development and can perform confidently in a short time.
+
+                </div>
+            </div>
+            <div class="sub-accordion">
+                <div class="sub-header">How does the Advanced Modular Grading Structure work? <span class="sub-arrow">▶</span></div>
+                <div class="sub-content">
+                    To understand the Advanced Modular Grading Structure, we first need to understand the guitar. Guitar isn’t just one instrument—it includes electric, acoustic, classical, and more. On top of that, there are many techniques you can play: Rhythm, Lead, Fingerpicking, Percussive styles, and others.
+
+At Yangerila, we believe a student should be fluent in playing multiple techniques to become a well-rounded guitarist. Our Modular Grading Structure achieves this by dividing each technique into small, manageable grades. Students can then choose their next course based on their musical interests and guidance from their counsellor or teacher, allowing them to become their own unique musician.
+
+Other grading structures, if taught at other academies, follow a fixed path designed for an average student, often teaching only one technique and restricting flexibility. Our approach ensures freedom, variety, and command on the instrument.
+                </div>
+            </div>
+            <div class="sub-accordion">
+                <div class="sub-header">What are Yangerila’s Smart Sheets?<span class="sub-arrow">▶</span></div>
+                <div class="sub-content">
+                    No education is complete without proper course material. And if you already have an amazing course, then adding resources that support learning makes it truly exceptional. That’s the vision behind Yangerila’s Smart Sheets.
+
+Smart Sheets are a full, comprehensive set of course materials, organized into individual lesson sheets. As the course progresses, students receive the relevant sheets in their Batch Hub, accessible anytime, anywhere—no notebooks or printouts needed.
+
+Each sheet is enriched with supporting resources like supporting audios, explanatory videos, and helpful tips, making practice more efficient and enhancing the overall learning experience.
+
+This took us years to build, but it makes learning highly organized and effortless for students.
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Accordion 2 -->
+    <div class="accordion" data-index="1">
+        <div class="accordion-header">Courses and Features <span class="arrow">▶</span></div>
+        <div class="accordion-content">
+            <div class="sub-accordion">
+                <div class="sub-header">Courses Offered <span class="sub-arrow">▶</span></div>
+                <div class="sub-content">
+                    Rhythm, Lead, Fingerpicking, Musicianship grades.
+                </div>
+            </div>
+            <div class="sub-accordion">
+                <div class="sub-header">Certificate Courses <span class="sub-arrow">▶</span></div>
+                <div class="sub-content">
+                    Most courses are certified except hobby courses.
+                </div>
+            </div>
+            <div class="sub-accordion">
+                <div class="sub-header">Hobby vs Graded <span class="sub-arrow">▶</span></div>
+                <div class="sub-content">
+                    Hobby is for casual learners; Graded is full musicianship.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Accordion 3 -->
+    <div class="accordion" data-index="2">
+        <div class="accordion-header">Dummy Category 3 <span class="arrow">▶</span></div>
+        <div class="accordion-content">
+            <div class="sub-accordion">
+                <div class="sub-header">Sub 3.1 <span class="sub-arrow">▶</span></div>
+                <div class="sub-content">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                </div>
+            </div>
+            <div class="sub-accordion">
+                <div class="sub-header">Sub 3.2 <span class="sub-arrow">▶</span></div>
+                <div class="sub-content">
+                    Praesent vel ligula scelerisque, vehicula dui eu.
+                </div>
+            </div>
+            <div class="sub-accordion">
+                <div class="sub-header">Sub 3.3 <span class="sub-arrow">▶</span></div>
+                <div class="sub-content">
+                    Cras convallis, mauris nec varius commodo.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Accordion 4 -->
+    <div class="accordion" data-index="3">
+        <div class="accordion-header">Dummy Category 4 <span class="arrow">▶</span></div>
+        <div class="accordion-content">
+            <div class="sub-accordion">
+                <div class="sub-header">Sub 4.1 <span class="sub-arrow">▶</span></div>
+                <div class="sub-content">
+                    Suspendisse potenti. Aliquam erat volutpat.
+                </div>
+            </div>
+            <div class="sub-accordion">
+                <div class="sub-header">Sub 4.2 <span class="sub-arrow">▶</span></div>
+                <div class="sub-content">
+                    Integer vitae eros eget ante facilisis gravida.
+                </div>
+            </div>
+            <div class="sub-accordion">
+                <div class="sub-header">Sub 4.3 <span class="sub-arrow">▶</span></div>
+                <div class="sub-content">
+                    Aenean vel dui sagittis, fermentum velit nec, dapibus quam.
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const container = document.querySelector('.accordion-container');
+    let originalOrder = Array.from(container.children);
+
+    document.querySelectorAll('.accordion-header').forEach(header => {
+        header.addEventListener('click', function () {
+            const accordion = this.parentElement;
+            const content = accordion.querySelector('.accordion-content');
+            const isOpen = content.classList.contains('open');
+
+            // Close all first
+            document.querySelectorAll('.accordion-content').forEach(c => c.classList.remove('open'));
+            document.querySelectorAll('.accordion').forEach(a => a.classList.remove('open'));
+
+            if (!isOpen) {
+                content.classList.add('open');
+                accordion.classList.add('open');
+                container.prepend(accordion); // Move to top
+            } else {
+                content.classList.remove('open');
+                accordion.classList.remove('open');
+                // Move back to original position
+                const index = accordion.dataset.index;
+                const beforeNode = [...container.children].find(c => c.dataset.index > index);
+                if (beforeNode) container.insertBefore(accordion, beforeNode);
+                else container.appendChild(accordion);
+            }
+        });
+    });
+
+    // Sub accordion toggles
+    document.querySelectorAll('.sub-header').forEach(subHeader => {
+        subHeader.addEventListener('click', function () {
+            const subAccordion = this.parentElement;
+            const subContent = this.nextElementSibling;
+            const isOpen = subContent.classList.contains('open');
+            subContent.classList.toggle('open', !isOpen);
+            subAccordion.classList.toggle('open', !isOpen);
+        });
+    });
+</script>
+</body>
+</html>

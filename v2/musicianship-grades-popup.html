@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lead Grades</title>
+  <style>
+    /* --- Body & Container --- */
+    body {
+      background-color: #2c464a;
+      color: #ffffff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .content {
+      max-width: 800px;
+      width: 100%;
+      text-align: center;
+    }
+
+    h1 {
+      color: #7AE7C7; /* theme accent */
+      font-size: 32px;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      color: #ffffff;
+      font-size: 24px;
+      margin: 15px 0;
+      text-align: center;
+    }
+
+    p {
+      line-height: 1.6;
+      font-size: 16px;
+      margin-bottom: 12px;
+      text-align: left;
+    }
+
+    ul {
+      padding-left: 20px;
+      margin: 5px 0 10px 0;
+    }
+
+    /* --- Accordion --- */
+    .accordion {
+      background-color: #1c1c1c;
+      color: #ffffff;
+      cursor: pointer;
+      padding: 16px 24px;
+      width: 100%;
+      border: none;
+      outline: none;
+      text-align: left;
+      font-size: 18px;
+      border-radius: 8px;
+      margin: 10px 0;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .accordion:hover, .accordion.active {
+      color: #7AE7C7;
+    }
+
+    .panel {
+      background-color: #232323;
+      color: #ffffff;
+      overflow: hidden;
+      max-height: 0;
+      transition: max-height 0.3s ease;
+      padding: 0 24px;
+      border-radius: 0 0 8px 8px;
+      margin-bottom: 10px;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    /* Scrollbar for panel */
+    .panel::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .panel::-webkit-scrollbar-thumb {
+      background-color: #7AE7C7;
+      border-radius: 3px;
+    }
+
+    /* --- Grade Highlights --- */
+    .grade-title {
+      font-weight: bold;
+      color: #7AE7C7;
+      margin: 8px 0 4px 0;
+    }
+
+    .highlight {
+      color: #7AE7C7;
+      font-weight: bold;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="content">
+  <h1>Musicianship Grades</h1>
+  <p align="center">Coming soon&nbsp;</p>
+
+  <!-- Lead Grade 1 Accordion -->
+  
+  <!-- Lead Grade 2 Accordion -->
+ 
+</div>
+
+<script>
+  // Accordion toggle
+  const accordions = document.querySelectorAll('.accordion');
+  accordions.forEach(acc => {
+    acc.addEventListener('click', () => {
+      acc.classList.toggle('active');
+      const panel = acc.nextElementSibling;
+      if (panel.style.maxHeight) {
+        panel.style.maxHeight = null;
+      } else {
+        panel.style.maxHeight = panel.scrollHeight + "px";
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
