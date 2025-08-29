@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Yangerila - FAQ</title>
+  <style>
+    /* --- Body & Container --- */
+    body {
+      background: rgba(7, 36, 44, 0.7);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      margin: 0;
+      padding: 40px 20px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 900px;
+      width: 100%;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+      padding: 30px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(122, 231, 199, 0.25);
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+    }
+
+    h1 {
+      color: #7AE7C7;
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 700;
+      margin: 0 0 10px 0;
+      letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 18px;
+      font-weight: 300;
+      margin: 0;
+    }
+
+    /* --- Main Accordion (Questions) --- */
+    .main-accordion {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(122, 231, 199, 0.3);
+      border-radius: 12px;
+      margin-bottom: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 25px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(15px) saturate(160%);
+      -webkit-backdrop-filter: blur(15px) saturate(160%);
+    }
+
+    .main-accordion:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 35px rgba(0, 0, 0, 0.15);
+    }
+
+    .main-question {
+      background: transparent;
+      color: #ffffff;
+      cursor: pointer;
+      padding: 24px 28px;
+      width: 100%;
+      border: none;
+      outline: none;
+      text-align: left;
+      font-size: 20px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+    }
+
+    .main-question:hover {
+      color: #7AE7C7;
+    }
+
+    .main-question.active {
+      color: #7AE7C7;
+      background: rgba(122, 231, 199, 0.08);
+    }
+
+    .arrow {
+      font-size: 16px;
+      transition: transform 0.3s ease;
+      color: #7AE7C7;
+      font-weight: bold;
+    }
+
+    .main-question.active .arrow {
+      transform: rotate(180deg);
+    }
+
+    /* --- Main Panel --- */
+    .main-panel {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      background: rgba(0, 0, 0, 0.15);
+      border-top: 1px solid rgba(122, 231, 199, 0.2);
+      backdrop-filter: blur(12px) saturate(140%);
+      -webkit-backdrop-filter: blur(12px) saturate(140%);
+    }
+
+    .main-panel.scrollable {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    /* --- Sub Accordions (Answers) --- */
+    .sub-accordion {
+      background: rgba(255, 255, 255, 0.05);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      transition: background 0.3s ease;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      margin: 8px 0;
+    }
+
+    .sub-accordion:last-child {
+      border-bottom: none;
+    }
+
+    .sub-accordion:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .sub-question {
+      background: transparent;
+      color: rgba(255, 255, 255, 0.9);
+      cursor: pointer;
+      padding: 20px 28px;
+      width: 100%;
+      border: none;
+      outline: none;
+      text-align: left;
+      font-size: 16px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sub-question:hover,
+    .sub-question.active {
+      color: #7AE7C7;
+    }
+
+    .sub-arrow {
+      font-size: 14px;
+      transition: transform 0.3s ease;
+      color: #7AE7C7;
+    }
+
+    .sub-question.active .sub-arrow {
+      transform: rotate(180deg);
+    }
+
+    /* --- Answer Panel --- */
+    .answer-panel {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      background: rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .answer-panel.scrollable {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .answer-content {
+      padding: 32px 28px;
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .answer-content p {
+      margin: 0 0 16px 0;
+    }
+
+    .answer-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    .highlight {
+      color: #7AE7C7;
+      font-weight: 600;
+    }
+
+    /* --- Custom Scrollbar --- */
+    .main-panel::-webkit-scrollbar,
+    .answer-panel::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .main-panel::-webkit-scrollbar-track,
+    .answer-panel::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 3px;
+    }
+
+    .main-panel::-webkit-scrollbar-thumb,
+    .answer-panel::-webkit-scrollbar-thumb {
+      background: rgba(122, 231, 199, 0.6);
+      border-radius: 3px;
+      transition: background 0.3s ease;
+    }
+
+    .main-panel::-webkit-scrollbar-thumb:hover,
+    .answer-panel::-webkit-scrollbar-thumb:hover {
+      background: rgba(122, 231, 199, 0.8);
+    }
+
+    /* --- Responsive Design --- */
+    @media (max-width: 768px) {
+      body {
+        padding: 20px 15px;
+      }
+
+      .header {
+        padding: 20px;
+        margin-bottom: 30px;
+      }
+
+      .main-question {
+        padding: 20px 24px;
+        font-size: 18px;
+      }
+
+      .sub-question {
+        padding: 16px 24px;
+        font-size: 15px;
+      }
+
+      .answer-content {
+        padding: 20px 24px;
+        font-size: 14px;
+      }
+
+      .main-panel.scrollable {
+        max-height: 300px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .main-question {
+        padding: 18px 20px;
+        font-size: 16px;
+      }
+
+      .sub-question {
+        padding: 14px 20px;
+      }
+
+      .answer-content {
+        padding: 18px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <h1>About Yangerila</h1>
+    <p class="subtitle">Frequently Asked Questions</p>
+  </div>
+
+  <!-- Question 1: Why choose Yangerila Creative Studio -->
+  <div class="main-accordion">
+    <button class="main-question active">
+      Why choose Yangerila Creative Studio over others?
+      <span class="arrow">▼</span>
+    </button>
+    <div class="main-panel">
+      <div class="sub-accordion">
+        <button class="sub-question">
+          Answer
+          <span class="sub-arrow">▼</span>
+        </button>
+        <div class="answer-panel">
+          <div class="answer-content">
+            <p><span class="highlight">Superior Courses:</span> With over 20 years of teaching experience, we have crafted courses that are far more effective and performance-driven than standard online lessons. Our structured approach ensures students progress efficiently while enjoying the learning journey.</p>
+            
+            <p><span class="highlight">Expert Teachers:</span> We carefully select and train only the best instructors. While our teaching team may be small, each teacher is highly skilled, experienced, and dedicated to helping students succeed.</p>
+            
+            <p><span class="highlight">Innovative Tools & Techniques:</span> We are redefining online guitar learning. Our Advanced Modular Grading Structure, Smart Sheets, and Batch Hub create a seamless and interactive learning experience that feels premium and personalized.</p>
+            
+            <p><span class="highlight">Fast Progress:</span> Combining exceptional teachers, innovative teaching methods, and comprehensive support, Yangerila students achieve rapid skill development and can perform confidently in a short time.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Question 2: Advanced Modular Grading Structure -->
+  <div class="main-accordion">
+    <button class="main-question">
+      How does the Advanced Modular Grading Structure work?
+      <span class="arrow">▼</span>
+    </button>
+    <div class="main-panel">
+      <div class="sub-accordion">
+        <button class="sub-question">
+          Answer
+          <span class="sub-arrow">▼</span>
+        </button>
+        <div class="answer-panel">
+          <div class="answer-content">
+            <p>To understand the Advanced Modular Grading Structure, we first need to understand the guitar. <span class="highlight">Guitar isn't just one instrument</span>—it includes electric, acoustic, classical, and more. On top of that, there are many techniques you can play: Rhythm, Lead, Fingerpicking, Percussive styles, and others.</p>
+            
+            <p>At Yangerila, we believe a student should be fluent in playing <span class="highlight">multiple techniques to become a well-rounded guitarist</span>. Our Modular Grading Structure achieves this by dividing each technique into small, manageable grades. Students can then choose their next course based on their musical interests and guidance from their counsellor or teacher, allowing them to become their own unique musician.</p>
+            
+            <p>Other grading structures, if taught at other academies, follow a fixed path designed for an average student, often teaching only one technique and restricting flexibility. <span class="highlight">Our approach ensures freedom, variety, and command on the instrument.</span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Question 3: Smart Sheets -->
+  <div class="main-accordion">
+    <button class="main-question">
+      What are Yangerila's Smart Sheets?
+      <span class="arrow">▼</span>
+    </button>
+    <div class="main-panel">
+      <div class="sub-accordion">
+        <button class="sub-question">
+          Answer
+          <span class="sub-arrow">▼</span>
+        </button>
+        <div class="answer-panel">
+          <div class="answer-content">
+            <p>No education is complete without proper course material. And if you already have an amazing course, then adding resources that support learning makes it truly exceptional. <span class="highlight">That's the vision behind Yangerila's Smart Sheets.</span></p>
+            
+            <p>Smart Sheets are a <span class="highlight">full, comprehensive set of course materials</span>, organized into individual lesson sheets. As the course progresses, students receive the relevant sheets in their Batch Hub, accessible anytime, anywhere—no notebooks or printouts needed.</p>
+            
+            <p>Each sheet is enriched with supporting resources like <span class="highlight">supporting audios, explanatory videos, and helpful tips</span>, making practice more efficient and enhancing the overall learning experience.</p>
+            
+            <p>This took us years to build, but it makes learning <span class="highlight">highly organized and effortless</span> for students.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Question 4: Batch Hub -->
+  <div class="main-accordion">
+    <button class="main-question">
+      What is 'Batch Hub'?
+      <span class="arrow">▼</span>
+    </button>
+    <div class="main-panel">
+      <div class="sub-accordion">
+        <button class="sub-question">
+          Answer
+          <span class="sub-arrow">▼</span>
+        </button>
+        <div class="answer-panel">
+          <div class="answer-content">
+            <p><span class="highlight">Batch Hub is a centralized page</span> that students get access to. It serves as the main hub where all resources needed for the course are shared.</p>
+            
+            <p>Resources include <span class="highlight">online meeting links, notices, ongoing tasks, and, most importantly, the course sheets</span> for that batch are shared on this page.</p>
+            
+            <p>Students can access everything anytime, anywhere using their Google account, making learning <span class="highlight">organized and seamless</span>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Get all main questions
+  const mainQuestions = document.querySelectorAll('.main-question');
+  const mainPanels = document.querySelectorAll('.main-panel');
+
+  // Get all sub questions
+  const subQuestions = document.querySelectorAll('.sub-question');
+  const answerPanels = document.querySelectorAll('.answer-panel');
+
+  // Open first accordion by default
+  if (mainPanels[0]) {
+    mainPanels[0].style.maxHeight = mainPanels[0].scrollHeight + "px";
+  }
+
+  // Main accordion functionality - only one active at a time
+  mainQuestions.forEach((question, index) => {
+    question.addEventListener('click', () => {
+      const isActive = question.classList.contains('active');
+      
+      // Close all main accordions
+      mainQuestions.forEach(q => q.classList.remove('active'));
+      mainPanels.forEach(panel => {
+        panel.style.maxHeight = null;
+      });
+      
+      // Close all sub accordions
+      subQuestions.forEach(q => q.classList.remove('active'));
+      answerPanels.forEach(panel => {
+        panel.style.maxHeight = null;
+      });
+      
+      // If clicked accordion wasn't active, open it
+      if (!isActive) {
+        question.classList.add('active');
+        const panel = mainPanels[index];
+        panel.style.maxHeight = panel.scrollHeight + "px";
+        
+        // Update max height when sub accordions are toggled
+        const updatePanelHeight = () => {
+          setTimeout(() => {
+            if (panel.classList.contains('scrollable')) {
+              panel.style.maxHeight = '400px';
+            } else {
+              panel.style.maxHeight = panel.scrollHeight + "px";
+            }
+          }, 50);
+        };
+        
+        // Add event listeners to sub accordions in this panel
+        const subAccordions = panel.querySelectorAll('.sub-question');
+        subAccordions.forEach(subQ => {
+          subQ.addEventListener('click', updatePanelHeight);
+        });
+      }
+    });
+  });
+
+  // Sub accordion functionality - only one active at a time within each main section
+  subQuestions.forEach((subQuestion, index) => {
+    subQuestion.addEventListener('click', (e) => {
+      e.stopPropagation();
+      
+      // Find the parent main panel
+      const parentPanel = subQuestion.closest('.main-panel');
+      const siblingSubQuestions = parentPanel.querySelectorAll('.sub-question');
+      const siblingAnswerPanels = parentPanel.querySelectorAll('.answer-panel');
+      
+      const isActive = subQuestion.classList.contains('active');
+      
+      // Close all sub accordions in this section
+      siblingSubQuestions.forEach(q => q.classList.remove('active'));
+      siblingAnswerPanels.forEach(panel => {
+        panel.style.maxHeight = null;
+      });
+      
+      // If clicked sub accordion wasn't active, open it
+      if (!isActive) {
+        subQuestion.classList.add('active');
+        const answerPanel = subQuestion.nextElementSibling;
+        
+        // Check if content is long enough to need scrolling
+        answerPanel.style.maxHeight = 'none';
+        const scrollHeight = answerPanel.scrollHeight;
+        answerPanel.style.maxHeight = '0px';
+        
+        if (scrollHeight > 300) {
+          answerPanel.classList.add('scrollable');
+          answerPanel.style.maxHeight = '300px';
+        } else {
+          answerPanel.classList.remove('scrollable');
+          answerPanel.style.maxHeight = scrollHeight + "px";
+        }
+      }
+      
+      // Update parent panel height
+      setTimeout(() => {
+        const parentPanel = subQuestion.closest('.main-panel');
+        parentPanel.style.maxHeight = parentPanel.scrollHeight + "px";
+      }, 150);
+    });
+  });
+
+  // Handle window resize
+  window.addEventListener('resize', () => {
+    mainPanels.forEach((panel, index) => {
+      if (mainQuestions[index].classList.contains('active')) {
+        if (panel.classList.contains('scrollable')) {
+          panel.style.maxHeight = window.innerWidth <= 768 ? '300px' : '400px';
+        } else {
+          panel.style.maxHeight = panel.scrollHeight + "px";
+        }
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -40,53 +40,86 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
 </script>
 	<style>
   #course-popup {
-    position: fixed;
-    top: 50%;
-    left: 55%;
-    width: 78vw;
-    height: 80vh;
-    transform: translate(-50%, -50%);
-    background: white;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
-    border-radius: 8px;
-    z-index: 9999;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
+  position: fixed;
+  top: 0; 
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: left 0.4s ease;
+  z-index: 9999;
+}
 
-  #popup-content {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
+#popup-content {
+  position: relative;
+  width: calc(100% - 250px); /* leave space for sidebar */
+  height: 100%;
+  margin-left: 250px; /* offset from sidebar */
+  background: rgba(255,255,255,0.3); /* more transparent */
+  backdrop-filter: blur(15px) saturate(180%);
+  -webkit-backdrop-filter: blur(15px) saturate(180%);
+  border-radius: 8px 0 0 8px;
+  box-shadow: -2px 0 20px rgba(0,0,0,0.4);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
 
-  #popup-close {
+#popup-close {
   position: absolute;
-  top: 15px;        /* adjust vertical position if needed */
-  right: 15px;      /* adjust horizontal position */
-  font-size: 30px;  /* bigger size (increase from 24px) */
-  color: white;     /* white color */
+  top: 15px;
+  right: 15px;
+  font-size: 30px;
+  color: #333;
   cursor: pointer;
-  font-weight: bold;
   background: transparent;
   border: none;
   z-index: 1001;
-  user-select: none;
-  line-height: 1;
-  padding: 0;
 }
 
-  #popup-iframe {
-    flex-grow: 1;
-    width: 100%;
-    border: none;
-    overflow-y: auto;
-	  
-	 
+#popup-iframe {
+  flex-grow: 1;
+  width: 100%;
+  border: none;
+  overflow-y: auto;
+}
+
+#popup-toggle {
+  position: absolute;
+  top: 50%;
+  right: -40px;
+  transform: translateY(-50%);
+  width: 35px;
+  height: 60px;
+  background: #333;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 8px 8px 0;
+  cursor: pointer;
+  font-size: 20px;
+  z-index: 1001;
+}
+
+#course-popup.active {
+  left: 0;
+}
+
+/* ✅ Mobile fix */
+@media (max-width: 768px) {
+  #popup-content {
+    width: 100%;   /* full width on mobile */
+    margin-left: 0;
+    border-radius: 0;
   }
+}
+
     </style>
 <style id='wp-emoji-styles-inline-css' type='text/css'>
 img.wp-smiley, img.emoji {
@@ -961,7 +994,7 @@ document.getElementById("slider-1-slide-1-layer-17").addEventListener("click", f
         <div class="wrap mcb-wrap mcb-wrap-9e55fe48e one-fourth tablet-one-second mobile-one-second clearfix service-wrap" 
              data-desktop-col="one-fourth" data-tablet-col="tablet-one-second" data-mobile-col="mobile-one-second" 
              style="" onclick="location.href='#service1'" role="button" tabindex="0">
-            <div class="mcb-wrap-inner course-card" data-url="musicianship-grades-popup.html" style="">
+            <div class="mcb-wrap-inner course-card" data-url="Faq1.html" style="">
                 <div class="column mcb-column mcb-item-96eca4efd one tablet-one mobile-one column_icon_box_2" style="" >
                     <div class="mcb-column-inner mcb-item-icon_box_2-inner">
                         <div class="mfn-icon-box mfn-icon-box-left mfn-icon-box-mobile-top mfn-icon-box-center mfn-icon-box-tablet-center mfn-icon-box-mobile-center">
@@ -983,7 +1016,7 @@ document.getElementById("slider-1-slide-1-layer-17").addEventListener("click", f
         <div class="wrap mcb-wrap mcb-wrap-6e4c49b84 one-fourth tablet-one-second mobile-one-second clearfix service-wrap" 
              data-desktop-col="one-fourth" data-tablet-col="tablet-one-second" data-mobile-col="mobile-one-second" 
              style="" onclick="location.href='#service2'" role="button" tabindex="0">
-            <div class="mcb-wrap-inner course-card" data-url="musicianship-grades-popup.html" style="">
+            <div class="mcb-wrap-inner course-card" data-url="Faq1.html" style="">
                 <div class="column mcb-column mcb-item-c1309295a one tablet-one mobile-one column_icon_box_2" style="">
                     <div class="mcb-column-inner mcb-item-icon_box_2-inner">
                         <div class="mfn-icon-box mfn-icon-box-left mfn-icon-box-mobile-top mfn-icon-box-center mfn-icon-box-mobile-center">
@@ -1131,12 +1164,17 @@ document.getElementById("slider-1-slide-1-layer-17").addEventListener("click", f
 <!-- Your existing courses section -->
 <div class="section mcb-section mcb-section-2198f1ed9 custom-width" id="guides" style="">
   <div class="section_wrapper mcb-section-inner">
-	  <div id="course-popup" style="display:none;">
+	  <div id="course-popup" style="display:flex;"> <!-- display stays flex, but hidden via CSS left:-100% -->
   <div id="popup-content">
     <button id="popup-close" title="Close">x</button>
+    <div id="popup-toggle">⮞</div>  <!-- added arrow -->
     <iframe id="popup-iframe" allowtransparency="true" src="" frameborder="0"></iframe>
   </div>
 </div>
+
+
+
+
     <div class="wrap mcb-wrap mcb-wrap-42790f7f0 one tablet-one mobile-one clearfix" data-desktop-col="one" data-tablet-col="tablet-one" data-mobile-col="mobile-one" style="">
       <div class="mcb-wrap-inner">
         <div class="column mcb-column mcb-item-3cd1826f1 one tablet-one mobile-one column_heading mfn-item-inline" style="">
@@ -1868,23 +1906,39 @@ var mfn = {"mobileInit":"1240","parallax":"translate3d","responsive":"1","sideba
   const popup = document.getElementById('course-popup');
   const iframe = document.getElementById('popup-iframe');
   const closeBtn = document.getElementById('popup-close');
+  const toggleBtn = document.getElementById('popup-toggle');
 
   function openPopup(url) {
     iframe.src = url;
-    popup.style.display = 'flex';
+    popup.classList.add('active'); // changed: add active class instead of display:flex
   }
 
   closeBtn.addEventListener('click', () => {
-    popup.style.display = 'none';
+    popup.classList.remove('active');
     iframe.src = '';
   });
 
+  // toggle arrow
+  let isVisible = true;
+  toggleBtn.addEventListener('click', () => {
+    if (isVisible) {
+      popup.style.left = "-100%"; 
+      isVisible = false;
+    } else {
+      popup.style.left = "0";
+      isVisible = true;
+    }
+  });
+
+  // click outside (disabled because overlay covers full screen)
+  /*
   popup.addEventListener('click', (e) => {
     if (e.target === popup) {
-      popup.style.display = 'none';
+      popup.classList.remove('active');
       iframe.src = '';
     }
   });
+  */
 
   document.querySelectorAll('.course-card').forEach(card => {
     card.style.cursor = 'pointer';
@@ -1894,6 +1948,7 @@ var mfn = {"mobileInit":"1240","parallax":"translate3d","responsive":"1","sideba
     });
   });
 </script>
+
 <script>
 document.querySelectorAll(".accordion h3").forEach(header => {
   header.addEventListener("click", () => {
