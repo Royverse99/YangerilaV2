@@ -68,7 +68,7 @@
   z-index: 1;
   padding-top: 560px;
   padding-bottom: 100px;
-  background-image: url("../../2022/04/coaching3-section-bg2.webp");
+  background-image: url("../../2022/04/yang.webp");
   background-position: top center;
   background-size: cover;
   transition: background-image 0.3s ease;
@@ -1097,39 +1097,7 @@
   }
 }
 
-/* Hover effects for different service sections */
-.mcb-section-4e54b4332:has(.mcb-wrap-9e55fe48e:hover) {
-  background-image: url("../../2022/04/academy-bg.webp");
-}
 
-.mcb-section-4e54b4332:has(.mcb-wrap-6e4c49b84:hover) {
-  background-image: url("../../2022/04/courses-bg.webp");
-}
-
-.mcb-section-4e54b4332:has(.mcb-wrap-755ef6b94:hover) {
-  background-image: url("../../2022/04/classes-bg.webp");
-}
-
-.mcb-section-4e54b4332:has(.mcb-wrap-b11940567:hover) {
-  background-image: url("../../2022/04/fees-bg.webp");
-}
-
-/* Fallback for browsers that don't support :has() */
-.mcb-section-4e54b4332.hover-academy {
-  background-image: url("../../2022/04/academy-bg.webp");
-}
-
-.mcb-section-4e54b4332.hover-courses {
-  background-image: url("../../2022/04/courses-bg.webp");
-}
-
-.mcb-section-4e54b4332.hover-classes {
-  background-image: url("../../2022/04/classes-bg.webp");
-}
-
-.mcb-section-4e54b4332.hover-fees {
-  background-image: url("../../2022/04/fees-bg.webp");
-}
 .coupon-row {
   display: flex;
   align-items: center;

@@ -74,8 +74,8 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
   position: absolute;
   top: 15px;
   right: 15px;
-  font-size: 30px;
-  color: #333;
+  font-size: 60px;
+  color: #fff;
   cursor: pointer;
   background: transparent;
   border: none;
@@ -620,6 +620,13 @@ body,td,th {
   </div>
 </div>
 <div id="Wrapper">
+  <div id="course-popup" style="display:flex;"> <!-- display stays flex, but hidden via CSS left:-100% -->
+  <div id="popup-content">
+    <button id="popup-close" title="Close">x</button>
+    <div id="popup-toggle">⮞</div>  <!-- added arrow -->
+    <iframe id="popup-iframe" allowtransparency="true" src="" frameborder="0"></iframe>
+  </div>
+</div>
   <div id="Header_wrapper" class="" >
     <header id="Header">
       <div class="mfn-main-slider mfn-rev-slider"> 
@@ -1000,82 +1007,66 @@ document.getElementById("slider-1-slide-1-layer-17").addEventListener("click", f
                         <div class="mfn-icon-box mfn-icon-box-left mfn-icon-box-mobile-top mfn-icon-box-center mfn-icon-box-tablet-center mfn-icon-box-mobile-center">
                             <div class="icon-wrapper"><i class="fas fa-dot-circle" aria-hidden="true"></i></div>
                             <div class="desc-wrapper">
-                                <h3 class="title">01</h3>
+                                <h3 class="title">About the Academy</h3>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="column mcb-column mcb-item-95b36d581 three-fourth tablet-three-fourth mobile-one column_column" style="">
-                    <div class="mcb-column-inner mcb-item-column-inner">
-                        <div class="column_attr mfn-inline-editor clearfix" style="">About the Academy</div>
-                    </div>
-                </div>
+               
             </div>
         </div>
 
         <div class="wrap mcb-wrap mcb-wrap-6e4c49b84 one-fourth tablet-one-second mobile-one-second clearfix service-wrap" 
              data-desktop-col="one-fourth" data-tablet-col="tablet-one-second" data-mobile-col="mobile-one-second" 
              style="" onclick="location.href='#service2'" role="button" tabindex="0">
-            <div class="mcb-wrap-inner course-card" data-url="Faq1.html" style="">
+            <div class="mcb-wrap-inner course-card" data-url="Faq2.html" style="">
                 <div class="column mcb-column mcb-item-c1309295a one tablet-one mobile-one column_icon_box_2" style="">
                     <div class="mcb-column-inner mcb-item-icon_box_2-inner">
                         <div class="mfn-icon-box mfn-icon-box-left mfn-icon-box-mobile-top mfn-icon-box-center mfn-icon-box-mobile-center">
                             <div class="icon-wrapper"><i class="fas fa-dot-circle" aria-hidden="true"></i></div>
                             <div class="desc-wrapper">
-                                <h3 class="title">02</h3>
+                                <h3 class="title">Courses & Features</h3>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="column mcb-column mcb-item-99d691c56 three-fourth tablet-three-fourth mobile-one column_column" style="">
-                    <div class="mcb-column-inner mcb-item-column-inner">
-                        <div class="column_attr mfn-inline-editor clearfix" style="">Courses & Features</div>
-                    </div>
-                </div>
+                
             </div>
         </div>
 
         <div class="wrap mcb-wrap mcb-wrap-755ef6b94 one-fourth tablet-one-second mobile-one-second clearfix service-wrap" 
              data-desktop-col="one-fourth" data-tablet-col="tablet-one-second" data-mobile-col="mobile-one-second" 
              style="" onclick="location.href='#service3'" role="button" tabindex="0">
-            <div class="mcb-wrap-inner  course-card" data-url="musicianship-grades-popup.html" style="">
+            <div class="mcb-wrap-inner  course-card" data-url="Faq3.html" style="">
                 <div class="column mcb-column mcb-item-c4b8abe07 one tablet-one mobile-one column_icon_box_2" style="">
                     <div class="mcb-column-inner mcb-item-icon_box_2-inner">
                         <div class="mfn-icon-box mfn-icon-box-left mfn-icon-box-mobile-top mfn-icon-box-center mfn-icon-box-mobile-center">
                             <div class="icon-wrapper"><i class="fas fa-dot-circle" aria-hidden="true"></i></div>
                             <div class="desc-wrapper">
-                                <h3 class="title">03</h3>
+                                <h3 class="title">Classes & Online Learning</h3>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="column mcb-column mcb-item-b0897768e three-fourth tablet-three-fourth mobile-one column_column" style="">
-                    <div class="mcb-column-inner mcb-item-column-inner">
-                        <div class="column_attr mfn-inline-editor clearfix" style="">Classes & Online Learning</div>
-                    </div>
-                </div>
+                
             </div>
         </div>
 
         <div class="wrap mcb-wrap mcb-wrap-b11940567 one-fourth tablet-one-second mobile-one-second clearfix service-wrap" 
              data-desktop-col="one-fourth" data-tablet-col="tablet-one-second" data-mobile-col="mobile-one-second" 
              style="" onclick="location.href='#service4'" role="button" tabindex="0">
-            <div class="mcb-wrap-inner course-card" data-url="musicianship-grades-popup.html" style="">
+            <div class="mcb-wrap-inner course-card" data-url="Faq4.html" style="">
                 <div class="column mcb-column mcb-item-19fae4c47 one tablet-one mobile-one column_icon_box_2" style="">
                     <div class="mcb-column-inner mcb-item-icon_box_2-inner">
                         <div class="mfn-icon-box mfn-icon-box-left mfn-icon-box-mobile-top mfn-icon-box-center mfn-icon-box-mobile-center">
                             <div class="icon-wrapper"><i class="fas fa-dot-circle" aria-hidden="true"></i></div>
                             <div class="desc-wrapper">
-                                <h3 class="title">04</h3>
+                                <h3 class="title">Fees & Enrollment</h3>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="column mcb-column mcb-item-2aa6ab1de three-fourth tablet-three-fourth mobile-one column_column" style="">
-                    <div class="mcb-column-inner mcb-item-column-inner">
-                        <div class="column_attr mfn-inline-editor clearfix" style="">Fees, Enrollment & Support</div>
-                    </div>
-                </div>
+                
             </div>
         </div>
 
@@ -1164,13 +1155,7 @@ document.getElementById("slider-1-slide-1-layer-17").addEventListener("click", f
 <!-- Your existing courses section -->
 <div class="section mcb-section mcb-section-2198f1ed9 custom-width" id="guides" style="">
   <div class="section_wrapper mcb-section-inner">
-	  <div id="course-popup" style="display:flex;"> <!-- display stays flex, but hidden via CSS left:-100% -->
-  <div id="popup-content">
-    <button id="popup-close" title="Close">x</button>
-    <div id="popup-toggle">⮞</div>  <!-- added arrow -->
-    <iframe id="popup-iframe" allowtransparency="true" src="" frameborder="0"></iframe>
-  </div>
-</div>
+	  
 
 
 
