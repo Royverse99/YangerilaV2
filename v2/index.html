@@ -41,37 +41,44 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
 	<style>
 
     
-  #course-popup {
+  /* === Popup wrapper (only handles sliding) === */
+#course-popup {
   position: fixed;
-  top: 0; 
-  left: 250px;                          /* Start after sidebar */
-  width: calc(100% - 250px);            /* Fill rest of screen */
+  top: 0;
+  left: 250px;  /* start after sidebar */
+  width: calc(100% - 250px); /* don’t overlap sidebar */
   height: 100%;
-  background: rgba(0,0,0,0.4);          /* dark overlay behind iframe */
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: transform 0.4s ease;
-  transform: translateX(-100%);
-  z-index: 8000;                        /* below sidebar (9002) */
+
+  transform: translateX(-100%);   /* fully hidden off-screen */
+  transition: transform 0.5s ease-in-out; /* smooth slide */
+  z-index: 8000;
+  background: transparent; /* no ghost blur layer */
 }
 
+/* active → slide into view */
+#course-popup.active {
+  transform: translateX(0);
+}
+
+/* === Inner popup content (blur + transparency here) === */
 #popup-content {
   position: relative;
-  width: 100%;                          /* use full width inside container */
+  width: 100%;
   height: 100%;
-  background: rgba(255,255,255,0.3);    /* glass effect */
+  background: rgba(255,255,255,0.25);
   backdrop-filter: blur(15px) saturate(180%);
   -webkit-backdrop-filter: blur(15px) saturate(180%);
-  border-radius: 0;                     /* no rounding against sidebar */
+  border-radius: 8px 0 0 8px;
   box-shadow: -2px 0 20px rgba(0,0,0,0.4);
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
+/* close button */
 #popup-close {
   position: absolute;
   top: 15px;
@@ -84,6 +91,7 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
   z-index: 1001;
 }
 
+/* iframe */
 #popup-iframe {
   flex-grow: 1;
   width: 100%;
@@ -91,6 +99,7 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
   overflow-y: auto;
 }
 
+/* toggle button */
 #popup-toggle {
   position: absolute;
   top: 50%;
@@ -109,18 +118,18 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
   z-index: 1001;
 }
 
-#course-popup.active {
-  transform: translateX(0);
-}
-
-/* ✅ Mobile fix */
+/* ✅ Mobile fix: full width if sidebar collapses */
 @media (max-width: 768px) {
   #course-popup {
-    left: 0; 
+    left: 0;
     width: 100%;
   }
   #popup-content {
-    border-r
+    width: 100%;
+    margin-left: 0;
+    border-radius: 0;
+  }
+}
 
 
     </style>
@@ -5276,50 +5285,48 @@ var mfn = {"mobileInit":"1240","parallax":"translate3d","responsive":"1","sideba
 		if (window.RS_MODULES.checkMinimal!==undefined) { window.RS_MODULES.checkMinimal();};
 	</script>
 <script>
-  const popup = document.getElementById('course-popup');
-  const iframe = document.getElementById('popup-iframe');
-  const closeBtn = document.getElementById('popup-close');
-  const toggleBtn = document.getElementById('popup-toggle');
+const popup = document.getElementById('course-popup');
+const iframe = document.getElementById('popup-iframe');
+const closeBtn = document.getElementById('popup-close');
+const toggleBtn = document.getElementById('popup-toggle');
 
-  function openPopup(url) {
-    iframe.src = url;
-    popup.classList.add('active'); // changed: add active class instead of display:flex
-  }
+function openPopup(url) {
+  iframe.src = url;
+  popup.classList.add('active');
+  isVisible = true;
+}
 
-  closeBtn.addEventListener('click', () => {
-    popup.classList.remove('active');
+function closePopup() {
+  popup.classList.remove('active');
+  popup.addEventListener('transitionend', () => {
     iframe.src = '';
-  });
+  }, { once: true });
+  isVisible = false;
+}
 
-  // toggle arrow
-  let isVisible = true;
-  toggleBtn.addEventListener('click', () => {
-    if (isVisible) {
-      popup.style.left = "-100%"; 
-      isVisible = false;
-    } else {
-      popup.style.left = "0";
-      isVisible = true;
-    }
-  });
+// X close
+closeBtn.addEventListener('click', closePopup);
 
-  // click outside (disabled because overlay covers full screen)
-  /*
-  popup.addEventListener('click', (e) => {
-    if (e.target === popup) {
-      popup.classList.remove('active');
-      iframe.src = '';
-    }
-  });
-  */
+// toggle arrow
+let isVisible = false;
+toggleBtn.addEventListener('click', () => {
+  if (isVisible) {
+    closePopup();
+  } else {
+    popup.classList.add('active');
+    isVisible = true;
+  }
+});
 
-  document.querySelectorAll('.course-card').forEach(card => {
-    card.style.cursor = 'pointer';
-    card.addEventListener('click', () => {
-      const url = card.getAttribute('data-url');
-      if (url) openPopup(url);
-    });
+// course card opens popup
+document.querySelectorAll('.course-card').forEach(card => {
+  card.style.cursor = 'pointer';
+  card.addEventListener('click', () => {
+    const url = card.getAttribute('data-url');
+    if (url) openPopup(url);
   });
+});
+
 </script>
 
 <script>
