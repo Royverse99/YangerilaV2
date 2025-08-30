@@ -3850,6 +3850,69 @@ select:focus {
 
 form input.display-none{display:none!important}
 </style>
+
+
+<style>
+  /* Reset wrapper in Offers (removes black outside box) */
+#offers .wrap {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Offers box styling */
+#offers .faq-box {
+  background: #ffffff;          /* White box */
+  border: 2px solid #1abc9c;    /* Green border */
+  color: #333;
+  border-radius: 10px;
+  padding: 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;                 /* Equal height */
+}
+
+/* Hover effect */
+#offers .faq-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+/* Headings */
+#offers .faq-box h3 {
+  color: #1abc9c;
+  margin-bottom: 10px;
+  font-size: 1.2em;
+  line-height: 1.3em;
+}
+
+/* Bold offer text */
+#offers .faq-box p {
+  font-weight: bold;
+  margin-bottom: 6px;
+  color: #222;
+}
+
+/* Small text */
+#offers .faq-box small {
+  font-size: 0.85em;
+  color: #666;
+  line-height: 1.4em;
+  display: block;
+}
+
+/* Ensure equal height layout */
+#offers .wrap {
+  display: flex;
+}
+
+#offers .mcb-wrap-inner {
+  height: 100%;
+}
+
+</style>
 <link rel='stylesheet' id='Montserrat-css' href='https://fonts.googleapis.com/css?family=Montserrat%3A400%2C500&amp;display=swap&amp;ver=6.8.2' type='text/css' media='all' />
 <link rel='stylesheet' id='be-demo-css' href='wp-content/plugins/be-demo/css/style6c2d.css?ver=6.8.2' type='text/css' media='all' />
 <script type="text/javascript" src="wp-includes/js/jquery/jquery.minf43b.js?ver=3.7.1" id="jquery-core-js"></script> 
@@ -4261,8 +4324,8 @@ document.getElementById("slider-1-slide-1-layer-17").addEventListener("click", f
                   <div class="mcb-wrap-inner">
                     <div  class="column mcb-column mcb-item-cac643a53 one tablet-one mobile-one column_heading" style="" >
                       <div class="mcb-column-inner mcb-item-heading-inner">
-                        <h2 class="title">About<br>
-                          </h2><h3>Yangerila Creative Studio</h3>
+                        <h2 class="title">Timeline<br>
+                          </h2><h3>of the Academy</h3>
                       </div>
                     </div>
                     <div  class="column mcb-column mcb-item-7c2bf0722 one tablet-one mobile-one column_heading" style="" >
@@ -4728,129 +4791,113 @@ document.getElementById("slider-1-slide-1-layer-17").addEventListener("click", f
             <div class="section mcb-section mcb-section-599595188 default-width" id="schedule">
   <div class="section_wrapper mcb-section-inner">
 
-    <!-- Headings -->
-    <div class="wrap mcb-wrap one tablet-one mobile-one clearfix">
-      <div class="mcb-wrap-inner">
-        <div class="column mcb-column one tablet-one mobile-one column_heading mfn-item-inline">
-          <div class="mcb-column-inner mcb-item-heading-inner">
-            <h6 class="title">YANGERILLA MUSIC ACADEMY</h6>
-          </div>
-        </div>
-        <div class="column mcb-column one tablet-one mobile-one column_heading">
-          <div class="mcb-column-inner mcb-item-heading-inner">
-            <h2 class="title">UPCOMING DISCOUNT COUPONS</h2>
-          </div>
-        </div>
+<!-- Coupons Section Heading (FAQ-style) -->
+<div class="wrap mcb-wrap one tablet-one mobile-one clearfix">
+  <div class="mcb-wrap-inner">
+    <div class="column mcb-column one tablet-one mobile-one column_heading mfn-item-inline">
+      <div class="mcb-column-inner mcb-item-heading-inner">
+        <h6 class="title">YANGERILLA MUSIC ACADEMY</h6>
       </div>
     </div>
-
-    <!-- Coupon Row 1 -->
-    <div class="wrap mcb-wrap two-fifth tablet-two-fifth mobile-one coupon-row clearfix">
-      <div class="coupon-card-container" id="coupon1">
-        <div class="coupon-card active" style="--bg: linear-gradient(135deg, #667eea, #764ba2)">
-          <span class="coupon-emoji">🎁</span>
-          <h3 class="coupon-title">Referral Reward</h3>
-          <p class="coupon-subtitle">₹1,000 Amazon Gift</p>
-        </div>
-        <div class="coupon-card" style="--bg: linear-gradient(135deg, #7ae7c7, #45c7a1)">
-          <span class="coupon-emoji">⭐</span>
-          <h3 class="coupon-title">New Rockstars</h3>
-          <p class="coupon-subtitle">Valid till: <span id="coupon2-date">Dec 31, 2024</span></p>
-        </div>
-        <div class="coupon-card" style="--bg: linear-gradient(135deg, #ff9a9e, #fad0c4)">
-          <span class="coupon-emoji">🤝</span>
-          <h3 class="coupon-title">United We Stand</h3>
-          <p class="coupon-subtitle">30% OFF Group Discount</p>
-        </div>
+    <div class="column mcb-column one tablet-one mobile-one column_heading">
+      <div class="mcb-column-inner mcb-item-heading-inner">
+        <h2 class="title">UPCOMING DISCOUNTS & OFFERS</h2>
       </div>
     </div>
+  </div>
+</div>
 
-    <div class="wrap mcb-wrap three-fifth tablet-three-fifth mobile-one coupon-row clearfix">
-      <div class="coupon-description">
-        <div class="icon-wrapper"><i class="fas fa-arrow-right"></i></div>
-        <div class="desc-wrapper">
-          <h5 class="title">Refer a friend for a free online demo session.</h5>
-          <p>If they join, you receive an Amazon gift card worth ₹1,000.<br>
-            Fill the referral form to participate.</p>
-        </div>
-      </div>
-    </div>
+<!-- Section Wrapper (same as FAQs) -->
+<div class="section mcb-section default-width" id="offers">
+  <div class="section_wrapper mcb-section-inner">
 
-    <!-- Divider -->
-    <div class="wrap mcb-wrap one tablet-one mobile-one clearfix">
-      <div class="mcb-wrap-inner">
-        <div class="column mcb-column one tablet-one mobile-one column_divider">
-          <div class="mcb-column-inner mcb-item-divider-inner">
-            <hr style="margin:0 auto 0px;background-color:#EDEDED"/>
+    <!-- Offer 1 -->
+    <div class="wrap mcb-wrap one-fourth tablet-one-second mobile-one-second clearfix service-wrap"
+         data-desktop-col="one-fourth" data-tablet-col="tablet-one-second" data-mobile-col="mobile-one-second"
+         onclick="location.href='#offer1'" role="button" tabindex="0">
+      <div class="mcb-wrap-inner course-card faq-box" data-url="Offer1.html">
+        <div class="column mcb-column one tablet-one mobile-one column_icon_box_2">
+          <div class="mcb-column-inner mcb-item-icon_box_2-inner">
+            <div class="mfn-icon-box mfn-icon-box-left mfn-icon-box-mobile-top mfn-icon-box-center">
+             
+              <div class="desc-wrapper">
+                <h3 class="title">Referral <br>Reward</h3>
+                <p>₹1,000 <br>Amazon Gift</p>
+                <small>Valid till: Always Active<br>
+                </small>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Coupon Row 2 -->
-    <div class="wrap mcb-wrap two-fifth tablet-two-fifth mobile-one coupon-row clearfix">
-      <div class="coupon-card-container" id="coupon2">
-        <div class="coupon-card active" style="--bg: linear-gradient(135deg,#667eea,#764ba2)">
-          <span class="coupon-emoji">2️⃣</span>
-          <h3 class="coupon-title">New Rockstars Coupon</h3>
-          <p class="coupon-subtitle">Valid till: <span id="coupon2-date">Dec 31, 2024</span></p>
-        </div>
-        <div class="coupon-card" style="--bg: linear-gradient(135deg,#ff9a9e,#fad0c4)">
-          <span class="coupon-emoji">⭐</span>
-          <h3 class="coupon-title">20% OFF</h3>
-          <p class="coupon-subtitle">First Month Discount</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="wrap mcb-wrap three-fifth tablet-three-fifth mobile-one coupon-row clearfix">
-      <div class="coupon-description">
-        <div class="icon-wrapper"><i class="fas fa-arrow-right"></i></div>
-        <div class="desc-wrapper">
-          <h5 class="title">20% discount for new joining students.</h5>
-          <p>Valid on first month only.<br>
-            Regular fees apply after the first month.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Divider -->
-    <div class="wrap mcb-wrap one tablet-one mobile-one clearfix">
-      <div class="mcb-wrap-inner">
-        <div class="column mcb-column one tablet-one mobile-one column_divider">
-          <div class="mcb-column-inner mcb-item-divider-inner">
-            <hr style="margin:0 auto 0px;background-color:#EDEDED"/>
+    <!-- Offer 2 -->
+    <div class="wrap mcb-wrap one-fourth tablet-one-second mobile-one-second clearfix service-wrap"
+         data-desktop-col="one-fourth" data-tablet-col="tablet-one-second" data-mobile-col="mobile-one-second"
+         onclick="location.href='#offer2'" role="button" tabindex="0">
+      <div class="mcb-wrap-inner course-card faq-box" data-url="Offer2.html">
+        <div class="column mcb-column one tablet-one mobile-one column_icon_box_2">
+          <div class="mcb-column-inner mcb-item-icon_box_2-inner">
+            <div class="mfn-icon-box mfn-icon-box-left mfn-icon-box-mobile-top mfn-icon-box-center">
+         
+              <div class="desc-wrapper">
+                <h3 class="title">New <br>Rockstars</h3>
+                <p>20% OFF – First Month</p>
+                <small>Valid till: <span id="offer2-date" data-months="3">Dec 31, 2024</span><br>
+                </small>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Coupon Row 3 -->
-    <div class="wrap mcb-wrap two-fifth tablet-two-fifth mobile-one coupon-row clearfix">
-      <div class="coupon-card-container" id="coupon3">
-        <div class="coupon-card active" style="--bg: linear-gradient(135deg,#667eea,#764ba2)">
-          <span class="coupon-emoji">3️⃣</span>
-          <h3 class="coupon-title">United We Stand Coupon</h3>
-          <p class="coupon-subtitle">Group Discount</p>
-        </div>
-        <div class="coupon-card" style="--bg: linear-gradient(135deg,#45c7a1,#7ae7c7)">
-          <span class="coupon-emoji">🤝</span>
-          <h3 class="coupon-title">30% OFF</h3>
-          <p class="coupon-subtitle">Bring a Friend!</p>
+    <!-- Offer 3 -->
+    <div class="wrap mcb-wrap one-fourth tablet-one-second mobile-one-second clearfix service-wrap"
+         data-desktop-col="one-fourth" data-tablet-col="tablet-one-second" data-mobile-col="mobile-one-second"
+         onclick="location.href='#offer3'" role="button" tabindex="0">
+      <div class="mcb-wrap-inner course-card faq-box" data-url="Offer3.html">
+        <div class="column mcb-column one tablet-one mobile-one column_icon_box_2">
+          <div class="mcb-column-inner mcb-item-icon_box_2-inner">
+            <div class="mfn-icon-box mfn-icon-box-left mfn-icon-box-mobile-top mfn-icon-box-center">
+
+              <div class="desc-wrapper">
+                <h3 class="title">United <br>We Stand</h3>
+                <p>30% OFF – Group Discount</p>
+                <small>Valid till: Always Active<br>
+                </small>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <div class="wrap mcb-wrap three-fifth tablet-three-fifth mobile-one coupon-row clearfix">
-      <div class="coupon-description">
-        <div class="icon-wrapper"><i class="fas fa-arrow-right"></i></div>
-        <div class="desc-wrapper">
-          <h5 class="title">30% off when joining in a group.</h5>
-          <p>Students must bring a new friend from their reference.<br>
-            Cannot combine with another joining student.</p>
+    <!-- Offer 4 (Dummy Example) -->
+    <div class="wrap mcb-wrap one-fourth tablet-one-second mobile-one-second clearfix service-wrap"
+         data-desktop-col="one-fourth" data-tablet-col="tablet-one-second" data-mobile-col="mobile-one-second"
+         onclick="location.href='#offer4'" role="button" tabindex="0">
+      <div class="mcb-wrap-inner course-card faq-box" data-url="Offer4.html">
+        <div class="column mcb-column one tablet-one mobile-one column_icon_box_2">
+          <div class="mcb-column-inner mcb-item-icon_box_2-inner">
+            <div class="mfn-icon-box mfn-icon-box-left mfn-icon-box-mobile-top mfn-icon-box-center">
+
+              <div class="desc-wrapper">
+                <h3 class="title">Early <br>Bird Offer</h3>
+                <p>Special <br>Discount</p>
+                <small>Valid till: <span id="offer4-date" data-months="6">Dec 31, 2024</span><br>
+                  </small>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
+
+  </div>
+</div>
+
 
   </div>
 </div>
@@ -5307,6 +5354,37 @@ document.querySelectorAll(".accordion h3").forEach(header => {
     }
   });
 });
+</script>
+<script>
+/**
+ * Set dynamic offer expiry dates
+ * @param {string} elementId - The ID of the element where date should be shown
+ * @param {number} monthsToAdd - Number of months from now
+ */
+function setOfferDate(elementId, monthsToAdd) {
+  const now = new Date();
+  const target = new Date(now.getFullYear(), now.getMonth() + monthsToAdd + 1, 0); 
+  // "+1, 0" trick gets the last day of the month
+
+  // Format: e.g. "Dec 31, 2024"
+  const formatted = target.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric"
+  });
+
+  const el = document.getElementById(elementId);
+  if (el) el.textContent = formatted;
+}
+
+// Example usage:
+// Offer 2 → 3 months from now (end of that month)
+setOfferDate("offer2-date", 3);
+
+// Offer 4 → 6 months from now
+setOfferDate("offer4-date", 6);
+
+// You can call this for as many offers as needed
 </script>
 <script>
 // Add keyboard accessibility
