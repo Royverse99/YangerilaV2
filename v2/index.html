@@ -3912,7 +3912,14 @@ form input.display-none{display:none!important}
 #offers .mcb-wrap-inner {
   height: 100%;
 }
-
+/* For smaller screens */
+@media (max-width: 768px) {
+  #offers .faq-box {
+    padding: 15px 10px;
+    aspect-ratio: 1 / 1;   /* keeps width = height */
+    height: auto;          /* reset so aspect-ratio works */  /* even tighter on mobile */
+  }
+}
 </style>
 <link rel='stylesheet' id='Montserrat-css' href='https://fonts.googleapis.com/css?family=Montserrat%3A400%2C500&amp;display=swap&amp;ver=6.8.2' type='text/css' media='all' />
 <link rel='stylesheet' id='be-demo-css' href='wp-content/plugins/be-demo/css/style6c2d.css?ver=6.8.2' type='text/css' media='all' />
