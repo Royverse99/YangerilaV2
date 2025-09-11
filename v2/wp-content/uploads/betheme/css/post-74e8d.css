@@ -80,6 +80,23 @@
   justify-content: flex-start;
 }
 
+.mcb-section-4e54b4343 {
+  position: relative;
+  z-index: 1;
+  padding-top: 560px;
+  padding-bottom: 100px;
+  background-image: url("../../2022/04/coup.webp");
+  background-position: top center;
+  background-size: cover;
+  transition: background-image 0.3s ease;
+}
+
+
+
+.mcb-section-4e54b4343 .section_wrapper {
+  justify-content: flex-start;
+}
+
 
 
 .mcb-section .mcb-wrap .mcb-item-96eca4efd .icon-wrapper {
@@ -787,6 +804,13 @@
     padding-top: 300px;
     padding-bottom: 40px;
   }
+
+
+    .mcb-section-4e54b4343 {
+    padding-top: 300px;
+    padding-bottom: 40px;
+  }
+
   .mcb-section .mcb-wrap-9e55fe48e .mcb-wrap-inner {
     margin-right: 2%;
     margin-left: 2%;
@@ -899,6 +923,11 @@
   .mcb-section-4e54b4332 {
     padding-top: 180px;
   }
+
+    .mcb-section-4e54b4343 {
+    padding-top: 180px;
+  }
+
   .mcb-section .mcb-wrap-9e55fe48e .mcb-wrap-inner {
     margin-right: 4%;
     margin-left: 4%;
