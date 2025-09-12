@@ -3,166 +3,122 @@
 <head>
   <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Guitar Solo Carousel</title>
+  <!-- Swiper CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css">
   <style>
-    body { margin:0; background:#000; color:#7ae7c7; font-family:sans-serif; overflow:hidden }
+    body { margin:0; background:#111; color:#fff; font-family:sans-serif }
     .swiper-container { width:100%; height:100vh }
-    .swiper-slide { display:flex; align-items:center; justify-content:center; position:relative }
-    .video-card { position:relative; width:100%; height:100% }
-    .thumbnail {
-      position:absolute; top:0; left:0;
-      width:100%; height:100%;
-      background:#111; cursor:pointer; overflow:hidden;
-      z-index:5;
-    }
-    .thumbnail img {
-      width:100%; height:100%; object-fit:cover; display:block;
-    }
-    .play-overlay {
-      position:absolute; top:50%; left:50%;
-      transform:translate(-50%,-50%);
-      background:rgba(122,231,199,0.8);
-      width:80px; height:80px; border-radius:50%;
-      display:flex; align-items:center; justify-content:center;
-      font-size:2rem; color:#000; opacity:0;
-      z-index:10; transition:opacity .3s;
-    }
+    .swiper-slide { display:flex; align-items:center; justify-content:center; }
+    /* Increased size to 90% */
+    .video-card { position:relative; width:90%; max-width:none; aspect-ratio:16/9; background:#000; overflow:hidden; border-radius:8px }
+    .video-thumb { width:100%; height:100%; object-fit:cover; cursor:pointer; }
+    .video-info { position:absolute; bottom:0; left:0; right:0; background:linear-gradient(transparent,rgba(0,0,0,.8)); padding:1rem; }
+    .video-info h3 { margin:0 0 .5rem; font-size:1.5rem }
+    .video-info p { margin:0; font-size:1rem; color:#aaa }
+    .play-overlay { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:rgba(255,0,0,.8); width:80px;height:80px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2rem; color:#fff; opacity:0; transition:opacity .3s; }
     .video-card:hover .play-overlay { opacity:1 }
-    .video-player {
-      position:absolute; top:0; left:0;
-      width:100%; height:100%;
-      display:none; z-index:1;
-    }
-    .video-player.active {
-      display:block; z-index:5;
-    }
-    .back-button {
-      position:absolute; top:1rem; left:1rem;
-      background:rgba(0,0,0,.7); border:none;
-      color:#7ae7c7; width:40px; height:40px;
-      border-radius:50%; font-size:1.2rem;
-      cursor:pointer; display:none;
-      align-items:center; justify-content:center;
-      z-index:10;
-    }
-    .back-button.show { display:flex }
-    .swiper-button-next, .swiper-button-prev {
-      color:#7ae7c7 !important;
-      width:44px; height:44px; border-radius:50%;
-      background:rgba(0,0,0,.5);
-      display:flex; align-items:center; justify-content:center;
-    }
-    .swiper-button-next::after, .swiper-button-prev::after {
-      font-size:1.5rem;
-    }
-    .swiper-pagination-bullet {
-      background:rgba(122,231,199,0.5);
-    }
-    .swiper-pagination-bullet-active {
-      background:#7ae7c7;
-    }
+    .swiper-button-next, .swiper-button-prev { color:#fff }
+    .swiper-pagination-bullet-active { background:#fff }
+    .back-button { position:absolute; top:1rem; left:1rem; background:rgba(0,0,0,.7); color:#fff; border:none; width:40px;height:40px;border-radius:50%;cursor:pointer; display:none; align-items:center; justify-content:center; z-index:1000 }
   </style>
 </head>
 <body>
-  <button class="back-button" id="back">✕</button>
-  <div class="swiper-container">
-    <div class="swiper-wrapper"></div>
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
-    <div class="swiper-pagination"></div>
+<button class="back-button" id="back">✕</button>
+<div class="swiper-container">
+  <div class="swiper-wrapper">
+    <!-- Slides injected by JS -->
   </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
-  <script>
-    const videoIDs = [
-      'sBe411-F2GE','Pl9H9X1GoAc','lT_mlbMjcxo','hafoCeXWxAE',
-      'AyJcLLYyJ9k','hgEjTeWc8C0','Anop2dCuR2g','umUAWqoxt-0'
-    ];
-    const wrapper = document.querySelector('.swiper-wrapper');
-    videoIDs.forEach(id => {
-      const slide = document.createElement('div');
-      slide.className = 'swiper-slide';
-      slide.innerHTML = `
-        <div class="video-card" data-id="${id}">
-          <div class="thumbnail">
-            <img src="" onerror="this.style.display='none'">
-            <div class="play-overlay">▶</div>
-          </div>
-          <div class="video-player" id="player${id}"></div>
-        </div>`;
-      wrapper.appendChild(slide);
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-button-next"></div>
+  <div class="swiper-pagination"></div>
+</div>
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+<script>
+const videoIDs = [
+  'sBe411-F2GE','Pl9H9X1GoAc','lT_mlbMjcxo','hafoCeXWxAE',
+  'AyJcLLYyJ9k','hgEjTeWc8C0','Anop2dCuR2g','umUAWqoxt-0'
+];
+// Build slides
+const wrapper = document.querySelector('.swiper-wrapper');
+videoIDs.forEach(id => {
+  const slide = document.createElement('div');
+  slide.className='swiper-slide';
+  slide.innerHTML=`
+    <div class="video-card" data-id="${id}">
+      <img class="video-thumb" src="" alt>
+      <div class="play-overlay">▶</div>
+      <div class="video-info"><h3>Loading…</h3><p></p></div>
+      <div class="video-player" style="display:none;position:absolute;top:0;left:0;width:100%;height:100%;"></div>
+    </div>`;
+  wrapper.appendChild(slide);
+});
+// Fetch oEmbed to populate thumbnail/title/author
+document.querySelectorAll('.video-card').forEach(card => {
+  const id=card.dataset.id;
+  fetch(`https://www.youtube.com/oembed?url=https://youtube.com/watch?v=${id}&format=json`)
+    .then(r=>r.json())
+    .then(d=>{
+      card.querySelector('.video-thumb').src=d.thumbnail_url;
+      card.querySelector('h3').textContent=d.title;
+      card.querySelector('p').textContent=d.author_name;
+    })
+    .catch(_=>{
+      card.querySelector('.video-thumb').src=`https://img.youtube.com/vi/${id}/hqdefault.jpg`;
     });
-
-    document.querySelectorAll('.video-card').forEach(card => {
-      const id = card.dataset.id;
-      fetch(`https://www.youtube.com/oembed?url=https://youtu.be/${id}&format=json`)
-        .then(r => r.json())
-        .then(d => card.querySelector('img').src = d.thumbnail_url)
-        .catch(_ => card.querySelector('img').src = `https://img.youtube.com/vi/${id}/hqdefault.jpg`);
-      card.querySelector('.thumbnail').onclick = () => play(card);
-    });
-
-    let players = {}, isPlaying = false;
-    const backBtn = document.getElementById('back');
-    const swiper = new Swiper('.swiper-container', {
-      loop: true,
-      pagination: { el: '.swiper-pagination', clickable: true },
-      navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-      autoplay: { delay: 5000, disableOnInteraction: false }
-    });
-
-    const tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    document.body.appendChild(tag);
-
-    function onYouTubeIframeAPIReady() {
-      document.querySelectorAll('.video-card').forEach(card => {
-        const id = card.dataset.id;
-        const container = card.querySelector('.video-player');
-        players[id] = new YT.Player(container, {
-          videoId: id,
-          playerVars: { autoplay: 0, controls: 1, rel: 0, modestbranding: 1, fs: 0 },
-          events: {
-            onStateChange: e => {
-              if (e.data === YT.PlayerState.PLAYING) {
-                isPlaying = true;
-                swiper.autoplay.stop();
-                card.querySelector('.thumbnail').style.display = 'none';
-                container.classList.add('active');
-                backBtn.classList.add('show');
-              }
-              if (e.data === YT.PlayerState.ENDED) {
-                stopVideo(id);
-              }
-            }
-          }
-        });
-      });
-    }
-
-    function play(card) {
-      const id = card.dataset.id;
-      const idx = videoIDs.indexOf(id);
-      swiper.slideToLoop(idx);
-      players[id].playVideo();
-    }
-
-    function stopVideo(id) {
-      players[id].stopVideo();
-      const card = document.querySelector(`.video-card[data-id="${id}"]`);
-      card.querySelector('.thumbnail').style.display = '';
-      card.querySelector('.video-player').classList.remove('active');
-      backBtn.classList.remove('show');
-      isPlaying = false;
-      swiper.autoplay.start();
-    }
-
-    backBtn.onclick = () => {
-      const id = document
-        .querySelector('.swiper-slide-active .video-card')
-        .dataset.id;
-      stopVideo(id);
-    };
-  </script>
+  // click to play
+  card.querySelector('.video-thumb').onclick=()=>play(card);
+  card.querySelector('.play-overlay').onclick=() => play(card);
+});
+// Initialize Swiper
+const swiper = new Swiper('.swiper-container', {
+  loop:true,
+  navigation:{ nextEl:'.swiper-button-next', prevEl:'.swiper-button-prev' },
+  pagination:{ el:'.swiper-pagination', clickable:true },
+  autoplay:{ delay:5000, disableOnInteraction:false }
+});
+// Load YouTube API
+let players=[];
+const tag=document.createElement('script'); tag.src="https://www.youtube.com/iframe_api"; document.body.appendChild(tag);
+function onYouTubeIframeAPIReady(){
+  document.querySelectorAll('.video-card').forEach((card,i)=>{
+    const id=card.dataset.id;
+    const container=card.querySelector('.video-player');
+    players[i]=new YT.Player(container, { videoId:id, playerVars:{controls:1,rel:0}, events:{ onStateChange:e=>{
+      if(e.data===YT.PlayerState.PLAYING){
+        swiper.autoplay.stop();
+        document.getElementById('back').style.display='flex';
+      }
+      if(e.data===YT.PlayerState.ENDED){
+        document.getElementById('back').click();
+      }
+    } }});
+  });
+}
+// Play function
+function play(card){
+  const idx=[...document.querySelectorAll('.video-card')].indexOf(card);
+  swiper.slideToLoop(idx);
+  // hide thumbnail & overlay & info
+  card.querySelector('.video-thumb').style.display='none';
+  card.querySelector('.play-overlay').style.display='none';
+  card.querySelector('.video-info').style.display='none';
+  card.querySelector('.video-player').style.display='block';
+  players[idx].playVideo();
+}
+// Back button
+document.getElementById('back').onclick=()=>{
+  const slide=swiper.slides[swiper.activeIndex];
+  const card=slide.querySelector('.video-card');
+  const idx=[...document.querySelectorAll('.video-card')].indexOf(card);
+  players[idx].stopVideo();
+  card.querySelector('.video-thumb').style.display='';
+  card.querySelector('.play-overlay').style.display='';
+  card.querySelector('.video-info').style.display='';
+  card.querySelector('.video-player').style.display='none';
+  document.getElementById('back').style.display='none';
+  swiper.autoplay.start();
+};
+</script>
 </body>
 </html>
