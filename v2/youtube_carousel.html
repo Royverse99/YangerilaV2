@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Guitar Solo YouTube Carousel</title>
+  <style>
+    /* Reset and container */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { 
+      width: 100%; 
+      height: 100%; 
+      overflow: hidden; 
+      background: linear-gradient(135deg, #0f0f0f, #1a1a1a); 
+      font-family: 'Arial', sans-serif;
+    }
+
+    .carousel { 
+      position: relative; 
+      width: 100vw; 
+      height: 100vh; 
+      display: flex; 
+      overflow: hidden;
+      transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .slide { 
+      min-width: 100%; 
+      height: 100%; 
+      flex-shrink: 0; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      background: #000; 
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Thumbnail display */
+    .thumbnail-container {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      cursor: pointer;
+      background: #000;
+    }
+
+    .thumbnail-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .thumbnail-container:hover .thumbnail-image {
+      transform: scale(1.05);
+    }
+
+    /* Play button overlay */
+    .play-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(135deg, rgba(255, 0, 0, 0.9), rgba(255, 0, 0, 0.7));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      backdrop-filter: blur(10px);
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .play-button:hover {
+      transform: translate(-50%, -50%) scale(1.1);
+      background: linear-gradient(135deg, #ff0000, rgba(255, 0, 0, 0.8));
+      box-shadow: 0 15px 40px rgba(255, 0, 0, 0.4);
+    }
+
+    .play-button::before {
+      content: '';
+      width: 0;
+      height: 0;
+      border-left: 25px solid white;
+      border-top: 15px solid transparent;
+      border-bottom: 15px solid transparent;
+      margin-left: 5px;
+    }
+
+    /* Video overlay info */
+    .video-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+      padding: 60px 40px 40px;
+      color: #7ae7c7;
+;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: all 0.4s ease;
+    }
+
+    .thumbnail-container:hover .video-overlay {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .video-title {
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #7ae7c7;
+;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    }
+
+    .video-description {
+      font-size: 16px;
+      color: #7ae7c7;
+;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    }
+
+    /* YouTube player (hidden initially) */
+    .youtube-player {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+
+    .youtube-player.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .youtube-player iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Loading state */
+    .loading-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+
+    .loading-overlay.show {
+      display: flex;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top: 3px solid #ff0000;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Enhanced Arrows */
+    .arrow {
+      position: absolute; 
+      top: 50%; 
+      transform: translateY(-50%);
+      width: 60px; 
+      height: 60px; 
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+      color: #7ae7c7;
+; 
+      font-size: 24px; 
+      line-height: 60px; 
+      text-align: center;
+      border-radius: 50%; 
+      cursor: pointer; 
+      z-index: 20;
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      user-select: none;
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .arrow:hover { 
+      background: linear-gradient(135deg, #fff, rgba(255, 255, 255, 0.9)); 
+      transform: translateY(-50%) scale(1.1);
+      box-shadow: 0 12px 40px rgba(255, 255, 255, 0.4);
+    }
+
+    .arrow:active {
+      transform: translateY(-50%) scale(0.95);
+    }
+
+    #prev { left: 30px; }
+    #next { right: 30px; }
+
+    /* Enhanced Dots */
+    .dots { 
+      position: absolute; 
+      bottom: 30px; 
+      width: 100%; 
+      text-align: center; 
+      z-index: 20; 
+    }
+
+    .dot {
+      display: inline-block; 
+      width: 14px; 
+      height: 14px;
+      margin: 0 8px; 
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 50%; 
+      cursor: pointer; 
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(5px);
+    }
+
+    .dot:hover {
+      background: rgba(255, 255, 255, 0.8);
+      transform: scale(1.2);
+    }
+
+    .dot.active { 
+      background: #fff; 
+      transform: scale(1.3);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.6);
+    }
+
+    /* Back to thumbnail button */
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 50px;
+      height: 50px;
+      background: rgba(0, 0, 0, 0.7);
+      color: #7ae7c7;
+;
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 30;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .back-button:hover {
+      background: rgba(0, 0, 0, 0.9);
+      transform: scale(1.1);
+    }
+
+    .back-button.show {
+      display: flex;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .arrow {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+        line-height: 50px;
+      }
+      
+      #prev { left: 15px; }
+      #next { right: 15px; }
+      
+      .dot {
+        width: 12px;
+        height: 12px;
+        margin: 0 6px;
+      }
+
+      .play-button {
+        width: 80px;
+        height: 80px;
+      }
+
+      .play-button::before {
+        border-left: 20px solid white;
+        border-top: 12px solid transparent;
+        border-bottom: 12px solid transparent;
+      }
+
+      .video-title {
+        font-size: 22px;
+      }
+
+      .video-description {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="carousel" id="carousel">
+  <div class="slide" data-video-id="sBe411-F2GE">
+    <div class="thumbnail-container">
+      <img class="thumbnail-image" src="https://img.youtube.com/vi/sBe411-F2GE/maxresdefault.jpg" alt="The best guitar solos in every genre">
+      <div class="play-button"></div>
+      <div class="video-overlay">
+        <div class="video-title">The best guitar solos in every genre</div>
+        <div class="video-description">A compilation of top guitar solos across multiple genres</div>
+      </div>
+      <div class="loading-overlay">
+        <div class="loading-spinner"></div>
+      </div>
+    </div>
+    <div class="youtube-player" id="player0"></div>
+  </div>
+  <div class="slide" data-video-id="Pl9H9X1GoAc">
+    <div class="thumbnail-container">
+      <img class="thumbnail-image" src="https://img.youtube.com/vi/Pl9H9X1GoAc/maxresdefault.jpg" alt="Possibly the most beautiful guitar solo I've ever heard">
+      <div class="play-button"></div>
+      <div class="video-overlay">
+        <div class="video-title">Possibly the most beautiful guitar solo I've ever heard</div>
+        <div class="video-description">A beautifully performed guitar solo with emotional depth</div>
+      </div>
+      <div class="loading-overlay">
+        <div class="loading-spinner"></div>
+      </div>
+    </div>
+    <div class="youtube-player" id="player1"></div>
+  </div>
+  <div class="slide" data-video-id="lT_mlbMjcxo">
+    <div class="thumbnail-container">
+      <img class="thumbnail-image" src="https://img.youtube.com/vi/lT_mlbMjcxo/maxresdefault.jpg" alt="The Greatest Guitar Solo Ever Played">
+      <div class="play-button"></div>
+      <div class="video-overlay">
+        <div class="video-title">The Greatest Guitar Solo Ever Played</div>
+        <div class="video-description">A legendary iconic guitar solo performance</div>
+      </div>
+      <div class="loading-overlay">
+        <div class="loading-spinner"></div>
+      </div>
+    </div>
+    <div class="youtube-player" id="player2"></div>
+  </div>
+  <div class="slide" data-video-id="hafoCeXWxAE">
+    <div class="thumbnail-container">
+      <img class="thumbnail-image" src="https://img.youtube.com/vi/hafoCeXWxAE/maxresdefault.jpg" alt="Improvising Guitar Solos For Beginners - The Ultimate Guide">
+      <div class="play-button"></div>
+      <div class="video-overlay">
+        <div class="video-title">Improvising Guitar Solos For Beginners - The Ultimate Guide</div>
+        <div class="video-description">Step-by-step guide for beginners to learn guitar solos</div>
+      </div>
+      <div class="loading-overlay">
+        <div class="loading-spinner"></div>
+      </div>
+    </div>
+    <div class="youtube-player" id="player3"></div>
+  </div>
+  <div class="slide" data-video-id="AyJcLLYyJ9k">
+    <div class="thumbnail-container">
+      <img class="thumbnail-image" src="https://img.youtube.com/vi/AyJcLLYyJ9k/maxresdefault.jpg" alt="The Top 20 Greatest Electric Guitar Solos of All Time!">
+      <div class="play-button"></div>
+      <div class="video-overlay">
+        <div class="video-title">The Top 20 Greatest Electric Guitar Solos of All Time!</div>
+        <div class="video-description">A collection showcasing the best electric guitar solos ever</div>
+      </div>
+      <div class="loading-overlay">
+        <div class="loading-spinner"></div>
+      </div>
+    </div>
+    <div class="youtube-player" id="player4"></div>
+  </div>
+  <div class="slide" data-video-id="hgEjTeWc8C0">
+    <div class="thumbnail-container">
+      <img class="thumbnail-image" src="https://img.youtube.com/vi/hgEjTeWc8C0/maxresdefault.jpg" alt="I Used ChatGPT to Write a Guitar Solo and IT'S INSANE">
+      <div class="play-button"></div>
+      <div class="video-overlay">
+        <div class="video-title">I Used ChatGPT to Write a Guitar Solo and IT'S INSANE</div>
+        <div class="video-description">A unique AI-generated guitar solo performance</div>
+      </div>
+      <div class="loading-overlay">
+        <div class="loading-spinner"></div>
+      </div>
+    </div>
+    <div class="youtube-player" id="player5"></div>
+  </div>
+  <div class="slide" data-video-id="Anop2dCuR2g">
+    <div class="thumbnail-container">
+      <img class="thumbnail-image" src="https://img.youtube.com/vi/Anop2dCuR2g/maxresdefault.jpg" alt="10 ICONIC GUITAR SOLOS (everyone should know)">
+      <div class="play-button"></div>
+      <div class="video-overlay">
+        <div class="video-title">10 ICONIC GUITAR SOLOS (everyone should know)</div>
+        <div class="video-description">A must-know list of iconic guitar solos</div>
+      </div>
+      <div class="loading-overlay">
+        <div class="loading-spinner"></div>
+      </div>
+    </div>
+    <div class="youtube-player" id="player6"></div>
+  </div>
+  <div class="slide" data-video-id="umUAWqoxt-0">
+    <div class="thumbnail-container">
+      <img class="thumbnail-image" src="https://img.youtube.com/vi/umUAWqoxt-0/maxresdefault.jpg" alt="THE GREATEST IMPROVISED GUITAR SOLO OF ALL TIME">
+      <div class="play-button"></div>
+      <div class="video-overlay">
+        <div class="video-title">THE GREATEST IMPROVISED GUITAR SOLO OF ALL TIME</div>
+        <div class="video-description">An incredible improvised guitar solo performance</div>
+      </div>
+      <div class="loading-overlay">
+        <div class="loading-spinner"></div>
+      </div>
+    </div>
+    <div class="youtube-player" id="player7"></div>
+  </div>
+</div>
+
+
+  <div id="prev" class="arrow">&#10094;</div>
+  <div id="next" class="arrow">&#10095;</div>
+  <div class="dots" id="dots"></div>
+  <div class="back-button" id="backButton">✕</div>
+
+  <script>
+    let players = {};
+    let current = 0;
+    let autoplayTimer = null;
+    let isVideoPlaying = false;
+    let apiLoaded = false;
+
+    const carousel = document.getElementById('carousel');
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
+    const dotsContainer = document.getElementById('dots');
+    const backButton = document.getElementById('backButton');
+
+    // Video data
+    const videoData = [
+      { id: 'fJ9rUzIMcZQ', title: 'Sweet Child O\' Mine Solo', description: 'Guns N\' Roses - Classic Rock Guitar Solo' },
+      { id: '1w7OgIMMRc4', title: 'Hotel California Solo', description: 'Eagles - Legendary Guitar Performance' },
+      { id: 'SlCRfTmBSGs', title: 'Comfortably Numb Solo', description: 'Pink Floyd - Epic Guitar Solo' },
+      { id: '9jK-NcRmVcw', title: 'Europa (Earth\'s Cry Heaven\'s Smile)', description: 'Santana - Emotional Guitar Masterpiece' },
+      { id: 'hb8E7ErF-T8', title: 'Cliffs of Dover', description: 'Eric Johnson - Technical Guitar Mastery' }
+    ];
+
+    // Create dots
+    slides.forEach((_, i) => {
+      const dot = document.createElement('div');
+      dot.className = 'dot' + (i === 0 ? ' active' : '');
+      dot.dataset.index = i;
+      dot.addEventListener('click', () => goToSlide(i));
+      dotsContainer.appendChild(dot);
+    });
+    const dots = Array.from(document.querySelectorAll('.dot'));
+
+    // Load YouTube API
+    function loadYouTubeAPI() {
+      if (window.YT && window.YT.Player) {
+        apiLoaded = true;
+        return;
+      }
+      
+      const tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      tag.onload = () => { apiLoaded = true; };
+      const firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    }
+
+    // YouTube API ready callback
+    window.onYouTubeIframeAPIReady = function() {
+      apiLoaded = true;
+    };
+
+    // Create YouTube player for specific slide
+    function createPlayer(slideIndex) {
+      if (!apiLoaded || players[slideIndex]) return;
+
+      const slide = slides[slideIndex];
+      const videoId = slide.dataset.videoId;
+      const playerId = `player${slideIndex}`;
+
+      try {
+        players[slideIndex] = new YT.Player(playerId, {
+          height: '100%',
+          width: '100%',
+          videoId: videoId,
+          playerVars: {
+            autoplay: 1,
+            controls: 1,
+            rel: 0,
+            modestbranding: 1,
+            fs: 1,
+            cc_load_policy: 0,
+            iv_load_policy: 3
+          },
+          events: {
+            onReady: (event) => onPlayerReady(event, slideIndex),
+            onStateChange: (event) => onPlayerStateChange(event, slideIndex),
+            onError: (event) => onPlayerError(event, slideIndex)
+          }
+        });
+      } catch (error) {
+        console.error('Error creating YouTube player:', error);
+        hideLoading(slideIndex);
+      }
+    }
+
+    // Player ready
+    function onPlayerReady(event, slideIndex) {
+      hideLoading(slideIndex);
+      showVideoPlayer(slideIndex);
+    }
+
+    // Player state change
+    function onPlayerStateChange(event, slideIndex) {
+      if (slideIndex !== current) return;
+
+      if (event.data === YT.PlayerState.PLAYING) {
+        isVideoPlaying = true;
+        pauseAutoplay();
+        showBackButton();
+      } else if (event.data === YT.PlayerState.PAUSED) {
+        isVideoPlaying = false;
+      } else if (event.data === YT.PlayerState.ENDED) {
+        isVideoPlaying = false;
+        hideBackButton();
+        showThumbnail(slideIndex);
+        // Auto advance to next slide after video ends
+        setTimeout(() => {
+          nextSlide();
+          startAutoplay();
+        }, 2000);
+      }
+    }
+
+    // Player error
+    function onPlayerError(event, slideIndex) {
+      console.error('YouTube player error:', event.data);
+      hideLoading(slideIndex);
+      // Show thumbnail again on error
+      showThumbnail(slideIndex);
+    }
+
+    // Show/hide loading
+    function showLoading(slideIndex) {
+      const slide = slides[slideIndex];
+      const loading = slide.querySelector('.loading-overlay');
+      loading.classList.add('show');
+    }
+
+    function hideLoading(slideIndex) {
+      const slide = slides[slideIndex];
+      const loading = slide.querySelector('.loading-overlay');
+      loading.classList.remove('show');
+    }
+
+    // Show/hide video player
+    function showVideoPlayer(slideIndex) {
+      const slide = slides[slideIndex];
+      const thumbnail = slide.querySelector('.thumbnail-container');
+      const player = slide.querySelector('.youtube-player');
+      
+      thumbnail.style.display = 'none';
+      player.classList.add('active');
+    }
+
+    function showThumbnail(slideIndex) {
+      const slide = slides[slideIndex];
+      const thumbnail = slide.querySelector('.thumbnail-container');
+      const player = slide.querySelector('.youtube-player');
+      
+      thumbnail.style.display = 'block';
+      player.classList.remove('active');
+      
+      // Remove player to save memory
+      if (players[slideIndex]) {
+        try {
+          players[slideIndex].destroy();
+        } catch (error) {
+          console.error('Error destroying player:', error);
+        }
+        delete players[slideIndex];
+      }
+    }
+
+    // Show/hide back button
+    function showBackButton() {
+      backButton.classList.add('show');
+    }
+
+    function hideBackButton() {
+      backButton.classList.remove('show');
+    }
+
+    // Handle play button click
+    function handlePlayClick(slideIndex) {
+      if (slideIndex !== current) return;
+      
+      showLoading(slideIndex);
+      pauseAutoplay();
+      
+      // Wait for API to be ready
+      const checkAPI = () => {
+        if (apiLoaded && window.YT && window.YT.Player) {
+          createPlayer(slideIndex);
+        } else {
+          setTimeout(checkAPI, 100);
+        }
+      };
+      checkAPI();
+    }
+
+    // Handle back button click
+    function handleBackClick() {
+      if (isVideoPlaying && players[current]) {
+        try {
+          players[current].pauseVideo();
+        } catch (error) {
+          console.error('Error pausing video:', error);
+        }
+      }
+      
+      showThumbnail(current);
+      hideBackButton();
+      isVideoPlaying = false;
+      startAutoplay();
+    }
+
+    // Carousel movement
+    function updateCarousel() {
+      carousel.style.transform = `translateX(-${current * 100}vw)`;
+      dots.forEach(d => d.classList.remove('active'));
+      dots[current].classList.add('active');
+    }
+
+    function goToSlide(index) {
+      if (index === current) return;
+      
+      // Hide any playing video
+      if (isVideoPlaying) {
+        showThumbnail(current);
+        hideBackButton();
+        isVideoPlaying = false;
+      }
+      
+      current = index;
+      updateCarousel();
+      pauseAutoplay();
+      
+      // Restart autoplay after user interaction
+      setTimeout(() => {
+        if (!isVideoPlaying) startAutoplay();
+      }, 3000);
+    }
+
+    function prevSlide() {
+      const newIndex = (current - 1 + slides.length) % slides.length;
+      goToSlide(newIndex);
+    }
+
+    function nextSlide() {
+      const newIndex = (current + 1) % slides.length;
+      goToSlide(newIndex);
+    }
+
+    // Autoplay functionality
+    function startAutoplay() {
+      pauseAutoplay(); // Clear any existing timer
+      
+      autoplayTimer = setInterval(() => {
+        if (!isVideoPlaying) {
+          nextSlide();
+        }
+      }, 4000); // 4 seconds between slides
+    }
+
+    function pauseAutoplay() {
+      if (autoplayTimer) {
+        clearInterval(autoplayTimer);
+        autoplayTimer = null;
+      }
+    }
+
+    // Event listeners for play buttons
+    slides.forEach((slide, index) => {
+      const playButton = slide.querySelector('.play-button');
+      const thumbnailContainer = slide.querySelector('.thumbnail-container');
+      
+      playButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        handlePlayClick(index);
+      });
+      
+      thumbnailContainer.addEventListener('click', (e) => {
+        if (e.target === playButton || playButton.contains(e.target)) return;
+        handlePlayClick(index);
+      });
+    });
+
+    // Navigation event listeners
+    prevBtn.addEventListener('click', prevSlide);
+    nextBtn.addEventListener('click', nextSlide);
+    backButton.addEventListener('click', handleBackClick);
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (event) => {
+      switch(event.key) {
+        case 'ArrowLeft':
+          event.preventDefault();
+          if (!isVideoPlaying) prevSlide();
+          break;
+        case 'ArrowRight':
+          event.preventDefault();
+          if (!isVideoPlaying) nextSlide();
+          break;
+        case 'Escape':
+          event.preventDefault();
+          if (isVideoPlaying) handleBackClick();
+          break;
+      }
+    });
+
+    // Touch/swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    carousel.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    carousel.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+      const swipeThreshold = 100;
+      
+      if (!isVideoPlaying && Math.abs(diff) > swipeThreshold) {
+        if (diff > 0) {
+          nextSlide();
+        } else {
+          prevSlide();
+        }
+      }
+    }, { passive: true });
+
+    // Pause autoplay on hover
+    carousel.addEventListener('mouseenter', pauseAutoplay);
+    carousel.addEventListener('mouseleave', () => {
+      if (!isVideoPlaying) {
+        setTimeout(() => {
+          if (!isVideoPlaying) startAutoplay();
+        }, 2000);
+      }
+    });
+
+    // Initialize
+    console.log('Initializing carousel...');
+    loadYouTubeAPI();
+    updateCarousel();
+    
+    // Add image error handling
+    slides.forEach((slide, index) => {
+      const img = slide.querySelector('.thumbnail-image');
+      img.addEventListener('error', function() {
+        console.log(`Thumbnail failed to load for slide ${index}, using fallback`);
+        this.dataset.error = 'true';
+        this.style.display = 'none';
+      });
+      
+      img.addEventListener('load', function() {
+        console.log(`Thumbnail loaded successfully for slide ${index}`);
+      });
+    });
+    
+    // Start autoplay after a short delay to ensure everything is ready
+    setTimeout(() => {
+      startAutoplay();
+    }, 1000);
+  </script>
+</body>
+</html>

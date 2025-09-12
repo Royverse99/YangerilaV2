@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guitar Gallery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 50%, #0c0c0c 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            perspective: 1000px;
+        }
+
+        .gallery {
+            display: grid;
+            gap: 20px;
+            padding: 20px;
+            max-width: 100%;
+        }
+
+        /* Desktop: 3 columns */
+        @media (min-width: 1024px) {
+            .gallery {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 30px;
+                padding: 40px;
+            }
+        }
+
+        /* Tablet: 2 columns */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .gallery {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 25px;
+                padding: 30px;
+            }
+        }
+
+        /* Mobile: 1 column */
+        @media (max-width: 767px) {
+            .gallery {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 20px 15px;
+            }
+        }
+
+        .gallery-item {
+            position: relative;
+            aspect-ratio: 1;
+            cursor: pointer;
+            overflow: hidden;
+            border-radius: 20px;
+            background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.8),
+                0 8px 16px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transform-style: preserve-3d;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-15px) rotateX(5deg) rotateY(2deg) scale(1.02);
+            box-shadow: 
+                0 35px 70px rgba(0, 0, 0, 0.9),
+                0 15px 30px rgba(0, 0, 0, 0.7),
+                0 0 0 1px rgba(255, 255, 255, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .gallery-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, 
+                rgba(255, 255, 255, 0.1) 0%, 
+                transparent 50%, 
+                rgba(255, 255, 255, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 2;
+            border-radius: 20px;
+        }
+
+        .gallery-item:hover::before {
+            opacity: 1;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+            transition: all 0.4s ease;
+            transform: scale(1.1);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.15);
+            filter: brightness(1.1) contrast(1.1);
+        }
+
+        .play-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) translateZ(20px);
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(240, 240, 240, 0.9));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(20px, 4vw, 32px);
+            color: #333;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 
+                0 10px 25px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+            z-index: 3;
+        }
+
+        /* Responsive play icon sizing */
+        @media (min-width: 1024px) {
+            .play-icon {
+                width: 80px;
+                height: 80px;
+                font-size: 32px;
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .play-icon {
+                width: 70px;
+                height: 70px;
+                font-size: 28px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .play-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 24px;
+            }
+        }
+
+        .gallery-item[data-type="video"]:hover .play-icon {
+            opacity: 1;
+            transform: translate(-50%, -50%) translateZ(30px) scale(1.1);
+        }
+
+        /* Modal Styles with 3D effects */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            perspective: 1000px;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 95vw;
+            max-height: 95vh;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 
+                0 50px 100px rgba(0, 0, 0, 0.8),
+                0 20px 40px rgba(0, 0, 0, 0.6),
+                0 0 0 1px rgba(255, 255, 255, 0.1);
+            animation: modalAppear 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        @keyframes modalAppear {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8) rotateX(-10deg);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1) rotateX(0deg);
+            }
+        }
+
+        .modal img {
+            width: 100%;
+            height: auto;
+            max-height: 95vh;
+            object-fit: contain;
+            display: block;
+        }
+
+        .modal iframe {
+            border: none;
+            border-radius: 20px;
+        }
+
+        /* Responsive iframe sizing */
+        @media (min-width: 1024px) {
+            .modal iframe {
+                width: 90vw;
+                height: 50.625vw; /* 16:9 aspect ratio */
+                max-height: 80vh;
+                max-width: 142.22vh; /* maintains 16:9 when height-constrained */
+            }
+        }
+
+        @media (min-width: 768px) and (max-width: 1023px) {
+            .modal iframe {
+                width: 95vw;
+                height: 53.4vw; /* 16:9 aspect ratio */
+                max-height: 70vh;
+                max-width: 124.44vh;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .modal iframe {
+                width: 95vw;
+                height: 53.4vw; /* 16:9 aspect ratio */
+                max-height: 60vh;
+                max-width: 106.67vh;
+            }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 24px;
+            color: #fff;
+            cursor: pointer;
+            z-index: 1001;
+            background: linear-gradient(145deg, #ff4757, #ff3742);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 
+                0 10px 20px rgba(255, 71, 87, 0.4),
+                0 4px 8px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        /* Responsive close button */
+        @media (min-width: 768px) {
+            .close-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+                top: -15px;
+                right: -15px;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .close-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+                top: -10px;
+                right: -10px;
+            }
+        }
+
+        .close-btn:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 
+                0 15px 30px rgba(255, 71, 87, 0.6),
+                0 6px 12px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
+
+        /* Smooth scrolling and performance optimizations */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Loading animation for gallery items */
+        .gallery-item {
+            animation: itemAppear 0.6s ease forwards;
+        }
+
+        @keyframes itemAppear {
+            from {
+                opacity: 0;
+                transform: translateY(30px) rotateX(-10deg);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) rotateX(0deg);
+            }
+        }
+
+        /* Additional mobile optimizations */
+        @media (max-width: 767px) {
+            .gallery-item {
+                border-radius: 15px;
+            }
+            
+            .gallery-item img {
+                border-radius: 15px;
+            }
+            
+            .modal-content {
+                border-radius: 15px;
+            }
+            
+            body {
+                background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 100%);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="gallery" id="gallery">
+        <!-- Gallery items will be dynamically generated -->
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <div class="modal-content" id="modal-content">
+            <!-- Content will be dynamically inserted -->
+        </div>
+    </div>
+
+    <script>
+        // Gallery data - Mix of YouTube videos and guitar images
+        const galleryData = [
+            {
+                type: 'video',
+                youtubeId: 'F5QCs3PnQBc',
+                thumbnail: 'https://img.youtube.com/vi/F5QCs3PnQBc/maxresdefault.jpg'
+            },
+            {
+                type: 'video',
+                youtubeId: 'AV572dsWJjE',
+                thumbnail: 'https://img.youtube.com/vi/AV572dsWJjE/maxresdefault.jpg'
+            },
+            {
+                type: 'image',
+                src: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&h=800&q=80'
+            },
+            {
+                type: 'video',
+                youtubeId: 'VeHZ3kDwt6U',
+                thumbnail: 'https://img.youtube.com/vi/VeHZ3kDwt6U/maxresdefault.jpg'
+            },
+            {
+                type: 'image',
+                src: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&h=800&q=80'
+            },
+            {
+                type: 'video',
+                youtubeId: 'NlU4RbmP8WY',
+                thumbnail: 'https://img.youtube.com/vi/NlU4RbmP8WY/maxresdefault.jpg'
+            },
+            {
+                type: 'image',
+                src: 'https://images.unsplash.com/photo-1564186763535-ebb21ef5277f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&h=800&q=80'
+            },
+            {
+                type: 'video',
+                youtubeId: 'wEvQrqoGlzk',
+                thumbnail: 'https://img.youtube.com/vi/wEvQrqoGlzk/maxresdefault.jpg'
+            },
+            {
+                type: 'image',
+                src: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&h=800&q=80'
+            },
+            {
+                type: 'video',
+                youtubeId: 'JdN1kVj-Jd8',
+                thumbnail: 'https://img.youtube.com/vi/JdN1kVj-Jd8/maxresdefault.jpg'
+            },
+            {
+                type: 'image',
+                src: 'https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&h=800&q=80'
+            },
+            {
+                type: 'image',
+                src: 'https://images.unsplash.com/photo-1556449895-a33c9dba33dd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&h=800&q=80'
+            },
+            {
+                type: 'image',
+                src: 'https://images.unsplash.com/photo-1525201548942-d8732f6617a0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&h=800&q=80'
+            },
+            {
+                type: 'image',
+                src: 'https://images.unsplash.com/photo-1510915361894-db8b60106cb1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&h=800&q=80'
+            },
+            {
+                type: 'image',
+                src: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&h=800&q=80'
+            }
+        ];
+
+        function generateGallery() {
+            const gallery = document.getElementById('gallery');
+            
+            galleryData.forEach((item, index) => {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item';
+                galleryItem.setAttribute('data-type', item.type);
+                galleryItem.style.animationDelay = `${index * 0.1}s`;
+                
+                let thumbnailSrc = item.type === 'video' ? item.thumbnail : item.src;
+                let playIcon = item.type === 'video' ? '<div class="play-icon">▶</div>' : '';
+                
+                galleryItem.innerHTML = `
+                    <img src="${thumbnailSrc}" alt="" loading="lazy">
+                    ${playIcon}
+                `;
+                
+                galleryItem.addEventListener('click', () => openModal(item));
+                gallery.appendChild(galleryItem);
+            });
+        }
+
+        function openModal(item) {
+            const modal = document.getElementById('modal');
+            const modalContent = document.getElementById('modal-content');
+            
+            if (item.type === 'video') {
+                modalContent.innerHTML = `
+                    <iframe 
+                        src="https://www.youtube.com/embed/${item.youtubeId}?autoplay=1" 
+                        frameborder="0" 
+                        allowfullscreen
+                        allow="autoplay; encrypted-media">
+                    </iframe>
+                `;
+            } else {
+                modalContent.innerHTML = `
+                    <img src="${item.src}" alt="">
+                `;
+            }
+            
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            const modalContent = document.getElementById('modal-content');
+            
+            modal.style.display = 'none';
+            modalContent.innerHTML = '';
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside content
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Initialize gallery when page loads
+        document.addEventListener('DOMContentLoaded', generateGallery);
+
+        // Add touch support for mobile 3D effects
+        if ('ontouchstart' in window) {
+            document.addEventListener('touchstart', function() {}, true);
+        }
+    </script>
+</body>
+</html>
