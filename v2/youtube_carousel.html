@@ -9,15 +9,65 @@
     body { margin:0; background:#111; color:#fff; font-family:sans-serif }
     .swiper-container { width:100%; height:100vh }
     .swiper-slide { display:flex; align-items:center; justify-content:center; }
-    .video-card { position:relative; width:90%; aspect-ratio:16/9; background:#000; overflow:hidden; border-radius:8px }
+
+    .video-card {
+      position:relative;
+      width:90%; aspect-ratio:16/9;
+      background:#000; overflow:hidden;
+      border-radius:8px;
+    }
     .video-thumb { width:100%; height:100%; object-fit:cover; cursor:pointer; }
-    .video-info { position:absolute; bottom:0; left:0; right:0; background:linear-gradient(transparent,rgba(0,0,0,.8)); padding:1rem; }
+    .video-info {
+      position:absolute; bottom:0; left:0; right:0;
+      background:linear-gradient(transparent,rgba(0,0,0,.8));
+      padding:1rem;
+    }
     .video-info h3 { margin:0 0 .5rem; font-size:1.5rem }
     .video-info p { margin:0; font-size:1rem; color:#aaa }
-    .play-overlay { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:rgba(122,231,199,0.8); width:80px;height:80px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2rem; color:#000; z-index:10; }
-    .video-player { position:absolute; top:0; left:0; width:100%; height:100%; display:none; z-index:5; }
-    .back-button { position:absolute; top:1rem; left:1rem; background:rgba(0,0,0,.7); color:#7ae7c7; border:none; width:40px;height:40px;border-radius:50%;cursor:pointer; display:none; align-items:center; justify-content:center; z-index:1000 }
-    .swiper-button-next, .swiper-button-prev { color:#7ae7c7 !important; background:rgba(0,0,0,.5); border-radius:50%; width:44px;height:44px; display:flex; align-items:center; justify-content:center; }
+
+    .play-overlay {
+      position:absolute; top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      background:rgba(122,231,199,0.8);
+      width:80px;height:80px;
+      border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-size:2rem; color:#000; z-index:10;
+      cursor:pointer;
+    }
+
+    /* ✅ video player is hidden with opacity, not display:none */
+    .video-player {
+      position:absolute; top:0; left:0;
+      width:100%; height:100%;
+      opacity:0; pointer-events:none;
+      z-index:5; transition:opacity .3s;
+    }
+    .video-player.active {
+      opacity:1; pointer-events:auto;
+    }
+
+    .back-button {
+      position:absolute; top:1rem; left:1rem;
+      background:rgba(0,0,0,.7); color:#7ae7c7;
+      border:none; width:40px;height:40px;
+      border-radius:50%;cursor:pointer;
+      align-items:center; justify-content:center;
+      z-index:1000;
+      opacity:0; pointer-events:none;
+      transition:opacity .3s;
+      display:flex;
+    }
+    .back-button.show {
+      opacity:1; pointer-events:auto;
+    }
+
+    .swiper-button-next, .swiper-button-prev {
+      color:#7ae7c7 !important;
+      background:rgba(0,0,0,.5);
+      border-radius:50%; width:44px;height:44px;
+      display:flex; align-items:center; justify-content:center;
+    }
     .swiper-button-next::after, .swiper-button-prev::after { font-size:1.5rem }
     .swiper-pagination-bullet { background:rgba(122,231,199,0.5) }
     .swiper-pagination-bullet-active { background:#7ae7c7 }
@@ -39,6 +89,8 @@
       'AyJcLLYyJ9k','hgEjTeWc8C0','Anop2dCuR2g','umUAWqoxt-0'
     ];
     const wrapper = document.querySelector('.swiper-wrapper');
+
+    // Build slides dynamically
     videoIDs.forEach(id => {
       const slide = document.createElement('div');
       slide.className='swiper-slide';
@@ -52,6 +104,7 @@
       wrapper.appendChild(slide);
     });
 
+    // Fill in thumbnails & titles
     document.querySelectorAll('.video-card').forEach(card => {
       const id=card.dataset.id;
       fetch(`https://www.youtube.com/oembed?url=https://youtu.be/${id}&format=json`)
@@ -77,6 +130,7 @@
       autoplay:{delay:3000,disableOnInteraction:false}
     });
 
+    // ✅ Load YouTube API
     const tag=document.createElement('script');
     tag.src="https://www.youtube.com/iframe_api";
     document.body.appendChild(tag);
@@ -95,7 +149,7 @@
               card.querySelector('.video-thumb').style.display='none';
               card.querySelector('.play-overlay').style.display='none';
               card.querySelector('.video-info').style.display='none';
-              container.classList.add('active');
+              container.classList.add('active'); // ✅ show iframe
               backBtn.classList.add('show');
             }
             if(e.data===YT.PlayerState.ENDED){
@@ -115,6 +169,7 @@
     }
 
     function stopVideo(id){
+      if(!players[id]) return;
       players[id].stopVideo();
       const card=document.querySelector(`.video-card[data-id="${id}"]`);
       card.querySelector('.video-thumb').style.display='';
@@ -130,6 +185,14 @@
       const id=document.querySelector('.swiper-slide-active .video-card').dataset.id;
       stopVideo(id);
     };
+
+    // ✅ stop video when changing slides
+    swiper.on('slideChangeTransitionStart', () => {
+      const activeCard = document.querySelector('.swiper-slide-active .video-card');
+      if (!activeCard) return;
+      const id = activeCard.dataset.id;
+      if (isPlaying) stopVideo(id);
+    });
   </script>
 </body>
 </html>
