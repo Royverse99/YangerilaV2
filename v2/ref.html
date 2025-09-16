@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en-US" class="no-js ">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Referral Reward - Yangerila Creative Studio</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+  background: rgba(24, 47, 53, 0.25); /* semi-transparent dark background */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: #4fd1c7;
+  font-family: 'Arial', sans-serif;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  margin: 0;
+}
+
+
+    .form-container {
+  background: rgba(24, 47, 53, 0.6); /* semi-transparent, same dark teal color */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(79, 209, 199, 0.3);
+  border-radius: 16px;
+  padding: 40px;
+  max-width: 600px; /* or your preferred width */
+  width: 100%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  color: #4fd1c7;
+  text-align: center; /* optional, adjust per your layout */
+}
+
+    h1 {
+      color: #4fd1c7;
+      margin-bottom: 20px;
+      font-weight: 600;
+      font-size: 28px;
+      text-align: center;
+    }
+
+    p.description {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 16px;
+      color: rgba(79, 209, 199, 0.8);
+      line-height: 1.5;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      row-gap: 25px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      color: #4fd1c7;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 16px;
+      background: rgba(24, 47, 53, 0.8);
+      border: 1px solid rgba(79, 209, 199, 0.4);
+      border-radius: 8px;
+      color: #4fd1c7;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #4fd1c7;
+      box-shadow: 0 0 0 3px rgba(79, 209, 199, 0.1);
+      transform: scale(1.02);
+    }
+
+    input::placeholder {
+      color: rgba(79, 209, 199, 0.6);
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #4fd1c7 0%, #38b2ac 100%);
+      border: none;
+      border-radius: 8px;
+      color: #1a202c;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 0 25px rgba(79, 209, 199, 0.4);
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(79, 209, 199, 0.6);
+    }
+
+    .thank-you {
+      text-align: center;
+      padding: 60px 20px;
+      display: none;
+      color: #4fd1c7;
+    }
+
+    .thank-you h2 {
+      font-size: 32px;
+      margin-bottom: 12px;
+      font-weight: 400;
+    }
+
+    .thank-you p {
+      font-size: 18px;
+      line-height: 1.5;
+      color: rgba(79, 209, 199, 0.8);
+      margin-bottom: 24px;
+    }
+
+    .back-btn {
+      background: rgba(79, 209, 199, 0.2);
+      border: 1px solid #4fd1c7;
+      color: #4fd1c7;
+      padding: 12px 28px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .back-btn:hover {
+      background: rgba(79, 209, 199, 0.3);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      .form-container {
+        padding: 30px 20px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .submit-btn {
+        font-size: 14px;
+        padding: 14px;
+      }
+    }
+.submit-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #4fd1c7 0%, #38b2ac 100%);
+  border: none;
+  border-radius: 8px;
+  color: #1a202c;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 0 25px rgba(79, 209, 199, 0.4);
+  margin-top: 25px;  /* NEW */
+}
+
+  </style>
+</head>
+
+<body>
+  <div class="form-container">
+    <h1>Referral Reward</h1>
+    <p class="description">
+      Know someone interested in learning guitar? Refer them to Yangerila Creative Studio for a free demo session. If they join, you’ll receive an Amazon gift card worth ₹1000 as our thank-you for spreading the word.
+    </p>
+
+    <form id="referralForm" onsubmit="submitReferralForm(event)">
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="yourName">Your Name *</label>
+          <input type="text" id="yourName" name="yourName" placeholder="Enter your full name" required />
+        </div>
+        <div class="form-group">
+          <label for="yourContact">Your Contact Number *</label>
+          <input type="tel" id="yourContact" name="yourContact" placeholder="+91 98765 43210" required />
+        </div>
+        <div class="form-group">
+          <label for="referredName">Referred Person’s Name *</label>
+          <input type="text" id="referredName" name="referredName" placeholder="Enter referred person's full name" required />
+        </div>
+        <div class="form-group">
+          <label for="referredContact">Referred Person’s Contact Number *</label>
+          <input type="tel" id="referredContact" name="referredContact" placeholder="+91 98765 43210" required />
+        </div>
+      </div>
+      <button type="submit" class="submit-btn">Submit Referral</button>
+    </form>
+
+    <div id="thankYouMessage" class="thank-you">
+      <h2>Thank You!</h2>
+      <p>Your referral has been submitted successfully.<br />We appreciate you helping us grow the Yangerila community.</p>
+      <button class="back-btn" onclick="resetForm()">Submit Another Referral</button>
+    </div>
+  </div>
+
+  <script>
+    function submitReferralForm(event) {
+      event.preventDefault();
+      const form = event.target;
+
+      // Basic validation is handled by required attributes
+      // Additional validation can be added here if needed
+
+      // Simulate successful submission
+      form.style.display = 'none';
+      document.getElementById('thankYouMessage').style.display = 'block';
+    }
+
+    function resetForm() {
+      const form = document.getElementById('referralForm');
+      form.reset();
+      form.style.display = 'block';
+
+      document.getElementById('thankYouMessage').style.display = 'none';
+    }
+  </script>
+</body>
+
+</html>

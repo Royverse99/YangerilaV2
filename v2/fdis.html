@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en-US" class="no-js ">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Festive Discount - Yangerila Creative Studio</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      /* Make background fully transparent with a blurred glass effect */
+      background: transparent;
+      font-family: 'Arial', sans-serif;
+      color: #4fd1c7;
+      width: 100%;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+
+      /* Background blur glass effect */
+      background: rgba(24, 47, 53, 0.25);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 0;
+      /* No solid color behind, just blur */
+    }
+
+    .form-container {
+      background: rgba(24, 47, 53, 0.6); /* Semi-transparent same color */
+      border: 1px solid rgba(79, 209, 199, 0.3);
+      border-radius: 16px;
+      padding: 40px;
+      width: 100%;
+      max-width: 600px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      color: #4fd1c7;
+      text-align: center;
+    }
+
+    h1 {
+      color: #4fd1c7;
+      margin-bottom: 20px;
+      font-weight: 600;
+      font-size: 28px;
+    }
+
+    p.description {
+      font-size: 16px;
+      color: rgba(79, 209, 199, 0.8);
+      line-height: 1.5;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      .form-container {
+        padding: 30px 20px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+    }
+
+    /* Submit button style (margin-top added as before) */
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #4fd1c7 0%, #38b2ac 100%);
+      border: none;
+      border-radius: 8px;
+      color: #1a202c;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      box-shadow: 0 0 25px rgba(79, 209, 199, 0.4);
+      margin-top: 25px;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(79, 209, 199, 0.6);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="form-container">
+    <h1>Festive Discount</h1>
+    <p class="description">
+      At Yangerila Creative Studio, we regularly announce special festive discounts for both new and ongoing students. Check this space during festive seasons to grab exciting offers and enjoy learning guitar at even more value.
+    </p>
+  </div>
+</body>
+
+</html>

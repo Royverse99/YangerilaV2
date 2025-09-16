@@ -3,82 +3,90 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About Yangerila - FAQ</title>
+  <title>Courses and Features - FAQ</title>
   <style>
-    body {
-      background: rgba(7, 36, 44, 0.7);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
-      color: #ffffff;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    * {
       margin: 0;
-      padding: 40px 20px;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      line-height: 1.6;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    .container {
+    body {
+      background: rgba(24, 47, 53, 0.25);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      color: #4fd1c7;
+      font-family: 'Arial', sans-serif;
+      width: 100%;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      margin: 0;
+    }
+
+    .form-container {
+      background: rgba(24, 47, 53, 0.6);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(79, 209, 199, 0.3);
+      border-radius: 16px;
+      padding: 40px;
       max-width: 900px;
       width: 100%;
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 50px;
-      padding: 30px;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(122, 231, 199, 0.25);
-      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      color: #4fd1c7;
+      text-align: left;
     }
 
     h1 {
-      color: #7AE7C7;
-      font-size: clamp(28px, 5vw, 42px);
-      font-weight: 700;
-      margin: 0 0 10px 0;
-      letter-spacing: -0.5px;
+      color: #4fd1c7;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 28px;
+      text-align: center;
     }
 
-    .subtitle {
-      color: rgba(255, 255, 255, 0.8);
-      font-size: 18px;
-      font-weight: 300;
-      margin: 0;
+    p.description {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 16px;
+      color: rgba(79, 209, 199, 0.8);
+      line-height: 1.5;
     }
 
     .main-accordion {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(122, 231, 199, 0.3);
-      border-radius: 12px;
-      margin-bottom: 16px;
+      background: rgba(24, 47, 53, 0.8);
+      border: 1px solid rgba(79, 209, 199, 0.3);
+      border-radius: 8px;
+      margin-bottom: 18px;
       overflow: hidden;
-      box-shadow: 0 4px 25px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      backdrop-filter: blur(15px) saturate(160%);
-      -webkit-backdrop-filter: blur(15px) saturate(160%);
+      backdrop-filter: blur(14px) saturate(160%);
+      -webkit-backdrop-filter: blur(14px) saturate(160%);
     }
 
     .main-accordion:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 35px rgba(0, 0, 0, 0.15);
+      transform: translateY(-1.5px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
     }
 
     .main-question {
       background: transparent;
-      color: #ffffff;
+      color: #FFFFFF;
       cursor: pointer;
-      padding: 24px 28px;
+      padding: 18px 22px;
       width: 100%;
       border: none;
       outline: none;
       text-align: left;
-      font-size: 20px;
+      font-size: 16px;
       font-weight: 600;
+      letter-spacing: 0.25px;
       transition: all 0.3s ease;
       display: flex;
       justify-content: space-between;
@@ -86,20 +94,26 @@
       position: relative;
     }
 
+    .main-question:focus {
+      border-color: #4fd1c7;
+      box-shadow: 0 0 0 3px rgba(79, 209, 199, 0.1);
+      transform: scale(1.02);
+    }
+
     .main-question:hover {
-      color: #7AE7C7;
+      color: #4fd1c7;
     }
 
     .main-question.active {
-      color: #7AE7C7;
-      background: rgba(122, 231, 199, 0.08);
+      color: #4fd1c7;
+      background: rgba(79, 209, 199, 0.1);
     }
 
     .arrow {
-      font-size: 16px;
+      font-size: 17px;
       transition: transform 0.3s ease;
-      color: #7AE7C7;
-      font-weight: bold;
+      color: #4fd1c7;
+      font-weight: 700;
     }
 
     .main-question.active .arrow {
@@ -110,26 +124,29 @@
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      background: rgba(0, 0, 0, 0.15);
-      border-top: 1px solid rgba(122, 231, 199, 0.2);
+      background: rgba(24, 47, 53, 0.9);
+      border-top: 1px solid rgba(79, 209, 199, 0.3);
       backdrop-filter: blur(12px) saturate(140%);
       -webkit-backdrop-filter: blur(12px) saturate(140%);
     }
 
     .main-panel.scrollable {
-      max-height: 400px;
+      max-height: 380px;
       overflow-y: auto;
+      padding-right: 6px;
     }
 
     .answer-content {
-      padding: 32px 28px;
-      color: rgba(255, 255, 255, 0.85);
+      padding: 20px 22px;
+      color: #FFFFFF;
       font-size: 15px;
-      line-height: 1.7;
+      line-height: 1.65;
+      letter-spacing: 0.3px;
     }
 
     .answer-content p {
-      margin: 0 0 16px 0;
+      margin: 0 0 14px 0;
+      color: #FFFFFF;
     }
 
     .answer-content p:last-child {
@@ -137,8 +154,9 @@
     }
 
     .highlight {
-      color: #7AE7C7;
-      font-weight: 600;
+      color: #4fd1c7;
+      font-weight: 700;
+      letter-spacing: 0.25px;
     }
 
     .main-panel::-webkit-scrollbar {
@@ -146,64 +164,78 @@
     }
 
     .main-panel::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(24, 47, 53, 0.8);
       border-radius: 3px;
     }
 
     .main-panel::-webkit-scrollbar-thumb {
-      background: rgba(122, 231, 199, 0.6);
+      background: rgba(79, 209, 199, 0.6);
       border-radius: 3px;
       transition: background 0.3s ease;
     }
 
     .main-panel::-webkit-scrollbar-thumb:hover {
-      background: rgba(122, 231, 199, 0.8);
+      background: rgba(79, 209, 199, 0.8);
     }
 
     @media (max-width: 768px) {
       body {
-        padding: 20px 15px;
+        padding: 15px;
       }
 
-      .header {
-        padding: 20px;
-        margin-bottom: 30px;
+      .form-container {
+        padding: 30px 25px;
+      }
+
+      h1 {
+        font-size: 24px;
       }
 
       .main-question {
-        padding: 20px 24px;
-        font-size: 18px;
+        padding: 16px 20px;
+        font-size: 15px;
       }
 
       .answer-content {
-        padding: 20px 24px;
+        padding: 18px 20px;
         font-size: 14px;
       }
 
       .main-panel.scrollable {
-        max-height: 300px;
+        max-height: 280px;
       }
     }
 
     @media (max-width: 480px) {
+      .form-container {
+        padding: 25px 20px;
+      }
+
+      h1 {
+        font-size: 22px;
+      }
+
       .main-question {
-        padding: 18px 20px;
-        font-size: 16px;
+        padding: 14px 18px;
+        font-size: 14px;
       }
 
       .answer-content {
-        padding: 18px 20px;
+        padding: 16px 18px;
+        font-size: 13px;
+      }
+
+      p.description {
+        font-size: 14px;
       }
     }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <div class="header">
-    <h1>Courses and Features</h1>
-    <p class="subtitle">Frequently Asked Questions</p>
-  </div>
+<div class="form-container">
+  <h1>Courses and Features</h1>
+  <p class="description">Frequently Asked Questions</p>
 
   <!-- Question 1 -->
   <div class="main-accordion">
@@ -216,7 +248,6 @@
         <p><span class="highlight">Yangerila Creative Studio</span> offers a range of guitar courses designed for all types of learners. Our main offerings include Rhythm Grades, Lead Grades, Fingerpicking Grades, and Musicianship Grades, each structured to help students progress step by step.</p>
         <p>For those who want to enjoy guitar as a hobby, we also have <span class="highlight">Hobby Courses,</span> designed for working professionals, housewives, and music lovers. These courses focus on playing songs and performing confidently without diving deep into complex theory or techniques.</p>
         <p>All our courses are crafted with <span class="highlight">performance, practical learning, and flexibility</span> in mind, so students can choose a path that suits their goals and interests.</p>
-        
       </div>
     </div>
   </div>
@@ -242,11 +273,9 @@
     </button>
     <div class="main-panel">
       <div class="answer-content">
-        <p>As the name suggests, <span class="highlight">Hobby Courses</span> are designed for students who want to add music into their lives but may not have the time or interest to dive into all the details required to become a professional musician. These courses fast-track progress, focusing only on what’s needed to perform favorite songs confidently.</p>
+        <p>As the name suggests, <span class="highlight">Hobby Courses</span> are designed for students who want to add music into their lives but may not have the time or interest to dive into all the details required to become a professional musician. These courses fast-track progress, focusing only on what's needed to perform favorite songs confidently.</p>
 
         <p><span class="highlight">Graded courses,</span> on the other hand, cover more theory, technical exercises, and detailed learning to build complete musicianship. While Graded courses are structured courses and students have to keep up with the course, Hobby courses are much more flexible in keeping up with the progress of student.</p>
-
-
       </div>
     </div>
   </div>
@@ -260,7 +289,7 @@
     <div class="main-panel">
       <div class="answer-content">
         <p>For absolute beginners, we recommend <span class="highlight">Rhythm Grade 1.</span> Rhythm is the fastest-progressing technique among all, and Rhythm Grade 1 also includes basic singing tips and some introductory lead lessons. This allows students to start performing their favorite songs sooner, which ignites their passion and motivates them to tackle more advanced courses confidently.</p>
-        <p>That said, students can still choose <span class="highlight">Fingerpicking Grade 1 or Lead Grade 1</span> as their starting course. However, if either is taken before completing Rhythm Grade 1, the course duration will extend to 18 months instead of 6, as many foundational elements from Rhythm Grade 1 are also included in these courses. </p>
+        <p>That said, students can still choose <span class="highlight">Fingerpicking Grade 1 or Lead Grade 1</span> as their starting course. However, if either is taken before completing Rhythm Grade 1, the course duration will extend to 18 months instead of 6, as many foundational elements from Rhythm Grade 1 are also included in these courses.</p>
       </div>
     </div>
   </div>

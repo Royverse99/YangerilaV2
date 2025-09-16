@@ -5,80 +5,88 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Classes & Online Learning - FAQ</title>
   <style>
-    body {
-      background: rgba(7, 36, 44, 0.7);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
-      color: #ffffff;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    * {
       margin: 0;
-      padding: 40px 20px;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      line-height: 1.6;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    .container {
+    body {
+      background: rgba(24, 47, 53, 0.25);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      color: #4fd1c7;
+      font-family: 'Arial', sans-serif;
+      width: 100%;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      margin: 0;
+    }
+
+    .form-container {
+      background: rgba(24, 47, 53, 0.6);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(79, 209, 199, 0.3);
+      border-radius: 16px;
+      padding: 40px;
       max-width: 900px;
       width: 100%;
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 50px;
-      padding: 30px;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(122, 231, 199, 0.25);
-      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      color: #4fd1c7;
+      text-align: left;
     }
 
     h1 {
-      color: #7AE7C7;
-      font-size: clamp(28px, 5vw, 42px);
-      font-weight: 700;
-      margin: 0 0 10px 0;
-      letter-spacing: -0.5px;
+      color: #4fd1c7;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 28px;
+      text-align: center;
     }
 
-    .subtitle {
-      color: rgba(255, 255, 255, 0.8);
-      font-size: 18px;
-      font-weight: 300;
-      margin: 0;
+    p.description {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 16px;
+      color: rgba(79, 209, 199, 0.8);
+      line-height: 1.5;
     }
 
     .main-accordion {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(122, 231, 199, 0.3);
-      border-radius: 12px;
-      margin-bottom: 16px;
+      background: rgba(24, 47, 53, 0.8);
+      border: 1px solid rgba(79, 209, 199, 0.3);
+      border-radius: 8px;
+      margin-bottom: 18px;
       overflow: hidden;
-      box-shadow: 0 4px 25px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      backdrop-filter: blur(15px) saturate(160%);
-      -webkit-backdrop-filter: blur(15px) saturate(160%);
+      backdrop-filter: blur(14px) saturate(160%);
+      -webkit-backdrop-filter: blur(14px) saturate(160%);
     }
 
     .main-accordion:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 35px rgba(0, 0, 0, 0.15);
+      transform: translateY(-1.5px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
     }
 
     .main-question {
       background: transparent;
-      color: #ffffff;
+      color: #FFFFFF;
       cursor: pointer;
-      padding: 24px 28px;
+      padding: 18px 22px;
       width: 100%;
       border: none;
       outline: none;
       text-align: left;
-      font-size: 20px;
+      font-size: 16px;
       font-weight: 600;
+      letter-spacing: 0.25px;
       transition: all 0.3s ease;
       display: flex;
       justify-content: space-between;
@@ -86,20 +94,26 @@
       position: relative;
     }
 
+    .main-question:focus {
+      border-color: #4fd1c7;
+      box-shadow: 0 0 0 3px rgba(79, 209, 199, 0.1);
+      transform: scale(1.02);
+    }
+
     .main-question:hover {
-      color: #7AE7C7;
+      color: #4fd1c7;
     }
 
     .main-question.active {
-      color: #7AE7C7;
-      background: rgba(122, 231, 199, 0.08);
+      color: #4fd1c7;
+      background: rgba(79, 209, 199, 0.1);
     }
 
     .arrow {
-      font-size: 16px;
+      font-size: 17px;
       transition: transform 0.3s ease;
-      color: #7AE7C7;
-      font-weight: bold;
+      color: #4fd1c7;
+      font-weight: 700;
     }
 
     .main-question.active .arrow {
@@ -110,35 +124,50 @@
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      background: rgba(0, 0, 0, 0.15);
-      border-top: 1px solid rgba(122, 231, 199, 0.2);
+      background: rgba(24, 47, 53, 0.9);
+      border-top: 1px solid rgba(79, 209, 199, 0.3);
       backdrop-filter: blur(12px) saturate(140%);
       -webkit-backdrop-filter: blur(12px) saturate(140%);
     }
 
     .main-panel.scrollable {
-      max-height: 400px;
+      max-height: 380px;
       overflow-y: auto;
+      padding-right: 6px;
     }
 
     .answer-content {
-      padding: 32px 28px;
-      color: rgba(255, 255, 255, 0.85);
+      padding: 20px 22px;
+      color: #FFFFFF;
       font-size: 15px;
-      line-height: 1.7;
+      line-height: 1.65;
+      letter-spacing: 0.3px;
     }
 
     .answer-content p {
-      margin: 0 0 16px 0;
+      margin: 0 0 14px 0;
+      color: #FFFFFF;
     }
 
     .answer-content p:last-child {
       margin-bottom: 0;
     }
 
+    .answer-content ul {
+      margin: 14px 0;
+      padding-left: 20px;
+      color: #FFFFFF;
+    }
+
+    .answer-content li {
+      margin: 6px 0;
+      color: #FFFFFF;
+    }
+
     .highlight {
-      color: #7AE7C7;
-      font-weight: 600;
+      color: #4fd1c7;
+      font-weight: 700;
+      letter-spacing: 0.25px;
     }
 
     .main-panel::-webkit-scrollbar {
@@ -146,150 +175,169 @@
     }
 
     .main-panel::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(24, 47, 53, 0.8);
       border-radius: 3px;
     }
 
     .main-panel::-webkit-scrollbar-thumb {
-      background: rgba(122, 231, 199, 0.6);
+      background: rgba(79, 209, 199, 0.6);
       border-radius: 3px;
       transition: background 0.3s ease;
     }
 
     .main-panel::-webkit-scrollbar-thumb:hover {
-      background: rgba(122, 231, 199, 0.8);
+      background: rgba(79, 209, 199, 0.8);
     }
 
     @media (max-width: 768px) {
       body {
-        padding: 20px 15px;
+        padding: 15px;
       }
 
-      .header {
-        padding: 20px;
-        margin-bottom: 30px;
+      .form-container {
+        padding: 30px 25px;
+      }
+
+      h1 {
+        font-size: 24px;
       }
 
       .main-question {
-        padding: 20px 24px;
-        font-size: 18px;
+        padding: 16px 20px;
+        font-size: 15px;
       }
 
       .answer-content {
-        padding: 20px 24px;
+        padding: 18px 20px;
         font-size: 14px;
       }
 
       .main-panel.scrollable {
-        max-height: 300px;
+        max-height: 280px;
       }
     }
 
     @media (max-width: 480px) {
+      .form-container {
+        padding: 25px 20px;
+      }
+
+      h1 {
+        font-size: 22px;
+      }
+
       .main-question {
-        padding: 18px 20px;
-        font-size: 16px;
+        padding: 14px 18px;
+        font-size: 14px;
       }
 
       .answer-content {
-        padding: 18px 20px;
+        padding: 16px 18px;
+        font-size: 13px;
+      }
+
+      p.description {
+        font-size: 14px;
       }
     }
   </style>
 </head>
 <body>
 
-<div class="container">
-  <div class="header">
-    <h1>Classes & Online Learning</h1>
-    <p class="subtitle">Frequently Asked Questions</p>
-  </div>
+<div class="form-container">
+  <h1>Classes & Online Learning</h1>
+  <p class="description">Frequently Asked Questions</p>
 
   <!-- Question 1 -->
   <div class="main-accordion">
-  <button class="main-question">
-    I am not sure about online classes.
-    <span class="arrow">▼</span>
-  </button>
-  <div class="main-panel">
-    <div class="answer-content">
-      <p>We don’t provide just any online classes. Our sessions are <span class="highlight">live, interactive classes with expert teachers</span> and your batchmates. Teachers use multi-camera setups and professional audio, offering continuous feedback and support throughout the class. Learning with the same batchmates creates a mini classroom environment, making it social, engaging, and motivating.</p>
+    <button class="main-question">
+      I am not sure about online classes.
+      <span class="arrow">▼</span>
+    </button>
+    <div class="main-panel">
+      <div class="answer-content">
+        <p>We don't provide just any online classes. Our sessions are <span class="highlight">live, interactive classes with expert teachers</span> and your batchmates. Teachers use multi-camera setups and professional audio, offering continuous feedback and support throughout the class. Learning with the same batchmates creates a mini classroom environment, making it social, engaging, and motivating.</p>
 
-      <p>When people think of online classes, they often imagine YouTube lessons or short pre-recorded courses. While YouTube is a great source of information, it doesn’t provide a structured course, and short lessons lack the feedback and guidance that live classes offer.</p>
+        <p>When people think of online classes, they often imagine YouTube lessons or short pre-recorded courses. While YouTube is a great source of information, it doesn't provide a structured course, and short lessons lack the feedback and guidance that live classes offer.</p>
 
-      <p>At Yangerila, our teachers follow <span class="highlight">comprehensive courses</span> that are paired with checks such as <span class="highlight">performance classes, regular assessments, and tasks</span>. This ensures every student progresses efficiently while staying supported and engaged. Attend our free Online demo session to see how we excel online guitar classes. Many students overcome their initial skepticism during the demo session itself.</p>
+        <p>At Yangerila, our teachers follow <span class="highlight">comprehensive courses</span> that are paired with checks such as <span class="highlight">performance classes, regular assessments, and tasks</span>. This ensures every student progresses efficiently while staying supported and engaged. Attend our free Online demo session to see how we excel online guitar classes. Many students overcome their initial skepticism during the demo session itself.</p>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="main-accordion">
-  <button class="main-question">
-    Tell me about the class schedule?
-    <span class="arrow">▼</span>
-  </button>
-  <div class="main-panel">
-    <div class="answer-content">
-      <p>In short the <span class="highlight">Schedule</span> goes like:</p>
-      <ul>
-        <li>Number of classes per week: <span class="highlight"><span class="highlight">2</span></li>
-        <li>Length of class: <span class="highlight">60–75 minutes</span></li>
-        <li>Held in small batches of up to <span class="highlight">8 students</span></li>
-        <li>Meeting app used - <span class="highlight">Zoom</span></li>
-        <li>Backup options available <span class="highlight">(read below)</span></li>
-      </ul>
+  <!-- Question 2 -->
+  <div class="main-accordion">
+    <button class="main-question">
+      Tell me about the class schedule?
+      <span class="arrow">▼</span>
+    </button>
+    <div class="main-panel">
+      <div class="answer-content">
+        <p>In short the <span class="highlight">Schedule</span> goes like:</p>
+        <ul>
+          <li>Number of classes per week: <span class="highlight">2</span></li>
+          <li>Length of class: <span class="highlight">60–75 minutes</span></li>
+          <li>Held in small batches of up to <span class="highlight">8 students</span></li>
+          <li>Meeting app used - <span class="highlight">Zoom</span></li>
+          <li>Backup options available <span class="highlight">(read below)</span></li>
+        </ul>
 
-      <p>When a student joins, they are given available slots for new batches. Once the student chooses their timings, they are added to that batch. A batch consists of about 8 students of similar level. For example, if a beginner joins, everyone in their batch will be a beginner. Classes then run <span class="highlight">twice a week</span> on the selected timings.</p>
+        <p>When a student joins, they are given available slots for new batches. Once the student chooses their timings, they are added to that batch. A batch consists of about 8 students of similar level. For example, if a beginner joins, everyone in their batch will be a beginner. Classes then run <span class="highlight">twice a week</span> on the selected timings.</p>
 
-      <p>Each student is also allotted a backup batch timing. Students cover their pre-informed missed classes in the backup batch. No backup classes are provided for uninformed absence.</p>
+        <p>Each student is also allotted a backup batch timing. Students cover their pre-informed missed classes in the backup batch. No backup classes are provided for uninformed absence.</p>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="main-accordion">
-  <button class="main-question">
-    Are the classes live or pre-recorded?
-    <span class="arrow">▼</span>
-  </button>
-  <div class="main-panel">
-    <div class="answer-content">
-      <p>All classes we take are <span class="highlight">live interactive sessions</span> with our teachers. We don’t believe in learning through pre-recorded classes, as they lack the feedback from the teacher which is essential to learn faster and properly.</p>
+  <!-- Question 3 -->
+  <div class="main-accordion">
+    <button class="main-question">
+      Are the classes live or pre-recorded?
+      <span class="arrow">▼</span>
+    </button>
+    <div class="main-panel">
+      <div class="answer-content">
+        <p>All classes we take are <span class="highlight">live interactive sessions</span> with our teachers. We don't believe in learning through pre-recorded classes, as they lack the feedback from the teacher which is essential to learn faster and properly.</p>
 
-      <p>In our <span class="highlight">Smart Sheets,</span> we do provide video lessons and tips as resources to help students more while practicing after our classes.</p>
+        <p>In our <span class="highlight">Smart Sheets,</span> we do provide video lessons and tips as resources to help students more while practicing after our classes.</p>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="main-accordion">
-  <button class="main-question">
-    What equipment do I need to join?
-    <span class="arrow">▼</span>
-  </button>
-  <div class="main-panel">
-    <div class="answer-content">
-      <p>To join our classes, you’ll need three essentials:</p>
-      <ul>
-        <li><span class="highlight">Your guitar or chosen instrument</span></li>
-        <li><span class="highlight">A device with a working camera</span></li>
-        <li><span class="highlight">A stable internet connection</span></li>
-      </ul>
+  <!-- Question 4 -->
+  <div class="main-accordion">
+    <button class="main-question">
+      What equipment do I need to join?
+      <span class="arrow">▼</span>
+    </button>
+    <div class="main-panel">
+      <div class="answer-content">
+        <p>To join our classes, you'll need three essentials:</p>
+        <ul>
+          <li><span class="highlight">Your guitar or chosen instrument</span></li>
+          <li><span class="highlight">A device with a working camera</span></li>
+          <li><span class="highlight">A stable internet connection</span></li>
+        </ul>
 
-      <p><span class="highlight">Any device</span> that can run Zoom is sufficient, but having a camera is mandatory. Ensure your camera is positioned so both you and your guitar are clearly visible. This allows our coaches to spot mistakes and guide your practice effectively. A stable internet connection is crucial to ensure uninterrupted learning.</p>
+        <p><span class="highlight">Any device</span> that can run Zoom is sufficient, but having a camera is mandatory. Ensure your camera is positioned so both you and your guitar are clearly visible. This allows our coaches to spot mistakes and guide your practice effectively. A stable internet connection is crucial to ensure uninterrupted learning.</p>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="main-accordion">
-  <button class="main-question">
-    What if I miss a class? Do I get a recording?
-    <span class="arrow">▼</span>
-  </button>
-  <div class="main-panel">
-    <div class="answer-content">
-      <p>We don’t share class recordings. Instead, for any missed classes that were pre-informed, we provide a <span class="highlight">full-length backup class</span>. Live classes are more effective than recorded sessions, as students get real-time feedback and guidance, which helps them learn faster and more accurately.</p>
+  <!-- Question 5 -->
+  <div class="main-accordion">
+    <button class="main-question">
+      What if I miss a class? Do I get a recording?
+      <span class="arrow">▼</span>
+    </button>
+    <div class="main-panel">
+      <div class="answer-content">
+        <p>We don't share class recordings. Instead, for any missed classes that were pre-informed, we provide a <span class="highlight">full-length backup class</span>. Live classes are more effective than recorded sessions, as students get real-time feedback and guidance, which helps them learn faster and more accurately.</p>
+      </div>
     </div>
   </div>
-</div>
 
+</div>
 
 <script>
   const mainQuestions = document.querySelectorAll('.main-question');

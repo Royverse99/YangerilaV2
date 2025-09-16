@@ -5,84 +5,88 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rhythm Grades</title>
   <style>
-    /* --- Body & Container --- */
-    body {
-      background: rgba(7, 36, 44, 0.7);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
-      color: #ffffff;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    * {
       margin: 0;
-      padding: 40px 20px;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      line-height: 1.6;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    .container {
+    body {
+      background: rgba(24, 47, 53, 0.25);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      color: #4fd1c7;
+      font-family: 'Arial', sans-serif;
+      width: 100%;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      margin: 0;
+    }
+
+    .form-container {
+      background: rgba(24, 47, 53, 0.6);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(79, 209, 199, 0.3);
+      border-radius: 16px;
+      padding: 40px;
       max-width: 900px;
       width: 100%;
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 50px;
-      padding: 30px;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(122, 231, 199, 0.25);
-      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
-      backdrop-filter: blur(20px) saturate(180%);
-      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      color: #4fd1c7;
+      text-align: left;
     }
 
     h1 {
-      color: #7AE7C7;
-      font-size: clamp(28px, 5vw, 42px);
-      font-weight: 700;
-      margin: 0 0 10px 0;
-      letter-spacing: -0.5px;
+      color: #4fd1c7;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 28px;
+      text-align: center;
     }
 
-    .description {
-      color: rgba(255, 255, 255, 0.85);
+    p.description {
+      text-align: center;
+      margin-bottom: 30px;
       font-size: 16px;
-      font-weight: 300;
-      margin: 0;
-      text-align: left;
-      line-height: 1.6;
+      color: rgba(79, 209, 199, 0.8);
+      line-height: 1.5;
     }
 
-    /* --- Main Accordion (Questions) --- */
     .main-accordion {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(122, 231, 199, 0.3);
-      border-radius: 12px;
-      margin-bottom: 16px;
+      background: rgba(24, 47, 53, 0.8);
+      border: 1px solid rgba(79, 209, 199, 0.3);
+      border-radius: 8px;
+      margin-bottom: 18px;
       overflow: hidden;
-      box-shadow: 0 4px 25px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      backdrop-filter: blur(15px) saturate(160%);
-      -webkit-backdrop-filter: blur(15px) saturate(160%);
+      backdrop-filter: blur(14px) saturate(160%);
+      -webkit-backdrop-filter: blur(14px) saturate(160%);
     }
 
     .main-accordion:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 35px rgba(0, 0, 0, 0.15);
+      transform: translateY(-1.5px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
     }
 
     .main-question {
       background: transparent;
-      color: #ffffff;
+      color: #FFFFFF;
       cursor: pointer;
-      padding: 24px 28px;
+      padding: 18px 22px;
       width: 100%;
       border: none;
       outline: none;
       text-align: left;
-      font-size: 20px;
+      font-size: 16px;
       font-weight: 600;
+      letter-spacing: 0.25px;
       transition: all 0.3s ease;
       display: flex;
       justify-content: space-between;
@@ -90,165 +94,160 @@
       position: relative;
     }
 
+    .main-question:focus {
+      border-color: #4fd1c7;
+      box-shadow: 0 0 0 3px rgba(79, 209, 199, 0.1);
+      transform: scale(1.02);
+    }
+
     .main-question:hover {
-      color: #7AE7C7;
+      color: #4fd1c7;
     }
 
     .main-question.active {
-      color: #7AE7C7;
-      background: rgba(122, 231, 199, 0.08);
+      color: #4fd1c7;
+      background: rgba(79, 209, 199, 0.1);
     }
 
     .arrow {
-      font-size: 16px;
+      font-size: 17px;
       transition: transform 0.3s ease;
-      color: #7AE7C7;
-      font-weight: bold;
+      color: #4fd1c7;
+      font-weight: 700;
     }
 
     .main-question.active .arrow {
       transform: rotate(180deg);
     }
 
-    /* --- Main Panel --- */
     .main-panel {
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      background: rgba(0, 0, 0, 0.15);
-      border-top: 1px solid rgba(122, 231, 199, 0.2);
+      background: rgba(24, 47, 53, 0.9);
+      border-top: 1px solid rgba(79, 209, 199, 0.3);
       backdrop-filter: blur(12px) saturate(140%);
       -webkit-backdrop-filter: blur(12px) saturate(140%);
     }
 
     .main-panel.scrollable {
-      max-height: 400px;
+      max-height: 380px;
       overflow-y: auto;
-    }
-
-    /* --- Answer Panel --- */
-    .answer-panel {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      background: rgba(0, 0, 0, 0.2);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-    }
-
-    .answer-panel.scrollable {
-      max-height: 300px;
-      overflow-y: auto;
+      padding-right: 6px;
     }
 
     .answer-content {
-      padding: 32px 28px;
-      color: rgba(255, 255, 255, 0.85);
+      padding: 20px 22px;
+      color: #FFFFFF;
       font-size: 15px;
-      line-height: 1.7;
+      line-height: 1.65;
+      letter-spacing: 0.3px;
     }
 
     .answer-content p {
-      margin: 0 0 16px 0;
+      margin: 0 0 14px 0;
+      color: #FFFFFF;
     }
 
     .answer-content p:last-child {
       margin-bottom: 0;
     }
 
-    .grade-title {
-      font-weight: bold;
-      color: #7AE7C7;
-      margin: 8px 0 4px 0;
-    }
-
     .highlight {
-      color: #7AE7C7;
-      font-weight: 600;
+      color: #4fd1c7;
+      font-weight: 700;
+      letter-spacing: 0.25px;
     }
 
-    .answer-content ul {
-      padding-left: 20px;
-      margin: 5px 0 10px 0;
-    }
-
-    .answer-content li {
-      margin-bottom: 4px;
-    }
-
-    /* --- Custom Scrollbar --- */
-    .main-panel::-webkit-scrollbar,
-    .answer-panel::-webkit-scrollbar {
+    .main-panel::-webkit-scrollbar {
       width: 6px;
     }
 
-    .main-panel::-webkit-scrollbar-track,
-    .answer-panel::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.05);
+    .main-panel::-webkit-scrollbar-track {
+      background: rgba(24, 47, 53, 0.8);
       border-radius: 3px;
     }
 
-    .main-panel::-webkit-scrollbar-thumb,
-    .answer-panel::-webkit-scrollbar-thumb {
-      background: rgba(122, 231, 199, 0.6);
+    .main-panel::-webkit-scrollbar-thumb {
+      background: rgba(79, 209, 199, 0.6);
       border-radius: 3px;
       transition: background 0.3s ease;
     }
 
-    .main-panel::-webkit-scrollbar-thumb:hover,
-    .answer-panel::-webkit-scrollbar-thumb:hover {
-      background: rgba(122, 231, 199, 0.8);
+    .main-panel::-webkit-scrollbar-thumb:hover {
+      background: rgba(79, 209, 199, 0.8);
     }
 
-    /* --- Responsive Design --- */
     @media (max-width: 768px) {
       body {
-        padding: 20px 15px;
+        padding: 15px;
       }
 
-      .header {
-        padding: 20px;
-        margin-bottom: 30px;
+      .form-container {
+        padding: 30px 25px;
+      }
+
+      h1 {
+        font-size: 24px;
       }
 
       .main-question {
-        padding: 20px 24px;
-        font-size: 18px;
+        padding: 16px 20px;
+        font-size: 15px;
       }
 
       .answer-content {
-        padding: 20px 24px;
+        padding: 18px 20px;
         font-size: 14px;
       }
 
       .main-panel.scrollable {
-        max-height: 300px;
-      }
-
-      .answer-panel.scrollable {
-        max-height: 250px;
+        max-height: 280px;
       }
     }
 
     @media (max-width: 480px) {
+      .form-container {
+        padding: 25px 20px;
+      }
+
+      h1 {
+        font-size: 22px;
+      }
+
       .main-question {
-        padding: 18px 20px;
-        font-size: 16px;
+        padding: 14px 18px;
+        font-size: 14px;
       }
 
       .answer-content {
-        padding: 18px 20px;
+        padding: 16px 18px;
+        font-size: 13px;
+      }
+
+      p.description {
+        font-size: 14px;
       }
     }
+
+    .main-panel.scrollable {
+  max-height: 380px;      /* adjust as needed */
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 6px;
+}
+
   </style>
 </head>
 <body>
 
-<div class="container">
+<div class="form-container">
+  <h1>Rhythm Grades</h1>
   <div class="header">
-    <h1>Rhythm Grades</h1>
-    <p class="description">Rhythm guitar playing technique<br>
-    Rhythm guitar is the backbone of most songs — the most played guitar technique in the world and one of the easiest to start with. It provides the musical accompaniment that supports a singer's performance and fills out the sound in an ensemble. From intimate acoustic sets to chart-topping pop hits, rhythm guitar remains a favorite among countless artists worldwide. If you imagine yourself singing and performing with your friends, family, or even your fans — rhythm is where your journey begins.</p>
+    <p class="description">Rhythm guitar playing technique<br></p>
+    <div class="answer-content">
+      <span class="highlight">Rhythm guitar</span> is the backbone of most songs — the most played guitar technique in the world and one of the easiest to start with. It provides the musical accompaniment that supports a singer's performance and fills out the sound in an ensemble. From intimate acoustic sets to chart-topping pop hits, rhythm guitar remains a favorite among countless artists worldwide. If you imagine yourself singing and performing with your friends, family, or even your fans — rhythm is where your journey begins.
+    </div>
   </div>
 
   <!-- Rhythm Grade 1 -->
@@ -260,12 +259,12 @@
     <div class="main-panel">
       <div class="answer-panel">
         <div class="answer-content">
-          <p class="grade-title">Duration:</p>
+          <p class="grade-title"><span class="highlight">Duration:</span></p>
           <p>3 Semesters (18 months)</p>
-          <p class="grade-title">Fee:</p>
+          <p class="grade-title"><span class="highlight">Fee:</span></p>
           <p>INR 3200 per month</p>
-          <p>Yangerila's Rhythm Grade 1 is designed for fast-paced progress, allowing students to start playing and performing much sooner than usual. Alongside essential rhythm techniques, the course also covers music theory, basic singing tips, and beginner lead guitar skills. It's the perfect program crafted with complete musicianship in mind.</p>
-          <p class="highlight">What You'll Learn:</p>
+          <p>Yangerila's <span class="highlight">Rhythm Grade 1</span> is designed for fast-paced progress, allowing students to start playing and performing much sooner than usual. Alongside essential rhythm techniques, the course also covers music theory, basic singing tips, and beginner lead guitar skills. It's the perfect program crafted with complete musicianship in mind.</p>
+          <p><span class="highlight">What You'll Learn:<span class="highlight"></p>
           <ul>
             <li>Rhythm building fundamentals</li>
             <li>Open chord shapes (major, minor, 7th)</li>
@@ -279,7 +278,7 @@
             <li>Transposing songs to different keys</li>
             <li>Beginner lead guitar melodies</li>
           </ul>
-          <p class="highlight">Upon Completion:</p>
+          <p><span class="highlight">Upon Completion:</span></p>
           <p>After completing this grade, our students can confidently perform their favorite songs, whether for friends, family, or in group jams. They gain a solid grasp of scales, keys, and time signatures, and can easily transpose pieces into their desired keys. By the end, beginners transform into well-rounded, expressive rhythm guitar players and performers, ready to take the stage or lead a singalong anywhere.</p>
         </div>
       </div>
@@ -295,85 +294,58 @@
     <div class="main-panel">
       <div class="answer-panel">
         <div class="answer-content">
-          <p class="grade-title">Duration:</p>
+          <p class="grade-title"><span class="highlight">Duration:</span></p>
           <p>2 Semesters (12 months)</p>
-          <p class="grade-title">Fee:</p>
+          <p class="grade-title"><span class="highlight">Fee:</span></p>
           <p>INR 4000 per month</p>
-          <p>Yangerila's Rhythm Grade 2 takes your rhythm guitar playing to the next level, introducing a fresh, more percussive and expressive style. You'll learn a variety of rhythmic expressions — including percussive sounds on the guitar body — that allow you to bring more groove, depth, and musicality into your solo guitar performances.</p>
-          <p class="highlight">Prerequisite:</p>
-          <p>To apply for this course, you must have completed Yangerila's Rhythm Grade 1. If you've successfully completed Grade 1, please contact your Student Relations Manager (SRM) or your teacher to apply for this grade.</p>
-          <p><strong>More grades launching soon!!!</strong></p>
+          <p>Yangerila's <span class="highlight">Rhythm Grade 2</span> takes your rhythm guitar playing to the next level, introducing a fresh, more percussive and expressive style. You'll learn a variety of rhythmic expressions — including percussive sounds on the guitar body — that allow you to bring more groove, depth, and musicality into your solo guitar performances.</p>
+          <p class="highlight"><span class="highlight">Prerequisite:</span></p>
+          <p>To apply for this course, you must have completed Yangerila's <span class="highlight">Rhythm Grade 1</span>. If you've successfully completed Grade 1, please contact your Student Relations Manager (SRM) or your teacher to apply for this grade.</p>
+          <p><strong><span class="highlight">More grades launching soon!!!</span></strong></p>
         </div>
       </div>
     </div>
   </div>
-
 </div>
 
+
 <script>
-  // Get all main questions
-  const mainQuestions = document.querySelectorAll('.main-question');
-  const mainPanels = document.querySelectorAll('.main-panel');
 
-  // Get all answer panels
-  const answerPanels = document.querySelectorAll('.answer-panel');
+const mainQuestions = document.querySelectorAll('.main-question');
+const mainPanels = document.querySelectorAll('.main-panel');
 
-  // Main accordion functionality - only one active at a time
-  mainQuestions.forEach((question, index) => {
-    question.addEventListener('click', () => {
-      const isActive = question.classList.contains('active');
-      
-      // Close all main accordions
-      mainQuestions.forEach(q => q.classList.remove('active'));
-      mainPanels.forEach(panel => {
-        panel.style.maxHeight = null;
-      });
-      
-      // Close all answer panels
-      answerPanels.forEach(panel => {
-        panel.style.maxHeight = null;
-        panel.classList.remove('scrollable');
-      });
-      
-      // If clicked accordion wasn't active, open it
-      if (!isActive) {
-        question.classList.add('active');
-        const panel = mainPanels[index];
-        const answerPanel = panel.querySelector('.answer-panel');
-        
-        // Check if content needs scrolling
-        answerPanel.style.maxHeight = 'none';
-        const scrollHeight = answerPanel.scrollHeight;
-        answerPanel.style.maxHeight = '0px';
-        
-        if (scrollHeight > 300) {
-          answerPanel.classList.add('scrollable');
-          answerPanel.style.maxHeight = '300px';
-        } else {
-          answerPanel.style.maxHeight = scrollHeight + "px";
-        }
-        
-        // Set main panel height
-        setTimeout(() => {
-          panel.style.maxHeight = panel.scrollHeight + "px";
-        }, 50);
-      }
+mainQuestions.forEach((question, index) => {
+  question.addEventListener('click', () => {
+    const panel = mainPanels[index];
+    const content = panel.querySelector('.answer-panel'); // measure this
+    const isActive = question.classList.contains('active');
+
+    // Close all
+    mainQuestions.forEach(q => q.classList.remove('active'));
+    mainPanels.forEach(p => {
+      p.classList.remove('scrollable');
+      p.style.maxHeight = null;
     });
-  });
 
-  // Handle window resize
-  window.addEventListener('resize', () => {
-    mainPanels.forEach((panel, index) => {
-      if (mainQuestions[index].classList.contains('active')) {
-        panel.style.maxHeight = panel.scrollHeight + "px";
-        
-        const answerPanel = panel.querySelector('.answer-panel');
-        if (answerPanel.classList.contains('scrollable')) {
-          answerPanel.style.maxHeight = window.innerWidth <= 768 ? '250px' : '300px';
-        }
+    if (!isActive) {
+      question.classList.add('active');
+
+      // Measure the real content height
+      const scrollHeight = content.scrollHeight;
+
+      if (scrollHeight > 300) {
+        panel.classList.add('scrollable');
+        panel.style.maxHeight = "380px"; // scrollable height
+      } else {
+        panel.style.maxHeight = scrollHeight + "px"; // fit to content
       }
-    });
+    }
   });
+});
+
+
+
+
 </script>
 
 </body>
