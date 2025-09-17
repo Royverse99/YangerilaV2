@@ -53,7 +53,7 @@
 
     p.description {
       text-align: center;
-      margin-bottom: 30px;a
+      margin-bottom: 30px;
       font-size: 16px;
       color: rgba(79, 209, 199, 0.8);
       line-height: 1.5;
@@ -262,10 +262,8 @@
         minute: "2-digit",
         hour12: true
       };
-      // Format with Intl API
       const formatted = new Intl.DateTimeFormat("en-GB", options).format(date);
 
-      // Add suffix to day (1st, 2nd, 3rd, 4th...)
       const day = date.toLocaleString("en-IN", { day: "numeric", timeZone: "Asia/Kolkata" });
       const suffix = (d => {
         if (d > 3 && d < 21) return "th";
@@ -277,11 +275,10 @@
         }
       })(parseInt(day));
 
-      // Replace day with suffix (e.g. 17 → 17th)
       return formatted.replace(day, day + suffix);
     }
 
-    document.getElementById("studentReferralForm").addEventListener("submit", async function(e) {
+    document.getElementById("studentReferralForm").addEventListener("submit", async function (e) {
       e.preventDefault();
 
       const submitBtn = document.getElementById("submitBtn");
@@ -313,6 +310,12 @@
         const result = await response.text();
 
         if (result.includes("Success") || response.ok) {
+          // Hide heading, description, and form
+          document.querySelector("h1").style.display = "none";
+          document.querySelector(".description").style.display = "none";
+          document.getElementById("studentReferralForm").style.display = "none";
+
+          // Show thank you message only
           thankYou.style.display = "block";
           document.getElementById("studentReferralForm").reset();
         } else {
@@ -326,6 +329,14 @@
         submitBtn.disabled = false;
       }
     });
+
+    function resetForm() {
+      // Bring everything back when "Submit Another Referral" is clicked
+      document.querySelector("h1").style.display = "block";
+      document.querySelector(".description").style.display = "block";
+      document.getElementById("studentReferralForm").style.display = "block";
+      document.getElementById("thankYouMessage").style.display = "none";
+    }
   </script>
 </body>
 
