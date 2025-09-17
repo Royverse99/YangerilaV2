@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Student Referral - Yangerila Creative Studio</title>
+  <style>
+    body {
+      background: rgba(24, 47, 53, 0.25);
+      font-family: 'Arial', sans-serif;
+      color: #4fd1c7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+    .form-container {
+      background: rgba(24, 47, 53, 0.6);
+      border: 1px solid rgba(79, 209, 199, 0.3);
+      border-radius: 16px;
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+    h1 { margin-bottom: 20px; text-align: center; }
+    label { display: block; margin-bottom: 6px; font-size: 14px; }
+    input {
+      width: 100%; padding: 12px; margin-bottom: 20px;
+      border: 1px solid rgba(79, 209, 199, 0.4);
+      border-radius: 8px; background: rgba(24, 47, 53, 0.8);
+      color: #4fd1c7;
+    }
+    .submit-btn {
+      width: 100%; padding: 14px; background: #4fd1c7; border: none;
+      border-radius: 8px; font-weight: bold; cursor: pointer;
+      color: #1a202c; font-size: 16px;
+    }
+    .loading, .error, .thank-you { display: none; text-align: center; margin-top: 15px; }
+    .error { color: #ff6b6b; }
+    .thank-you { color: #4fd1c7; }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h1>Student Referral</h1>
+    <form id="studentReferralForm">
+      <label for="yourName">Your Name *</label>
+      <input type="text" id="yourName" name="yourName" required />
+
+      <label for="yourContact">Your Contact Number *</label>
+      <input type="tel" id="yourContact" name="yourContact" required />
+
+      <label for="referredName">Referred Person's Name *</label>
+      <input type="text" id="referredName" name="referredName" required />
+
+      <label for="referredContact">Referred Person's Contact Number *</label>
+      <input type="tel" id="referredContact" name="referredContact" required />
+
+      <button type="submit" class="submit-btn" id="submitBtn">Submit Referral</button>
+      <div class="loading" id="loading">Submitting your referral...</div>
+      <div class="error" id="error">There was an error submitting your referral.</div>
+      <div class="thank-you" id="thankYouMessage">✅ Thank you! Your referral has been recorded.</div>
+    </form>
+  </div>
+
+  <script>
+    // Replace this with your latest Google Apps Script deployment URL (ending with /exec)
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzHtaGaoGg8pFwLURiElvTNYP1uKrmzLjkhYtx73lorHs01PVW_IucpTWjLjxe2gblsxg/exec";
+
+    document.getElementById("studentReferralForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const submitBtn = document.getElementById("submitBtn");
+      const loading = document.getElementById("loading");
+      const error = document.getElementById("error");
+      const thankYou = document.getElementById("thankYouMessage");
+
+      // Reset UI
+      error.style.display = "none";
+      thankYou.style.display = "none";
+
+      // Disable submit while processing
+      submitBtn.disabled = true;
+      loading.style.display = "block";
+
+      // Collect data
+      const params = new URLSearchParams();
+      params.append("yourName", document.getElementById("yourName").value);
+      params.append("yourContact", document.getElementById("yourContact").value);
+      params.append("referredName", document.getElementById("referredName").value);
+      params.append("referredContact", document.getElementById("referredContact").value);
+      params.append("timestamp", new Date().toISOString());
+
+      try {
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+          method: "POST",
+          body: params
+        });
+        const result = await response.text();
+
+        if (result.includes("Success") || response.ok) {
+          thankYou.style.display = "block";
+          document.getElementById("studentReferralForm").reset();
+        } else {
+          throw new Error(result);
+        }
+      } catch (err) {
+        console.error("Error submitting form:", err);
+        error.style.display = "block";
+      } finally {
+        loading.style.display = "none";
+        submitBtn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
