@@ -13,36 +13,35 @@
     }
 
     body {
-  background: rgba(24, 47, 53, 0.25); /* semi-transparent dark background */
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  color: #4fd1c7;
-  font-family: 'Arial', sans-serif;
-  width: 100%;
-  min-height: 100vh;
-  overflow-x: hidden;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  margin: 0;
-}
-
+      background: rgba(24, 47, 53, 0.25);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      color: #4fd1c7;
+      font-family: 'Arial', sans-serif;
+      width: 100%;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      margin: 0;
+    }
 
     .form-container {
-  background: rgba(24, 47, 53, 0.6); /* semi-transparent, same dark teal color */
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(79, 209, 199, 0.3);
-  border-radius: 16px;
-  padding: 40px;
-  max-width: 600px; /* or your preferred width */
-  width: 100%;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  color: #4fd1c7;
-  text-align: center; /* optional, adjust per your layout */
-}
+      background: rgba(24, 47, 53, 0.6);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(79, 209, 199, 0.3);
+      border-radius: 16px;
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      color: #4fd1c7;
+      text-align: center;
+    }
 
     h1 {
       color: #4fd1c7;
@@ -118,6 +117,30 @@
       box-shadow: 0 8px 30px rgba(79, 209, 199, 0.6);
     }
 
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .loading {
+      display: none;
+      color: rgba(79, 209, 199, 0.8);
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    .error {
+      display: none;
+      color: #ff6b6b;
+      margin-top: 15px;
+      font-size: 14px;
+      padding: 10px;
+      background: rgba(255, 107, 107, 0.1);
+      border-radius: 6px;
+      border: 1px solid rgba(255, 107, 107, 0.3);
+    }
+
     .thank-you {
       text-align: center;
       padding: 60px 20px;
@@ -153,6 +176,20 @@
       background: rgba(79, 209, 199, 0.3);
     }
 
+    .setup-info {
+      background: rgba(79, 209, 199, 0.1);
+      border: 1px solid rgba(79, 209, 199, 0.3);
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .setup-info strong {
+      color: #4fd1c7;
+    }
+
     @media (max-width: 480px) {
       .form-container {
         padding: 30px 20px;
@@ -174,11 +211,11 @@
   <div class="form-container">
     <h1>Student Referral</h1>
     <p class="description">
-      Already a student at Yangerila? Share your experience! When you refer a new student who joins, you get 50% off your next month’s fee.<br>
+      Already a student at Yangerila? Share your experience! When you refer a new student who joins, you get 50% off your next month's fee.<br>
       <strong>Please note:</strong> this discount applies only to the existing student (the new student does not receive a discount).
     </p>
 
-    <form id="studentReferralForm" onsubmit="submitStudentReferralForm(event)">
+    <form id="studentReferralForm">
       <div class="form-grid">
         <div class="form-group">
           <label for="yourName">Your Name *</label>
@@ -189,41 +226,89 @@
           <input type="tel" id="yourContact" name="yourContact" placeholder="+91 98765 43210" required />
         </div>
         <div class="form-group">
-          <label for="referredName">Referred Person’s Name *</label>
+          <label for="referredName">Referred Person's Name *</label>
           <input type="text" id="referredName" name="referredName" placeholder="Enter referred person's full name" required />
         </div>
         <div class="form-group">
-          <label for="referredContact">Referred Person’s Contact Number *</label>
+          <label for="referredContact">Referred Person's Contact Number *</label>
           <input type="tel" id="referredContact" name="referredContact" placeholder="+91 98765 43210" required />
         </div>
       </div>
-      <button type="submit" class="submit-btn">Submit Referral</button>
+      <button type="submit" class="submit-btn" id="submitBtn">Submit Referral</button>
+      <div class="loading" id="loading">Submitting your referral...</div>
+      <div class="error" id="error">There was an error submitting your referral. Please try again.</div>
     </form>
 
     <div id="thankYouMessage" class="thank-you">
       <h2>Thank You!</h2>
-      <p>Your student referral has been submitted successfully.<br />We appreciate you helping grow our Yangerila community.</p>
+      <p>Your student referral has been submitted successfully and saved to our records.<br />We appreciate you helping grow our Yangerila community.</p>
       <button class="back-btn" onclick="resetForm()">Submit Another Referral</button>
     </div>
   </div>
 
   <script>
-    function submitStudentReferralForm(event) {
+    // Replace this URL with your Google Apps Script web app URL
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby0FVBAu2q9ZPNoOBT88hO1AfW_1NeDjCsYXc7skYAmOqiClR705eT-uit4MhTI-EuH/exec';
+
+    document.getElementById('studentReferralForm').addEventListener('submit', async function(event) {
       event.preventDefault();
-      const form = event.target;
+      
+      const submitBtn = document.getElementById('submitBtn');
+      const loading = document.getElementById('loading');
+      const error = document.getElementById('error');
+      
+      // Disable submit button and show loading
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Submitting...';
+      loading.style.display = 'block';
+      error.style.display = 'none';
 
-      // Basic validation handled by required attributes
+      // Collect form data
+      const formData = new FormData();
+      formData.append('yourName', document.getElementById('yourName').value);
+      formData.append('yourContact', document.getElementById('yourContact').value);
+      formData.append('referredName', document.getElementById('referredName').value);
+      formData.append('referredContact', document.getElementById('referredContact').value);
+      formData.append('timestamp', new Date().toISOString());
 
-      // Show thank you message and hide form
-      form.style.display = 'none';
-      document.getElementById('thankYouMessage').style.display = 'block';
-    }
+      try {
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          body: formData
+        });
+
+        if (response.ok) {
+          // Success - show thank you message
+          document.getElementById('studentReferralForm').style.display = 'none';
+          document.getElementById('thankYouMessage').style.display = 'block';
+        } else {
+          throw new Error('Network response was not ok');
+        }
+      } catch (err) {
+        console.error('Error:', err);
+        error.style.display = 'block';
+        
+        // Re-enable submit button
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Submit Referral';
+        loading.style.display = 'none';
+      }
+    });
 
     function resetForm() {
       const form = document.getElementById('studentReferralForm');
+      const submitBtn = document.getElementById('submitBtn');
+      const loading = document.getElementById('loading');
+      const error = document.getElementById('error');
+      
+      // Reset form and UI state
       form.reset();
       form.style.display = 'block';
-
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit Referral';
+      loading.style.display = 'none';
+      error.style.display = 'none';
+      
       document.getElementById('thankYouMessage').style.display = 'none';
     }
   </script>
