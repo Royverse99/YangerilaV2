@@ -247,70 +247,85 @@
   </div>
 
   <script>
-    // Replace this URL with your Google Apps Script web app URL
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzifq15DBPa5waruvR8R6HyyrA2FfYEBt2dX-GRenPDbfYvFUuNcZsX9Gx3SqpunvvoKQ/exec';
+    // Replace this with your latest Google Apps Script deployment URL (ending with /exec)
+    const GOOGLE_SCRIPT_URL = "YOUR_SCRIPT_URL_HERE";
 
-    document.getElementById('studentReferralForm').addEventListener('submit', async function(event) {
-      event.preventDefault();
-      
-      const submitBtn = document.getElementById('submitBtn');
-      const loading = document.getElementById('loading');
-      const error = document.getElementById('error');
-      
-      // Disable submit button and show loading
+    // Helper: format timestamp to Indian time zone
+    function getIndianTimestamp() {
+      const date = new Date();
+      const options = {
+        timeZone: "Asia/Kolkata",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true
+      };
+      // Format with Intl API
+      const formatted = new Intl.DateTimeFormat("en-GB", options).format(date);
+
+      // Add suffix to day (1st, 2nd, 3rd, 4th...)
+      const day = date.toLocaleString("en-IN", { day: "numeric", timeZone: "Asia/Kolkata" });
+      const suffix = (d => {
+        if (d > 3 && d < 21) return "th";
+        switch (d % 10) {
+          case 1: return "st";
+          case 2: return "nd";
+          case 3: return "rd";
+          default: return "th";
+        }
+      })(parseInt(day));
+
+      // Replace day with suffix (e.g. 17 → 17th)
+      return formatted.replace(day, day + suffix);
+    }
+
+    document.getElementById("studentReferralForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const submitBtn = document.getElementById("submitBtn");
+      const loading = document.getElementById("loading");
+      const error = document.getElementById("error");
+      const thankYou = document.getElementById("thankYouMessage");
+
+      // Reset UI
+      error.style.display = "none";
+      thankYou.style.display = "none";
+
+      // Disable submit while processing
       submitBtn.disabled = true;
-      submitBtn.textContent = 'Submitting...';
-      loading.style.display = 'block';
-      error.style.display = 'none';
+      loading.style.display = "block";
 
-      // Collect form data
-      const formData = new FormData();
-      formData.append('yourName', document.getElementById('yourName').value);
-      formData.append('yourContact', document.getElementById('yourContact').value);
-      formData.append('referredName', document.getElementById('referredName').value);
-      formData.append('referredContact', document.getElementById('referredContact').value);
-      formData.append('timestamp', new Date().toISOString());
+      // Collect data
+      const params = new URLSearchParams();
+      params.append("yourName", document.getElementById("yourName").value);
+      params.append("yourContact", document.getElementById("yourContact").value);
+      params.append("referredName", document.getElementById("referredName").value);
+      params.append("referredContact", document.getElementById("referredContact").value);
+      params.append("timestamp", getIndianTimestamp());
 
       try {
         const response = await fetch(GOOGLE_SCRIPT_URL, {
-          method: 'POST',
-          body: formData
+          method: "POST",
+          body: params
         });
+        const result = await response.text();
 
-        if (response.ok) {
-          // Success - show thank you message
-          document.getElementById('studentReferralForm').style.display = 'none';
-          document.getElementById('thankYouMessage').style.display = 'block';
+        if (result.includes("Success") || response.ok) {
+          thankYou.style.display = "block";
+          document.getElementById("studentReferralForm").reset();
         } else {
-          throw new Error('Network response was not ok');
+          throw new Error(result);
         }
       } catch (err) {
-        console.error('Error:', err);
-        error.style.display = 'block';
-        
-        // Re-enable submit button
+        console.error("Error submitting form:", err);
+        error.style.display = "block";
+      } finally {
+        loading.style.display = "none";
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Submit Referral';
-        loading.style.display = 'none';
       }
     });
-
-    function resetForm() {
-      const form = document.getElementById('studentReferralForm');
-      const submitBtn = document.getElementById('submitBtn');
-      const loading = document.getElementById('loading');
-      const error = document.getElementById('error');
-      
-      // Reset form and UI state
-      form.reset();
-      form.style.display = 'block';
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Submit Referral';
-      loading.style.display = 'none';
-      error.style.display = 'none';
-      
-      document.getElementById('thankYouMessage').style.display = 'none';
-    }
   </script>
 </body>
 

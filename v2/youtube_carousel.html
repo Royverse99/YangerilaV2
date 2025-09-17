@@ -1,70 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Guitar Solo Carousel</title>
-  <!-- Swiper CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
   <style>
-    body { margin:0; background:#111; color:#fff; font-family:sans-serif }
+    body { margin:0; background:#111; color:#fff; font-family:Arial, sans-serif }
     .swiper-container { width:100%; height:100vh }
     .swiper-slide { display:flex; align-items:center; justify-content:center; }
-
     .video-card {
       position:relative;
       width:90%; aspect-ratio:16/9;
       background:#000; overflow:hidden;
       border-radius:8px;
     }
-    .video-thumb { width:100%; height:100%; object-fit:cover; cursor:pointer; }
+    .video-thumb { width:100%; height:100%; object-fit:cover; cursor:pointer; display:block; }
     .video-info {
       position:absolute; bottom:0; left:0; right:0;
       background:linear-gradient(transparent,rgba(0,0,0,.8));
       padding:1rem;
     }
-    .video-info h3 { margin:0 0 .5rem; font-size:1.5rem }
-    .video-info p { margin:0; font-size:1rem; color:#aaa }
-
+    .video-info h3 { margin:0 0 .5rem; font-size:1.25rem; color:#4fd1c7 }
+    .video-info p { margin:0; font-size:0.95rem; color:#9bd6c8 }
     .play-overlay {
       position:absolute; top:50%; left:50%;
       transform:translate(-50%,-50%);
-      background:rgba(122,231,199,0.8);
-      width:80px;height:80px;
+      background:rgba(122,231,199,0.85);
+      width:72px;height:72px;
       border-radius:50%;
       display:flex; align-items:center; justify-content:center;
       font-size:2rem; color:#000; z-index:10;
       cursor:pointer;
     }
-
-    /* ✅ wrapper ensures YouTube iframe fills and shows */
     .video-player-wrapper {
       position:absolute; top:0; left:0;
       width:100%; height:100%;
       opacity:0; pointer-events:none;
-      z-index:5; transition:opacity .3s;
+      z-index:5; transition:opacity .25s;
     }
-    .video-player-wrapper.active {
-      opacity:1; pointer-events:auto;
-    }
-    .video-player-wrapper iframe {
-      width:100%; height:100%; border:0;
-    }
-
+    .video-player-wrapper.active { opacity:1; pointer-events:auto; }
+    .video-player { width:100%; height:100%; }
     .back-button {
       position:absolute; top:1rem; left:1rem;
       background:rgba(0,0,0,.7); color:#7ae7c7;
       border:none; width:40px;height:40px;
       border-radius:50%;cursor:pointer;
-      align-items:center; justify-content:center;
-      z-index:1000;
-      opacity:0; pointer-events:none;
-      transition:opacity .3s;
-      display:flex;
+      display:flex; align-items:center; justify-content:center;
+      z-index:1000; opacity:0; pointer-events:none; transition:opacity .25s;
     }
-    .back-button.show {
-      opacity:1; pointer-events:auto;
-    }
-
+    .back-button.show { opacity:1; pointer-events:auto; }
     .swiper-button-next, .swiper-button-prev {
       color:#7ae7c7 !important;
       background:rgba(0,0,0,.5);
@@ -78,8 +63,10 @@
 </head>
 <body>
   <button class="back-button" id="back">✕</button>
+
   <div class="swiper-container">
-    <div class="swiper-wrapper"></div>
+    <div class="swiper-wrapper" id="slides-wrapper"></div>
+
     <div class="swiper-button-prev"></div>
     <div class="swiper-button-next"></div>
     <div class="swiper-pagination"></div>
@@ -87,128 +74,208 @@
 
   <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
   <script>
-    // 🎸 List of YouTube video IDs
+    // YOUR VIDEO IDS (kept from your list)
     const videoIDs = [
       'sBe411-F2GE','Pl9H9X1GoAc','lT_mlbMjcxo','hafoCeXWxAE',
       'AyJcLLYyJ9k','hgEjTeWc8C0','Anop2dCuR2g','umUAWqoxt-0'
     ];
-    const wrapper = document.querySelector('.swiper-wrapper');
 
-    // Build slides dynamically
+    const wrapper = document.getElementById('slides-wrapper');
+
+    // Build slides dynamically (one slide per video)
     videoIDs.forEach(id => {
       const slide = document.createElement('div');
-      slide.className='swiper-slide';
-      slide.innerHTML=`
+      slide.className = 'swiper-slide';
+      slide.innerHTML = `
         <div class="video-card" data-id="${id}">
-          <img class="video-thumb" src="" alt>
+          <img class="video-thumb" src="" alt="thumbnail">
           <div class="play-overlay">▶</div>
           <div class="video-info"><h3>Loading…</h3><p></p></div>
           <div class="video-player-wrapper">
-            <div class="video-player" id="player${id}"></div>
+            <div class="video-player" data-player-id="${id}"></div>
           </div>
         </div>`;
       wrapper.appendChild(slide);
     });
 
-    // Fill in thumbnails & titles
+    // fill thumbnails & attach click handlers (covers all slides / clones)
     document.querySelectorAll('.video-card').forEach(card => {
-      const id=card.dataset.id;
+      const id = card.dataset.id;
+      // try oEmbed for title/thumb; fallback to youtube thumbnail
       fetch(`https://www.youtube.com/oembed?url=https://youtu.be/${id}&format=json`)
-        .then(r=>r.json())
-        .then(d=>{
-          card.querySelector('.video-thumb').src=d.thumbnail_url;
-          card.querySelector('h3').textContent=d.title;
-          card.querySelector('p').textContent=d.author_name;
-        })
-        .catch(_=>{
-          card.querySelector('.video-thumb').src=`https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+        .then(r => r.json())
+        .then(d => {
+          const img = card.querySelector('.video-thumb');
+          img.src = d.thumbnail_url;
+          card.querySelector('h3').textContent = d.title;
+          card.querySelector('p').textContent = d.author_name;
+        }).catch(_ => {
+          card.querySelector('.video-thumb').src = `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+          card.querySelector('h3').textContent = 'Video';
+          card.querySelector('p').textContent = '';
         });
-      card.querySelector('.video-thumb').onclick=()=>play(card);
-      card.querySelector('.play-overlay').onclick=e=>{e.stopPropagation(); play(card)};
+
+      // clicking thumbnail or overlay triggers play(card)
+      card.querySelector('.video-thumb').onclick = () => play(card);
+      card.querySelector('.play-overlay').onclick = e => { e.stopPropagation(); play(card); };
     });
 
-    let players = {};
+    let players = {}; // keyed by videoId -> YT.Player (only originals)
     let currentPlayingId = null;
-    const backBtn=document.getElementById('back');
-    const swiper=new Swiper('.swiper-container',{
-      loop:true,
-      pagination:{el:'.swiper-pagination',clickable:true},
-      navigation:{nextEl:'.swiper-button-next',prevEl:'.swiper-button-prev'},
-      autoplay:{delay:3000,disableOnInteraction:false}
+    const backBtn = document.getElementById('back');
+
+    // Initialize Swiper (loop kept as original)
+    const swiper = new Swiper('.swiper-container', {
+      loop: true,
+      pagination: { el: '.swiper-pagination', clickable: true },
+      navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+      autoplay: { delay: 3000, disableOnInteraction: false }
     });
 
     // Load YouTube API
-    const tag=document.createElement('script');
-    tag.src="https://www.youtube.com/iframe_api";
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
     document.body.appendChild(tag);
 
-    function onYouTubeIframeAPIReady(){
-      document.querySelectorAll('.video-card').forEach(card=>{
-        const id=card.dataset.id;
-        const container=card.querySelector('.video-player');
-        players[id]=new YT.Player(container,{
-          videoId:id,
-          playerVars:{autoplay:0,controls:1,rel:0,modestbranding:1,fs:0},
-          events:{onStateChange:e=>{
-            if(e.data===YT.PlayerState.PLAYING){
-              // Stop previously playing video
-              if (currentPlayingId && currentPlayingId !== id) {
-                stopVideo(currentPlayingId);
-              }
-              currentPlayingId = id;
+    // Create players ONLY for original slides (exclude duplicates)
+    function onYouTubeIframeAPIReady() {
+      // select original (non-duplicate) slides' video-player containers
+      const originalPlayerContainers = document.querySelectorAll('.swiper-slide:not(.swiper-slide-duplicate) .video-player');
+      originalPlayerContainers.forEach(container => {
+        const card = container.closest('.video-card');
+        const id = card.dataset.id;
+        // create YT player using the container DOM element (avoid id-string duplicate issues)
+        players[id] = new YT.Player(container, {
+          videoId: id,
+          playerVars: { autoplay: 0, controls: 1, rel: 0, modestbranding: 1, fs: 0 },
+          events: {
+            onStateChange: (e) => {
+              const vid = e.target.getVideoData && e.target.getVideoData().video_id;
+              if (e.data === YT.PlayerState.PLAYING) {
+                // ensure only one plays at a time
+                if (currentPlayingId && currentPlayingId !== vid) {
+                  stopVideo(currentPlayingId);
+                }
+                currentPlayingId = vid;
+                swiper.autoplay.stop();
 
-              swiper.autoplay.stop();
-              card.querySelector('.video-thumb').style.display='none';
-              card.querySelector('.play-overlay').style.display='none';
-              card.querySelector('.video-info').style.display='none';
-              card.querySelector('.video-player-wrapper').classList.add('active');
-              backBtn.classList.add('show');
+                // update UI for the active slide (the slide currently visible)
+                const activeCard = document.querySelector('.swiper-slide-active .video-card');
+                if (activeCard && activeCard.dataset.id === vid) {
+                  activeCard.querySelector('.video-thumb').style.display = 'none';
+                  activeCard.querySelector('.play-overlay').style.display = 'none';
+                  activeCard.querySelector('.video-info').style.display = 'none';
+                  activeCard.querySelector('.video-player-wrapper').classList.add('active');
+                  backBtn.classList.add('show');
+                } else {
+                  // try to update the original card (non-duplicate)
+                  const orig = document.querySelector('.swiper-slide:not(.swiper-slide-duplicate) .video-card[data-id="' + vid + '"]');
+                  if (orig) {
+                    orig.querySelector('.video-thumb').style.display = 'none';
+                    orig.querySelector('.play-overlay').style.display = 'none';
+                    orig.querySelector('.video-info').style.display = 'none';
+                    orig.querySelector('.video-player-wrapper').classList.add('active');
+                    backBtn.classList.add('show');
+                  }
+                }
+              }
+
+              if (e.data === YT.PlayerState.ENDED) {
+                stopVideo(vid);
+              }
             }
-            if(e.data===YT.PlayerState.ENDED){
-              stopVideo(id);
-            }
-          }}
+          }
         });
       });
     }
 
-    function play(card){
-      const id=card.dataset.id;
-      const idx=videoIDs.indexOf(id);
-      swiper.slideToLoop(idx);
+    // play when card (or clone) is clicked
+    function play(card) {
+      const id = card.dataset.id;
+      // stop autoplay immediately to avoid mid-transition race
+      swiper.autoplay.stop();
 
+      // stop any currently playing video
       if (currentPlayingId && currentPlayingId !== id) {
         stopVideo(currentPlayingId);
       }
-      players[id].playVideo();
-    }
 
-    function stopVideo(id){
-      if(!players[id]) return;
-      players[id].stopVideo();
-      const card=document.querySelector(`.video-card[data-id="${id}"]`);
-      card.querySelector('.video-thumb').style.display='';
-      card.querySelector('.play-overlay').style.display='';
-      card.querySelector('.video-info').style.display='';
-      card.querySelector('.video-player-wrapper').classList.remove('active');
-      backBtn.classList.remove('show');
-      currentPlayingId=null;
-      swiper.autoplay.start();
-    }
-
-    // Back button
-    backBtn.onclick=()=>{
-      if (currentPlayingId) {
-        stopVideo(currentPlayingId);
+      // If the active slide already shows this ID, just play (if player ready)
+      const activeCard = document.querySelector('.swiper-slide-active .video-card');
+      if (activeCard && activeCard.dataset.id === id && players[id]) {
+        players[id].playVideo();
+        currentPlayingId = id;
+        return;
       }
+
+      // Slide to the logical (loop) position for this id, then play after transition
+      const idx = videoIDs.indexOf(id);
+      swiper.slideToLoop(idx);
+
+      // Wait one transition end for slide to be active, then play the original player
+      swiper.once('slideChangeTransitionEnd', () => {
+        if (players[id] && typeof players[id].playVideo === 'function') {
+          players[id].playVideo();
+          currentPlayingId = id;
+        } else {
+          // fallback small delay if player wasn't ready yet
+          setTimeout(() => {
+            if (players[id] && typeof players[id].playVideo === 'function') {
+              players[id].playVideo();
+              currentPlayingId = id;
+            }
+          }, 300);
+        }
+      });
+    }
+
+    function stopVideo(id) {
+      if (!id) return;
+      if (players[id] && typeof players[id].stopVideo === 'function') {
+        players[id].stopVideo();
+      }
+      // Restore UI for active/original cards
+      const activeCard = document.querySelector('.swiper-slide-active .video-card');
+      if (activeCard && activeCard.dataset.id === id) {
+        activeCard.querySelector('.video-thumb').style.display = '';
+        activeCard.querySelector('.play-overlay').style.display = '';
+        activeCard.querySelector('.video-info').style.display = '';
+        activeCard.querySelector('.video-player-wrapper').classList.remove('active');
+        backBtn.classList.remove('show');
+      } else {
+        const orig = document.querySelector('.swiper-slide:not(.swiper-slide-duplicate) .video-card[data-id="' + id + '"]');
+        if (orig) {
+          orig.querySelector('.video-thumb').style.display = '';
+          orig.querySelector('.play-overlay').style.display = '';
+          orig.querySelector('.video-info').style.display = '';
+          orig.querySelector('.video-player-wrapper').classList.remove('active');
+          backBtn.classList.remove('show');
+        }
+      }
+      currentPlayingId = null;
+      // resume autoplay
+      try { swiper.autoplay.start(); } catch (e) {}
+    }
+
+    // back button to stop current video
+    backBtn.onclick = () => {
+      if (currentPlayingId) stopVideo(currentPlayingId);
     };
 
-    // Stop video when slide changes
+    // when the carousel moves due to autoplay/navigation, stop any playing video
     swiper.on('slideChangeTransitionStart', () => {
       if (currentPlayingId) {
         stopVideo(currentPlayingId);
       }
     });
+
+    // also stop current video when user uses pagination / navigation (interaction)
+    swiper.on('touchStart', () => { if (currentPlayingId) stopVideo(currentPlayingId); });
+    swiper.on('navigationPrev', () => { if (currentPlayingId) stopVideo(currentPlayingId); });
+    swiper.on('navigationNext', () => { if (currentPlayingId) stopVideo(currentPlayingId); });
+
+    // expose the YouTube API callback for global scope
+    window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
   </script>
 </body>
 </html>
