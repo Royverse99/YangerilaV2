@@ -4507,6 +4507,8 @@ document.getElementById("slider-1-slide-1-layer-17").addEventListener("click", f
                                                             Hobby
                                                             <br />
                                                             Courses
+                                                            <br />
+                                                            &nbsp;
                                                         </h4>
                                                     </div>
                                                 </div>
@@ -4573,6 +4575,8 @@ document.getElementById("slider-1-slide-1-layer-17").addEventListener("click", f
                                                             Rhythm
                                                             <br />
                                                             Grades
+                                                            <br />
+                                                            &nbsp;
                                                         </h4>
                                                     </div>
                                                 </div>
@@ -4639,6 +4643,8 @@ document.getElementById("slider-1-slide-1-layer-17").addEventListener("click", f
                                                             Lead
                                                             <br />
                                                             Grades
+                                                            <br />
+                                                            &nbsp;
                                                         </h4>
                                                     </div>
                                                 </div>
@@ -4698,10 +4704,10 @@ document.getElementById("slider-1-slide-1-layer-17").addEventListener("click", f
                                         </div>
                                         <div class="wrap mcb-wrap mcb-wrap-50210e984 one-fourth tablet-one-second mobile-one clearfix course-card" data-url="fingerpicking-grades-popup.html" style>
                                             <div class="mcb-wrap-inner">
-                                                <div class="column mcb-column mcb-item-7124155d2 one tablet-one mobile-one column_heading" style>
+                                                <div class="column mcb-column mcb-item-7124155d2 one tablet-one mobile-one column_heading">
                                                     <div class="mcb-column-inner mcb-item-heading-inner">
                                                         <h4 class="title course-title">
-                                                            Fingerpicking
+                                                            Finger-picking
                                                             <br />
                                                             Grades
                                                         </h4>
@@ -5776,6 +5782,35 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+
+  function equalizeCourseCardHeights() {
+    const cards = document.querySelectorAll('.course-card');
+    let maxHeight = 0;
+
+    // Reset heights to auto first
+    cards.forEach(card => {
+      card.style.height = 'auto';
+    });
+
+    // Find max height
+    cards.forEach(card => {
+      const cardHeight = card.offsetHeight;
+      if (cardHeight > maxHeight) {
+        maxHeight = cardHeight;
+      }
+    });
+
+    // Set all cards to max height
+    cards.forEach(card => {
+      card.style.height = maxHeight + 'px';
+    });
+  }
+
+  window.addEventListener('load', equalizeCourseCardHeights);
+  window.addEventListener('resize', equalizeCourseCardHeights);
+
+
         </script>
     </body>
     <!--Mirrored from themes.muffingroup.com/be/coaching3/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 05 Aug 2025 05:58:08 GMT-->

@@ -375,36 +375,47 @@
   color: inherit; /* reset to inherit for better control */
 }
 
+
+
+
 /* Course name/title with mint color */
 .course-card .column_heading .title {
   color: #17c4b8 !important;
   font-weight: 700;
-  font-size: 1.2rem;
+  /* Responsive font size that adjusts based on container */
+  font-size: clamp(1rem, 2vw, 1.2rem);
   margin-bottom: 8px;
   text-align: center;
   line-height: 1;
   position: relative; /* required for 'top' to work */
   top: -15rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+
+  /* Keep title inside container bounds */
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  white-space: normal;
 }
 
 @media screen and (max-width: 767px) {
   .course-card .column_heading .title {
-    top: 0; /* Reset top for phone screens */
-    font-size: 1rem; /* Optionally reduce font size for smaller screens */
+    /* Adjust positioning */
     top: -5rem;
     margin-bottom: 6px;
+
+    /* Responsive font size for smaller screens */
+    font-size: clamp(0.9rem, 3vw, 1rem);
+
+    /* Same wrapping/protection */
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    white-space: normal;
   }
 }
-/* Fee amount light grey */
-.course-card .column_icon_box_2 .desc-wrapper h6.title {
-  color: #bbbbbb !important;
-  font-weight: 600;
-  font-size: 1rem;
-  margin-bottom: 6px;
-  text-align: center;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
-}
+
+
 
 /* Students count white */
 .course-card .column_icon_box_2 .desc-wrapper h6.title:last-of-type {
