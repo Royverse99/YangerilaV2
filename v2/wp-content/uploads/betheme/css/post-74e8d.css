@@ -7,10 +7,29 @@
   width: 75px;
 }
 .mcb-section .mcb-wrap .mcb-item-3p728qre .title {
-  font-size: 70px;
-  line-height: 75px;
+  font-size: 40px;       /* bigger font size */
+  font-weight: 700;      /* thicker font weight */
+  line-height: 45px;
   color: #4a5e61;
+  margin-bottom: 15px;
 }
+
+.mcb-section .mcb-wrap .mcb-item-3p728qre .demo-text-wrapper {
+  text-align: center;
+     /* invisible but takes space */
+}
+
+.mcb-section .mcb-wrap .mcb-item-3p728qre .demo-quote {
+  font-size: 18px;
+  line-height: 24px;
+  color: #7ae7c7;
+  margin: 0 auto;
+  max-width: 600rem;
+  margin-left: -10rem;       /* limit width for paragraph formatting */
+  white-space: normal;
+  opacity: 0.7;
+}
+
 .mcb-section-c833f11f8 .section_wrapper {
   align-items: center;
 }
