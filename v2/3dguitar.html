@@ -19,7 +19,7 @@
         .bg {
             position: fixed;
             inset: 0;
-            background: url("wp-content/uploads/2022/04/wall.jpg") center/cover no-repeat;
+            background: url("images/wall.jpg") center/cover no-repeat;
             z-index: 0;
             filter: brightness(0.3);
             will-change: transform;
@@ -612,10 +612,12 @@
             });
         }
 
-        // Mobile: Gyroscope-based room looking (throttled to prevent flickering)
+        // Mobile: Gyroscope-based room looking (heavily throttled to prevent flickering)
         if (window.DeviceOrientationEvent && !isDesktop) {
             let lastGyroUpdate = 0;
-            const gyroThreshold = 50; // Throttle to 20fps for smoother mobile experience
+            const gyroThreshold = 100; // Throttle to 10fps for smoother mobile experience
+            let smoothX = 0;
+            let smoothY = 0;
             
             window.addEventListener('deviceorientation', (event) => {
                 const now = Date.now();
@@ -628,10 +630,14 @@
                 // Normalize tilt to -1 to 1 range
                 const maxTiltX = 25;
                 const maxTiltY = 20;
-                const normalizedX = Math.max(-1, Math.min(1, tiltX / maxTiltX));
-                const normalizedY = Math.max(-1, Math.min(1, (tiltY - 90) / maxTiltY)); // Adjust for portrait
+                const targetX = Math.max(-1, Math.min(1, tiltX / maxTiltX));
+                const targetY = Math.max(-1, Math.min(1, (tiltY - 90) / maxTiltY));
                 
-                updateRoomView(normalizedX, normalizedY);
+                // Smooth interpolation to reduce jittery movement
+                smoothX += (targetX - smoothX) * 0.3;
+                smoothY += (targetY - smoothY) * 0.3;
+                
+                updateRoomView(smoothX, smoothY);
             }, true);
         }
 
