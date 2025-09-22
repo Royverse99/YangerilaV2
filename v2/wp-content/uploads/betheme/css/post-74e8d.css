@@ -34,7 +34,7 @@
   .mcb-section .mcb-wrap .mcb-item-3p728qre .demo-quote {
     font-size: 14px;
     line-height: 20px;
-    max-width: 95%;          /* use 95% width */
+    max-width: 100%;          /* use 95% width */
     margin: 0 auto;          /* fully center with auto margins */
     padding-left: 5%;        /* equal padding left */
     padding-right: 5%;       /* equal padding right */
