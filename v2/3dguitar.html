@@ -469,22 +469,19 @@
         // Guitar subtle movement
         guitar.style.transform = `translate(-50%, -50%) translateX(${panX * 0.4}px) translateY(${panY * 0.3}px)`;
         
-        // Enhanced spotlight tracking - full range
-        const spotX = 50 + (normalizedX * 40); // 10% to 90%
-        const spotY = 30 + (normalizedY * 50); // 5% to 80%
+        // Spotlight tracking
+        const spotX = 50 + (normalizedX * 40);
+        const spotY = 30 + (normalizedY * 50);
         spotlight.style.setProperty('--spot-x', spotX + '%');
         spotlight.style.setProperty('--spot-y', spotY + '%');
         
-        // Realistic guitar shadow - opposite movement like real spotlight
+        // Shadow movement
         const shadowOffsetX = 50 + (-normalizedX * 30); 
         const shadowOffsetY = 70 + (-normalizedY * 25); 
-        
         const shadowDisplaceX = -normalizedX * 50; 
         const shadowDisplaceY = -normalizedY * 35; 
-        
         const shadowScale = 1.3 + (Math.abs(normalizedX + normalizedY) * 0.3);
         const shadowOpacity = 0.6 - (Math.abs(normalizedX + normalizedY) * 0.1);
-        
         const shadowWidth = 450 + (Math.abs(normalizedX + normalizedY) * 50);
         
         shadow.style.setProperty('--shadow-x', shadowOffsetX + '%');
@@ -495,13 +492,13 @@
         shadow.style.setProperty('--shadow-offset-y', shadowDisplaceY + 'px');
         shadow.style.setProperty('--shadow-opacity', shadowOpacity);
         
-        // Smoke layers parallax
+        // Smoke parallax
         smokeElements.forEach((smoke, index) => {
             let depth;
-            if (index < 3) depth = (index + 1) * 0.3; 
-            else if (index >= 6 && index < 8) depth = 0.8; 
-            else if (index >= 8) depth = 0.2 + (index % 4) * 0.15; 
-            else depth = (index - 2) * 0.1; 
+            if (index < 3) depth = (index + 1) * 0.3;
+            else if (index >= 6 && index < 8) depth = 0.8;
+            else if (index >= 8) depth = 0.2 + (index % 4) * 0.15;
+            else depth = (index - 2) * 0.1;
             
             const smokeX = panX * depth;
             const smokeY = panY * depth * 0.5;
@@ -509,16 +506,16 @@
             smoke.style.transform = `translateX(${smokeX}px) translateY(${smokeY}px)`;
         });
         
-        // Musical notes parallax
+        // Notes parallax
         musicNotes.forEach((note) => {
             const isNear = note.classList.contains('note-near');
             const isMid = note.classList.contains('note-mid');
             const isFar = note.classList.contains('note-far');
             
-            let depthFactor = 0.4; 
-            if (isNear) depthFactor = 1.2; 
-            else if (isMid) depthFactor = 0.8; 
-            else if (isFar) depthFactor = 0.3; 
+            let depthFactor = 0.4;
+            if (isNear) depthFactor = 1.2;
+            else if (isMid) depthFactor = 0.8;
+            else if (isFar) depthFactor = 0.3;
             
             const noteX = panX * depthFactor;
             const noteY = panY * depthFactor * 0.8;
@@ -530,7 +527,7 @@
         
         // Particles parallax
         particles.forEach((particle, index) => {
-            const depthFactor = 0.3 + (index % 3) * 0.4; 
+            const depthFactor = 0.3 + (index % 3) * 0.4;
             const particleX = panX * depthFactor;
             const particleY = panY * depthFactor * 0.7;
             const currentTransform = particle.style.transform || '';
@@ -540,12 +537,25 @@
         });
     }
 
-    // Desktop: Mouse-based
+    // Shared idle animation (used for both desktop and mobile)
+    function animateRoom() {
+        const now = Date.now();
+        const time = now * 0.0005;
+
+        const gentleX = Math.sin(time) * 0.7 + Math.cos(time * 0.3) * 0.4;
+        const gentleY = Math.cos(time * 0.8) * 0.6 + Math.sin(time * 0.5) * 0.3;
+        const randomX = Math.sin(time * 1.7) * 0.2 + Math.cos(time * 2.3) * 0.15;
+        const randomY = Math.cos(time * 1.9) * 0.25 + Math.sin(time * 1.1) * 0.2;
+        
+        const finalX = gentleX + randomX;
+        const finalY = gentleY + randomY;
+
+        updateRoomView(finalX, finalY);
+        requestAnimationFrame(animateRoom);
+    }
+
     if (isDesktop) {
         let lastMouseTime = 0;
-        let animationId = null;
-        let currentX = 0;
-        let currentY = 0;
         let targetX = 0;
         let targetY = 0;
 
@@ -562,73 +572,27 @@
         
         document.addEventListener('mousemove', handleMouseMove);
         
-        function animateRoom() {
+        function desktopAnimate() {
             const now = Date.now();
             const timeSinceLastMouse = now - lastMouseTime;
             
             if (timeSinceLastMouse > 2000) {
-                const time = now * 0.0005;
-                
-                const gentleX = Math.sin(time) * 0.7 + Math.cos(time * 0.3) * 0.4;
-                const gentleY = Math.cos(time * 0.8) * 0.6 + Math.sin(time * 0.5) * 0.3;
-                
-                const randomX = Math.sin(time * 1.7) * 0.2 + Math.cos(time * 2.3) * 0.15;
-                const randomY = Math.cos(time * 1.9) * 0.25 + Math.sin(time * 1.1) * 0.2;
-                
-                const finalX = gentleX + randomX;
-                const finalY = gentleY + randomY;
-                
-                const transitionFactor = Math.min((timeSinceLastMouse - 2000) / 3000, 1);
-                
-                currentX = targetX * (1 - transitionFactor) + finalX * transitionFactor;
-                currentY = targetY * (1 - transitionFactor) + finalY * transitionFactor;
-                
-                updateRoomView(currentX, currentY);
+                animateRoom();
+                return;
             }
-            
-            animationId = requestAnimationFrame(animateRoom);
+            requestAnimationFrame(desktopAnimate);
         }
         
-        animateRoom();
+        desktopAnimate();
         
         document.addEventListener('visibilitychange', () => {
             if (!document.hidden) {
                 lastMouseTime = Date.now();
             }
         });
-    }
-
-    // Mobile: Gyroscope-based (smoothed)
-    if (window.DeviceOrientationEvent && !isDesktop) {
-        let targetX = 0, targetY = 0;
-        let smoothX = 0, smoothY = 0;
-        let lastGyroUpdate = 0;
-        const gyroThreshold = 100; // throttle raw updates
-
-        window.addEventListener('deviceorientation', (event) => {
-            const now = Date.now();
-            if (now - lastGyroUpdate < gyroThreshold) return;
-            lastGyroUpdate = now;
-
-            const tiltX = event.gamma || 0; 
-            const tiltY = event.beta || 0;  
-
-            const maxTiltX = 25;
-            const maxTiltY = 20;
-
-            targetX = Math.max(-1, Math.min(1, tiltX / maxTiltX));
-            targetY = Math.max(-1, Math.min(1, (tiltY - 90) / maxTiltY));
-        }, true);
-
-        function smoothGyro() {
-            smoothX += (targetX - smoothX) * 0.08;
-            smoothY += (targetY - smoothY) * 0.08;
-
-            updateRoomView(smoothX, smoothY);
-            requestAnimationFrame(smoothGyro);
-        }
-
-        smoothGyro();
+    } else {
+        // Mobile → idle animation only
+        animateRoom();
     }
 
     // Initialize centered view

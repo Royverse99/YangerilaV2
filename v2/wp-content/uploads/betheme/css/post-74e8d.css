@@ -3,20 +3,23 @@
   padding-top: 40px;
   margin-bottom: 80px;
 }
-.mcb-section .mcb-wrap .mcb-item-3p728qre .icon-wrapper {
+..mcb-section .mcb-wrap .mcb-item-3p728qre .icon-wrapper {
   width: 75px;
 }
+
 .mcb-section .mcb-wrap .mcb-item-3p728qre .title {
   font-size: 40px;       /* bigger font size */
   font-weight: 700;      /* thicker font weight */
   line-height: 45px;
   color: #4a5e61;
   margin-bottom: 15px;
+  margin-left: -5rem;        /* no shifts, keep original position */
+  position: relative;    /* ensure normal layout */
 }
 
 .mcb-section .mcb-wrap .mcb-item-3p728qre .demo-text-wrapper {
   text-align: center;
-     /* invisible but takes space */
+  /* no positioning applied here to avoid affecting heading */
 }
 
 .mcb-section .mcb-wrap .mcb-item-3p728qre .demo-quote {
@@ -25,24 +28,43 @@
   color: #7ae7c7;
   margin: 0 auto;
   max-width: 600rem;
-  margin-left: -10rem;
+  position: relative;          /* positioning inside container */
+  left: -10rem;                /* visually shift quote left */
   white-space: normal;
   opacity: 0.7;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  box-sizing: border-box;
 }
 
+.mcb-section .mcb-wrap .mcb-item-3p728qre {
+  overflow: visible;
+  box-sizing: border-box;
+}
+
+/* Mobile styles */
 @media only screen and (max-width: 480px) {
   .mcb-section .mcb-wrap .mcb-item-3p728qre .demo-quote {
     font-size: 14px;
     line-height: 20px;
-    max-width: 98%;       /* increase max width to almost full width */
+    max-width: 98%;       /* nearly full width on mobile */
     margin: 0 auto;
-    padding-left: 1%;     /* reduce padding left */
-    padding-right: 1%;    /* reduce padding right */
+    margin-left: 0;       /* reset shift */
+    padding-left: 1%;     /* minimal padding */
+    padding-right: 1%;
     opacity: 0.7;
     text-align: center;
     word-wrap: break-word;
+    overflow-wrap: break-word;
+    box-sizing: border-box;
+    left: 0;              /* remove left shift */
+  }
+  .mcb-section .mcb-wrap .mcb-item-3p728qre .title {
+    margin-left: 0;       /* ensure heading position unchanged */
+    position: relative;
   }
 }
+
 
 
 
