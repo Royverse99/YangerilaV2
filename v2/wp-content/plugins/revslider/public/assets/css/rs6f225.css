@@ -1417,3 +1417,24 @@ rs-loader.spinner6{width:40px;height:40px;-webkit-transform:translate(-50%,-50%)
 .avada-has-rev-slider-styles .rev_slider_wrapper {
 	transform:none;
 }
+
+@media (max-width: 767px) {
+  #slider-1-slide-1-layer-17 {
+    position: relative !important;
+    top: 370px !important; /* smaller value to prevent button disappearing */
+    left: 0 !important;
+    transform: none !important;
+    margin-bottom: 40px !important;
+  }
+
+  #slider-1-slide-1-layer-0 {
+    position: relative !important;
+    top: -40px !important;
+  }
+
+  #rev_slider_1_1 {
+    min-height: 1000px !important; /* Larger container height */
+    overflow: visible !important;
+  }
+}
+

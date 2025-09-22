@@ -20,7 +20,17 @@
 }
 .mcb-section .mcb-wrap .mcb-item-a620edc94 .image_frame {
   border-radius: 30px 30px 30px 30px;
+  transform: translateY(-10.5em);
+  overflow: visible !important;
 }
+
+/* For smaller screens (phones) */
+@media screen and (max-width: 768px) {
+  .mcb-section .mcb-wrap .mcb-item-a620edc94 .image_frame {
+    transform: translateY(-1.5em);
+  }
+}
+
 .mcb-section .mcb-wrap-d6a755a44 .mcb-wrap-inner {
   margin-right: 20%;
 }
@@ -294,6 +304,13 @@
   border-color: #1d4854;
   border-width: 0 0 1px 0;
 }
+.mcb-section .mcb-wrap .mcb-item-96eca4efd .mcb-column-inner {
+  padding-bottom: 10px;
+  border-style: solid;
+  border-color: #1d4854;
+  border-width: 0 0 1px 0;
+}
+
 .course-card .column_heading .title,
 .course-card .column_icon_box_2 .desc-wrapper h6.title {
   position: relative;
@@ -308,9 +325,20 @@
   font-size: 1.2rem;
   margin-bottom: 8px;
   text-align: center;
+  line-height: 1;
+  position: relative; /* required for 'top' to work */
+  top: -15rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
 }
 
+@media screen and (max-width: 767px) {
+  .course-card .column_heading .title {
+    top: 0; /* Reset top for phone screens */
+    font-size: 1rem; /* Optionally reduce font size for smaller screens */
+    top: -5rem;
+    margin-bottom: 6px;
+  }
+}
 /* Fee amount light grey */
 .course-card .column_icon_box_2 .desc-wrapper h6.title {
   color: #bbbbbb !important;
@@ -331,6 +359,28 @@
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
 }
 
+/* Updated styles for the four specific course titles: increase size and align top */
+.course-card .column_heading .title.course-title {
+  font-size: 2.5rem !important; /* close to H1 size */
+  font-weight: 900 !important;
+  text-align: center;
+  color: #17c4b8 !important;
+  margin-bottom: 0.5rem !important;
+  vertical-align: top;
+  padding-top: 0;
+}
+
+/* Slightly bigger, bold, white for fee and students count */
+.course-card .column_icon_box_2 .desc-wrapper h6.course-fee,
+.course-card .column_icon_box_2 .desc-wrapper h6.course-students {
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  text-align: center;
+  margin-bottom: 0.5rem !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
 /* Subtle blurred dark background behind text */
 .course-card .column_heading .title::before,
 .course-card .column_icon_box_2 .desc-wrapper h6.title::before {
@@ -339,7 +389,7 @@
   inset: 0;
   background: rgba(20, 24, 29, 0.2);
   backdrop-filter: blur(6px);
-  border-radius: 6px;
+  border-radius: 12px;
   z-index: -1;
   pointer-events: none;
 }
@@ -493,9 +543,10 @@
   margin-bottom: 30px;
 }
 .mcb-section .mcb-wrap .mcb-item-c97da1201 .mcb-column-inner {
-  padding-top: 30px;
-  padding-bottom: 30px;
-  margin-bottom: 30px;
+  border-top: 1px solid transparent;
+  margin-top: -2rem;
+  padding-bottom: 0.7rem;
+  margin-bottom: 0.7rem;
   border-style: solid;
   border-color: #45c7a1;
   border-width: 1px 0 1px 0;
