@@ -444,7 +444,7 @@
     <!-- Dynamic spotlight -->
     <div class="spotlight"></div>
 
-    <script>
+<script>
     const bg = document.querySelector('.bg');
     const guitar = document.querySelector('.guitar');
     const shadow = document.querySelector('.shadow');
@@ -455,27 +455,26 @@
     
     let isDesktop = !(/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
     
-    // Room dimensions for panning effect
     const maxPanX = 30;
     const maxPanY = 20;
 
     function updateRoomView(normalizedX, normalizedY) {
         const panX = normalizedX * maxPanX;
         const panY = normalizedY * maxPanY;
-        
-        // Background wall panning
+
+        // Background
         bg.style.transform = `translateX(${panX * 0.8}px) translateY(${panY * 0.6}px) scale(1.1)`;
-        
-        // Guitar subtle movement
+
+        // Guitar
         guitar.style.transform = `translate(-50%, -50%) translateX(${panX * 0.4}px) translateY(${panY * 0.3}px)`;
-        
-        // Spotlight tracking
+
+        // Spotlight
         const spotX = 50 + (normalizedX * 40);
         const spotY = 30 + (normalizedY * 50);
         spotlight.style.setProperty('--spot-x', spotX + '%');
         spotlight.style.setProperty('--spot-y', spotY + '%');
-        
-        // Shadow movement
+
+        // Shadow
         const shadowOffsetX = 50 + (-normalizedX * 30); 
         const shadowOffsetY = 70 + (-normalizedY * 25); 
         const shadowDisplaceX = -normalizedX * 50; 
@@ -483,7 +482,7 @@
         const shadowScale = 1.3 + (Math.abs(normalizedX + normalizedY) * 0.3);
         const shadowOpacity = 0.6 - (Math.abs(normalizedX + normalizedY) * 0.1);
         const shadowWidth = 450 + (Math.abs(normalizedX + normalizedY) * 50);
-        
+
         shadow.style.setProperty('--shadow-x', shadowOffsetX + '%');
         shadow.style.setProperty('--shadow-y', shadowOffsetY + '%');
         shadow.style.setProperty('--shadow-width', shadowWidth + 'px');
@@ -491,54 +490,53 @@
         shadow.style.setProperty('--shadow-offset-x', shadowDisplaceX + 'px');
         shadow.style.setProperty('--shadow-offset-y', shadowDisplaceY + 'px');
         shadow.style.setProperty('--shadow-opacity', shadowOpacity);
-        
-        // Smoke parallax
+
+        // Smoke
         smokeElements.forEach((smoke, index) => {
             let depth;
             if (index < 3) depth = (index + 1) * 0.3;
             else if (index >= 6 && index < 8) depth = 0.8;
             else if (index >= 8) depth = 0.2 + (index % 4) * 0.15;
             else depth = (index - 2) * 0.1;
-            
+
             const smokeX = panX * depth;
             const smokeY = panY * depth * 0.5;
-            
             smoke.style.transform = `translateX(${smokeX}px) translateY(${smokeY}px)`;
         });
-        
-        // Notes parallax
+
+        // Notes
         musicNotes.forEach((note) => {
             const isNear = note.classList.contains('note-near');
             const isMid = note.classList.contains('note-mid');
             const isFar = note.classList.contains('note-far');
-            
+
             let depthFactor = 0.4;
             if (isNear) depthFactor = 1.2;
             else if (isMid) depthFactor = 0.8;
             else if (isFar) depthFactor = 0.3;
-            
+
             const noteX = panX * depthFactor;
             const noteY = panY * depthFactor * 0.8;
             const currentTransform = note.style.transform || '';
-            
-            note.style.transform = currentTransform.replace(/translateX\([^)]*\)|translateY\([^)]*\)/g, '') + 
+
+            note.style.transform = currentTransform.replace(/translateX\([^)]*\)|translateY\([^)]*\)/g, '') +
                 ` translateX(${noteX}px) translateY(${noteY}px)`;
         });
-        
-        // Particles parallax
+
+        // Particles
         particles.forEach((particle, index) => {
             const depthFactor = 0.3 + (index % 3) * 0.4;
             const particleX = panX * depthFactor;
             const particleY = panY * depthFactor * 0.7;
             const currentTransform = particle.style.transform || '';
-            
-            particle.style.transform = currentTransform.replace(/translateX\([^)]*\)|translateY\([^)]*\)/g, '') + 
+
+            particle.style.transform = currentTransform.replace(/translateX\([^)]*\)|translateY\([^)]*\)/g, '') +
                 ` translateX(${particleX}px) translateY(${particleY}px)`;
         });
     }
 
-    // Shared idle animation (used for both desktop and mobile)
-    function animateRoom() {
+    // Idle animation
+    function idleAnimation() {
         const now = Date.now();
         const time = now * 0.0005;
 
@@ -546,58 +544,53 @@
         const gentleY = Math.cos(time * 0.8) * 0.6 + Math.sin(time * 0.5) * 0.3;
         const randomX = Math.sin(time * 1.7) * 0.2 + Math.cos(time * 2.3) * 0.15;
         const randomY = Math.cos(time * 1.9) * 0.25 + Math.sin(time * 1.1) * 0.2;
-        
+
         const finalX = gentleX + randomX;
         const finalY = gentleY + randomY;
 
         updateRoomView(finalX, finalY);
-        requestAnimationFrame(animateRoom);
     }
 
     if (isDesktop) {
         let lastMouseTime = 0;
-        let targetX = 0;
-        let targetY = 0;
+        let idle = false;
 
         function handleMouseMove(e) {
             const normalizedX = (e.clientX / window.innerWidth - 0.5) * 2;
             const normalizedY = (e.clientY / window.innerHeight - 0.5) * 2;
             
-            targetX = normalizedX;
-            targetY = normalizedY;
             lastMouseTime = Date.now();
-            
+            idle = false;
             updateRoomView(normalizedX, normalizedY);
         }
-        
+
         document.addEventListener('mousemove', handleMouseMove);
-        
-        function desktopAnimate() {
+
+        function loop() {
             const now = Date.now();
-            const timeSinceLastMouse = now - lastMouseTime;
-            
-            if (timeSinceLastMouse > 2000) {
-                animateRoom();
-                return;
+            if (now - lastMouseTime > 2000) {
+                idle = true;
             }
-            requestAnimationFrame(desktopAnimate);
+            if (idle) {
+                idleAnimation();
+            }
+            requestAnimationFrame(loop);
         }
-        
-        desktopAnimate();
-        
-        document.addEventListener('visibilitychange', () => {
-            if (!document.hidden) {
-                lastMouseTime = Date.now();
-            }
-        });
+        loop();
+
     } else {
-        // Mobile → idle animation only
-        animateRoom();
+        // Mobile = idle only
+        function loop() {
+            idleAnimation();
+            requestAnimationFrame(loop);
+        }
+        loop();
     }
 
-    // Initialize centered view
+    // Start centered
     updateRoomView(0, 0);
 </script>
+
 
 </body>
 </html>
