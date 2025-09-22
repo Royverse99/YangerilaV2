@@ -19,7 +19,7 @@
         .bg {
             position: fixed;
             inset: 0;
-            background: url("images/wall.jpg") center/cover no-repeat;
+            background: url("wp-content/uploads/2022/04/wall.jpg") center/cover no-repeat;
             z-index: 0;
             filter: brightness(0.3);
             will-change: transform;
@@ -146,49 +146,41 @@
             transform: scaleX(-1);
         }
 
-        /* Enhanced smoke animations for seamless looping */
+        /* Enhanced smoke animations for perfect seamless looping */
         @keyframes drift1 { 
-            0% { background-position: -300px bottom; transform: translateX(0px); }
-            50% { background-position: 50% bottom; transform: translateX(150px); }
-            100% { background-position: calc(100% + 300px) bottom; transform: translateX(300px); }
+            0% { background-position: -400px bottom; }
+            100% { background-position: 400px bottom; }
         }
         @keyframes drift2 { 
-            0% { background-position: calc(100% + 250px) bottom; transform: translateX(250px); }
-            50% { background-position: 50% bottom; transform: translateX(0px); }
-            100% { background-position: -250px bottom; transform: translateX(-250px); }
+            0% { background-position: 400px bottom; }
+            100% { background-position: -400px bottom; }
         }
         @keyframes drift3 { 
-            0% { background-position: -200px bottom; transform: translateX(-100px); }
-            50% { background-position: 75% bottom; transform: translateX(125px); }
-            100% { background-position: calc(100% + 200px) bottom; transform: translateX(300px); }
+            0% { background-position: -300px bottom; }
+            100% { background-position: 500px bottom; }
         }
         @keyframes drift4 { 
-            0% { background-position: calc(100% + 280px) bottom; transform: translateX(280px); }
-            50% { background-position: 25% bottom; transform: translateX(-50px); }
-            100% { background-position: -280px bottom; transform: translateX(-280px); }
+            0% { background-position: 500px bottom; }
+            100% { background-position: -500px bottom; }
         }
         @keyframes drift5 { 
-            0% { background-position: -220px bottom; transform: translateX(-110px); }
-            50% { background-position: 60% bottom; transform: translateX(180px); }
-            100% { background-position: calc(100% + 220px) bottom; transform: translateX(400px); }
+            0% { background-position: -350px bottom; }
+            100% { background-position: 450px bottom; }
         }
         @keyframes drift6 { 
-            0% { background-position: calc(100% + 180px) bottom; transform: translateX(180px); }
-            50% { background-position: 40% bottom; transform: translateX(-60px); }
-            100% { background-position: -180px bottom; transform: translateX(-180px); }
+            0% { background-position: 450px bottom; }
+            100% { background-position: -350px bottom; }
         }
         @keyframes drift7 { 
-            0% { background-position: -160px bottom; transform: translateX(-80px); }
-            50% { background-position: 65% bottom; transform: translateX(130px); }
-            100% { background-position: calc(100% + 160px) bottom; transform: translateX(320px); }
+            0% { background-position: -250px bottom; }
+            100% { background-position: 550px bottom; }
         }
         @keyframes drift8 { 
-            0% { background-position: calc(100% + 200px) bottom; transform: translateX(200px); }
-            50% { background-position: 35% bottom; transform: translateX(-30px); }
-            100% { background-position: -200px bottom; transform: translateX(-200px); }
+            0% { background-position: 550px bottom; }
+            100% { background-position: -250px bottom; }
         }
 
-        /* Guitar container with natural gradient shading */
+        /* Guitar container - exactly like your version */
         .guitar {
             position: fixed;
             top: 50%;
@@ -205,13 +197,6 @@
         .guitar img {
             width: 100%;
             height: auto;
-            /* Natural guitar shading and dynamic spotlight shine combined */
-            filter: 
-                /* Base natural shading - darker bottom, lighter top */
-                brightness(var(--guitar-brightness, 1))
-                contrast(1.1)
-                /* Dynamic spotlight shine effect */
-                drop-shadow(var(--guitar-shine-x, 0px) var(--guitar-shine-y, 0px) var(--guitar-shine-blur, 20px) rgba(255,240,200, var(--guitar-shine-opacity, 0.3)));
         }
 
         /* Guitar shadow - more responsive movement */
@@ -397,7 +382,7 @@
     
     <!-- Guitar shadow using actual guitar image -->
     <div class="shadow">
-        <img src="images/guitar.png" alt="Guitar Shadow">
+        <img src="wp-content/uploads/2022/04/guitar.png" alt="Guitar Shadow">
     </div>
     
     <!-- Back smoke layers (behind guitar) -->
@@ -409,7 +394,7 @@
 
     <!-- Guitar with integrated shading and shine effects -->
     <div class="guitar">
-        <img src="images/guitar.png" alt="Guitar">
+        <img src="wp-content/uploads/2022/04/guitar.png" alt="Guitar">
     </div>
 
     <!-- Front smoke layers (in front of guitar) -->
@@ -462,7 +447,6 @@
     <script>
         const bg = document.querySelector('.bg');
         const guitar = document.querySelector('.guitar');
-        const guitarImg = document.querySelector('.guitar img');
         const shadow = document.querySelector('.shadow');
         const spotlight = document.querySelector('.spotlight');
         const smokeElements = document.querySelectorAll('.smoke1, .smoke2, .smoke3, .smoke4, .smoke5, .smoke6, .smoke7, .smoke8, .smoke9, .smoke10, .smoke11, .smoke12');
@@ -492,10 +476,6 @@
             spotlight.style.setProperty('--spot-y', spotY + '%');
             
             // Realistic guitar shadow - opposite movement like real spotlight
-            const lightAngleX = (normalizedX * 60) - 30;
-            const lightAngleY = (normalizedY * 40) - 20;
-            
-            // Shadow position - opposite to light movement (realistic physics)
             const shadowOffsetX = 50 + (-normalizedX * 30); // Right light = left shadow
             const shadowOffsetY = 70 + (-normalizedY * 25); // Down light = up shadow
             
@@ -564,13 +544,71 @@
             });
         }
 
-        // Desktop: Mouse-based room looking
+        // Desktop: Mouse-based room looking with timer-based subtle animation
         if (isDesktop) {
-            document.addEventListener('mousemove', (e) => {
-                const normalizedX = (e.clientX / window.innerWidth - 0.5) * 2; // -1 to 1
-                const normalizedY = (e.clientY / window.innerHeight - 0.5) * 2; // -1 to 1
+            let lastMouseTime = 0;
+            let animationId = null;
+            let currentX = 0;
+            let currentY = 0;
+            let targetX = 0;
+            let targetY = 0;
+
+            // Function to handle mouse events
+            function handleMouseMove(e) {
+                const normalizedX = (e.clientX / window.innerWidth - 0.5) * 2;
+                const normalizedY = (e.clientY / window.innerHeight - 0.5) * 2;
+                
+                targetX = normalizedX;
+                targetY = normalizedY;
+                lastMouseTime = Date.now();
                 
                 updateRoomView(normalizedX, normalizedY);
+            }
+            
+            // Add local event listener (works when mouse is inside iframe)
+            document.addEventListener('mousemove', handleMouseMove);
+            
+            // Subtle animation when no mouse movement detected
+            function animateRoom() {
+                const now = Date.now();
+                const timeSinceLastMouse = now - lastMouseTime;
+                
+                // Start subtle animation 2 seconds after mouse stops
+                if (timeSinceLastMouse > 2000) {
+                    const time = now * 0.0005; // Slightly faster for more movement
+                    
+                    // More varied movement patterns covering more screen area
+                    const gentleX = Math.sin(time) * 0.7 + Math.cos(time * 0.3) * 0.4; // Larger range, layered movement
+                    const gentleY = Math.cos(time * 0.8) * 0.6 + Math.sin(time * 0.5) * 0.3; // More vertical coverage
+                    
+                    // Add some random-like movement using multiple sine waves
+                    const randomX = Math.sin(time * 1.7) * 0.2 + Math.cos(time * 2.3) * 0.15;
+                    const randomY = Math.cos(time * 1.9) * 0.25 + Math.sin(time * 1.1) * 0.2;
+                    
+                    // Combine patterns for more organic movement
+                    const finalX = gentleX + randomX;
+                    const finalY = gentleY + randomY;
+                    
+                    // Gradually transition from last mouse position to gentle animation
+                    const transitionFactor = Math.min((timeSinceLastMouse - 2000) / 3000, 1);
+                    
+                    currentX = targetX * (1 - transitionFactor) + finalX * transitionFactor;
+                    currentY = targetY * (1 - transitionFactor) + finalY * transitionFactor;
+                    
+                    updateRoomView(currentX, currentY);
+                }
+                
+                animationId = requestAnimationFrame(animateRoom);
+            }
+            
+            // Start the animation loop
+            animateRoom();
+            
+            // Reset animation when page becomes visible again
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden) {
+                    lastMouseTime = Date.now();
+                }
             });
         }
 

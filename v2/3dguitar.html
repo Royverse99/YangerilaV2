@@ -612,9 +612,16 @@
             });
         }
 
-        // Mobile: Gyroscope-based room looking
+        // Mobile: Gyroscope-based room looking (throttled to prevent flickering)
         if (window.DeviceOrientationEvent && !isDesktop) {
+            let lastGyroUpdate = 0;
+            const gyroThreshold = 50; // Throttle to 20fps for smoother mobile experience
+            
             window.addEventListener('deviceorientation', (event) => {
+                const now = Date.now();
+                if (now - lastGyroUpdate < gyroThreshold) return;
+                lastGyroUpdate = now;
+                
                 const tiltX = event.gamma || 0; // -90 to 90
                 const tiltY = event.beta || 0;  // -180 to 180
                 
