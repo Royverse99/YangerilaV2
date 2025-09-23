@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Guitar Room</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+            filter: sepia(0.1) brightness(0.9) contrast(1.05);
+        }
+
+        /* Background brick wall */
+        .bg {
+            position: fixed;
+            inset: 0;
+            background: url("images/wall.jpg") center/cover no-repeat;
+            z-index: 0;
+            filter: brightness(0.3);
+            will-change: transform;
+        }
+
+        /* Dynamic spotlight - flat round shape - no transitions on mobile */
+        .spotlight {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at var(--spot-x, 50%) var(--spot-y, 30%), 
+                rgba(255,220,180,0.5) 0%, 
+                rgba(255,200,150,0.3) 20%,
+                rgba(255,180,120,0.15) 40%,
+                rgba(0,0,0,0.85) 70%);
+            pointer-events: none;
+            z-index: 5;
+            mix-blend-mode: screen;
+            will-change: transform;
+        }
+
+        /* Add transitions only on desktop */
+        @media (hover: hover) and (pointer: fine) {
+            .spotlight {
+                transition: all 0.2s ease-out;
+            }
+        }
+
+        /* Smoke layers with seamless blurred edges and overlapping - optimized for mobile */
+        .smoke1, .smoke2, .smoke3, .smoke4, .smoke5, .smoke6, .smoke7, .smoke8, .smoke9, .smoke10, .smoke11, .smoke12 {
+            position: fixed;
+            bottom: 0;
+            left: -20%; /* Extend beyond viewport */
+            right: -20%; /* Extend beyond viewport */
+            width: 140%; /* Make wider for seamless loop */
+            height: 70%;
+            background-position: center bottom;
+            background-repeat: repeat-x;
+            background-size: auto 100%;
+            pointer-events: none;
+            mix-blend-mode: lighten;
+            will-change: transform;
+            /* Enhanced blurred edges with wider fade zones */
+            mask: linear-gradient(to right, 
+                transparent 0%, 
+                rgba(0,0,0,0.2) 3%, 
+                rgba(0,0,0,0.6) 8%, 
+                black 12%, 
+                black 88%, 
+                rgba(0,0,0,0.6) 92%,
+                rgba(0,0,0,0.2) 97%, 
+                transparent 100%);
+            -webkit-mask: linear-gradient(to right, 
+                transparent 0%, 
+                rgba(0,0,0,0.2) 3%, 
+                rgba(0,0,0,0.6) 8%, 
+                black 12%, 
+                black 88%, 
+                rgba(0,0,0,0.6) 92%,
+                rgba(0,0,0,0.2) 97%, 
+                transparent 100%);
+        }
+
+        /* Front smoke layers (in front of guitar) */
+        .smoke1 {
+            background-image: url("wp-content/uploads/2022/04/smoke1.png");
+            opacity: 0.6;
+            animation: drift1 35s linear infinite;
+            height: 80%;
+            z-index: 4;
+        }
+
+        .smoke2 {
+            background-image: url("wp-content/uploads/2022/04/smoke2.png");
+            opacity: 0.4;
+            animation: drift2 50s linear infinite;
+            height: 70%;
+            z-index: 3;
+        }
+
+        .smoke3 {
+            background-image: url("wp-content/uploads/2022/04/smoke3.png");
+            opacity: 0.3;
+            animation: drift3 65s linear infinite;
+            height: 60%;
+            z-index: 3;
+        }
+
+        /* Additional front smoke layers (over guitar) */
+        .smoke7 {
+            background-image: url("wp-content/uploads/2022/04/smoke1.png");
+            opacity: 0.2;
+            animation: drift1 40s linear infinite;
+            height: 50%;
+            z-index: 6;
+            transform: scaleY(-1);
+        }
+
+        .smoke8 {
+            background-image: url("wp-content/uploads/2022/04/smoke3.png");
+            opacity: 0.15;
+            animation: drift3 55s linear infinite reverse;
+            height: 45%;
+            z-index: 6;
+        }
+
+        /* Back smoke layers */
+        .smoke4 {
+            background-image: url("wp-content/uploads/2022/04/smoke1.png");
+            opacity: 0.25;
+            animation: drift4 25s linear infinite reverse;
+            height: 75%;
+            z-index: 1;
+            transform: scaleX(-1);
+        }
+
+        .smoke5 {
+            background-image: url("wp-content/uploads/2022/04/smoke2.png");
+            opacity: 0.2;
+            animation: drift5 40s linear infinite reverse;
+            height: 65%;
+            z-index: 1;
+        }
+
+        .smoke6 {
+            background-image: url("wp-content/uploads/2022/04/smoke3.png");
+            opacity: 0.15;
+            animation: drift6 55s linear infinite;
+            height: 50%;
+            z-index: 1;
+            transform: scaleX(-1);
+        }
+
+        /* Enhanced smoke animations for perfect seamless looping */
+        @keyframes drift1 { 
+            0% { background-position: -400px bottom; }
+            100% { background-position: 400px bottom; }
+        }
+        @keyframes drift2 { 
+            0% { background-position: 400px bottom; }
+            100% { background-position: -400px bottom; }
+        }
+        @keyframes drift3 { 
+            0% { background-position: -300px bottom; }
+            100% { background-position: 500px bottom; }
+        }
+        @keyframes drift4 { 
+            0% { background-position: 500px bottom; }
+            100% { background-position: -500px bottom; }
+        }
+        @keyframes drift5 { 
+            0% { background-position: -350px bottom; }
+            100% { background-position: 450px bottom; }
+        }
+        @keyframes drift6 { 
+            0% { background-position: 450px bottom; }
+            100% { background-position: -350px bottom; }
+        }
+        @keyframes drift7 { 
+            0% { background-position: -250px bottom; }
+            100% { background-position: 550px bottom; }
+        }
+        @keyframes drift8 { 
+            0% { background-position: 550px bottom; }
+            100% { background-position: -250px bottom; }
+        }
+
+        /* Guitar container - pure 2D parallax */
+        .guitar {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 400px;
+            z-index: 2;
+            pointer-events: none;
+            will-change: transform;
+            filter: drop-shadow(var(--guitar-shadow-x, 0px) var(--guitar-shadow-y, 20px) 40px rgba(0,0,0,0.8));
+            transition: all 0.1s ease-out;
+        }
+
+        .guitar img {
+            width: 100%;
+            height: auto;
+        }
+
+        /* Guitar shadow - more responsive movement */
+        .shadow {
+            position: fixed;
+            top: var(--shadow-y, 70%);
+            left: var(--shadow-x, 55%);
+            width: var(--shadow-width, 450px);
+            height: auto;
+            transform: translate(-50%, -50%) 
+                       translateX(var(--shadow-offset-x, 20px))
+                       translateY(var(--shadow-offset-y, 10px))
+                       scale(var(--shadow-scale, 1.3));
+            z-index: 1;
+            opacity: var(--shadow-opacity, 0.6);
+            will-change: transform;
+            transition: all 0.1s ease-out;
+            filter: blur(8px) brightness(0.15) contrast(3);
+        }
+
+        .shadow img {
+            width: 100%;
+            height: auto;
+        }
+
+        /* Musical notes with depth illusion */
+        .music-notes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        .note {
+            position: absolute;
+            font-size: 20px;
+            font-weight: bold;
+            animation: float-note 12s ease-in-out infinite;
+            will-change: transform;
+        }
+
+        /* Near notes (front of room) */
+        .note-near {
+            color: rgba(255, 215, 0, 0.8);
+            z-index: 4;
+            font-size: 28px;
+        }
+
+        /* Mid notes */
+        .note-mid {
+            color: rgba(255, 180, 100, 0.6);
+            z-index: 2;
+            font-size: 22px;
+        }
+
+        /* Far notes (back of room) */
+        .note-far {
+            color: rgba(255, 150, 80, 0.4);
+            z-index: 1;
+            font-size: 16px;
+            filter: blur(0.5px);
+        }
+
+        .note:nth-child(1) { left: 15%; top: 25%; animation-delay: 0s; }
+        .note:nth-child(2) { left: 75%; top: 35%; animation-delay: -3s; }
+        .note:nth-child(3) { left: 25%; top: 70%; animation-delay: -6s; }
+        .note:nth-child(4) { left: 85%; top: 60%; animation-delay: -9s; }
+        .note:nth-child(5) { left: 45%; top: 20%; animation-delay: -2s; }
+        .note:nth-child(6) { left: 65%; top: 80%; animation-delay: -5s; }
+        .note:nth-child(7) { left: 30%; top: 45%; animation-delay: -8s; }
+        .note:nth-child(8) { left: 80%; top: 25%; animation-delay: -1s; }
+        .note:nth-child(9) { left: 20%; top: 55%; animation-delay: -4s; }
+        .note:nth-child(10) { left: 90%; top: 40%; animation-delay: -7s; }
+        .note:nth-child(11) { left: 35%; top: 15%; animation-delay: -10s; }
+        .note:nth-child(12) { left: 55%; top: 75%; animation-delay: -11s; }
+        .note:nth-child(13) { left: 10%; top: 65%; animation-delay: -12s; }
+        .note:nth-child(14) { left: 70%; top: 50%; animation-delay: -13s; }
+        .note:nth-child(15) { left: 40%; top: 85%; animation-delay: -14s; }
+
+        /* Floating particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: rgba(255, 200, 100, 0.6);
+            border-radius: 50%;
+            animation: particle-float 15s ease-in-out infinite;
+        }
+
+        .particle-small {
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 180, 80, 0.4);
+            animation-duration: 20s;
+        }
+
+        .particle-large {
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 220, 120, 0.8);
+            animation-duration: 12s;
+        }
+
+        @keyframes particle-float {
+            0%, 100% { 
+                transform: translateY(0px) translateX(0px) scale(0.5); 
+                opacity: 0.3; 
+            }
+            25% { 
+                transform: translateY(-50px) translateX(35px) scale(1.2); 
+                opacity: 0.9; 
+            }
+            50% { 
+                transform: translateY(-90px) translateX(-20px) scale(0.8); 
+                opacity: 1; 
+            }
+            75% { 
+                transform: translateY(-40px) translateX(45px) scale(1.4); 
+                opacity: 0.6; 
+            }
+        }
+
+        .particle:nth-child(1) { left: 12%; top: 30%; animation-delay: 0s; }
+        .particle:nth-child(2) { left: 78%; top: 45%; animation-delay: -2s; }
+        .particle:nth-child(3) { left: 22%; top: 65%; animation-delay: -4s; }
+        .particle:nth-child(4) { left: 88%; top: 25%; animation-delay: -6s; }
+        .particle:nth-child(5) { left: 35%; top: 75%; animation-delay: -8s; }
+        .particle:nth-child(6) { left: 65%; top: 35%; animation-delay: -10s; }
+        .particle:nth-child(7) { left: 45%; top: 55%; animation-delay: -12s; }
+        .particle:nth-child(8) { left: 85%; top: 70%; animation-delay: -14s; }
+        .particle:nth-child(9) { left: 15%; top: 40%; animation-delay: -16s; }
+        .particle:nth-child(10) { left: 75%; top: 60%; animation-delay: -18s; }
+
+        @keyframes float-note {
+            0%, 100% { 
+                transform: translateY(0px) translateX(0px) rotate(0deg) scale(1); 
+                opacity: 0.3; 
+            }
+            25% { 
+                transform: translateY(-40px) translateX(-25px) rotate(15deg) scale(1.2); 
+                opacity: 0.8; 
+            }
+            50% { 
+                transform: translateY(-70px) translateX(30px) rotate(-10deg) scale(1.1); 
+                opacity: 1; 
+            }
+            75% { 
+                transform: translateY(-35px) translateX(-15px) rotate(20deg) scale(0.9); 
+                opacity: 0.7; 
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .guitar { width: 300px; }
+            .note { font-size: 16px; }
+            .note-near { font-size: 22px; }
+            .note-mid { font-size: 18px; }
+            .note-far { font-size: 14px; }
+        }
+
+        @media (max-width: 480px) {
+            .guitar { width: 250px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background layers -->
+    <div class="bg"></div>
+    
+    <!-- Guitar shadow using actual guitar image -->
+    <div class="shadow">
+        <img src="wp-content/uploads/2022/04/guitar.png" alt="Guitar Shadow">
+    </div>
+    
+    <!-- Back smoke layers (behind guitar) -->
+    <div class="smoke4"></div>
+    <div class="smoke5"></div>
+    <div class="smoke6"></div>
+    <div class="smoke9"></div>
+    <div class="smoke11"></div>
+
+    <!-- Guitar with integrated shading and shine effects -->
+    <div class="guitar">
+        <img src="wp-content/uploads/2022/04/guitar.png" alt="Guitar">
+    </div>
+
+    <!-- Front smoke layers (in front of guitar) -->
+    <div class="smoke1"></div>
+    <div class="smoke2"></div>
+    <div class="smoke3"></div>
+    
+    <!-- Additional overlapping front smoke (over guitar) -->
+    <div class="smoke7"></div>
+    <div class="smoke8"></div>
+    <div class="smoke10"></div>
+    <div class="smoke12"></div>
+
+    <!-- Musical notes with depth -->
+    <div class="music-notes">
+        <div class="note note-far">♪</div>
+        <div class="note note-mid">♫</div>
+        <div class="note note-near">♪</div>
+        <div class="note note-far">♬</div>
+        <div class="note note-mid">♪</div>
+        <div class="note note-near">♫</div>
+        <div class="note note-far">♪</div>
+        <div class="note note-mid">♬</div>
+        <div class="note note-near">♪</div>
+        <div class="note note-far">♫</div>
+        <div class="note note-mid">♪</div>
+        <div class="note note-near">♬</div>
+        <div class="note note-far">♪</div>
+        <div class="note note-mid">♫</div>
+        <div class="note note-near">♪</div>
+    </div>
+
+    <!-- Floating particles -->
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle particle-small"></div>
+        <div class="particle particle-large"></div>
+        <div class="particle"></div>
+        <div class="particle particle-small"></div>
+        <div class="particle particle-large"></div>
+        <div class="particle"></div>
+        <div class="particle particle-small"></div>
+        <div class="particle particle-large"></div>
+        <div class="particle"></div>
+    </div>
+
+    <!-- Dynamic spotlight -->
+    <div class="spotlight"></div>
+
+    <script>
+        const bg = document.querySelector('.bg');
+        const guitar = document.querySelector('.guitar');
+        const shadow = document.querySelector('.shadow');
+        const spotlight = document.querySelector('.spotlight');
+        const smokeElements = document.querySelectorAll('.smoke1, .smoke2, .smoke3, .smoke4, .smoke5, .smoke6, .smoke7, .smoke8, .smoke9, .smoke10, .smoke11, .smoke12');
+        const musicNotes = document.querySelectorAll('.note');
+        const particles = document.querySelectorAll('.particle');
+        
+        let isDesktop = !(/Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+        
+        // Room dimensions for panning effect
+        const maxPanX = 30;
+        const maxPanY = 20;
+
+        function updateRoomView(normalizedX, normalizedY) {
+            const panX = normalizedX * maxPanX;
+            const panY = normalizedY * maxPanY;
+            
+            // Background wall panning - pure 2D movement
+            bg.style.transform = `translateX(${panX * 0.8}px) translateY(${panY * 0.6}px) scale(1.1)`;
+            
+            // Guitar subtle movement - pure 2D
+            guitar.style.transform = `translate(-50%, -50%) translateX(${panX * 0.4}px) translateY(${panY * 0.3}px)`;
+            
+            // Enhanced spotlight tracking - full range
+            const spotX = 50 + (normalizedX * 40); // 10% to 90%
+            const spotY = 30 + (normalizedY * 50); // 5% to 80%
+            spotlight.style.setProperty('--spot-x', spotX + '%');
+            spotlight.style.setProperty('--spot-y', spotY + '%');
+            
+            // Realistic guitar shadow - opposite movement like real spotlight
+            const shadowOffsetX = 50 + (-normalizedX * 30); // Right light = left shadow
+            const shadowOffsetY = 70 + (-normalizedY * 25); // Down light = up shadow
+            
+            // Shadow displacement - moves opposite to light direction
+            const shadowDisplaceX = -normalizedX * 50; // Opposite horizontal movement
+            const shadowDisplaceY = -normalizedY * 35; // Opposite vertical movement
+            
+            // Shadow scale - bigger when light is more angled
+            const shadowScale = 1.3 + (Math.abs(normalizedX + normalizedY) * 0.3);
+            const shadowOpacity = 0.6 - (Math.abs(normalizedX + normalizedY) * 0.1);
+            
+            // Shadow size 
+            const shadowWidth = 450 + (Math.abs(normalizedX + normalizedY) * 50);
+            
+            shadow.style.setProperty('--shadow-x', shadowOffsetX + '%');
+            shadow.style.setProperty('--shadow-y', shadowOffsetY + '%');
+            shadow.style.setProperty('--shadow-width', shadowWidth + 'px');
+            shadow.style.setProperty('--shadow-scale', shadowScale);
+            shadow.style.setProperty('--shadow-offset-x', shadowDisplaceX + 'px');
+            shadow.style.setProperty('--shadow-offset-y', shadowDisplaceY + 'px');
+            shadow.style.setProperty('--shadow-opacity', shadowOpacity);
+            
+            // Smoke layers parallax - pure 2D translateX/Y only
+            smokeElements.forEach((smoke, index) => {
+                // Enhanced depth calculation for more layers
+                let depth;
+                if (index < 3) depth = (index + 1) * 0.3; // Front layers
+                else if (index >= 6 && index < 8) depth = 0.8; // Over guitar layers  
+                else if (index >= 8) depth = 0.2 + (index % 4) * 0.15; // Additional overlapping layers
+                else depth = (index - 2) * 0.1; // Back layers
+                
+                const smokeX = panX * depth;
+                const smokeY = panY * depth * 0.5;
+                
+                // Pure 2D translation only
+                smoke.style.transform = `translateX(${smokeX}px) translateY(${smokeY}px)`;
+            });
+            
+            // Musical notes with bigger depth movement - 2D only
+            musicNotes.forEach((note, index) => {
+                const isNear = note.classList.contains('note-near');
+                const isMid = note.classList.contains('note-mid');
+                const isFar = note.classList.contains('note-far');
+                
+                let depthFactor = 0.4; // Increased base movement
+                if (isNear) depthFactor = 1.2; // Much bigger movement
+                else if (isMid) depthFactor = 0.8; // Bigger movement
+                else if (isFar) depthFactor = 0.3; // Smaller but still increased
+                
+                const noteX = panX * depthFactor;
+                const noteY = panY * depthFactor * 0.8;
+                
+                // Replace any existing transforms and apply only 2D translation
+                const baseTransform = note.style.transform.replace(/translateX\([^)]*\)|translateY\([^)]*\)/g, '');
+                note.style.transform = baseTransform + ` translateX(${noteX}px) translateY(${noteY}px)`;
+            });
+            
+            // Particles with bigger depth movement - 2D only
+            particles.forEach((particle, index) => {
+                const depthFactor = 0.3 + (index % 3) * 0.4; // Much bigger movement
+                const particleX = panX * depthFactor;
+                const particleY = panY * depthFactor * 0.7;
+                
+                // Replace any existing transforms and apply only 2D translation
+                const baseTransform = particle.style.transform.replace(/translateX\([^)]*\)|translateY\([^)]*\)/g, '');
+                particle.style.transform = baseTransform + ` translateX(${particleX}px) translateY(${particleY}px)`;
+            });
+        }
+
+        // Desktop: Mouse-based room looking with timer-based subtle animation
+        if (isDesktop) {
+            let lastMouseTime = 0;
+            let animationId = null;
+            let currentX = 0;
+            let currentY = 0;
+            let targetX = 0;
+            let targetY = 0;
+
+            // Function to handle mouse events
+            function handleMouseMove(e) {
+                const normalizedX = (e.clientX / window.innerWidth - 0.5) * 2;
+                const normalizedY = (e.clientY / window.innerHeight - 0.5) * 2;
+                
+                targetX = normalizedX;
+                targetY = normalizedY;
+                lastMouseTime = Date.now();
+                
+                updateRoomView(normalizedX, normalizedY);
+            }
+            
+            // Add local event listener (works when mouse is inside iframe)
+            document.addEventListener('mousemove', handleMouseMove);
+            
+            // Subtle animation when no mouse movement detected
+            function animateRoom() {
+                const now = Date.now();
+                const timeSinceLastMouse = now - lastMouseTime;
+                
+                // Start subtle animation 2 seconds after mouse stops
+                if (timeSinceLastMouse > 2000) {
+                    const time = now * 0.0005; // Slightly faster for more movement
+                    
+                    // More varied movement patterns covering more screen area
+                    const gentleX = Math.sin(time) * 0.7 + Math.cos(time * 0.3) * 0.4; // Larger range, layered movement
+                    const gentleY = Math.cos(time * 0.8) * 0.6 + Math.sin(time * 0.5) * 0.3; // More vertical coverage
+                    
+                    // Add some random-like movement using multiple sine waves
+                    const randomX = Math.sin(time * 1.7) * 0.2 + Math.cos(time * 2.3) * 0.15;
+                    const randomY = Math.cos(time * 1.9) * 0.25 + Math.sin(time * 1.1) * 0.2;
+                    
+                    // Combine patterns for more organic movement
+                    const finalX = gentleX + randomX;
+                    const finalY = gentleY + randomY;
+                    
+                    // Gradually transition from last mouse position to gentle animation
+                    const transitionFactor = Math.min((timeSinceLastMouse - 2000) / 3000, 1);
+                    
+                    currentX = targetX * (1 - transitionFactor) + finalX * transitionFactor;
+                    currentY = targetY * (1 - transitionFactor) + finalY * transitionFactor;
+                    
+                    updateRoomView(currentX, currentY);
+                }
+                
+                animationId = requestAnimationFrame(animateRoom);
+            }
+            
+            // Start the animation loop
+            animateRoom();
+            
+            // Reset animation when page becomes visible again
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden) {
+                    lastMouseTime = Date.now();
+                }
+            });
+        }
+
+        // Mobile: Gyroscope-based room looking (heavily throttled to prevent flickering)
+        if (window.DeviceOrientationEvent && !isDesktop) {
+            let lastGyroUpdate = 0;
+            const gyroThreshold = 100; // Throttle to 10fps for smoother mobile experience
+            let smoothX = 0;
+            let smoothY = 0;
+            
+            window.addEventListener('deviceorientation', (event) => {
+                const now = Date.now();
+                if (now - lastGyroUpdate < gyroThreshold) return;
+                lastGyroUpdate = now;
+                
+                const tiltX = event.gamma || 0; // -90 to 90
+                const tiltY = event.beta || 0;  // -180 to 180
+                
+                // Normalize tilt to -1 to 1 range
+                const maxTiltX = 25;
+                const maxTiltY = 20;
+                const targetX = Math.max(-1, Math.min(1, tiltX / maxTiltX));
+                const targetY = Math.max(-1, Math.min(1, (tiltY - 90) / maxTiltY));
+                
+                // Smooth interpolation to reduce jittery movement
+                smoothX += (targetX - smoothX) * 0.3;
+                smoothY += (targetY - smoothY) * 0.3;
+                
+                updateRoomView(smoothX, smoothY);
+            }, true);
+        }
+
+        // Initialize centered view
+        updateRoomView(0, 0);
+    </script>
+</body>
+</html>
