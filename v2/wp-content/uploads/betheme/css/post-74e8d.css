@@ -13,7 +13,7 @@
   line-height: 45px;
   color: #4a5e61;
   margin-bottom: 15px;
-  margin-left: -5rem;        /* no shifts, keep original position */
+         /* no shifts, keep original position */
   position: relative;    /* ensure normal layout */
 }
 
@@ -29,7 +29,7 @@
   margin: 0 auto;
   max-width: 600rem;
   position: relative;          /* positioning inside container */
-  left: -10rem;                /* visually shift quote left */
+                 /* visually shift quote left */
   white-space: normal;
   opacity: 0.7;
   word-wrap: break-word;
@@ -1167,7 +1167,7 @@
 }
 @media (max-width: 959px) {
   .mcb-section-jdg78v52p {
-    margin-bottom: 60px;
+   /* margin-bottom: 60px; */
   }
   .mcb-section .mcb-wrap .mcb-item-3p728qre .title {
     font-size: 50px;
