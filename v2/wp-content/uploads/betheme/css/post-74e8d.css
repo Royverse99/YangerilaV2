@@ -84,7 +84,7 @@
 /* For smaller screens (phones) */
 @media screen and (max-width: 768px) {
   .mcb-section .mcb-wrap .mcb-item-a620edc94 .image_frame {
-    transform: translateY(-1.5em);
+   /* transform: translateY(-1.5em);*/
   }
 }
 
@@ -1167,7 +1167,8 @@
 }
 @media (max-width: 959px) {
   .mcb-section-jdg78v52p {
-   /* margin-bottom: 60px; */
+   margin-bottom: 60px; 
+
   }
   .mcb-section .mcb-wrap .mcb-item-3p728qre .title {
     font-size: 50px;
