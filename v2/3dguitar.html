@@ -19,7 +19,7 @@
         .bg {
             position: fixed;
             inset: 0;
-            background: url("wp-content/uploads/2022/04/wall.jpg") center/cover no-repeat;
+            background: url("images/wall.jpg") center/cover no-repeat;
             z-index: 0;
             filter: brightness(0.3);
             will-change: transform;
@@ -154,36 +154,36 @@
 
         /* Enhanced smoke animations for perfect seamless looping */
         @keyframes drift1 { 
-            0% { background-position: -400px bottom; }
-            100% { background-position: 400px bottom; }
+            0% { background-position: -800px bottom; }
+            100% { background-position: 800px bottom; }
         }
         @keyframes drift2 { 
-            0% { background-position: 400px bottom; }
-            100% { background-position: -400px bottom; }
+            0% { background-position: 800px bottom; }
+            100% { background-position: -800px bottom; }
         }
         @keyframes drift3 { 
-            0% { background-position: -300px bottom; }
-            100% { background-position: 500px bottom; }
+            0% { background-position: -600px bottom; }
+            100% { background-position: 1000px bottom; }
         }
         @keyframes drift4 { 
-            0% { background-position: 500px bottom; }
-            100% { background-position: -500px bottom; }
+            0% { background-position: 1000px bottom; }
+            100% { background-position: -1000px bottom; }
         }
         @keyframes drift5 { 
-            0% { background-position: -350px bottom; }
-            100% { background-position: 450px bottom; }
+            0% { background-position: -700px bottom; }
+            100% { background-position: 900px bottom; }
         }
         @keyframes drift6 { 
-            0% { background-position: 450px bottom; }
-            100% { background-position: -350px bottom; }
+            0% { background-position: 900px bottom; }
+            100% { background-position: -700px bottom; }
         }
         @keyframes drift7 { 
-            0% { background-position: -250px bottom; }
-            100% { background-position: 550px bottom; }
+            0% { background-position: -500px bottom; }
+            100% { background-position: 1100px bottom; }
         }
         @keyframes drift8 { 
-            0% { background-position: 550px bottom; }
-            100% { background-position: -250px bottom; }
+            0% { background-position: 1100px bottom; }
+            100% { background-position: -500px bottom; }
         }
 
         /* Guitar container - pure 2D parallax */
@@ -619,33 +619,24 @@
             });
         }
 
-        // Mobile: Gyroscope-based room looking (heavily throttled to prevent flickering)
-        if (window.DeviceOrientationEvent && !isDesktop) {
-            let lastGyroUpdate = 0;
-            const gyroThreshold = 100; // Throttle to 10fps for smoother mobile experience
-            let smoothX = 0;
-            let smoothY = 0;
+        // Mobile: Light idle animation only (no gyroscope)
+        if (!isDesktop) {
+            let mobileAnimationId = null;
             
-            window.addEventListener('deviceorientation', (event) => {
-                const now = Date.now();
-                if (now - lastGyroUpdate < gyroThreshold) return;
-                lastGyroUpdate = now;
+            function animateMobileRoom() {
+                const time = Date.now() * 0.0003; // Very slow animation speed
                 
-                const tiltX = event.gamma || 0; // -90 to 90
-                const tiltY = event.beta || 0;  // -180 to 180
+                // Very subtle side-to-side movement only
+                const gentleX = Math.sin(time) * 0.15; // Small horizontal movement
+                const gentleY = 0; // No vertical movement to keep it simple
                 
-                // Normalize tilt to -1 to 1 range
-                const maxTiltX = 25;
-                const maxTiltY = 20;
-                const targetX = Math.max(-1, Math.min(1, tiltX / maxTiltX));
-                const targetY = Math.max(-1, Math.min(1, (tiltY - 90) / maxTiltY));
+                updateRoomView(gentleX, gentleY);
                 
-                // Smooth interpolation to reduce jittery movement
-                smoothX += (targetX - smoothX) * 0.3;
-                smoothY += (targetY - smoothY) * 0.3;
-                
-                updateRoomView(smoothX, smoothY);
-            }, true);
+                mobileAnimationId = requestAnimationFrame(animateMobileRoom);
+            }
+            
+            // Start the mobile animation loop
+            animateMobileRoom();
         }
 
         // Initialize centered view
