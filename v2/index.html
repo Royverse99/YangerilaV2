@@ -5392,50 +5392,48 @@ document.getElementById("slider-1-slide-1-layer-17").addEventListener("click", f
                                             <ul></ul>
                                         </div>
                                         <form action="#" class="wpcf7-form init" data-status="init" method="post" novalidate="novalidate">
-                                            <div style="display: none;">
-                                                <!--All hidden input fields remain unchanged-->
-                                                <input name="_wpcf7" type="hidden" value="62" />
-                                                <input name="_wpcf7_version" type="hidden" value="5.5.6" />
-                                                <input name="_wpcf7_locale" type="hidden" value="en_US" />
-                                                <input name="_wpcf7_unit_tag" type="hidden" value="wpcf7-f62-p7-o2" />
-                                                <input name="_wpcf7_container_post" type="hidden" value="7" />
-                                                <input name="_wpcf7_posted_data_hash" type="hidden" value />
-                                            </div>
-                                            <div class="column one">
-                                                <span class="wpcf7-form-control-wrap your-name">
-                                                    <input aria-invalid="false" aria-required="true" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" name="your-name" placeholder="Full Name *" size="40" type="text" value />
-                                                </span>
-                                            </div>
-                                            <div class="column one">
-                                                <span class="wpcf7-form-control-wrap your-phone">
-                                                    <input aria-invalid="false" aria-required="true" class="wpcf7-form-control wpcf7-text wpcf7-tel wpcf7-validates-as-required wpcf7-validates-as-tel" name="your-phone" placeholder="Phone number *" size="40" type="tel" value />
-                                                </span>
-                                            </div>
-                                            <div class="column one">
-                                                <span class="wpcf7-form-control-wrap your-dropdown">
-                                                    <select aria-invalid="false" aria-required="true" class="wpcf7-form-control wpcf7-select wpcf7-validates-as-required" name="your-dropdown">
-                                                        <option disabled selected value>Select an option</option>
-                                                        <option value="General Inquiry">General Inquiry</option>
-                                                        <option value="Enrollment">Enrollment</option>
-                                                        <option value="Course Details">Course Details</option>
-                                                    </select>
-                                                </span>
-                                            </div>
-                                            <div class="column one">
-                                                <span class="wpcf7-form-control-wrap your-message">
-                                                    <textarea aria-invalid="false" class="wpcf7-form-control wpcf7-textarea" cols="40" name="your-message" placeholder="Message" rows="1"></textarea>
-                                                </span>
-                                            </div>
-                                            <div class="column one">
-                                              <input type="hidden" name="sheet" value="contact">
+    <div style="display: none;">
+        <!--All hidden input fields remain unchanged-->
+        <input name="_wpcf7" type="hidden" value="62" />
+        <input name="_wpcf7_version" type="hidden" value="5.5.6" />
+        <input name="_wpcf7_locale" type="hidden" value="en_US" />
+        <input name="_wpcf7_unit_tag" type="hidden" value="wpcf7-f62-p7-o2" />
+        <input name="_wpcf7_container_post" type="hidden" value="7" />
+        <input name="_wpcf7_posted_data_hash" type="hidden" value />
+    </div>
+    <div class="column one">
+        <span class="wpcf7-form-control-wrap your-name">
+            <input aria-invalid="false" aria-required="true" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" name="your-name" placeholder="Full Name *" size="40" type="text" value />
+        </span>
+    </div>
+    <div class="column one">
+        <span class="wpcf7-form-control-wrap your-phone">
+            <input aria-invalid="false" aria-required="true" class="wpcf7-form-control wpcf7-text wpcf7-tel wpcf7-validates-as-required wpcf7-validates-as-tel" name="your-phone" placeholder="Phone number *" size="40" type="tel" value />
+        </span>
+    </div>
+    <div class="column one">
+        <span class="wpcf7-form-control-wrap your-dropdown">
+            <select aria-invalid="false" aria-required="true" class="wpcf7-form-control wpcf7-select wpcf7-validates-as-required" name="your-dropdown">
+                <option disabled selected value>Select an option</option>
+                <option value="General Inquiry">General Inquiry</option>
+                <option value="Enrollment">Enrollment</option>
+                <option value="Course Details">Course Details</option>
+            </select>
+        </span>
+    </div>
+    <div class="column one">
+        <span class="wpcf7-form-control-wrap your-message">
+            <textarea aria-invalid="false" class="wpcf7-form-control wpcf7-textarea" cols="40" name="your-message" placeholder="Message" rows="1"></textarea>
+        </span>
+    </div>
+    <div class="column one">
+        <input class="wpcf7-form-control has-spinner wpcf7-submit" type="submit" value="Submit" />
+    </div>
+    <div aria-hidden="true" class="wpcf7-response-output"></div>
+</form>
 
-                                                <input class="wpcf7-form-control has-spinner wpcf7-submit" type="submit" value="Submit" />
-                                            </div>
-                                            <div aria-hidden="true" class="wpcf7-response-output"></div>
-                                        </form>
-                                        <script>
-// Add this script just before </form>
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzifq15DBPa5waruvR8R6HyyrA2FfYEBt2dX-GRenPDbfYvFUuNcZsX9Gx3SqpunvvoKQ/exec";
+<script>
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxgFBjXemi_Nd99ereTJ52b71eaMl-_y3I3Ypc1zfcTVZrtoQU8fOyW56xN86Ey9w4B/exec";
 
 function getIndianTimestamp() {
   const date = new Date();
@@ -5462,18 +5460,54 @@ function getIndianTimestamp() {
   return formatted.replace(day, day + suffix);
 }
 
+function autoClosePopup() {
+  console.log('Attempting to close contact form popup...');
+  
+  // Method 1: Send message to parent window
+  if (window.parent && window.parent !== window) {
+    console.log('Sending closePopup message to parent');
+    window.parent.postMessage('closePopup', '*');
+  }
+  
+  // Method 2: Try standard window.close()
+  try {
+    console.log('Attempting window.close()');
+    window.close();
+  } catch (e) {
+    console.log('window.close() failed:', e);
+  }
+  
+  // Method 3: Try to hide iframe
+  try {
+    if (window.parent && window.parent.document) {
+      const iframes = window.parent.document.querySelectorAll('iframe');
+      iframes.forEach(iframe => {
+        if (iframe.contentWindow === window) {
+          console.log('Hiding contact form iframe');
+          iframe.style.display = 'none';
+        }
+      });
+    }
+  } catch (e) {
+    console.log('Iframe hiding failed:', e);
+  }
+}
+
 document.querySelector('.wpcf7-form').addEventListener('submit', async function(e) {
   e.preventDefault();
   
   const submitBtn = document.querySelector('.wpcf7-submit');
   const responseOutput = document.querySelector('.wpcf7-response-output');
   
+  // Disable submit button and show loading
   submitBtn.disabled = true;
-  responseOutput.innerHTML = 'Submitting...';
+  submitBtn.value = 'Submitting...';
+  responseOutput.innerHTML = 'Submitting your enquiry...';
   responseOutput.style.display = 'block';
+  responseOutput.style.color = '#4fd1c7';
   
   const params = new URLSearchParams();
-  params.append('sheet', 'Sheet3');
+  params.append('sheet', 'contact'); // This will route to contact sheet in your Google Apps Script
   params.append('fullName', document.querySelector('[name="your-name"]').value);
   params.append('phoneNumber', document.querySelector('[name="your-phone"]').value);
   params.append('enquiryType', document.querySelector('[name="your-dropdown"]').value);
@@ -5481,37 +5515,47 @@ document.querySelector('.wpcf7-form').addEventListener('submit', async function(
   params.append('timestamp', getIndianTimestamp());
   
   try {
+    console.log('Submitting contact form to:', GOOGLE_SCRIPT_URL);
+    console.log('Data being sent:', Object.fromEntries(params));
+    
     const response = await fetch(GOOGLE_SCRIPT_URL, {
       method: 'POST',
       body: params
     });
     
-    if (response.ok) {
+    const result = await response.text();
+    console.log('Contact form response:', result);
+    
+    if (result.includes("Success") || response.ok) {
       // Hide all content and show thank you
       document.querySelector('.wrap').innerHTML = `
-        <div style="text-align: center; padding: 60px 20px; color: #4fd1c7;">
-          <h2 style="font-size: 32px; margin-bottom: 12px;">Thank You!</h2>
-          <p style="font-size: 18px;">We have received your enquiry.<br/>Our SRM will call you at the earliest.</p>
+        <div style="text-align: center; padding: 60px 20px; color: #4fd1c7; font-family: Arial, sans-serif;">
+          <h2 style="font-size: 32px; margin-bottom: 12px; font-weight: 400;">Thank You!</h2>
+          <p style="font-size: 18px; line-height: 1.5; color: rgba(79, 209, 199, 0.8);">We have received your enquiry.<br/>Our SRM will call you at the earliest.</p>
         </div>
       `;
       
       // Auto-close after 2 seconds
       setTimeout(() => {
-        if (window.parent !== window) {
-          window.parent.postMessage('closePopup', '*');
-        }
-        try { window.close(); } catch(e) {}
+        autoClosePopup();
       }, 2000);
       
     } else {
-      throw new Error('Submission failed');
+      throw new Error('Submission failed: ' + result);
     }
   } catch (err) {
+    console.error('Error submitting contact form:', err);
     responseOutput.innerHTML = 'Error submitting form. Please try again.';
     responseOutput.style.color = '#ff6b6b';
+    submitBtn.value = 'Submit';
   } finally {
     submitBtn.disabled = false;
   }
+});
+
+// Listen for messages from parent (for debugging)
+window.addEventListener('message', function(event) {
+  console.log('Contact form received message from parent:', event.data);
 });
 </script>
                                     </div>

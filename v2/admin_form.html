@@ -216,7 +216,7 @@
       Interested in learning guitar with Yangerila? Let us know what you're looking for and we'll get back to you soon!
     </p>
 
-    <form id="generalEnquiryForm">
+    <form id="adminForm">
       <div class="form-grid">
         <div class="form-group">
           <label for="enquiryType">What brings you here? *</label>
@@ -270,12 +270,10 @@
           </div>
         </div>
       </div>
-      <input type="hidden" name="sheet" value="admin">
 
       <button type="submit" class="submit-btn" id="submitBtn">Submit</button>
       <div class="loading" id="loading">Submitting your enquiry...</div>
       <div class="error" id="error">There was an error submitting your enquiry. Please try again.</div>
-
     </form>
 
     <div id="thankYouMessage" class="thank-you">
@@ -285,7 +283,7 @@
   </div>
 
   <script>
-    // Replace this with your Google Apps Script deployment URL (same as sref.html)
+    // Replace this with your Google Apps Script deployment URL
     const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzifq15DBPa5waruvR8R6HyyrA2FfYEBt2dX-GRenPDbfYvFUuNcZsX9Gx3SqpunvvoKQ/exec";
 
     // Helper: format timestamp to Indian time zone
@@ -318,29 +316,41 @@
 
     // Auto-close function for iframe
     function autoClosePopup() {
-      // Try different methods to close popup/iframe
+      console.log('Attempting to close popup...');
+      
+      // Method 1: Send message to parent window
       if (window.parent && window.parent !== window) {
-        // If in iframe, try to communicate with parent
+        console.log('Sending closePopup message to parent');
         window.parent.postMessage('closePopup', '*');
       }
       
-      // Alternative methods
+      // Method 2: Try standard window.close()
       try {
-        if (window.close) {
-          window.close();
+        console.log('Attempting window.close()');
+        window.close();
+      } catch (e) {
+        console.log('window.close() failed:', e);
+      }
+      
+      // Method 3: Try to hide iframe
+      try {
+        if (window.parent && window.parent.document) {
+          const iframes = window.parent.document.querySelectorAll('iframe');
+          iframes.forEach(iframe => {
+            if (iframe.contentWindow === window) {
+              console.log('Hiding iframe');
+              iframe.style.display = 'none';
+              // Or remove the iframe completely
+              // iframe.remove();
+            }
+          });
         }
       } catch (e) {
-        // Fallback: try to hide the current window
-        if (window.parent && window.parent.document) {
-          const iframe = window.parent.document.querySelector('iframe[src*="general-enquiry"]');
-          if (iframe) {
-            iframe.style.display = 'none';
-          }
-        }
+        console.log('Iframe hiding failed:', e);
       }
     }
 
-    document.getElementById("generalEnquiryForm").addEventListener("submit", async function (e) {
+    document.getElementById("adminForm").addEventListener("submit", async function (e) {
       e.preventDefault();
 
       const submitBtn = document.getElementById("submitBtn");
@@ -356,9 +366,9 @@
       submitBtn.disabled = true;
       loading.style.display = "block";
 
-      // Collect data for Sheet 2
+      // Collect data for Admin sheet
       const params = new URLSearchParams();
-      params.append("sheet", "Sheet2"); // Specify which sheet to use
+      params.append("sheet", "admin"); // This will route to admin sheet
       params.append("enquiryType", document.getElementById("enquiryType").value);
       params.append("fullName", document.getElementById("fullName").value);
       params.append("phoneNumber", document.getElementById("phoneNumber").value);
@@ -368,20 +378,28 @@
       params.append("timestamp", getIndianTimestamp());
 
       try {
+        console.log('Submitting to:', GOOGLE_SCRIPT_URL);
+        console.log('Data being sent:', Object.fromEntries(params));
+        
         const response = await fetch(GOOGLE_SCRIPT_URL, {
           method: "POST",
           body: params
         });
+        
         const result = await response.text();
+        console.log('Response:', result);
 
         if (result.includes("Success") || response.ok) {
           // Hide all form elements
           document.querySelector("h1").style.display = "none";
           document.querySelector(".description").style.display = "none";
-          document.getElementById("generalEnquiryForm").style.display = "none";
+          document.getElementById("adminForm").style.display = "none";
 
           // Show thank you message
           thankYou.style.display = "block";
+
+          // Reset form for next use
+          document.getElementById("adminForm").reset();
 
           // Auto-close after 2 seconds
           setTimeout(() => {
@@ -393,11 +411,17 @@
         }
       } catch (err) {
         console.error("Error submitting form:", err);
+        error.textContent = "There was an error submitting your enquiry. Please try again.";
         error.style.display = "block";
       } finally {
         loading.style.display = "none";
         submitBtn.disabled = false;
       }
+    });
+
+    // Listen for messages from parent (for debugging)
+    window.addEventListener('message', function(event) {
+      console.log('Received message from parent:', event.data);
     });
   </script>
 </body>
