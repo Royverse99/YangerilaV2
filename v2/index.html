@@ -4103,6 +4103,7 @@ body,td,th {
             </div>
         </div>
         <div id="Wrapper">
+          <div id="popup-overlay" style="display:none;"></div>
             <div id="course-popup" style="display:flex;">
                 <!--display stays flex, but hidden via CSS left:-100%-->
                 <div id="popup-content">
@@ -5472,7 +5473,7 @@ document.querySelector('.wpcf7-form').addEventListener('submit', async function(
   responseOutput.style.display = 'block';
   
   const params = new URLSearchParams();
-  params.append('sheet', 'Sheet3');
+  params.append('sheet', 'contact');
   params.append('fullName', document.querySelector('[name="your-name"]').value);
   params.append('phoneNumber', document.querySelector('[name="your-phone"]').value);
   params.append('enquiryType', document.querySelector('[name="your-dropdown"]').value);
@@ -5878,6 +5879,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
         </script>
+
+        <script>
+  // ✅ Listen for "closePopup" messages from child forms
+  window.addEventListener("message", function (event) {
+    if (event.data === "closePopup") {
+      closePopup(); // call your existing close function
+    }
+  });
+</script>
+
+
     </body>
     <!--Mirrored from themes.muffingroup.com/be/coaching3/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 05 Aug 2025 05:58:08 GMT-->
 </html>
