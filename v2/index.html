@@ -961,7 +961,7 @@ h6 {
     letter-spacing: 0px;
   }
   h2 {
-    font-size: 33px;
+
     line-height: 36px;
     font-weight: 500;
     letter-spacing: 0px;
@@ -969,7 +969,7 @@ h6 {
   h3,
   .woocommerce ul.products li.product h3,
   .woocommerce #customer_login h2 {
-    font-size: 22px;
+   
     line-height: 25px;
     font-weight: 500;
     letter-spacing: 0px;
@@ -978,7 +978,7 @@ h6 {
   .woocommerce .woocommerce-order-details__title,
   .woocommerce .wc-bacs-bank-details-heading,
   .woocommerce .woocommerce-customer-details h2 {
-    font-size: 14px;
+   
     line-height: 19px;
     font-weight: 500;
     letter-spacing: 0px;
@@ -5379,6 +5379,8 @@ document.getElementById("slider-1-slide-1-layer-17").addEventListener("click", f
                             <div class="mcb-column-inner mcb-item-column-inner">
                                 <div class="column_attr mfn-inline-editor clearfix" style>
                                     <h4 style="color: black !important;">Need help - Let us call you.</h4>
+                                    <div class="form-message"></div>
+<hr class="no_line" style="margin: 0 auto 10px auto" />
                                     <hr class="no_line" style="margin: 0 auto 10px auto" />
                                     <!--Social media links REMOVED as requested-->
                                 </div>
@@ -5393,15 +5395,7 @@ document.getElementById("slider-1-slide-1-layer-17").addEventListener("click", f
                                             <ul></ul>
                                         </div>
                                         <form action="#" class="wpcf7-form init" data-status="init" method="post" novalidate="novalidate">
-                                            <div style="display: none;">
-                                                <!--All hidden input fields remain unchanged-->
-                                                <input name="_wpcf7" type="hidden" value="62" />
-                                                <input name="_wpcf7_version" type="hidden" value="5.5.6" />
-                                                <input name="_wpcf7_locale" type="hidden" value="en_US" />
-                                                <input name="_wpcf7_unit_tag" type="hidden" value="wpcf7-f62-p7-o2" />
-                                                <input name="_wpcf7_container_post" type="hidden" value="7" />
-                                                <input name="_wpcf7_posted_data_hash" type="hidden" value />
-                                            </div>
+                                    
                                             <div class="column one">
                                                 <span class="wpcf7-form-control-wrap your-name">
                                                     <input aria-invalid="false" aria-required="true" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" name="your-name" placeholder="Full Name *" size="40" type="text" value />
@@ -5435,43 +5429,30 @@ document.getElementById("slider-1-slide-1-layer-17").addEventListener("click", f
                                         </form>
                                         <script>
 // Add this script just before </form>
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxgFBjXemi_Nd99ereTJ52b71eaMl-_y3I3Ypc1zfcTVZrtoQU8fOyW56xN86Ey9w4B/exec";
-
-function getIndianTimestamp() {
-  const date = new Date();
-  const options = {
-    timeZone: "Asia/Kolkata",
-    day: "numeric",
-    month: "long", 
-    year: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true
-  };
-  const formatted = new Intl.DateTimeFormat("en-GB", options).format(date);
-  const day = date.toLocaleString("en-IN", { day: "numeric", timeZone: "Asia/Kolkata" });
-  const suffix = (d => {
-    if (d > 3 && d < 21) return "th";
-    switch (d % 10) {
-      case 1: return "st";
-      case 2: return "nd"; 
-      case 3: return "rd";
-      default: return "th";
-    }
-  })(parseInt(day));
-  return formatted.replace(day, day + suffix);
-}
+                                          // Put this above your submit handler
 
 document.querySelector('.wpcf7-form').addEventListener('submit', async function(e) {
   e.preventDefault();
-  
+  e.stopImmediatePropagation(); // ensure no other handler runs
+function getIndianTimestamp() {
+  const date = new Date();
+  const opts = { timeZone: "Asia/Kolkata", day: "numeric", month: "long", year: "numeric", hour: "numeric", minute: "2-digit", hour12: true };
+  const formatted = new Intl.DateTimeFormat("en-GB", opts).format(date);
+  const day = date.toLocaleString("en-IN", { day: "numeric", timeZone: "Asia/Kolkata" });
+  const suffix = (d => (d>3 && d<21) ? "th" : (["st","nd","rd"][d%10-1] || "th"))(parseInt(day, 10));
+  return formatted.replace(day, day + suffix);
+}
   const submitBtn = document.querySelector('.wpcf7-submit');
-  const responseOutput = document.querySelector('.wpcf7-response-output');
-  
+  const msgBox = document.querySelector('.form-message'); // <-- your new div under the heading
+
   submitBtn.disabled = true;
-  responseOutput.innerHTML = 'Submitting...';
-  responseOutput.style.display = 'block';
-  
+
+  // Optional: show "Submitting..." state
+  if (msgBox) {
+    msgBox.textContent = 'Submitting...';
+    msgBox.className = 'form-message'; // reset classes
+  }
+
   const params = new URLSearchParams();
   params.append('sheet', 'contact');
   params.append('fullName', document.querySelector('[name="your-name"]').value);
@@ -5479,40 +5460,48 @@ document.querySelector('.wpcf7-form').addEventListener('submit', async function(
   params.append('enquiryType', document.querySelector('[name="your-dropdown"]').value);
   params.append('message', document.querySelector('[name="your-message"]').value);
   params.append('timestamp', getIndianTimestamp());
-  
+
   try {
-    const response = await fetch(GOOGLE_SCRIPT_URL, {
+    const response = await fetch("https://script.google.com/macros/s/AKfycbxgFBjXemi_Nd99ereTJ52b71eaMl-_y3I3Ypc1zfcTVZrtoQU8fOyW56xN86Ey9w4B/exec", {
       method: 'POST',
       body: params
     });
-    
+
     if (response.ok) {
-      // Hide all content and show thank you
-      document.querySelector('.wrap').innerHTML = `
-        <div style="text-align: center; padding: 60px 20px; color: #4fd1c7;">
-          <h2 style="font-size: 32px; margin-bottom: 12px;">Thank You!</h2>
-          <p style="font-size: 18px;">We have received your enquiry.<br/>Our SRM will call you at the earliest.</p>
-        </div>
-      `;
-      
-      // Auto-close after 2 seconds
-      setTimeout(() => {
-        if (window.parent !== window) {
+      if (window.parent !== window) {
+        // ===== POPUP: keep your auto-close flow =====
+        document.querySelector('.wrap').innerHTML = `
+          <div style="text-align: center; padding: 60px 20px; color: #4fd1c7;">
+            <h2 style="font-size: 32px; margin-bottom: 12px;">Thank You!</h2>
+            <p style="font-size: 18px;">We have received your enquiry.<br/>Our SRM will call you at the earliest.</p>
+          </div>
+        `;
+        setTimeout(() => {
           window.parent.postMessage('closePopup', '*');
+          try { window.close(); } catch(e) {}
+        }, 2000);
+      } else {
+        // ===== INLINE: show success in your new div =====
+        if (msgBox) {
+          msgBox.textContent = 'Thank you — we have received your enquiry.';
+          msgBox.className = 'form-message success';
         }
-        try { window.close(); } catch(e) {}
-      }, 2000);
-      
+      }
     } else {
       throw new Error('Submission failed');
     }
   } catch (err) {
-    responseOutput.innerHTML = 'Error submitting form. Please try again.';
-    responseOutput.style.color = '#ff6b6b';
+    if (msgBox) {
+      msgBox.textContent = 'Error submitting form. Please try again.';
+      msgBox.className = 'form-message error';
+    }
   } finally {
     submitBtn.disabled = false;
   }
 });
+
+
+
 </script>
                                     </div>
                                 </div>
@@ -5659,13 +5648,8 @@ document.querySelector('.wpcf7-form').addEventListener('submit', async function(
 		@font-face{font-family:'Material Icons'; font-style:normal; font-weight:400;  src:url(http://fonts.gstatic.com/s/materialicons/v41/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2) format('woff2')}rs-module .material-icons{font-family:'Material Icons'; font-weight:normal; font-style:normal;font-size:inherit; display:inline-block;  text-transform:none; letter-spacing:normal; word-wrap:normal; white-space:nowrap; direction:ltr; vertical-align:top; line-height:inherit;  font-feature-settings:'liga'; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; -moz-osx-font-smoothing:grayscale}
         </style>
         <script id="wp-polyfill-js" src="wp-includes/js/dist/vendor/wp-polyfill.min2c7c.js?ver=3.15.0" type="text/javascript"></script>
-        <script id="contact-form-7-js-extra" type="text/javascript">
-        
-/* <![CDATA[ */
-var wpcf7 = {"api":{"root":"https:\/\/themes.muffingroup.com\/be\/coaching3\/wp-json\/","namespace":"contact-form-7\/v1"}};
-/* ]]> */
-        </script>
-        <script id="contact-form-7-js" src="wp-content/plugins/contact-form-7/includes/js/index5406.js?ver=5.5.6" type="text/javascript"></script>
+       
+      
         <script async defer id="tp-tools-js" src="wp-content/plugins/revslider/public/assets/js/rbtools.min8331.js?ver=6.5.18" type="text/javascript"></script>
         <script async defer id="revmin-js" src="wp-content/plugins/revslider/public/assets/js/rs6.minf225.js?ver=6.5.20" type="text/javascript"></script>
         <script id="jquery-ui-core-js" src="wp-includes/js/jquery/ui/core.minb37e.js?ver=1.13.3" type="text/javascript"></script>

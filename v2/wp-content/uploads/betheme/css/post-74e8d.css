@@ -1863,7 +1863,7 @@
 /* Mobile readability — small, tasteful bump */
 @media (max-width: 640px) {
   .wrap.mcb-wrap-d6a755a44 .mcb-item-cac643a53 .mcb-item-heading-inner .title {
-    font-size: clamp(18px, 5vw, 22px) !important;
+           margin-bottom: -1.5rem !important;
   }
   .wrap.mcb-wrap-d6a755a44 .column_attr p {
     font-size: clamp(16px, 3.9vw, 18px) !important;
@@ -1907,3 +1907,25 @@
   box-shadow: 0 6px 14px rgba(24, 47, 53, 0.55);
 }
 
+.form-message {
+  font-size: 16px;
+  line-height: 1.4;
+  margin-top: 8px;
+  font-weight: 500;
+  padding: 6px 10px;
+  border-radius: 4px;
+}
+
+/* Success */
+.form-message.success {
+  color: #4fd1c7;               /* lime green */
+  background-color: #e6fafa;    /* very light green background */
+  border: 1px solid #4fd1c7;
+}
+
+/* Error */
+.form-message.error {
+  color: #ff6b6b;
+  background-color: #ffecec;
+  border: 1px solid #ff6b6b;
+}
