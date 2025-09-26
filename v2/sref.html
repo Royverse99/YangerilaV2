@@ -320,6 +320,12 @@
           // Show thank you message only
           thankYou.style.display = "block";
           document.getElementById("studentReferralForm").reset();
+
+          // NEW: Auto-close after 2 seconds (same as admin)
+          setTimeout(() => {
+            autoClosePopup();
+          }, 2000);
+
         } else {
           throw new Error(result);
         }
@@ -339,6 +345,29 @@
       document.getElementById("studentReferralForm").style.display = "block";
       document.getElementById("thankYouMessage").style.display = "none";
     }
+
+    function autoClosePopup() {
+  // Method 1: Ask parent to close
+  if (window.parent && window.parent !== window) {
+    window.parent.postMessage("closePopup", "*");
+  }
+
+  // Method 2: Try window.close()
+  try { window.close(); } catch (e) {}
+
+  // Method 3: Hide/remove iframe if still open
+  try {
+    if (window.parent && window.parent.document) {
+      const iframes = window.parent.document.querySelectorAll("iframe");
+      iframes.forEach(iframe => {
+        if (iframe.contentWindow === window) {
+          iframe.style.display = "none";
+        }
+      });
+    }
+  } catch (e) {}
+}
+
   </script>
 </body>
 
