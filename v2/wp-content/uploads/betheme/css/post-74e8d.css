@@ -1929,3 +1929,27 @@
   background-color: #ffecec;
   border: 1px solid #ff6b6b;
 }
+
+/* Phone tweaks for the bottom contact block — with split spans */
+@media (max-width: 600px) {
+  /* "Ready!" bigger than the sub-line, but not huge */
+  #contact .mcb-item-2e047add7 .cta-head .ready { 
+    font-size: 28px; 
+    line-height: 1.2;
+  }
+  #contact .mcb-item-2e047add7 .cta-head .sub { 
+    font-size: 18px; 
+    line-height: 1.2;
+  }
+
+  /* Call / Mail / Home lines */
+  #contact .mcb-item-2e047add7 .column_attr h4:nth-of-type(n+2) {
+    font-size: 18px;
+    line-height: 1.4;
+  }
+
+  #contact .mcb-item-2e047add7 .column_attr h4 .material-symbols-outlined {
+    font-size: 18px;
+    vertical-align: -3px;
+  }
+}
