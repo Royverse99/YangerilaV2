@@ -395,8 +395,6 @@
     <div class="smoke4"></div>
     <div class="smoke5"></div>
     <div class="smoke6"></div>
-    <div class="smoke9"></div>
-    <div class="smoke11"></div>
 
     <!-- Guitar with integrated shading and shine effects -->
     <div class="guitar">
@@ -411,8 +409,6 @@
     <!-- Additional overlapping front smoke (over guitar) -->
     <div class="smoke7"></div>
     <div class="smoke8"></div>
-    <div class="smoke10"></div>
-    <div class="smoke12"></div>
 
     <!-- Musical notes with depth -->
     <div class="music-notes">
@@ -455,7 +451,7 @@
         const guitar = document.querySelector('.guitar');
         const shadow = document.querySelector('.shadow');
         const spotlight = document.querySelector('.spotlight');
-        const smokeElements = document.querySelectorAll('.smoke1, .smoke2, .smoke3, .smoke4, .smoke5, .smoke6, .smoke7, .smoke8, .smoke9, .smoke10, .smoke11, .smoke12');
+        const smokeElements = document.querySelectorAll('.smoke1, .smoke2, .smoke3, .smoke4, .smoke5, .smoke6, .smoke7, .smoke8');
         const musicNotes = document.querySelectorAll('.note');
         const particles = document.querySelectorAll('.particle');
         
@@ -510,7 +506,6 @@
                 let depth;
                 if (index < 3) depth = (index + 1) * 0.3; // Front layers
                 else if (index >= 6 && index < 8) depth = 0.8; // Over guitar layers  
-                else if (index >= 8) depth = 0.2 + (index % 4) * 0.15; // Additional overlapping layers
                 else depth = (index - 2) * 0.1; // Back layers
                 
                 const smokeX = panX * depth;

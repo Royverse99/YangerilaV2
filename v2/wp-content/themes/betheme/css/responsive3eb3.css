@@ -1358,3 +1358,100 @@ html,body{overflow-x:hidden}
 @media only screen and (max-device-width: 1024px){
 	html.ios, .ios .section.bg-cover{background-attachment:scroll!important}
 }
+
+/* Reset testimonials margin on phones */
+@media only screen and (max-width: 767px) {
+  #testimonials {
+    margin-top: -6rem !important; /* override the inline style */
+  }
+}
+
+/* Tablet fix: make the popup span the full viewport so it's 100% off-screen when hidden */
+@media (min-width: 769px) and (max-width: 1024px) {
+  #course-popup {
+    left: 0;
+    width: 100%;
+  }
+  /* optional — to match phone edges */
+  #popup-content { border-radius: 0; }
+}
+/* cover iPad Pro landscape too just in case
+@media (min-width: 769px) and (max-width: 1366px) {
+  #course-popup { left: 0; width: 100%; }
+}*/
+
+/* Phone readability bumps — with slightly tighter line-height */
+@media (max-width: 640px) {
+
+  /* Admission & Demo Session */
+ 
+  .mcb-item-3p728qre .demo-text-wrapper p {
+    font-size: clamp(16.5px, 4.3vw, 18.5px) !important;
+    line-height: 1.44 !important;   /* tighter than before */
+  }
+
+  /* Fun Fact */
+  .mcb-item-4edcb7b06 .title {
+    font-size: clamp(22px, 6.8vw, 28px) !important;
+  }
+  .mcb-item-b44604f53 .column_attr {
+    font-size: clamp(16.5px, 4.3vw, 18.5px) !important;
+    line-height: 1.46 !important;   /* tighter than before */
+  }
+
+  /* Testimonials */
+  .mcb-item-c9fa4e83f .testimonials_slider blockquote {
+    font-size: clamp(16.5px, 4.2vw, 18.5px) !important;
+    line-height: 1.46 !important;   /* tighter than before */
+  }
+  .mcb-item-c9fa4e83f .testimonials_slider .author h5 {
+    font-size: clamp(15px, 3.8vw, 17px) !important;
+  }
+  .mcb-item-c9fa4e83f .testimonials_slider .author .company {
+    font-size: clamp(13px, 3.4vw, 15px) !important;
+  }
+}
+/* --- Course cards: hard-center the inner columns + contents --- */
+.course-card .mcb-wrap-inner {
+  display: grid !important;
+  justify-items: center !important;     /* center every child column */
+  text-align: center !important;
+}
+
+/* Make every inner column shrink to its content and center */
+.course-card .mcb-wrap-inner > .column {
+  width: auto !important;
+  float: none !important;               /* ignore BeTheme float grid */
+  display: block !important;
+  margin: 0 auto !important;
+}
+
+/* Title row */
+.course-card .column_heading .mcb-column-inner {
+  display: flex !important;
+  justify-content: center !important;
+}
+.course-card .column_heading .title {
+  margin: 0 auto !important;
+}
+
+/* Fee / Students rows (icon on the left, text on the right) */
+.course-card .mfn-icon-box-left {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;   /* center the whole row */
+  width: auto !important;
+}
+.course-card .mfn-icon-box-left .desc-wrapper {
+  padding-left: 0 !important;           /* remove left bias */
+  text-align: center !important;
+}
+
+/* Stars row */
+.course-card .progress_icons {
+  display: inline-flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: auto !important;
+}
+
