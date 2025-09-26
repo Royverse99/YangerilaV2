@@ -1454,4 +1454,14 @@ html,body{overflow-x:hidden}
   align-items: center !important;
   width: auto !important;
 }
+/* Our Courses section spacing */
+.mcb-section-2198f1ed9.courses {
+  margin-top: 70px !important;   /* desktop / tablet */
+}
+
+@media (max-width: 767px) {
+  .mcb-section-2198f1ed9.courses {
+    margin-top: -50px !important; /* phones */
+  }
+}
 
