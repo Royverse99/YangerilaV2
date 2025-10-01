@@ -2029,3 +2029,143 @@
     width: 100% !important;
   }
 }
+
+/* ensure the wrapper doesn't clip the quote when absolutely positioned items are inside */
+.mcb-column-inner.mcb-item-image-inner .image_wrapper {
+  overflow: visible !important;
+}
+
+/* Quote block styles (scoped only here) */
+.mcb-column-inner.mcb-item-image-inner .founder-quote {
+  position: relative;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 2;
+
+  /* typography – blocky italic */
+  font-family: "Roboto", "Helvetica Neue", Arial, sans-serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(17px, 2.2vw, 19px);
+  line-height: 1.45;
+  color: #000;
+  text-align: center;
+
+  /* tight vertical spacing as requested (~15px top & bottom) */
+  padding: 15px 12px 15px 12px; /* extra bottom so the badge never overlaps text */
+
+  /* no negative margins (prevents clipping/disappearing) */
+  margin: 0;
+}
+
+.mcb-column-inner.mcb-item-image-inner .founder-quote em {
+  font-style: inherit; /* inherit italics from container */
+}
+
+/* 🔒 Force position/size for the founder badge in this exact spot */
+.mcb-column-inner.mcb-item-image-inner .image_wrapper .founder-quote .founder-quote-badge {
+  position: absolute !important;
+  left: 10px !important;
+
+  /* push it well below the quote block */
+  bottom: -100px !important;           /* try -60px; make more negative to go lower */
+  transform: translateY(60px) !important; /* extra nudge downward; tweak 8–16px to taste */
+
+  width: 40px !important;             /* slightly bigger as requested */
+  height: auto !important;
+
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.95;
+}
+
+@media (max-width: 600px) {
+  .mcb-column-inner.mcb-item-image-inner .image_wrapper .founder-quote .founder-quote-badge {
+    left: 8px !important;
+    bottom: -100px !important;         /* keep same drop on phones */
+    transform: translateY(60px) !important;
+    width: 34px !important;
+  }
+}
+
+
+/* Phones: keep the same tight spacing; make badge a touch smaller */
+@media (max-width: 600px) {
+  .mcb-column-inner.mcb-item-image-inner .founder-quote {
+    font-size: 16px;
+    line-height: 1.4;
+    
+  }
+ 
+}
+/* Phones only: move this one image down and prevent cropping */
+@media (max-width: 600px) {
+  .mcb-column-inner.mcb-item-image-inner .image_frame .image_wrapper img[alt="coaching3-pic6"] {
+    position: relative;
+    top: 20px;         /* ⬇️ shift image down */
+    margin-bottom: 20px; /* 🛠️ add space so it’s not clipped */
+  }
+}
+
+
+
+
+
+
+
+/* Phones only call button */
+@media (max-width: 600px) {
+  .float-call-btn {
+    position: fixed;
+    left: max(12px, env(safe-area-inset-left));    /* respect iOS safe areas */
+    bottom: max(12px, env(safe-area-inset-bottom));
+    z-index: 9999;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 56px;
+    height: 56px;
+    border-radius: 999px;
+
+    background: #17c4b8;              /* your mint family */
+    color: #fff;
+    text-decoration: none;
+
+    box-shadow: 0 6px 14px rgba(0,0,0,0.18);
+    -webkit-tap-highlight-color: transparent;
+
+    /* subtle floating/bobbing effect */
+    animation: callFloat 3.2s ease-in-out infinite;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .float-call-btn:hover,
+  .float-call-btn:active {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 10px 18px rgba(0,0,0,0.22);
+  }
+
+  .float-call-btn .material-symbols-outlined {
+    font-size: 28px; /* nice, crisp icon size */
+    line-height: 1;
+  }
+
+  @keyframes callFloat {
+    0%   { transform: translateY(0); }
+    50%  { transform: translateY(-4px); }
+    100% { transform: translateY(0); }
+  }
+
+  /* Respect users who prefer reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .float-call-btn { animation: none; }
+  }
+}
+
+/* Hide on larger screens explicitly (optional) */
+@media (min-width: 601px) {
+  .float-call-btn { display: none !important; }
+}
