@@ -2012,3 +2012,20 @@
   }
 }
 
+@media only screen and (max-width: 767px) {
+  .mcb-wrap-d6a755a44 h4.title {
+    text-align: center !important;   /* force text center */
+    display: block !important;       /* block element */
+    width: 100% !important;          /* take full width */
+    margin: 30px auto 15px !important; /* center horizontally + top space */
+    justify-content: center !important; /* if parent is flex */
+    align-items: center !important;     /* if parent is flex */
+  }
+
+  /* Also target its parent column_attr */
+  .mcb-wrap-d6a755a44 .column_attr {
+    text-align: center !important;   /* center all child text */
+    display: block !important;
+    width: 100% !important;
+  }
+}
