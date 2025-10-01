@@ -5,6 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>3D Guitar Room</title>
     <style>
+        /* ---------- Responsive sizing controls ---------- */
+
+        :root {
+            /* Main guitar width scales with viewport, capped to original look */
+            --gtr-w: clamp(240px, 38vw, 420px);
+            /* Back guitars scale relative to the main */
+            --gtr2-w: calc(var(--gtr-w) * 0.86);
+            --gtr3-w: calc(var(--gtr-w) * 0.71);
+            /* Shadow width scales with viewport, capped to original 450px */
+            --shadow-w: clamp(260px, 42vw, 450px);
+        }
+        @media (max-width: 768px) {
+            :root {
+                --gtr-w: clamp(220px, 60vw, 300px);
+                --shadow-w: clamp(220px, 60vw, 350px);
+            }
+        }
+        @media (max-width: 480px) {
+            :root {
+                --gtr-w: clamp(200px, 70vw, 260px);
+                --shadow-w: clamp(200px, 70vw, 300px);
+            }
+        }
+        /* ------------------------------------------------ */
+
         body, html {
             margin: 0;
             padding: 0;
@@ -191,9 +216,9 @@
         .guitar {
             position: fixed;
             top: 50%;
-            left: 50%;
+            left: 58%; /* was 55% — slightly more to the right for extra gap */
             transform: translate(-50%, -50%);
-            width: 420px;
+            width: var(--gtr-w);
             z-index: 5;
             pointer-events: none;
             will-change: transform;
@@ -219,21 +244,21 @@
             height: auto;
         }
 
-        /* Guitar 2 - second guitar (medium, 50% visible behind guitar 1) */
+        /* Guitar 2 - second guitar (closer and right) */
         .guitar-2 {
             top: 50%;
-            left: 39%;
-            width: 360px;
+            left: 50%; /* unchanged (middle) */
+            width: var(--gtr2-w);
             z-index: 4;
             transform: translate(-50%, -50%);
             filter: drop-shadow(0px 18px 36px rgba(0,0,0,0.75));
         }
 
-        /* Guitar 3 - third guitar (smallest, 50% visible behind guitar 2) */
+        /* Guitar 3 - third guitar (closer and centered more) */
         .guitar-3 {
             top: 50%;
-            left: 28%;
-            width: 300px;
+            left: 42%; /* was 45% — further left for extra gap */
+            width: var(--gtr3-w);
             z-index: 3;
             transform: translate(-50%, -50%);
             filter: drop-shadow(0px 16px 32px rgba(0,0,0,0.7));
@@ -257,8 +282,8 @@
         /* Main guitar shadow */
         .shadow-1 {
             top: 70%;
-            left: 55%;
-            width: 450px;
+            left: 63%; /* was 60% — +5% from guitar's 58% */
+            width: var(--shadow-w);
             transform: translate(-50%, -50%) 
                        translateX(var(--shadow-1-offset-x, 20px))
                        translateY(var(--shadow-1-offset-y, 10px))
@@ -267,11 +292,11 @@
             opacity: var(--shadow-1-opacity, 0.6);
         }
 
-        /* Guitar 2 shadow (same size and position pattern) */
+        /* Guitar 2 shadow */
         .shadow-2 {
             top: 70%;
-            left: 51%;
-            width: 450px;
+            left: 56%; /* unchanged — +6% from guitar-2's 50% */
+            width: var(--shadow-w);
             transform: translate(-50%, -50%)
                        translateX(var(--shadow-2-offset-x, 15px))
                        translateY(var(--shadow-2-offset-y, 8px))
@@ -280,11 +305,11 @@
             opacity: var(--shadow-2-opacity, 0.55);
         }
 
-        /* Guitar 3 shadow (same size and position pattern) */
+        /* Guitar 3 shadow */
         .shadow-3 {
             top: 70%;
-            left: 47%;
-            width: 450px;
+            left: 49%; /* was 52% — +7% from guitar-3's 42% */
+            width: var(--shadow-w);
             transform: translate(-50%, -50%)
                        translateX(var(--shadow-3-offset-x, 10px))
                        translateY(var(--shadow-3-offset-y, 6px))
@@ -433,18 +458,25 @@
             }
         }
 
-        /* Responsive design */
+        /* Responsive font tweaks preserved from original breakpoints */
         @media (max-width: 768px) {
-            .guitar { width: 300px; }
             .note { font-size: 16px; }
             .note-near { font-size: 22px; }
             .note-mid { font-size: 18px; }
             .note-far { font-size: 14px; }
         }
-
         @media (max-width: 480px) {
-            .guitar { width: 250px; }
+            /* widths handled by variables; proportions preserved */
         }
+        @media (max-width: 500px) {
+  .guitar     { left: 65%; } /* more right */
+  .guitar-2   { left: 45%; } /* middle */
+  .guitar-3   { left: 30%; } /* more left */
+  .shadow-1   { left: 65%; }
+  .shadow-2   { left: 55%; }
+  .shadow-3   { left: 45%; }
+}
+
     </style>
 </head>
 <body>
@@ -453,10 +485,10 @@
     
     <!-- Guitar shadows using actual guitar image -->
     <div class="shadow shadow-3">
-        <img src="wp-content/uploads/2022/04/guitar.png" alt="Guitar Shadow 3">
+        <img src="wp-content/uploads/2022/04/guitar3.png" alt="Guitar Shadow 3">
     </div>
     <div class="shadow shadow-2">
-        <img src="wp-content/uploads/2022/04/guitar.png" alt="Guitar Shadow 2">
+        <img src="wp-content/uploads/2022/04/guitar2.png" alt="Guitar Shadow 2">
     </div>
     <div class="shadow shadow-1">
         <img src="wp-content/uploads/2022/04/guitar.png" alt="Guitar Shadow 1">
@@ -469,10 +501,10 @@
 
     <!-- Back guitars stacked evenly behind main guitar -->
     <div class="guitar-back guitar-3">
-        <img src="wp-content/uploads/2022/04/guitar.png" alt="Guitar 3">
+        <img src="wp-content/uploads/2022/04/guitar3.png" alt="Guitar 3">
     </div>
     <div class="guitar-back guitar-2">
-        <img src="wp-content/uploads/2022/04/guitar.png" alt="Guitar 2">
+        <img src="wp-content/uploads/2022/04/guitar2.png" alt="Guitar 2">
     </div>
 
     <!-- Main guitar (front) -->
@@ -609,7 +641,7 @@
             });
             
             // Musical notes with bigger depth movement - 2D only
-            musicNotes.forEach((note, index) => {
+            musicNotes.forEach((note) => {
                 const isNear = note.classList.contains('note-near');
                 const isMid = note.classList.contains('note-mid');
                 const isFar = note.classList.contains('note-far');
