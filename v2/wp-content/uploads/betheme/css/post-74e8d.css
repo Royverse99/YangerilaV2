@@ -2084,7 +2084,7 @@
   .mcb-column-inner.mcb-item-image-inner .image_wrapper .founder-quote .founder-quote-badge {
     left: 8px !important;
     bottom: -100px !important;         /* keep same drop on phones */
-    transform: translateY(60px) !important;
+    transform: translateY(70px) !important;
     width: 34px !important;
   }
 }
