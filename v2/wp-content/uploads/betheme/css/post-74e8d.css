@@ -2169,40 +2169,43 @@
   .float-call-btn { display: none !important; }
 }
 /* Sits above the page, just under the popup (popup z-index is 8000) */
-/* Keep popup to the right of the 250px menu and ABOVE all page content */
+/* ==== POPUP STACKING & OVERLAY (kept just under the left menu) ==== */
+/* Your left menu (#Header_creative) sits at z-index: 9002. */
 #course-popup {
-  /* you already have left:250px / width:calc(100% - 250px); keep those */
-  z-index: 2147483600 !important;  /* above any content/section */
+  /* you already have left:250px and width:calc(100% - 250px) in your CSS — keep them */
+  z-index: 9001 !important;               /* popup under the menu, above page content */
 }
 
-/* Overlay only covers the content area (NOT the left menu) and sits just under the popup */
 #popup-overlay {
   position: fixed;
   top: 0;
-  left: 250px;                      /* align to the right of the menu */
+  left: 250px;                             /* align to the right of the 250px menu */
   width: calc(100% - 250px);
   height: 100%;
-  z-index: 2147483599 !important;   /* just beneath the popup */
-  background: transparent;          /* keep your backdrop-filter blur visible */
-  overscroll-behavior: contain;
-  touch-action: none;
-  display: none;                    /* JS will set to block when open */
+  z-index: 9000 !important;                /* just beneath the popup */
+  background: transparent;                 /* keeps blurred glass from #popup-content visible */
+  overscroll-behavior: contain;            /* stop scroll chaining through overlay */
+  touch-action: none;                      /* block touch panning on overlay */
+  /* display is controlled via JS; no need to set here */
 }
 
-/* Mobile: when the sidebar collapses, the popup/overlay should span full width */
+/* Mobile: when the sidebar collapses, overlay spans full width */
 @media (max-width: 768px) {
   #popup-overlay { left: 0; width: 100%; }
 }
 
-/* Make scrolling feel natural: confine scroll to popup; iframe scrolls naturally */
+/* ==== SCROLL BEHAVIOR INSIDE POPUP ==== */
+/* Keep wheel/touch confined to the popup; iframe scrolls naturally */
 #course-popup,
 #popup-content,
-#popup-iframe { overscroll-behavior: contain; }
+#popup-iframe {
+  overscroll-behavior: contain;
+}
 
 #popup-iframe {
   display: block;
   width: 100%;
   height: 100%;
   border: none;
-  overflow: auto;
+  overflow: auto;                          /* iframe gets its own scroll area */
 }
