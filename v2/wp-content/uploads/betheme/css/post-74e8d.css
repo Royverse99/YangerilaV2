@@ -2209,3 +2209,66 @@
   border: none;
   overflow: auto;                          /* iframe gets its own scroll area */
 }
+/* ========= Service tiles: desktop/right, mobile/left, underline under text ========= */
+/* Theme gives the icon a fixed 25% column — drop that so text can move cleanly. */
+.service-wrap .mfn-icon-box .icon-wrapper {
+  width: auto !important;                 /* override 25% width */
+  margin: 0 14px 0 0 !important;          /* small gap between dot and text */
+}
+
+/* Kill the original full-width bottom border on these 4 tiles */
+.service-wrap .mcb-item-96eca4efd .mcb-column-inner,
+.service-wrap .mcb-item-c1309295a .mcb-column-inner,
+.service-wrap .mcb-item-c4b8abe07 .mcb-column-inner,
+.service-wrap .mcb-item-19fae4c47 .mcb-column-inner {
+  border-bottom: none !important;
+}
+
+/* Underline directly under the text block, full length with small gaps */
+/* Keep the theme's dot-on-left layout changes you already applied.
+   Ensure the text block actually spans the whole available width. */
+.service-wrap .mfn-icon-box .desc-wrapper {
+  position: relative;
+  width: 100% !important;     /* <- critical so the line can run the full width */
+}
+
+/* Full-length underline with small gaps at both ends */
+.service-wrap .mfn-icon-box .desc-wrapper::after {
+  content: "";
+  display: block;
+  height: 2px;
+  background: #1d4854;
+  margin-top: 14px;
+  width: calc(100% - 12px) !important;  /* total width minus 6px on each side */
+  margin-left: 6px !important;
+  margin-right: 6px !important;
+  border-radius: 1px;
+}
+
+/* ===== Desktop/tablet: push text more to the right ===== */
+@media (min-width: 961px) {
+  .service-wrap .mfn-icon-box .desc-wrapper {
+    padding-left: 28px !important;        /* nudge text to the right (was ~20px) */
+    text-align: left !important;
+  }
+}
+
+/* ===== Phone: pull text slightly left so it doesn't look pushed ===== */
+@media (max-width: 768px) {
+  /* keep dot on the LEFT on phones (theme tries to put it on top) */
+  .service-wrap .mfn-icon-box-mobile-top { flex-direction: row !important; }
+
+  .service-wrap .mfn-icon-box .desc-wrapper {
+    padding-left: 8px !important;         /* a small left nudge on phones */
+  }
+  .service-wrap .mfn-icon-box .icon-wrapper {
+    margin-right: 12px !important;        /* slightly tighter gap on phones */
+  }
+
+  /* slightly smaller underline gaps on phones */
+  .service-wrap .mfn-icon-box .desc-wrapper::after {
+    width: calc(100% - 16px) !important;  /* 8px each side */
+    margin-left: 8px !important;
+    margin-right: 8px !important;
+  }
+}
