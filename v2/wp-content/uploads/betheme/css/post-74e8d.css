@@ -2113,7 +2113,6 @@
 
 
 
-
 /* Phones only call button */
 @media (max-width: 600px) {
   .float-call-btn {
@@ -2168,4 +2167,42 @@
 /* Hide on larger screens explicitly (optional) */
 @media (min-width: 601px) {
   .float-call-btn { display: none !important; }
+}
+/* Sits above the page, just under the popup (popup z-index is 8000) */
+/* Keep popup to the right of the 250px menu and ABOVE all page content */
+#course-popup {
+  /* you already have left:250px / width:calc(100% - 250px); keep those */
+  z-index: 2147483600 !important;  /* above any content/section */
+}
+
+/* Overlay only covers the content area (NOT the left menu) and sits just under the popup */
+#popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 250px;                      /* align to the right of the menu */
+  width: calc(100% - 250px);
+  height: 100%;
+  z-index: 2147483599 !important;   /* just beneath the popup */
+  background: transparent;          /* keep your backdrop-filter blur visible */
+  overscroll-behavior: contain;
+  touch-action: none;
+  display: none;                    /* JS will set to block when open */
+}
+
+/* Mobile: when the sidebar collapses, the popup/overlay should span full width */
+@media (max-width: 768px) {
+  #popup-overlay { left: 0; width: 100%; }
+}
+
+/* Make scrolling feel natural: confine scroll to popup; iframe scrolls naturally */
+#course-popup,
+#popup-content,
+#popup-iframe { overscroll-behavior: contain; }
+
+#popup-iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: none;
+  overflow: auto;
 }

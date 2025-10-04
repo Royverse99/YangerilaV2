@@ -97,13 +97,7 @@ window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/16
   z-index: 1001;
 }
 
-/* iframe */
-#popup-iframe {
-  flex-grow: 1;
-  width: 100%;
-  border: none;
-  overflow-y: auto;
-}
+
 
 /* toggle button */
 #popup-toggle {
@@ -5716,50 +5710,164 @@ var mfn = {"mobileInit":"1240","parallax":"translate3d","responsive":"1","sideba
         </script>
 
 
-        <script>
-        
-const popup = document.getElementById('course-popup');
-const iframe = document.getElementById('popup-iframe');
-const closeBtn = document.getElementById('popup-close');
+<script>
+// === Popup: fixed to the right of the 250px menu, above content, blur OK, no background scroll ===
+const popup     = document.getElementById('course-popup');
+const overlay   = document.getElementById('popup-overlay');   // already in your HTML
+const iframe    = document.getElementById('popup-iframe');
+const closeBtn  = document.getElementById('popup-close');
 const toggleBtn = document.getElementById('popup-toggle');
 
+let isVisible = false;
+let savedScrollY = 0;
+
+// 0) Move overlay & popup to <body> so they escape any stacking contexts below (no HTML edits needed)
+(function relocateToBody() {
+  if (overlay && overlay.parentElement !== document.body) document.body.appendChild(overlay);
+  if (popup   && popup.parentElement   !== document.body) document.body.appendChild(popup);
+})();
+
+// helpers — prevent layout shift when we hide the scrollbar
+function scrollbarWidth() { return window.innerWidth - document.documentElement.clientWidth; }
+function restoreScrollSoon(y) {
+  window.scrollTo(0, y);
+  requestAnimationFrame(() => window.scrollTo(0, y));
+}
+
+// Guards: block wheel/touch that start outside the popup; allow iframe to handle its own scroll
+const blockOutsidePopup = (e) => {
+  if (!isVisible) return;
+  const content = document.getElementById('popup-content');
+  if (!content.contains(e.target)) { e.preventDefault(); e.stopPropagation(); }
+};
+
+// Proxy wheel/touch on the blurred “glass” to the iframe so users can scroll there too
+let touchStartY = null;
+const proxyWheelToIframe = (e) => {
+  if (!isVisible) return;
+  const content = document.getElementById('popup-content');
+  if (content.contains(e.target) && e.target !== iframe) {
+    e.preventDefault();
+    try { iframe.contentWindow?.scrollBy({ top: e.deltaY, left: 0, behavior: 'auto' }); } catch {}
+  }
+};
+const onGlassTouchStart = (e) => {
+  if (!isVisible) return;
+  const content = document.getElementById('popup-content');
+  if (content.contains(e.target) && e.target !== iframe) touchStartY = e.touches[0].clientY;
+};
+const onGlassTouchMove = (e) => {
+  if (!isVisible || touchStartY === null) return;
+  const content = document.getElementById('popup-content');
+  if (content.contains(e.target) && e.target !== iframe) {
+    const dy = touchStartY - e.touches[0].clientY;
+    e.preventDefault();
+    try { iframe.contentWindow?.scrollBy({ top: dy, left: 0, behavior: 'auto' }); } catch {}
+    touchStartY = e.touches[0].clientY;
+  }
+};
+const onGlassTouchEnd = () => { touchStartY = null; };
+
+function enableGuards() {
+  document.addEventListener('wheel',     blockOutsidePopup, { passive: false });
+  document.addEventListener('touchmove', blockOutsidePopup, { passive: false });
+
+  const content = document.getElementById('popup-content');
+  content.addEventListener('wheel',      proxyWheelToIframe, { passive: false });
+  content.addEventListener('touchstart', onGlassTouchStart,  { passive: true  });
+  content.addEventListener('touchmove',  onGlassTouchMove,   { passive: false });
+  content.addEventListener('touchend',   onGlassTouchEnd,    { passive: true  });
+}
+function disableGuards() {
+  document.removeEventListener('wheel',     blockOutsidePopup);
+  document.removeEventListener('touchmove', blockOutsidePopup);
+
+  const content = document.getElementById('popup-content');
+  content.removeEventListener('wheel',      proxyWheelToIframe);
+  content.removeEventListener('touchstart', onGlassTouchStart);
+  content.removeEventListener('touchmove',  onGlassTouchMove);
+  content.removeEventListener('touchend',   onGlassTouchEnd);
+}
+
+// Keyboard guard: stop page scrolling via keys when popup is open
+const keysThatScroll = new Set(['Space','PageUp','PageDown','Home','End','ArrowUp','ArrowDown']);
+document.addEventListener('keydown', (e) => {
+  if (!isVisible) return;
+  if (keysThatScroll.has(e.code)) {
+    const content = document.getElementById('popup-content');
+    if (!content.contains(document.activeElement)) e.preventDefault();
+  }
+});
+
+// Open / Close (lock html/body overflow — no position:fixed on body, so blur stays perfect)
 function openPopup(url) {
-  iframe.src = url;
+  if (url) iframe.src = url;
+
+  savedScrollY = window.scrollY || document.documentElement.scrollTop;
+
+  // lock scroll, compensate scrollbar, and restore scroll position (prevents jumps)
+  const sw = scrollbarWidth();
+  if (sw > 0) {
+    document.documentElement.style.paddingRight = sw + 'px';
+    document.body.style.paddingRight = sw + 'px';
+  }
+  document.documentElement.style.overflow = 'hidden';
+  document.body.style.overflow = 'hidden';
+  restoreScrollSoon(savedScrollY);
+
+  // show overlay and guards, then slide in the popup
+  overlay.style.display = 'block';
+  enableGuards();
+
   popup.classList.add('active');
   isVisible = true;
+
+  // focus iframe so keyboard scrolling goes there
+  setTimeout(() => { try { iframe.focus(); iframe.contentWindow?.focus(); } catch {} }, 0);
 }
 
 function closePopup() {
   popup.classList.remove('active');
   popup.addEventListener('transitionend', () => {
     iframe.src = '';
+
+    // unlock & remove compensation
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+    document.documentElement.style.paddingRight = '';
+    document.body.style.paddingRight = '';
+    restoreScrollSoon(savedScrollY);
+
+    disableGuards();
+    overlay.style.display = 'none';
   }, { once: true });
   isVisible = false;
 }
 
-// X close
+// Buttons / Toggle
 closeBtn.addEventListener('click', closePopup);
+toggleBtn.addEventListener('click', () => (isVisible ? closePopup() : openPopup(iframe.src || '')));
 
-// toggle arrow
-let isVisible = false;
-toggleBtn.addEventListener('click', () => {
-  if (isVisible) {
-    closePopup();
-  } else {
-    popup.classList.add('active');
-    isVisible = true;
-  }
-});
-
-// course card opens popup
+// Course cards trigger (ignore href="#")
 document.querySelectorAll('.course-card').forEach(card => {
   card.style.cursor = 'pointer';
-  card.addEventListener('click', () => {
+  card.addEventListener('click', (e) => {
+    const a = e.target.closest('a');
+    if (a && (a.getAttribute('href') || '').trim().startsWith('#')) { e.preventDefault(); e.stopPropagation(); }
     const url = card.getAttribute('data-url');
     if (url) openPopup(url);
   });
 });
-        </script>
+
+// Auto-close from inside the iframe (postMessage)
+window.addEventListener('message', (event) => { if (event.data === 'closePopup') closePopup(); });
+
+// Refocus iframe after it navigates
+iframe.addEventListener('load', () => { try { iframe.focus(); iframe.contentWindow?.focus(); } catch {} });
+</script>
+
+
+
         <script>
         
 document.querySelectorAll(".accordion h3").forEach(header => {
