@@ -398,6 +398,18 @@ document.addEventListener('DOMContentLoaded', () => {
       if (typeof el.value === 'string') el.value = el.value.trim();
     }
   }
+  function readAsBase64(file){
+    return new Promise((resolve, reject) => {
+      const r = new FileReader();
+      r.onload  = () => {
+        const s = String(r.result || '');
+        const comma = s.indexOf(',');
+        resolve(comma >= 0 ? s.slice(comma + 1) : s); // strip data:...;base64,
+      };
+      r.onerror = () => reject(r.error || new Error('FileReader error'));
+      r.readAsDataURL(file);
+    });
+  }
 
   // ========= ELEMENTS =========
   const steps       = $$('.step');
@@ -491,7 +503,7 @@ document.addEventListener('DOMContentLoaded', () => {
     go(2);
   });
 
-  // ========= SUBMIT with PROGRESS (XMLHttpRequest) =========
+  // ========= SUBMIT with PROGRESS (XMLHttpRequest + Base64 fallback) =========
   submitBtn.addEventListener('click', async () => {
     clearSubmitError();
 
@@ -511,19 +523,30 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     // price varies; do not send a value
     fd.append('courseFee', '');
-    // append file with original filename (better for Apps Script)
+
     const file = fileInput.files[0];
+    // send the original file (normal multipart)
     fd.append('paymentScreenshot', file, file.name);
     fd.append('timestamp', new Date().toISOString());
+
+    // ALSO send Base64 (server can use it if multipart file is missing)
+    progressWrap.style.display = 'block';
+    progressBarSpan.style.width = '0%';
+    progressPercent.textContent = '0%';
+    progressStatus.textContent = 'Preparing…';
+    try {
+      const b64 = await readAsBase64(file);
+      fd.append('paymentScreenshot_b64', b64);
+      fd.append('paymentScreenshot_name', file.name);
+      fd.append('paymentScreenshot_type', file.type || 'image/jpeg');
+    } catch (err) {
+      console.warn('Base64 conversion failed (will try raw file only):', err);
+    }
 
     // UI: lock button + show progress
     submitBtn.disabled = true;
     const originalBtnText = submitBtn.textContent;
     submitBtn.textContent = 'Uploading…';
-    progressWrap.style.display = 'block';
-    progressBarSpan.style.width = '0%';
-    progressPercent.textContent = '0%';
-    progressStatus.textContent = 'Preparing…';
 
     // Use XHR for upload progress
     const xhr = new XMLHttpRequest();
@@ -542,7 +565,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     xhr.onerror = () => {
-      showSubmitError('Network error during upload. Please try again.');
+      showSubmitError('Network error during upload. Please confirm the Web App URL is live and access is set to “Anyone”.');
       submitBtn.disabled = false;
       submitBtn.textContent = originalBtnText;
       progressStatus.textContent = 'Failed';
@@ -550,7 +573,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     xhr.onload = () => {
       try {
-        const json = JSON.parse(xhr.responseText || '{}');
+        const raw = xhr.responseText || '';
+        let json;
+        try { json = JSON.parse(raw); }
+        catch (e) {
+          throw new Error('Server did not return JSON. First 200 chars: ' + raw.slice(0,200));
+        }
+
         if (xhr.status >= 200 && xhr.status < 300 && json.status === 'Success') {
           progressBarSpan.style.width = '100%';
           progressPercent.textContent = '100%';
@@ -576,6 +605,7 @@ document.addEventListener('DOMContentLoaded', () => {
   setStep(0);
 });
 </script>
+
 
 </body>
 </html>
