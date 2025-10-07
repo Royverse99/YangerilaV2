@@ -100,6 +100,82 @@
   .error{color:var(--error);font-weight:700}
   .success{color:var(--lime);font-weight:700}
   .center{text-align:center}
+
+  /* Upload progress bar */
+  .progress-wrap{margin-top:14px}
+  .progress-bar{position:relative;width:100%;height:12px;background:rgba(255,255,255,.12);border-radius:999px;overflow:hidden}
+  .progress-bar span{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--lime),var(--lime-strong));transition:width .15s ease}
+  .progress-meta{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:13px;color:var(--muted)}
+  .progress-meta .percent{font-weight:800;color:var(--lime)}
+
+  /* --- Mobile polish for Terms & Conditions --- */
+@media (max-width: 640px) {
+  /* Make the terms box breathe and fit better on small screens */
+  .tcs{
+    max-height: 58vh;                /* keeps buttons visible beneath */
+    padding: 16px 14px;
+    background: rgba(255,255,255,.07);
+    border-radius: 12px;
+  }
+
+  /* Better readability: slightly larger body text, comfy leading */
+  .tcs h3{
+    font-size: 15.5px;
+    margin: 10px 0 6px;
+    line-height: 1.35;
+  }
+  .tcs p,
+  .tcs li{
+    font-size: 14.5px;
+    line-height: 1.6;
+  }
+
+  /* Bullet alignment & nested list spacing */
+  .tcs ul{
+    margin: 6px 0 12px;
+    padding-left: 1.1em;             /* tighter indent for phones */
+    list-style: disc outside;
+  }
+  .tcs ul ul{
+    margin: 6px 0 6px 1em;
+    list-style: circle outside;
+  }
+  .tcs li{ margin: 6px 0; }
+
+  /* Long words/links won’t overflow */
+  .tcs, .tcs p, .tcs li{
+    overflow-wrap: anywhere;
+    word-break: normal;
+    hyphens: auto;
+  }
+
+  /* Subtext size */
+  .tcs .small{ font-size: 12.5px; }
+
+  /* Highlight emphasis reads better on small screens */
+  .tcs .hl{
+    font-style: italic;
+    font-weight: 700;
+  }
+
+  /* Keep the accept/decline buttons easy to tap */
+  #step-1 .actions{
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    margin-top: 14px;
+  }
+  #step-1 .actions .btn{
+    width: 100%;
+    padding: 13px 16px;
+  }
+}
+
+/* Optional: make the whole card edge-to-edge on very small phones */
+@media (max-width: 380px){
+  .card{ padding: 16px 12px; border-radius: 14px; }
+}
+
 </style>
 </head>
 <body>
@@ -243,7 +319,7 @@
       </form>
     </section>
 
-    <!-- STEP 3 — Pay & upload (no course/price shown) -->
+    <!-- STEP 3 — Pay & upload (w/ progress) -->
     <section class="step" id="step-3">
       <h2>Step 3 — Pay & Upload</h2>
       <p class="lead">Please scan the QR code below and make your payment. Upload the screenshot of your transaction once done.</p>
@@ -256,11 +332,22 @@
         <label>Upload payment screenshot *</label>
         <input type="file" id="paymentScreenshot" accept="image/*" required />
         <div class="hint">Your screenshot is stored securely for verification.</div>
+
+        <!-- Progress UI -->
+        <div class="progress-wrap" id="uploadProgress" style="display:none" aria-live="polite">
+          <div class="progress-bar" aria-label="Upload progress">
+            <span id="progressBar"></span>
+          </div>
+          <div class="progress-meta">
+            <span id="progressStatus">Preparing…</span>
+            <span class="percent" id="progressPercent">0%</span>
+          </div>
+        </div>
       </div>
 
       <div class="actions">
         <button type="button" class="btn ghost" data-back>Back</button>
-        <button type="button" class="btn primary" id="submitAll">Submit</button>
+        <button type="button" class="btn primary" id="submitAll">Upload & Submit</button>
       </div>
       <p class="error" id="submitError" style="display:none"></p>
     </section>
@@ -283,7 +370,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   // ========= CONFIG =========
-  const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxb3cKGsI1-8tBtMmHjTXst_7mdhXqh5m6vYLF4Qd6d0Qb9HgcZWqA5CiluiOE5n8b9lQ/exec';
+  const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwaXmisXuYvEIsDao2NetycESVECEWMEXk2GZqVoKdV4e1VD_5-AdiA8APFiadpSXMEXg/exec';
 
   // ========= HELPERS =========
   const $ = (sel, root = document) => root.querySelector(sel);
@@ -326,6 +413,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const step2Error  = $('#step2Error');
   const submitError = $('#submitError');
   const fileInput   = $('#paymentScreenshot');
+
+  // Progress UI elements
+  const progressWrap    = $('#uploadProgress');
+  const progressBarSpan = $('#progressBar');
+  const progressPercent = $('#progressPercent');
+  const progressStatus  = $('#progressStatus');
 
   let stepIndex = 0;
 
@@ -395,11 +488,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // ========= STEP 2 → STEP 3 =========
   step2Btn.addEventListener('click', () => {
     if (!validateStep2()) return;
-    // (No course/price preview in Step 3)
     go(2);
   });
 
-  // ========= SUBMIT (expects JSON) =========
+  // ========= SUBMIT with PROGRESS (XMLHttpRequest) =========
   submitBtn.addEventListener('click', async () => {
     clearSubmitError();
 
@@ -410,38 +502,74 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (!validateStep2()) return;
 
+    // Build FormData
     const fd = new FormData();
     fd.append('termsAccepted', 'Yes'); // accepted in Step 1
     for (const el of form.elements) {
       if (!el || !el.name) continue;
       fd.append(el.name, el.value);
     }
-    // no derived fee (it varies; student knows amount)
+    // price varies; do not send a value
     fd.append('courseFee', '');
-    fd.append('paymentScreenshot', fileInput.files[0], fileInput.files[0].name);
+    // append file with original filename (better for Apps Script)
+    const file = fileInput.files[0];
+    fd.append('paymentScreenshot', file, file.name);
     fd.append('timestamp', new Date().toISOString());
 
+    // UI: lock button + show progress
     submitBtn.disabled = true;
     const originalBtnText = submitBtn.textContent;
-    submitBtn.textContent = 'Submitting...';
+    submitBtn.textContent = 'Uploading…';
+    progressWrap.style.display = 'block';
+    progressBarSpan.style.width = '0%';
+    progressPercent.textContent = '0%';
+    progressStatus.textContent = 'Preparing…';
 
-    try {
-      const res = await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: fd });
-      let json = {};
-      try { json = await res.json(); } catch(e) {
-        throw new Error('Unexpected server response. Please confirm deployment access is “Anyone with the link”.');
+    // Use XHR for upload progress
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', GOOGLE_SCRIPT_URL, true);
+
+    // progress event (uploading to server)
+    xhr.upload.onprogress = (e) => {
+      if (e.lengthComputable) {
+        const pct = Math.max(0, Math.min(100, Math.round((e.loaded / e.total) * 100)));
+        progressBarSpan.style.width = pct + '%';
+        progressPercent.textContent = pct + '%';
+        progressStatus.textContent = pct < 100 ? 'Uploading…' : 'Processing…';
+      } else {
+        progressStatus.textContent = 'Uploading…';
       }
-      if (!res.ok || json.status !== 'Success') {
-        throw new Error(json.message || 'Submission failed.');
-      }
-      go(3);
-    } catch (err) {
-      console.error(err);
-      showSubmitError(err.message || String(err));
-    } finally {
+    };
+
+    xhr.onerror = () => {
+      showSubmitError('Network error during upload. Please try again.');
       submitBtn.disabled = false;
       submitBtn.textContent = originalBtnText;
-    }
+      progressStatus.textContent = 'Failed';
+    };
+
+    xhr.onload = () => {
+      try {
+        const json = JSON.parse(xhr.responseText || '{}');
+        if (xhr.status >= 200 && xhr.status < 300 && json.status === 'Success') {
+          progressBarSpan.style.width = '100%';
+          progressPercent.textContent = '100%';
+          progressStatus.textContent = 'Uploaded ✓';
+          // Success → Step 4
+          setTimeout(() => go(3), 350);
+        } else {
+          throw new Error(json.message || 'Submission failed.');
+        }
+      } catch (err) {
+        showSubmitError(err.message || String(err));
+        progressStatus.textContent = 'Failed';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
+      }
+    };
+
+    xhr.send(fd);
   });
 
   // Initialize step UI
