@@ -373,8 +373,31 @@ document.addEventListener('DOMContentLoaded', () => {
   const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxb3cKGsI1-8tBtMmHjTXst_7mdhXqh5m6vYLF4Qd6d0Qb9HgcZWqA5CiluiOE5n8b9lQ/exec';
 
   // ========= HELPERS =========
-  const $ = (sel, root = document) => root.querySelector(sel);
+  const $  = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+  const steps  = $$('.step');
+  const dots   = $$('.dot');
+  const form   = $('#admissionForm');
+  const byeMsg = $('#byeMsg');
+
+  const step2Error  = $('#step2Error');
+  const submitError = $('#submitError');
+
+  const acceptBtn = $('#acceptBtn');
+  const declineBtn = $('#declineBtn');
+  const step2Btn   = $('#toStep3');
+  const submitBtn  = $('#submitAll');
+  const backBtns   = $$('[data-back]');
+  const fileInput  = $('#paymentScreenshot');
+
+  // Progress UI
+  const progressWrap    = $('#uploadProgress');
+  const progressBarSpan = $('#progressBar');
+  const progressPercent = $('#progressPercent');
+  const progressStatus  = $('#progressStatus');
+
+  let stepIndex = 0;
 
   function setStep(i){ dots.forEach((d, idx) => d.classList.toggle('on', idx <= i)); }
   function go(i){
@@ -403,43 +426,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const r = new FileReader();
       r.onload  = () => {
         const s = String(r.result || '');
-        const comma = s.indexOf(',');
-        resolve(comma >= 0 ? s.slice(comma + 1) : s); // strip data:...;base64,
+        const i = s.indexOf(',');
+        resolve(i >= 0 ? s.slice(i + 1) : s);
       };
       r.onerror = () => reject(r.error || new Error('FileReader error'));
       r.readAsDataURL(file);
     });
   }
 
-  // ========= ELEMENTS =========
-  const steps       = $$('.step');
-  const dots        = $$('.dot');
-  const acceptBtn   = $('#acceptBtn');
-  const declineBtn  = $('#declineBtn');
-  const step2Btn    = $('#toStep3');
-  const submitBtn   = $('#submitAll');
-  const backBtns    = $$('[data-back]');
-  const byeMsg      = $('#byeMsg');
-
-  const form        = $('#admissionForm');
-  const step2Error  = $('#step2Error');
-  const submitError = $('#submitError');
-  const fileInput   = $('#paymentScreenshot');
-
-  // Progress UI elements
-  const progressWrap    = $('#uploadProgress');
-  const progressBarSpan = $('#progressBar');
-  const progressPercent = $('#progressPercent');
-  const progressStatus  = $('#progressStatus');
-
-  let stepIndex = 0;
-
-  if (!steps.length || !form || !step2Btn || !submitBtn) {
-    console.error('Form initialization error: required elements not found.');
-    return;
-  }
-
-  // ========= NAV =========
+  // NAV
   backBtns.forEach(b => b.addEventListener('click', () => go(stepIndex - 1)));
   acceptBtn?.addEventListener('click', () => go(1));
   declineBtn?.addEventListener('click', () => {
@@ -447,9 +442,8 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => { location.href = '/'; }, 2000);
   });
 
-  // ========= VALIDATION =========
+  // VALIDATION
   const requiredNames = ['fullName','phone','learnedBefore','haveGuitar','course'];
-
   function validateStep2(){
     trimFormValues(form);
     Array.from(form.elements).forEach(el => el.classList?.remove('error'));
@@ -458,7 +452,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let ok = true;
     let firstBad = null;
 
-    // Required fields
     for (const name of requiredNames) {
       const el = form.elements[name];
       if (!el || !el.value) {
@@ -467,24 +460,18 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!firstBad) firstBad = el;
       }
     }
-    // Phone
     const phoneEl = form.elements['phone'];
     if (phoneEl) {
       const num = phoneEl.value.replace(/[^\d+]/g, '');
       if (!/^\+?\d{10,15}$/.test(num)) {
-        ok = false;
-        phoneEl.classList.add('error');
-        if (!firstBad) firstBad = phoneEl;
+        ok = false; phoneEl.classList.add('error'); if (!firstBad) firstBad = phoneEl;
       }
     }
-    // Email (optional)
     const emailEl = form.elements['email'];
     if (emailEl && emailEl.value) {
       const emailOk = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(emailEl.value);
       if (!emailOk) {
-        ok = false;
-        emailEl.classList.add('error');
-        if (!firstBad) firstBad = emailEl;
+        ok = false; emailEl.classList.add('error'); if (!firstBad) firstBad = emailEl;
       }
     }
 
@@ -493,17 +480,12 @@ document.addEventListener('DOMContentLoaded', () => {
       step2Error.style.display = 'block';
       firstBad?.focus?.({preventScroll:false});
     }
-
     return ok;
   }
 
-  // ========= STEP 2 → STEP 3 =========
-  step2Btn.addEventListener('click', () => {
-    if (!validateStep2()) return;
-    go(2);
-  });
+  step2Btn.addEventListener('click', () => { if (validateStep2()) go(2); });
 
-  // ========= SUBMIT with PROGRESS (XMLHttpRequest + Base64 fallback) =========
+  // ==== Fetch submit with simulated progress (reliable cross-origin) ====
   submitBtn.addEventListener('click', async () => {
     clearSubmitError();
 
@@ -516,92 +498,91 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Build FormData
     const fd = new FormData();
-    fd.append('termsAccepted', 'Yes'); // accepted in Step 1
-    for (const el of form.elements) {
-      if (!el || !el.name) continue;
-      fd.append(el.name, el.value);
-    }
-    // price varies; do not send a value
+    fd.append('termsAccepted', 'Yes');
+    for (const el of form.elements) { if (el && el.name) fd.append(el.name, el.value); }
     fd.append('courseFee', '');
 
     const file = fileInput.files[0];
-    // send the original file (normal multipart)
     fd.append('paymentScreenshot', file, file.name);
     fd.append('timestamp', new Date().toISOString());
 
-    // ALSO send Base64 (server can use it if multipart file is missing)
-    progressWrap.style.display = 'block';
-    progressBarSpan.style.width = '0%';
-    progressPercent.textContent = '0%';
-    progressStatus.textContent = 'Preparing…';
+    // Also send base64 (server can use this if raw multipart is missing)
     try {
       const b64 = await readAsBase64(file);
       fd.append('paymentScreenshot_b64', b64);
       fd.append('paymentScreenshot_name', file.name);
       fd.append('paymentScreenshot_type', file.type || 'image/jpeg');
-    } catch (err) {
-      console.warn('Base64 conversion failed (will try raw file only):', err);
+    } catch (e) {
+      console.warn('Base64 conversion failed:', e);
     }
 
-    // UI: lock button + show progress
+    // Progress UI (simulated): smoothly go to 92–95% while waiting
+    progressWrap.style.display = 'block';
+    progressBarSpan.style.width = '0%';
+    progressPercent.textContent = '0%';
+    progressStatus.textContent  = 'Preparing…';
+
     submitBtn.disabled = true;
-    const originalBtnText = submitBtn.textContent;
+    const oldText = submitBtn.textContent;
     submitBtn.textContent = 'Uploading…';
 
-    // Use XHR for upload progress
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', GOOGLE_SCRIPT_URL, true);
+    let pct = 0;
+    const sizeKB = Math.max(1, Math.round(file.size / 1024));
+    const totalMs = Math.min(12000, 2500 + sizeKB * 6); // 2.5s + ~6ms/KB (cap 12s)
+    const start = performance.now();
+    const targetWhileWaiting = 95;
 
-    // progress event (uploading to server)
-    xhr.upload.onprogress = (e) => {
-      if (e.lengthComputable) {
-        const pct = Math.max(0, Math.min(100, Math.round((e.loaded / e.total) * 100)));
+    const tick = () => {
+      const elapsed = performance.now() - start;
+      const x = Math.min(elapsed / totalMs, 1);
+      // Ease-out curve for niceness
+      const eased = 1 - Math.pow(1 - x, 2);
+      pct = Math.min(targetWhileWaiting, Math.max(pct, Math.round(eased * targetWhileWaiting)));
+      progressBarSpan.style.width = pct + '%';
+      progressPercent.textContent = pct + '%';
+      progressStatus.textContent  = pct < 100 ? (pct < 99 ? 'Uploading…' : 'Processing…') : 'Uploaded ✓';
+      if (pct < targetWhileWaiting) raf = requestAnimationFrame(tick);
+    };
+    let raf = requestAnimationFrame(tick);
+
+    // Send with fetch (works reliably with Apps Script)
+    let json;
+    try {
+      const res = await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: fd });
+      const raw = await res.text();
+      try { json = JSON.parse(raw); }
+      catch { throw new Error('Server did not return JSON. First 200 chars: ' + raw.slice(0,200)); }
+
+      if (!res.ok || json.status !== 'Success') {
+        throw new Error(json.message || 'Submission failed.');
+      }
+
+      // Success → finish progress to 100 and advance
+      cancelAnimationFrame(raf);
+      const finish = () => {
+        pct = Math.min(100, pct + 2);
         progressBarSpan.style.width = pct + '%';
         progressPercent.textContent = pct + '%';
-        progressStatus.textContent = pct < 100 ? 'Uploading…' : 'Processing…';
-      } else {
-        progressStatus.textContent = 'Uploading…';
-      }
-    };
+        progressStatus.textContent  = pct < 100 ? 'Processing…' : 'Uploaded ✓';
+        if (pct < 100) requestAnimationFrame(finish);
+        else setTimeout(() => go(3), 250);
+      };
+      requestAnimationFrame(finish);
 
-    xhr.onerror = () => {
-      showSubmitError('Network error during upload. Please confirm the Web App URL is live and access is set to “Anyone”.');
-      submitBtn.disabled = false;
-      submitBtn.textContent = originalBtnText;
+    } catch (err) {
+      cancelAnimationFrame(raf);
       progressStatus.textContent = 'Failed';
-    };
+      showSubmitError(err.message || String(err));
+      submitBtn.disabled = false;
+      submitBtn.textContent = oldText;
+      return;
+    }
 
-    xhr.onload = () => {
-      try {
-        const raw = xhr.responseText || '';
-        let json;
-        try { json = JSON.parse(raw); }
-        catch (e) {
-          throw new Error('Server did not return JSON. First 200 chars: ' + raw.slice(0,200));
-        }
-
-        if (xhr.status >= 200 && xhr.status < 300 && json.status === 'Success') {
-          progressBarSpan.style.width = '100%';
-          progressPercent.textContent = '100%';
-          progressStatus.textContent = 'Uploaded ✓';
-          // Success → Step 4
-          setTimeout(() => go(3), 350);
-        } else {
-          throw new Error(json.message || 'Submission failed.');
-        }
-      } catch (err) {
-        showSubmitError(err.message || String(err));
-        progressStatus.textContent = 'Failed';
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = originalBtnText;
-      }
-    };
-
-    xhr.send(fd);
+    submitBtn.disabled = false;
+    submitBtn.textContent = oldText;
   });
 
-  // Initialize step UI
+  // init
   setStep(0);
 });
 </script>
