@@ -349,7 +349,7 @@ input.error, select.error, textarea.error {
           <div class="upload">
             <label>Upload payment screenshot *</label>
             <input type="file" id="paymentScreenshot" accept="image/*" required />
-            <div class="hint">Your screenshot is saved securely to our Drive and a view-only link is stored in the sheet.</div>
+            <div class="hint">Your screenshot is saved securely in our servers, and will be only handled by us to confirm payment and then delted.</div>
           </div>
         </div>
       </div>
@@ -375,61 +375,216 @@ input.error, select.error, textarea.error {
 </main>
 
 <script>
-  // ====== CONFIG ======
-  const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzPJhbAfAA5KdqPvnL6HHbSIZuDwvNE1YkLPl0VCZuuB_ltzSEdeMJzAOKcXjiMCjLvYw/exec'; // your Apps Script /exec
+'use strict';
+
+document.addEventListener('DOMContentLoaded', () => {
+  // ========= CONFIG =========
+  const GOOGLE_SCRIPT_URL = 'PASTE_YOUR_NEW_WEB_APP_DEPLOYMENT_URL_HERE'; // Your Apps Script /exec
   const COURSE_FEE_MAP = {
-    'Hobby Courses':'₹3200','Rhythm Grades':'₹3200',
-    'Finger-picking Grades':'₹3600','Lead Grades':'₹3600','Musicianship':'₹3600'
+    'Hobby Courses':'₹3200',
+    'Rhythm Grades':'₹3200',
+    'Finger-picking Grades':'₹3600',
+    'Lead Grades':'₹3600',
+    'Musicianship':'₹3600'
   };
 
-  // Progress dots
-  const dots=[...document.querySelectorAll('.dot')];
-  function setStep(i){dots.forEach((d,idx)=>d.classList.toggle('on',idx<=i));}
+  // ========= HELPERS =========
+  const $ = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
-  // Step flow
-  const steps=[...document.querySelectorAll('.step')]; let stepIndex=0;
-  const go=i=>{steps[stepIndex].classList.remove('active');stepIndex=Math.max(0,Math.min(i,steps.length-1));
-               steps[stepIndex].classList.add('active');setStep(stepIndex);window.scrollTo({top:0,behavior:'smooth'});}
-  document.querySelectorAll('[data-back]').forEach(b=>b.onclick=()=>go(stepIndex-1));
-  document.getElementById('acceptBtn').onclick=()=>go(1);
-  document.getElementById('declineBtn').onclick=()=>{document.getElementById('byeMsg').style.display='block';setTimeout(()=>location.href='/',2000);};
+  function setStep(i){
+    dots.forEach((d, idx) => d.classList.toggle('on', idx <= i));
+  }
 
-  // Step 2 → Step 3
-  const form=document.getElementById('admissionForm');
-  document.getElementById('toStep3').onclick=()=>{
-    const required=['fullName','phone','learnedBefore','haveGuitar','course'];
-    const ok=required.every(n=>form.elements[n]&&form.elements[n].value.trim()!=='');
-    document.getElementById('step2Error').style.display=ok?'none':'block';
-    if(!ok) return;
-    const course=form.elements['course'].value;
-    document.getElementById('courseChosen').textContent=course||'—';
-    document.getElementById('courseAmount').textContent=COURSE_FEE_MAP[course]||'—';
+  function go(i){
+    steps[stepIndex].classList.remove('active');
+    stepIndex = Math.max(0, Math.min(i, steps.length - 1));
+    steps[stepIndex].classList.add('active');
+    setStep(stepIndex);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function showSubmitError(msg){
+    submitError.textContent = msg || 'Something went wrong. Please try again.';
+    submitError.style.display = 'block';
+  }
+
+  function clearSubmitError(){
+    submitError.textContent = '';
+    submitError.style.display = 'none';
+  }
+
+  function trimFormValues(formEl){
+    for (const el of formEl.elements) {
+      if (!el || !el.name) continue;
+      if (typeof el.value === 'string') el.value = el.value.trim();
+    }
+  }
+
+  // ========= ELEMENTS =========
+  const steps       = $$('.step');
+  const dots        = $$('.dot');
+  const acceptBtn   = $('#acceptBtn');
+  const declineBtn  = $('#declineBtn');
+  const step2Btn    = $('#toStep3');
+  const submitBtn   = $('#submitAll');
+  const backBtns    = $$('[data-back]');
+  const byeMsg      = $('#byeMsg');
+
+  const form        = $('#admissionForm');
+  const step2Error  = $('#step2Error');
+  const submitError = $('#submitError');
+
+  const courseChosen = $('#courseChosen');
+  const courseAmount = $('#courseAmount');
+  const fileInput    = $('#paymentScreenshot');
+
+  let stepIndex = 0;
+
+  // Guard: required elements
+  if (!steps.length || !form || !step2Btn || !submitBtn) {
+    console.error('Form initialization error: required elements not found.');
+    return;
+  }
+
+  // ========= NAV =========
+  backBtns.forEach(b => b.addEventListener('click', () => go(stepIndex - 1)));
+  acceptBtn?.addEventListener('click', () => go(1));
+  declineBtn?.addEventListener('click', () => {
+    if (byeMsg) byeMsg.style.display = 'block';
+    setTimeout(() => { location.href = '/'; }, 2000);
+  });
+
+  // ========= VALIDATION =========
+  const requiredNames = ['fullName','phone','learnedBefore','haveGuitar','course'];
+
+  function validateStep2(){
+    trimFormValues(form);
+
+    // reset errors
+    Array.from(form.elements).forEach(el => el.classList?.remove('error'));
+    step2Error.style.display = 'none';
+
+    let ok = true;
+    let firstBad = null;
+
+    // 1) Required fields
+    for (const name of requiredNames) {
+      const el = form.elements[name];
+      if (!el || !el.value) {
+        ok = false;
+        if (el?.classList) el.classList.add('error');
+        if (!firstBad) firstBad = el;
+      }
+    }
+
+    // 2) Phone: digits (allow +), 10–15 chars
+    const phoneEl = form.elements['phone'];
+    if (phoneEl) {
+      const num = phoneEl.value.replace(/[^\d+]/g, '');
+      const phoneOk = /^\+?\d{10,15}$/.test(num);
+      if (!phoneOk) {
+        ok = false;
+        phoneEl.classList.add('error');
+        if (!firstBad) firstBad = phoneEl;
+      }
+    }
+
+    // 3) Email: optional, but if present must be valid
+    const emailEl = form.elements['email'];
+    if (emailEl && emailEl.value) {
+      const emailOk = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(emailEl.value);
+      if (!emailOk) {
+        ok = false;
+        emailEl.classList.add('error');
+        if (!firstBad) firstBad = emailEl;
+      }
+    }
+
+    if (!ok) {
+      step2Error.textContent = 'Please correct highlighted fields before continuing.';
+      step2Error.style.display = 'block';
+      if (firstBad?.focus) firstBad.focus({preventScroll:false});
+    }
+
+    return ok;
+  }
+
+  // ========= STEP 2 → STEP 3 =========
+  step2Btn.addEventListener('click', () => {
+    if (!validateStep2()) return;
+
+    // Set Step 3 preview
+    const course = form.elements['course']?.value || '';
+    courseChosen.textContent = course || '—';
+    courseAmount.textContent = COURSE_FEE_MAP[course] || '—';
+
     go(2);
-  };
+  });
 
-  // Submit (expects JSON back)
-  document.getElementById('submitAll').onclick=async()=>{
-    const fileInput=document.getElementById('paymentScreenshot');
-    if(!fileInput.files.length){showSubmitError('Please attach the payment screenshot.');return;}
+  // ========= SUBMIT (expects JSON) =========
+  submitBtn.addEventListener('click', async () => {
+    clearSubmitError();
 
-    const fd=new FormData();
-    fd.append('termsAccepted','Yes'); // accepted step 1
-    for(const el of form.elements){ if(el.name) fd.append(el.name, el.value); }
-    const c=form.elements['course'].value; fd.append('courseFee', COURSE_FEE_MAP[c] || '');
+    // basic file check
+    if (!fileInput?.files?.length) {
+      showSubmitError('Please attach the payment screenshot.');
+      fileInput?.focus?.();
+      return;
+    }
+
+    // Also validate step 2 again in case user navigated back
+    if (!validateStep2()) {
+      return;
+    }
+
+    // Prepare payload
+    const fd = new FormData();
+    fd.append('termsAccepted', 'Yes'); // they accepted in Step 1
+    for (const el of form.elements) {
+      if (!el || !el.name) continue;
+      fd.append(el.name, el.value);
+    }
+    const c = form.elements['course']?.value || '';
+    fd.append('courseFee', COURSE_FEE_MAP[c] || '');
     fd.append('paymentScreenshot', fileInput.files[0]);
     fd.append('timestamp', new Date().toISOString());
 
-    try{
-      const res=await fetch(GOOGLE_SCRIPT_URL,{method:'POST',body:fd});
-      const json=await res.json().catch(()=>({}));
-      if(!res.ok || json.status!=='Success') throw new Error(json.message || 'Submission failed');
-      go(3); // success → Step 4
-    }catch(err){
-      showSubmitError(err.message||String(err));
-    }
-  };
+    // Disable button to avoid duplicates
+    submitBtn.disabled = true;
+    const originalBtnText = submitBtn.textContent;
+    submitBtn.textContent = 'Submitting...';
 
-  function showSubmitError(msg){const el=document.getElementById('submitError');el.textContent=msg;el.style.display='block';}
+    try {
+      const res = await fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: fd });
+
+      // If Apps Script throws a login/HTML error, JSON parse will fail; handle gracefully
+      let json = {};
+      try { json = await res.json(); } catch (e) {
+        // Non-JSON response
+        throw new Error('Unexpected server response. Please confirm deployment access is “Anyone with the link”.');
+      }
+
+      if (!res.ok || json.status !== 'Success') {
+        throw new Error(json.message || 'Submission failed.');
+      }
+
+      // Success → Step 4 (index 3 because 0-based)
+      go(3);
+
+    } catch (err) {
+      console.error(err);
+      showSubmitError(err.message || String(err));
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalBtnText;
+    }
+  });
+
+  // Initialize
+  setStep(0);
+});
 </script>
+
 </body>
 </html>
