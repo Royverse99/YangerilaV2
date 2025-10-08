@@ -4,7 +4,64 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Yangerila Admin Dashboard</title>
-  <link rel="stylesheet" href="../login/style.css?v=2">
+
+  <!-- Reuse login styles -->
+  <link rel="stylesheet" href="../login/style.css?v=4">
+
+  <!-- Page-specific tweaks (icons, modal, sticky tools) -->
+  <style>
+    /* Sticky header tools */
+    .section .tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0 12px}
+    .tools .btn.small{padding:8px 10px;border-radius:10px;font-size:13px}
+
+    /* Tall scroll for the Admission & Fees table */
+    .table-wrap.tall{max-height:62vh; overflow:auto; border-radius:10px}
+
+    /* Icon buttons (call / copy) */
+    .icon-btn{
+      display:inline-flex;align-items:center;justify-content:center;
+      width:30px;height:30px;border-radius:8px;
+      background:rgba(255,255,255,.06);border:1px solid var(--border);
+      cursor:pointer; margin-right:6px; vertical-align:middle;
+    }
+    .icon-btn:hover{filter:saturate(1.15)}
+    .phone-bundle{display:flex;align-items:center;gap:8px;min-width:160px}
+    .phone-text{white-space:nowrap}
+
+    /* Lightweight toast */
+    .toast{
+      position:fixed;left:50%;transform:translateX(-50%);
+      bottom:18px;background:rgba(0,0,0,.8);color:#fff;padding:10px 14px;border-radius:10px;
+      font-size:13px;z-index:2000;opacity:0;transition:opacity .15s;
+    }
+    .toast.show{opacity:1}
+
+    /* CRM image modal */
+    .img-modal {
+      position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
+      background: rgba(0,0,0,.7); z-index: 1000; padding: 20px;
+    }
+    .img-modal.open { display: flex; }
+    .img-modal img {
+      max-width: 92vw; max-height: 88vh; border-radius: 8px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.6);
+    }
+    .img-modal .close {
+      position: absolute; top: 14px; right: 14px;
+      background: rgba(255,255,255,.1); border: 1px solid var(--border);
+      color: var(--text); padding: 8px 12px; border-radius: 8px; cursor: pointer;
+    }
+    .thumbnail {
+      width: 56px; height: 56px; object-fit: cover; border-radius: 6px; cursor: zoom-in;
+      border: 1px solid var(--border);
+    }
+
+    /* Tables */
+    .table-wrap{overflow-x:auto}
+    table{width:100%;border-collapse:collapse;font-size:15px}
+    th,td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:top}
+    th{color:var(--accent);text-align:left;white-space:nowrap}
+  </style>
 </head>
 <body>
 
@@ -14,54 +71,57 @@
         <img src="../wp-content/uploads/2022/04/your-logo-file-name.png" alt="Yangerila" class="logo" />
         <h1>Yangerila Admin Panel</h1>
         <p class="muted" id="user-email">Loading...</p>
-        <button class="btn primary" id="signout" style="width:auto;min-width:120px;margin-top:10px;">Sign out</button>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
+          <button class="btn primary" id="signout" style="width:auto;min-width:120px;">Sign out</button>
+          <a class="btn" href="/admin/blog-editor.html" style="width:auto;min-width:160px;">Open Blog Editor</a>
+        </div>
       </header>
 
       <div class="dashboard">
 
-        <!-- 1️⃣ Leads CRM -->
-        <section class="section" id="crm-section">
-          <h2>Leads CRM</h2>
-          <div class="table-wrap">
-            <table id="crm-table">
-              <thead>
-                <tr><th>Name</th><th>Email</th><th>Phone</th><th>Message</th></tr>
-              </thead>
+        <!-- 1) LEADS CRM — Yangerila Web Data (3 tabs from Sheet A) -->
+        <section class="section" id="crm-web">
+          <h2>Leads CRM — Yangerila Web Data</h2>
+          <div class="tools">
+            <button class="btn small" id="refresh-web">Refresh</button>
+          </div>
+          <div class="table-wrap" id="wrap-web">
+            <table id="table-web">
+              <thead></thead>
               <tbody>
-                <tr><td colspan="4" style="text-align:center;color:var(--muted)">Loading leads...</td></tr>
+                <tr><td style="text-align:center;color:var(--muted)">Loading…</td></tr>
               </tbody>
             </table>
           </div>
         </section>
 
-        <!-- 2️⃣ Blog Manager -->
-        <section class="section" id="blogs-section">
-          <h2>Blogs</h2>
-          <div class="blog-list" id="blog-list">
-            <article class="blog">
-              <img src="https://images.unsplash.com/photo-1511376777868-611b54f68947?auto=format&fit=crop&w=800&q=80" alt="Electric Guitar">
-              <h3>How to Choose Your First Electric Guitar</h3>
-              <p>Picking your first guitar can be overwhelming. Learn how to match your playing style, body size, and tone goals with the right model.</p>
-              <div class="tags"><span class="tag">Guitar</span><span class="tag">Beginners</span><span class="tag">Tips</span></div>
-            </article>
-
-            <article class="blog">
-              <img src="https://images.unsplash.com/photo-1504274066651-8d31a536b11a?auto=format&fit=crop&w=800&q=80" alt="Practice">
-              <h3>5 Daily Exercises to Improve Finger Strength</h3>
-              <p>These simple drills help build finger independence and control—perfect for guitarists of any skill level.</p>
-              <div class="tags"><span class="tag">Practice</span><span class="tag">Technique</span></div>
-            </article>
-
-            <article class="blog">
-              <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80" alt="Studio">
-              <h3>Recording Your First Guitar Track at Home</h3>
-              <p>Learn the basics of recording, mic placement, and getting a great tone using affordable gear.</p>
-              <div class="tags"><span class="tag">Recording</span><span class="tag">Home Studio</span></div>
-            </article>
+        <!-- 2) LEADS CRM — Admission & Fees Form Data (single tab from Sheet B) -->
+        <section class="section" id="crm-fees">
+          <h2>Leads CRM — Admission &amp; Fees Form Data</h2>
+          <div class="tools">
+            <button class="btn small" id="refresh-fees">Refresh</button>
+            <span class="muted">Thumbnails are clickable.</span>
+          </div>
+          <div class="table-wrap tall" id="wrap-fees">
+            <table id="table-fees">
+              <thead></thead>
+              <tbody>
+                <tr><td style="text-align:center;color:var(--muted)">Loading…</td></tr>
+              </tbody>
+            </table>
           </div>
         </section>
 
-        <!-- 3️⃣ Settings -->
+        <!-- 3) BLOGS — list (short) + link to editor -->
+        <section class="section" id="blogs-section">
+          <h2>Blogs</h2>
+          <div class="tools">
+            <a class="btn small" href="/admin/blog-editor.html">Create / Edit Blogs</a>
+          </div>
+          <div class="blog-list" id="blog-list"></div>
+        </section>
+
+        <!-- 4) Settings placeholder -->
         <section class="section">
           <h2>Yangerila Settings</h2>
           <div class="coming-soon">Coming soon…</div>
@@ -71,21 +131,38 @@
     </section>
   </main>
 
+  <!-- Image modal -->
+  <div class="img-modal" id="imgModal">
+    <button class="close">Close</button>
+    <img src="" alt="preview">
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast">Copied</div>
+
+  <!-- Firebase + App JS -->
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
     import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+    import {
+      getFirestore, collection, getDocs, addDoc, serverTimestamp
+    } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDHDjHrnQ2IwwetQoV6cWAGnkMzANerVDE",
-  authDomain: "yangerila-studio.firebaseapp.com",
-  projectId: "yangerila-studio",
-  storageBucket: "yangerila-studio.firebasestorage.app",
-  messagingSenderId: "585529190595",
-  appId: "1:585529190595:web:7555d8334949c3b30f9a76",
-  measurementId: "G-39S037X9BB"
-};
+    /* ---- Firebase config (correct one) ---- */
+    const firebaseConfig = {
+      apiKey: "AIzaSyDHDJHrnQ2IwvetQoV6cWAGnkMzANerVDE",
+      authDomain: "yangerila-studio.firebaseapp.com",
+      projectId: "yangerila-studio",
+      storageBucket: "yangerila-studio.appspot.com",
+      messagingSenderId: "585529190595",
+      appId: "1:585529190595:web:755d5834949c3b30f9a76",
+      measurementId: "G-39S837X9BB"
+    };
+
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
+    const db = getFirestore(app);
+
     const emailEl = document.querySelector('#user-email');
     const signOutBtn = document.querySelector('#signout');
 
@@ -93,7 +170,8 @@ const firebaseConfig = {
       if (!user) {
         window.location.assign('/login/');
       } else {
-        emailEl.textContent = user.email;
+        emailEl.textContent = user.email || '';
+        loadEverything();
       }
     });
 
@@ -102,24 +180,239 @@ const firebaseConfig = {
       window.location.assign('/login/');
     });
 
-    // --- Leads CRM stub (connect to Google Sheets later) ---
-    async function fetchLeads() {
-      const tbody = document.querySelector('#crm-table tbody');
-      try {
-        // Placeholder rows for now
-        const leads = [
-          { name: 'John Doe', email: 'john@example.com', phone: '555-2312', message: 'Interested in beginner lessons' },
-          { name: 'Sara Lee', email: 'sara@example.com', phone: '555-7712', message: 'Looking for online guitar classes' },
-          { name: 'Mark Diaz', email: 'mark@example.com', phone: '555-0987', message: 'Can I book weekend sessions?' },
-        ];
-        tbody.innerHTML = leads.map(l => `<tr><td>${l.name}</td><td>${l.email}</td><td>${l.phone}</td><td>${l.message}</td></tr>`).join('');
-      } catch (err) {
+    /* ---- Leads API config (Apps Script) ---- */
+    const API_URL   = 'https://script.google.com/macros/s/AKfycbxlVwjnyNFfKJXOG3lJeYbF5_7ZVa6srhvByly6I3I8lyTW-PvHThosGTryRQOsqJMxTg/exec';
+    const API_TOKEN = 'yngrla_6f3c1f9b4e2a47b2b1c9d0f8d7a6c5e4'; // rotate later
+
+    async function loadEverything(){
+      await fetchAndRenderLeads();
+      await loadBlogs();
+      // refresh buttons
+      document.querySelector('#refresh-web')?.addEventListener('click', fetchAndRenderLeads);
+      document.querySelector('#refresh-fees')?.addEventListener('click', fetchAndRenderLeads);
+    }
+
+    /* --------------------------
+       LEADS: fetch & render (split into two sections)
+       -------------------------- */
+    async function fetchAndRenderLeads(){
+      const url = `${API_URL}?token=${encodeURIComponent(API_TOKEN)}`;
+      const webTHead = document.querySelector('#table-web thead');
+      const webTBody = document.querySelector('#table-web tbody');
+      const feesTHead = document.querySelector('#table-fees thead');
+      const feesTBody = document.querySelector('#table-fees tbody');
+
+      webTBody.innerHTML = `<tr><td style="text-align:center;color:var(--muted)">Loading…</td></tr>`;
+      feesTBody.innerHTML = `<tr><td style="text-align:center;color:var(--muted)">Loading…</td></tr>`;
+
+      try{
+        const res = await fetch(url);
+        if(!res.ok) throw new Error('API failed ' + res.status);
+        const data = await res.json();
+        const leads = Array.isArray(data.leads) ? data.leads : [];
+
+        // Split datasets
+        const feesRows = leads.filter(r => (r.Source || '').toLowerCase().trim() === 'ycs admissions');
+        const webRows  = leads.filter(r => (r.Source || '').toLowerCase().trim() !== 'ycs admissions');
+
+        // Build headers dynamically (union of keys)
+        renderTable(webRows, webTHead, webTBody, { showSource:true });
+        renderTable(feesRows, feesTHead, feesTBody, { showSource:false, preferImages:true });
+
+        wireThumbnails();
+        wireCopyButtons();
+      }catch(err){
         console.error(err);
-        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--error)">Failed to load leads</td></tr>`;
+        webTBody.innerHTML = `<tr><td style="text-align:center;color:var(--error)">Failed to load web data</td></tr>`;
+        feesTBody.innerHTML = `<tr><td style="text-align:center;color:var(--error)">Failed to load admissions data</td></tr>`;
       }
     }
-    fetchLeads();
-  </script>
 
+    function renderTable(rows, theadEl, tbodyEl, opts={}){
+      if(!rows.length){
+        theadEl.innerHTML = '';
+        tbodyEl.innerHTML = `<tr><td style="text-align:center;color:var(--muted)">No rows</td></tr>`;
+        return;
+      }
+
+      // union of keys (preserve a friendly order)
+      const set = new Set();
+      rows.forEach(r => Object.keys(r).forEach(k => set.add(k)));
+      let cols = Array.from(set);
+
+      const preferred = ['Timestamp','Name','Email','Phone','Message','Source'];
+      cols.sort((a,b) => (indexOrEnd(preferred,a) - indexOrEnd(preferred,b)));
+
+      if(!opts.showSource){ cols = cols.filter(c => c !== 'Source'); }
+
+      theadEl.innerHTML = `<tr>${cols.map(c => `<th>${esc(c)}</th>`).join('')}</tr>`;
+      tbodyEl.innerHTML = rows.map(r => `<tr>${cols.map(c => cellHtml(c, r[c], opts)).join('')}</tr>`).join('');
+    }
+
+    function indexOrEnd(arr, key){
+      const i = arr.indexOf(key);
+      return i === -1 ? Number.MAX_SAFE_INTEGER : i;
+    }
+
+    // Render cell: images → thumbnail; phone → call+copy icons; links → clickable
+    function cellHtml(col, val, opts){
+      const v = String(val ?? '').trim();
+      if(!v) return `<td></td>`;
+
+      // Phone handling (match common names)
+      if (['phone','mobile','contact','contact number','phone number'].includes(col.toLowerCase())) {
+        const tel = sanitizePhone(v);
+        return `<td>
+          <span class="phone-bundle">
+            <a class="icon-btn" href="tel:${esc(tel)}" title="Call">
+              ${svgPhone()}
+            </a>
+            <button class="icon-btn copy-btn" data-copy="${esc(v)}" title="Copy number">
+              ${svgCopy()}
+            </button>
+            <span class="phone-text">${esc(v)}</span>
+          </span>
+        </td>`;
+      }
+
+      // Image-ish values (Drive / ext)
+      const lower = v.toLowerCase();
+      const looksImg = lower.includes('drive.google.com') || /\.(jpg|jpeg|png|gif|webp)(\?|$)/.test(lower);
+      if (looksImg) {
+        return `<td><img class="thumbnail" src="${esc(v)}" alt="${esc(col)}" data-full="${esc(v)}"></td>`;
+      }
+
+      // URLs → linkify
+      if (/^https?:\/\//i.test(v)) {
+        return `<td><a href="${esc(v)}" target="_blank" rel="noopener">${esc(v)}</a></td>`;
+      }
+
+      return `<td>${esc(v)}</td>`;
+    }
+
+    function sanitizePhone(raw){
+      // keep digits and leading plus
+      const s = String(raw).trim();
+      const plus = s.startsWith('+');
+      const digits = s.replace(/[^\d]/g,'');
+      return plus ? ('+' + digits) : digits;
+    }
+
+    /* ---------- Blogs (short list) ---------- */
+    async function loadBlogs() {
+      const listEl = document.querySelector('#blog-list');
+      if (!listEl) return;
+
+      try {
+        const snap = await getDocs(collection(db, 'blogs'));
+        if (snap.empty) {
+          await seedBlogs();
+          return loadBlogs();
+        }
+        const items = [];
+        snap.forEach(doc => items.push({ id: doc.id, ...doc.data() }));
+        listEl.innerHTML = items.map(post => blogCard(post)).join('');
+      } catch (e) {
+        console.error(e);
+        listEl.innerHTML = `<div style="color:var(--error)">Failed to load blogs</div>`;
+      }
+    }
+
+    function blogCard(p) {
+      const img = p.imageUrl || 'https://images.unsplash.com/photo-1511376777868-611b54f68947?auto=format&fit=crop&w=800&q=80';
+      const tags = (p.tags || []).map(t => `<span class="tag">${esc(t)}</span>`).join('');
+      return `
+        <article class="blog">
+          <img src="${esc(img)}" alt="${esc(p.title || 'Blog image')}">
+          <h3>${esc(p.title || 'Untitled')}</h3>
+          <p>${esc(p.shortText || '')}</p>
+          <div class="tags">${tags}</div>
+        </article>
+      `;
+    }
+
+    async function seedBlogs() {
+      const items = [
+        {
+          title: 'How to Choose Your First Electric Guitar',
+          shortText: 'Match your style, body size, and tone goals to the right model.',
+          fullText: 'Longer article body here about pickups, scale length, neck profiles, and budgets...',
+          imageUrl: 'https://images.unsplash.com/photo-1511376777868-611b54f68947?auto=format&fit=crop&w=800&q=80',
+          tags: ['Guitar','Beginners','Tips'],
+          publishedAt: serverTimestamp()
+        },
+        {
+          title: '5 Daily Exercises to Improve Finger Strength',
+          shortText: 'Simple drills to build independence and control.',
+          fullText: 'Full write-up with tab examples, metronome tips, and progression ideas...',
+          imageUrl: 'https://images.unsplash.com/photo-1504274066651-8d31a536b11a?auto=format&fit=crop&w=800&q=80',
+          tags: ['Practice','Technique'],
+          publishedAt: serverTimestamp()
+        },
+        {
+          title: 'Recording Your First Guitar Track at Home',
+          shortText: 'Basics of recording, mic placement, and tone on a budget.',
+          fullText: 'Detailed guide to interfaces, DAWs, amp sims, and room treatment...',
+          imageUrl: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80',
+          tags: ['Recording','Home Studio'],
+          publishedAt: serverTimestamp()
+        }
+      ];
+      for (const post of items) {
+        await addDoc(collection(db, 'blogs'), post);
+      }
+    }
+
+    /* ---------- Utilities ---------- */
+    function wireThumbnails(){
+      const modal = document.getElementById('imgModal');
+      const img = modal.querySelector('img');
+      modal.addEventListener('click', (e) => {
+        if (e.target.classList.contains('close') || e.target === modal) modal.classList.remove('open');
+      });
+      document.querySelectorAll('.thumbnail').forEach(t => {
+        t.addEventListener('click', () => {
+          img.src = t.getAttribute('data-full') || t.src;
+          modal.classList.add('open');
+        });
+      });
+    }
+
+    function wireCopyButtons(){
+      document.querySelectorAll('.copy-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const text = btn.getAttribute('data-copy') || '';
+          try{
+            await navigator.clipboard.writeText(text);
+            showToast('Number copied');
+          }catch{
+            showToast('Copy failed');
+          }
+        });
+      });
+    }
+
+    function showToast(msg){
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 1300);
+    }
+
+    function esc(s=''){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+    function svgPhone(){
+      return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M3 5c0-1.1.9-2 2-2h2a1 1 0 0 1 1 .82l.5 3a1 1 0 0 1-.28.9l-1.2 1.2a15 15 0 0 0 6.36 6.36l1.2-1.2a1 1 0 0 1 .9-.28l3 .5a1 1 0 0 1 .82 1v2a2 2 0 0 1-2 2h-1C9.61 20 4 14.39 4 7V6a2 2 0 0 1 2-2H5c-1.1 0-2 .9-2 2z" stroke="currentColor" stroke-width="1.4"/>
+      </svg>`;
+    }
+
+    function svgCopy(){
+      return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <rect x="9" y="9" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.4"/>
+        <rect x="5" y="5" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.4" opacity=".7"/>
+      </svg>`;
+    }
+  </script>
 </body>
 </html>
