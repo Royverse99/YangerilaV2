@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Yangerila — Admin Login</title>
+
+  <!-- Fonts used on your main page -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Courgette&display=swap" rel="stylesheet">
+
+  <!-- Your site’s theme CSS (place these files in /login or change paths accordingly) -->
+  <link rel="stylesheet" href="./be3eb3.css?v=1" />
+  <link rel="stylesheet" href="./responsive3eb3.css?v=1" />
+  <link rel="stylesheet" href="./post-74e8d.css?v=1" />
+
+  <!-- Login-specific minimal CSS (FILE NAME FIXED: style.css) -->
+  <link rel="stylesheet" href="./style.css?v=2" />
+
+  <meta name="robots" content="noindex, nofollow" />
+</head>
+<body class="style-simple">
+
+  <main class="wrap">
+    <section class="card">
+      <header class="head">
+        <img src="../wp-content/uploads/2022/04/coaching3-slider-pic1.webp" alt="Yangerila" class="logo" />
+        <h1>Admin Login</h1>
+        <p class="muted">Restricted area. Only authorised staff.</p>
+      </header>
+
+      <form id="login-form" class="form" autocomplete="on">
+        <div class="field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" inputmode="email" placeholder="you@yourdomain.com" required />
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" placeholder="••••••••" minlength="8" required />
+        </div>
+        <div class="meta">
+          <label class="remember">
+            <input type="checkbox" id="remember" checked />
+            Keep me signed in
+          </label>
+          <a href="#" id="forgot">Forgot password?</a>
+        </div>
+        <button class="btn primary" id="login-btn" type="submit">Sign in</button>
+        <p class="err" id="error" role="alert" aria-live="polite"></p>
+      </form>
+
+      <footer class="foot">
+        <p class="tiny">By signing in you agree to follow internal policies. Unauthorised access is prohibited.</p>
+      </footer>
+    </section>
+  </main>
+
+  <template id="reset-template">
+    <div class="reset-box">
+      <h2>Reset your password</h2>
+      <p class="muted">Enter your admin email. We'll send a reset link if it exists.</p>
+      <div class="field">
+        <label for="reset-email">Email</label>
+        <input id="reset-email" type="email" placeholder="you@yourdomain.com" />
+      </div>
+      <div class="row">
+        <button class="btn" id="reset-cancel">Cancel</button>
+        <button class="btn primary" id="reset-send">Send link</button>
+      </div>
+      <p class="err" id="reset-msg"></p>
+    </div>
+  </template>
+
+  <!-- JS (same folder), cache-busted -->
+  <script type="module" src="./app.js?v=2"></script>
+</body>
+</html>

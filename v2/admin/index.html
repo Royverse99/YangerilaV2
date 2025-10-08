@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Yangerila Admin Dashboard</title>
+  <link rel="stylesheet" href="../login/style.css?v=2">
+</head>
+<body>
+
+  <main class="wrap">
+    <section class="card" style="width:100%;max-width:1180px">
+      <header class="head">
+        <img src="../wp-content/uploads/2022/04/your-logo-file-name.png" alt="Yangerila" class="logo" />
+        <h1>Yangerila Admin Panel</h1>
+        <p class="muted" id="user-email">Loading...</p>
+        <button class="btn primary" id="signout" style="width:auto;min-width:120px;margin-top:10px;">Sign out</button>
+      </header>
+
+      <div class="dashboard">
+
+        <!-- 1️⃣ Leads CRM -->
+        <section class="section" id="crm-section">
+          <h2>Leads CRM</h2>
+          <div class="table-wrap">
+            <table id="crm-table">
+              <thead>
+                <tr><th>Name</th><th>Email</th><th>Phone</th><th>Message</th></tr>
+              </thead>
+              <tbody>
+                <tr><td colspan="4" style="text-align:center;color:var(--muted)">Loading leads...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- 2️⃣ Blog Manager -->
+        <section class="section" id="blogs-section">
+          <h2>Blogs</h2>
+          <div class="blog-list" id="blog-list">
+            <article class="blog">
+              <img src="https://images.unsplash.com/photo-1511376777868-611b54f68947?auto=format&fit=crop&w=800&q=80" alt="Electric Guitar">
+              <h3>How to Choose Your First Electric Guitar</h3>
+              <p>Picking your first guitar can be overwhelming. Learn how to match your playing style, body size, and tone goals with the right model.</p>
+              <div class="tags"><span class="tag">Guitar</span><span class="tag">Beginners</span><span class="tag">Tips</span></div>
+            </article>
+
+            <article class="blog">
+              <img src="https://images.unsplash.com/photo-1504274066651-8d31a536b11a?auto=format&fit=crop&w=800&q=80" alt="Practice">
+              <h3>5 Daily Exercises to Improve Finger Strength</h3>
+              <p>These simple drills help build finger independence and control—perfect for guitarists of any skill level.</p>
+              <div class="tags"><span class="tag">Practice</span><span class="tag">Technique</span></div>
+            </article>
+
+            <article class="blog">
+              <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80" alt="Studio">
+              <h3>Recording Your First Guitar Track at Home</h3>
+              <p>Learn the basics of recording, mic placement, and getting a great tone using affordable gear.</p>
+              <div class="tags"><span class="tag">Recording</span><span class="tag">Home Studio</span></div>
+            </article>
+          </div>
+        </section>
+
+        <!-- 3️⃣ Settings -->
+        <section class="section">
+          <h2>Yangerila Settings</h2>
+          <div class="coming-soon">Coming soon…</div>
+        </section>
+
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+
+    const firebaseConfig = {
+  apiKey: "AIzaSyDHDjHrnQ2IwwetQoV6cWAGnkMzANerVDE",
+  authDomain: "yangerila-studio.firebaseapp.com",
+  projectId: "yangerila-studio",
+  storageBucket: "yangerila-studio.firebasestorage.app",
+  messagingSenderId: "585529190595",
+  appId: "1:585529190595:web:7555d8334949c3b30f9a76",
+  measurementId: "G-39S037X9BB"
+};
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const emailEl = document.querySelector('#user-email');
+    const signOutBtn = document.querySelector('#signout');
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.assign('/login/');
+      } else {
+        emailEl.textContent = user.email;
+      }
+    });
+
+    signOutBtn.addEventListener('click', async () => {
+      await signOut(auth);
+      window.location.assign('/login/');
+    });
+
+    // --- Leads CRM stub (connect to Google Sheets later) ---
+    async function fetchLeads() {
+      const tbody = document.querySelector('#crm-table tbody');
+      try {
+        // Placeholder rows for now
+        const leads = [
+          { name: 'John Doe', email: 'john@example.com', phone: '555-2312', message: 'Interested in beginner lessons' },
+          { name: 'Sara Lee', email: 'sara@example.com', phone: '555-7712', message: 'Looking for online guitar classes' },
+          { name: 'Mark Diaz', email: 'mark@example.com', phone: '555-0987', message: 'Can I book weekend sessions?' },
+        ];
+        tbody.innerHTML = leads.map(l => `<tr><td>${l.name}</td><td>${l.email}</td><td>${l.phone}</td><td>${l.message}</td></tr>`).join('');
+      } catch (err) {
+        console.error(err);
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:var(--error)">Failed to load leads</td></tr>`;
+      }
+    }
+    fetchLeads();
+  </script>
+
+</body>
+</html>
