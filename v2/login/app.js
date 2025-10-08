@@ -1,7 +1,10 @@
-// Firebase Admin Login
-// --- Replace with your own Firebase project config ---
+// =========================
+//  Yangerila Admin Login
+// =========================
+
+// --- Replace with your actual Firebase project config ---
 const firebaseConfig = {
-  apiKey: "AIzaSyDHDjHrnQ2IwwetQoV6cWAGnkMzANerVDE",
+  apiKey: "AIzaSyDHDJHrnQ2IwwetQoV6cWAGnkMzANerVDE",
   authDomain: "yangerila-studio.firebaseapp.com",
   projectId: "yangerila-studio",
   storageBucket: "yangerila-studio.firebasestorage.app",
@@ -10,7 +13,7 @@ const firebaseConfig = {
   measurementId: "G-39S037X9BB"
 };
 
-
+// --- Firebase imports ---
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 import {
   getAuth, setPersistence, browserLocalPersistence, browserSessionPersistence,
@@ -18,11 +21,13 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
-// ---------- Init ----------
+// --- Initialize Firebase ---
+console.log("🔥 Initializing Firebase...");
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+// --- Select elements ---
 const form = document.querySelector('#login-form');
 const emailEl = document.querySelector('#email');
 const passEl = document.querySelector('#password');
@@ -35,26 +40,34 @@ function showError(msg) {
   errorEl.textContent = msg;
   errorEl.style.visibility = 'visible';
   errorEl.focus?.();
+  console.warn("⚠️ Error:", msg);
 }
 
-// Redirect if already signed in & admin
+// --- Auto-redirect if already logged in and authorized ---
 onAuthStateChanged(auth, async (user) => {
   if (!user) return;
+  console.log("✅ User detected:", user.email);
   try {
     const snap = await getDoc(doc(db, 'admins', user.uid));
     if (snap.exists()) {
-      window.location.assign('/admin/'); // change if needed
+      console.log("✅ Admin verified, redirecting to /admin/");
+      window.location.assign('/admin/');
+    } else {
+      console.warn("⛔ User logged in but not in admins list.");
     }
   } catch (e) {
-    console.error(e);
+    console.error("Firestore check error:", e);
   }
 });
 
+// --- Handle sign-in form submit ---
 form?.addEventListener('submit', async (e) => {
   e.preventDefault();
   errorEl.textContent = '';
+
   const email = emailEl.value.trim();
   const password = passEl.value;
+
   if (!email || !password) {
     showError('Please enter your email and password.');
     return;
@@ -62,17 +75,20 @@ form?.addEventListener('submit', async (e) => {
 
   const btn = document.querySelector('#login-btn');
   btn.disabled = true;
+  console.log("🔐 Attempting login for", email);
 
   try {
     await setPersistence(auth, rememberEl.checked ? browserLocalPersistence : browserSessionPersistence);
     const { user } = await signInWithEmailAndPassword(auth, email, password);
+    console.log("✅ Authenticated:", user.uid);
 
     // Check admin list in Firestore
     const adminDoc = await getDoc(doc(db, 'admins', user.uid));
     if (!adminDoc.exists()) {
-      throw new Error('not-authorised'); // custom flag we’ll map below
+      throw new Error('not-authorised'); // custom flag for error mapping
     }
 
+    console.log("✅ Admin verified, redirecting to /admin/");
     window.location.assign('/admin/');
   } catch (err) {
     console.error('[Login error]', err);
@@ -82,17 +98,20 @@ form?.addEventListener('submit', async (e) => {
   }
 });
 
-// Forgot password flow
+// --- Forgot password flow ---
 forgotBtn?.addEventListener('click', (e) => {
   e.preventDefault();
   const node = resetTpl.content.cloneNode(true);
   document.body.appendChild(node);
+
   const box = document.querySelector('.reset-box');
   const emailInput = document.querySelector('#reset-email');
   const msg = document.querySelector('#reset-msg');
   const send = document.querySelector('#reset-send');
   const cancel = document.querySelector('#reset-cancel');
+
   emailInput.value = emailEl.value;
+  console.log("📨 Password reset dialog opened");
 
   send.addEventListener('click', async () => {
     msg.textContent = '';
@@ -100,19 +119,25 @@ forgotBtn?.addEventListener('click', (e) => {
       await sendPasswordResetEmail(auth, emailInput.value.trim());
       msg.style.color = 'var(--accent)';
       msg.textContent = 'If an account exists for this email, a reset link has been sent.';
+      console.log("✅ Password reset email sent");
     } catch (err) {
       msg.style.color = 'var(--error)';
       msg.textContent = normaliseError(err);
+      console.error("❌ Reset error:", err);
     }
   });
-  cancel.addEventListener('click', () => box.remove());
+
+  cancel.addEventListener('click', () => {
+    box.remove();
+    console.log("❎ Password reset dialog closed");
+  });
 });
 
+// --- Error message mapping ---
 function normaliseError(err) {
   const code = (err && err.code) || '';
   const msg = (err && err.message) || '';
 
-  // Wrong email or password (new unified error)
   if (code === 'auth/invalid-credential' || code === 'auth/wrong-password' || code === 'auth/user-not-found') {
     return 'Incorrect email or password.';
   }
@@ -123,22 +148,5 @@ function normaliseError(err) {
   if (code === 'auth/operation-not-allowed') return 'Email/Password sign-in is not enabled for this project.';
   if (code === 'auth/unauthorized-domain' || code === 'auth/domain-not-allowed') return 'This domain is not allowed. Add your domain in Firebase Authentication settings.';
 
-  return 'Sorry, could not sign you in. Please try again.';
-}
-      msg.style.color = 'var(--lime)';
-      msg.textContent = 'If an account exists for this email, a reset link has been sent.';
-    } catch (err) {
-      msg.style.color = 'var(--error)';
-      msg.textContent = normaliseError(err);
-    }
-  });
-  cancel.addEventListener('click', () => box.remove());
-});
-
-function normaliseError(err){
-  const code = err?.code || '';
-  if (code.includes('invalid-email')) return 'Please enter a valid email address.';
-  if (code.includes('user-not-found') || code.includes('wrong-password')) return 'Incorrect email or password.';
-  if (err?.message?.includes('not authorised')) return 'This account is not authorised for admin access.';
   return 'Sorry, could not sign you in. Please try again.';
 }
