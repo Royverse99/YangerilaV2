@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Yangerila Admin Dashboard</title>
 
-  <!-- Reuse login styles -->
-  <link rel="stylesheet" href="../login/style.css?v=4">
+  <!-- Reuse the login CSS (absolute path avoids relative issues) -->
+  <link rel="stylesheet" href="/login/style.css?v=6"/>
 
-  <!-- Page-specific tweaks (icons, modal, sticky tools) -->
   <style>
     /* Sticky header tools */
     .section .tools{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0 12px}
@@ -61,14 +60,25 @@
     table{width:100%;border-collapse:collapse;font-size:15px}
     th,td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:top}
     th{color:var(--accent);text-align:left;white-space:nowrap}
+
+    /* Optional: initial loading cover to avoid flicker */
+    #loading {
+      position: fixed; inset: 0; display:flex; align-items:center; justify-content:center;
+      background: #0b1a12; color: #fff; z-index: 9999;
+      font-weight: 700; letter-spacing: .3px;
+    }
   </style>
 </head>
 <body>
 
-  <main class="wrap">
+  <!-- Loading cover (removed once auth resolves) -->
+  <div id="loading">Checking login…</div>
+
+  <main class="wrap" aria-live="polite">
     <section class="card" style="width:100%;max-width:1180px">
       <header class="head">
-        <img src="../wp-content/uploads/2022/04/your-logo-file-name.png" alt="Yangerila" class="logo" />
+        <!-- UPDATE the logo src to your actual file -->
+        <img src="/v2/wp-content/uploads/2022/04/your-logo-file-name.png" alt="Yangerila" class="logo" />
         <h1>Yangerila Admin Panel</h1>
         <p class="muted" id="user-email">Loading...</p>
         <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">
@@ -132,8 +142,8 @@
   </main>
 
   <!-- Image modal -->
-  <div class="img-modal" id="imgModal">
-    <button class="close">Close</button>
+  <div class="img-modal" id="imgModal" aria-hidden="true">
+    <button class="close" aria-label="Close image preview">Close</button>
     <img src="" alt="preview">
   </div>
 
@@ -145,7 +155,7 @@
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
     import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
     import {
-      getFirestore, collection, getDocs, addDoc, serverTimestamp
+      getFirestore, doc, getDoc, collection, getDocs, addDoc, serverTimestamp
     } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
     /* ---- Firebase config (correct one) ---- */
@@ -166,18 +176,52 @@
     const emailEl = document.querySelector('#user-email');
     const signOutBtn = document.querySelector('#signout');
 
-    onAuthStateChanged(auth, (user) => {
+    let hasLoadedAdmin = false;
+    let loginRedirectTimer;
+
+    onAuthStateChanged(auth, async (user) => {
+      // cancel pending redirect if auth state changes
+      if (loginRedirectTimer) clearTimeout(loginRedirectTimer);
+
       if (!user) {
-        window.location.assign('/login/');
-      } else {
-        emailEl.textContent = user.email || '';
-        loadEverything();
+        console.warn('No user yet on /admin – will redirect to /login in 1s if still signed out');
+        loginRedirectTimer = setTimeout(() => {
+          if (location.pathname !== '/login/') location.replace('/login/');
+        }, 1000);
+        return;
       }
+
+      // We have a user – show email
+      emailEl.textContent = user.email || '';
+
+      // Double-check this user is an admin
+      try {
+        const adminSnap = await getDoc(doc(db, 'admins', user.uid));
+        if (!adminSnap.exists()) {
+          console.warn('User is signed in but not in admins; signing out and sending to login');
+          await signOut(auth);
+          location.replace('/login/?unauthorized=1');
+          return;
+        }
+      } catch (e) {
+        console.error('Admin check failed:', e);
+        // optional: redirect to login
+        return;
+      }
+
+      // Load admin UI exactly once
+      if (hasLoadedAdmin) return;
+      hasLoadedAdmin = true;
+
+      // remove loading cover
+      document.getElementById('loading')?.remove();
+
+      await loadEverything();
     });
 
     signOutBtn.addEventListener('click', async () => {
       await signOut(auth);
-      window.location.assign('/login/');
+      location.replace('/login/');
     });
 
     /* ---- Leads API config (Apps Script) ---- */
@@ -211,7 +255,7 @@
         const data = await res.json();
         const leads = Array.isArray(data.leads) ? data.leads : [];
 
-        // Split datasets
+        // Split datasets by Source
         const feesRows = leads.filter(r => (r.Source || '').toLowerCase().trim() === 'ycs admissions');
         const webRows  = leads.filter(r => (r.Source || '').toLowerCase().trim() !== 'ycs admissions');
 
