@@ -4,7 +4,7 @@
 
 // --- Replace with your actual Firebase project config ---
 const firebaseConfig = {
-  apiKey: "AIzaSyDHDJHrnQ2IwwetQoV6cWAGnkMzANerVDE",
+  apiKey: "AIzaSyDHDjHrnQ2IwwetQoV6cWAGnkMzANerVDE",
   authDomain: "yangerila-studio.firebaseapp.com",
   projectId: "yangerila-studio",
   storageBucket: "yangerila-studio.firebasestorage.app",
