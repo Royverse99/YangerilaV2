@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Yangerila — Blog</title>
+
+  <!-- Reuse your site look -->
+  <link rel="stylesheet" href="/login/style.css?v=7"/>
+
+  <style>
+    .container{max-width:1080px;margin:0 auto}
+    .controls{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 16px}
+    .controls input, .controls select{
+      padding:10px;border-radius:10px;border:1px solid var(--border);
+      background:rgba(255,255,255,.04);color:var(--text)
+    }
+    .tagsbar{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+    .tagchip{
+      font-size:12px;padding:6px 10px;border-radius:999px;cursor:pointer;
+      background:rgba(122,231,199,0.15);border:1px solid var(--border);color:var(--accent)
+    }
+    .tagchip.active{outline:2px solid var(--accent)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+    .cardx{
+      background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px;
+      box-shadow:0 6px 20px rgba(0,0,0,.35);display:flex;flex-direction:column
+    }
+    .cardx img{width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:10px}
+    .cardx h2{font-size:18px;margin:0 0 6px}
+    .meta{color:var(--muted);font-size:12px;margin-bottom:6px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .cardx .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+    .cardx .tag{font-size:12px;background:rgba(122,231,199,0.15);border:1px solid var(--border);border-radius:8px;padding:3px 8px;color:var(--accent)}
+    .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .btn.ghost{background:transparent;border:1px solid var(--border)}
+    .btn.icon{display:inline-flex;align-items:center;gap:6px}
+
+    .loadmore{display:block;margin:16px auto}
+
+    /* Modal to read full post */
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:1000}
+    .modal.open{display:flex}
+    .modal-card{
+      max-width:900px;width:92vw;max-height:90vh;overflow:auto;background:var(--panel);
+      border:1px solid var(--border);border-radius:12px;padding:16px
+    }
+    .modal .close{position:absolute;right:20px;top:20px}
+    .hero{width:100%;max-height:340px;object-fit:cover;border-radius:12px;border:1px solid var(--border)}
+    .content{color:var(--text);line-height:1.65}
+    .content p{margin:0 0 14px}
+    .content a{color:var(--accent);text-decoration:underline}
+
+    /* tiny toast */
+    .toast{
+      position:fixed;left:50%;transform:translateX(-50%);bottom:18px;background:rgba(0,0,0,.8);
+      color:#fff;padding:10px 14px;border-radius:10px;font-size:13px;z-index:2000;opacity:0;transition:opacity .15s;
+    }
+    .toast.show{opacity:1}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card container">
+      <header class="head">
+        <img src="/v2/wp-content/uploads/2022/04/your-logo-file-name.png" class="logo" alt="Yangerila"/>
+        <h1>Blog</h1>
+        <p class="muted">Lessons, tips and stories from Yangerila.</p>
+      </header>
+
+      <!-- Filters -->
+      <div class="controls">
+        <input id="search" placeholder="Search posts… (title & teaser)"/>
+        <select id="sort">
+          <option value="date_desc">Newest first</option>
+          <option value="views_desc">Most viewed</option>
+        </select>
+        <button class="btn ghost" id="clear">Clear filters</button>
+      </div>
+
+      <!-- Dynamic tag bar (click to filter) -->
+      <div class="tagsbar" id="tagbar"></div>
+
+      <!-- Cards -->
+      <div class="grid" id="cards"></div>
+
+      <button class="btn loadmore" id="loadMore" style="display:none">Load more</button>
+    </section>
+  </main>
+
+  <!-- Read modal -->
+  <div class="modal" id="postModal" aria-hidden="true">
+    <div class="modal-card">
+      <button class="btn close" id="closeModal">Close</button>
+      <h2 id="mTitle"></h2>
+      <div class="meta" id="mMeta"></div>
+      <img id="mHero" class="hero" src="" alt="" style="display:none"/>
+      <div class="tags" id="mTags"></div>
+      <article class="content" id="mBody" style="margin-top:10px"></article>
+      <div class="row" style="margin-top:10px">
+        <button class="btn icon" id="mLikeBtn">👍 <span id="mLikesCount">0</span></button>
+        <button class="btn icon" id="mShareBtn">🔗 Share</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Copied</div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import {
+      getFirestore, collection, query, where, orderBy, limit, getDocs, startAfter,
+      doc, updateDoc, increment, getDoc
+    } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+    /* Firebase config (yours) */
+    const firebaseConfig = {
+      apiKey: "AIzaSyDHDJHrnQ2IwvetQoV6cWAGnkMzANerVDE",
+      authDomain: "yangerila-studio.firebaseapp.com",
+      projectId: "yangerila-studio",
+      storageBucket: "yangerila-studio.appspot.com",
+      messagingSenderId: "585529190595",
+      appId: "1:585529190595:web:755d5834949c3b30f9a76",
+      measurementId: "G-39S837X9BB"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // UI refs
+    const cardsEl = document.getElementById('cards');
+    const searchEl = document.getElementById('search');
+    const sortEl   = document.getElementById('sort');
+    const clearBtn = document.getElementById('clear');
+    const tagbarEl = document.getElementById('tagbar');
+    const loadMoreBtn = document.getElementById('loadMore');
+
+    // Modal refs
+    const postModal = document.getElementById('postModal');
+    const closeModal = document.getElementById('closeModal');
+    const mTitle = document.getElementById('mTitle');
+    const mMeta  = document.getElementById('mMeta');
+    const mHero  = document.getElementById('mHero');
+    const mTags  = document.getElementById('mTags');
+    const mBody  = document.getElementById('mBody');
+    const mLikeBtn = document.getElementById('mLikeBtn');
+    const mLikesCount = document.getElementById('mLikesCount');
+    const mShareBtn = document.getElementById('mShareBtn');
+
+    const toastEl = document.getElementById('toast');
+
+    // State
+    let pageState = {
+      tag: null,
+      sort: 'date_desc',
+      search: '',
+      lastDoc: null,
+      exhausted: false,
+      pageSize: 12,
+      cache: [] // last fetched batch for building tag bar & client search
+    };
+
+    /* ---------- Init ---------- */
+    sortEl.value = pageState.sort;
+
+    searchEl.addEventListener('input', () => {
+      pageState.search = searchEl.value.trim().toLowerCase();
+      renderCards(); // client-side filter on cached
+    });
+
+    sortEl.addEventListener('change', async () => {
+      pageState.sort = sortEl.value;
+      await resetAndLoad();
+    });
+
+    clearBtn.addEventListener('click', async () => {
+      pageState.tag = null;
+      pageState.search = '';
+      searchEl.value = '';
+      tagbarEl.querySelectorAll('.tagchip').forEach(t => t.classList.remove('active'));
+      await resetAndLoad();
+    });
+
+    loadMoreBtn.addEventListener('click', loadMore);
+
+    closeModal.addEventListener('click', () => postModal.classList.remove('open'));
+    postModal.addEventListener('click', (e)=>{ if (e.target === postModal) postModal.classList.remove('open'); });
+
+    // First load
+    resetAndLoad();
+
+    async function resetAndLoad(){
+      pageState.lastDoc = null;
+      pageState.exhausted = false;
+      pageState.cache = [];
+      cardsEl.innerHTML = `<div class="muted">Loading…</div>`;
+      await loadMore(true);
+    }
+
+    /* ---------- Firestore fetching with sort/tag/paging ---------- */
+    async function loadMore(first = false){
+      if (pageState.exhausted) return;
+      try{
+        const constraints = [
+          where('published','==', true)
+        ];
+
+        // Tag filter (server-side)
+        if (pageState.tag) constraints.push(where('tags','array-contains', pageState.tag));
+
+        // Sorting
+        if (pageState.sort === 'views_desc') {
+          constraints.push(orderBy('views', 'desc'));
+          constraints.push(orderBy('publishedAt','desc')); // tie breaker (requires index)
+        } else { // date_desc
+          constraints.push(orderBy('publishedAt', 'desc'));
+        }
+
+        constraints.push(limit(pageState.pageSize));
+
+        // Cursor
+        if (pageState.lastDoc) constraints.push(startAfter(pageState.lastDoc));
+
+        const qRef = query(collection(db,'blogs'), ...constraints);
+        const snap = await getDocs(qRef);
+
+        if (first) cardsEl.innerHTML = '';
+
+        const batch = [];
+        let last = null;
+        snap.forEach(d => {
+          const x = d.data(); x.id = d.id; x.__ref = d.ref;
+          // fill defaults
+          x.views = Number(x.views || 0);
+          x.likes = Number(x.likes || 0);
+          batch.push(x); last = d;
+        });
+
+        if (!batch.length) {
+          if (first && !pageState.cache.length) cardsEl.innerHTML = `<div class="muted">No posts yet.</div>`;
+          pageState.exhausted = true;
+          loadMoreBtn.style.display = 'none';
+          return;
+        }
+
+        pageState.cache = pageState.cache.concat(batch);
+        pageState.lastDoc = last;
+        loadMoreBtn.style.display = batch.length < pageState.pageSize ? 'none' : 'block';
+
+        // Build / refresh tag bar from cache (lightweight)
+        buildTagBarFromCache();
+
+        renderCards();
+      }catch(e){
+        console.error(e);
+        cardsEl.innerHTML = `<div class="err" style="color:var(--error)">Failed to load. If this is your first time sorting by views, Firestore may ask for an index — open the console link it shows, create it, then refresh.</div>`;
+      }
+    }
+
+    /* ---------- UI render ---------- */
+    function renderCards(){
+      const q = pageState.search;
+      let items = pageState.cache.slice();
+
+      if (q) {
+        items = items.filter(p =>
+          (p.title || '').toLowerCase().includes(q) ||
+          (p.shortText || '').toLowerCase().includes(q)
+        );
+      }
+
+      // For date sort, ensure client-side order in case server fallback occurred
+      if (pageState.sort === 'date_desc') {
+        items.sort((a,b) => (ts(b.publishedAt) - ts(a.publishedAt)));
+      } else if (pageState.sort === 'views_desc') {
+        items.sort((a,b) => (Number(b.views||0) - Number(a.views||0)) || (ts(b.publishedAt) - ts(a.publishedAt)));
+      }
+
+      cardsEl.innerHTML = items.map(p => cardHtml(p)).join('');
+      wireCardEvents(items);
+    }
+
+    function cardHtml(p){
+      const img = p.imageUrl ? `<img src="${esc(p.imageUrl)}" alt="${esc(p.title||'')}" loading="lazy"/>` : '';
+      const when = p.publishedAt?.seconds ? new Date(p.publishedAt.seconds*1000).toLocaleDateString() : '';
+      const tags = (p.tags || []).map(t => `<span class="tag">${esc(t)}</span>`).join('');
+      return `
+        <article class="cardx" data-id="${p.id}">
+          ${img}
+          <h2>${esc(p.title || 'Untitled')}</h2>
+          <div class="meta">
+            <span>📅 ${esc(when)}</span>
+            <span>👁️ ${Number(p.views||0)}</span>
+            <span>👍 ${Number(p.likes||0)}</span>
+          </div>
+          <p class="muted">${esc(p.shortText || '')}</p>
+          <div class="tags">${tags}</div>
+          <div class="row">
+            <button class="btn" data-action="open">Read</button>
+            <button class="btn ghost" data-action="share">Share</button>
+            <button class="btn ghost" data-action="like">👍 Like</button>
+          </div>
+        </article>
+      `;
+    }
+
+    function wireCardEvents(items){
+      document.querySelectorAll('.cardx').forEach(el => {
+        const id = el.getAttribute('data-id');
+        const post = items.find(x => x.id === id);
+
+        el.querySelectorAll('[data-action]').forEach(btn => {
+          const action = btn.getAttribute('data-action');
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (action === 'open') openPost(post);
+            else if (action === 'share') sharePost(post);
+            else if (action === 'like') likePost(post);
+          });
+        });
+
+        // Clicking anywhere on card also opens
+        el.addEventListener('click', (e)=>{
+          if (!(e.target instanceof HTMLElement) || e.target.closest('[data-action]')) return;
+          openPost(post);
+        });
+
+        // Tag clicks filter
+        el.querySelectorAll('.tag').forEach(tagEl => {
+          tagEl.addEventListener('click', (e) => {
+            e.stopPropagation();
+            pageState.tag = tagEl.textContent.trim();
+            tagbarActivate(pageState.tag);
+            resetAndLoad();
+          });
+        });
+      });
+    }
+
+    function buildTagBarFromCache(){
+      const counts = new Map();
+      pageState.cache.forEach(p => (p.tags||[]).forEach(t => counts.set(t, (counts.get(t)||0)+1)));
+      const top = Array.from(counts.entries()).sort((a,b)=>b[1]-a[1]).slice(0, 12);
+      tagbarEl.innerHTML = [
+        `<span class="tagchip ${!pageState.tag?'active':''}" data-tag="">All</span>`,
+        ...top.map(([t,c]) => `<span class="tagchip ${pageState.tag===t?'active':''}" data-tag="${esc(t)}">${esc(t)} • ${c}</span>`)
+      ].join('');
+      tagbarEl.querySelectorAll('.tagchip').forEach(chip => {
+        chip.addEventListener('click', async ()=>{
+          const tag = chip.getAttribute('data-tag');
+          pageState.tag = tag || null;
+          tagbarActivate(pageState.tag);
+          await resetAndLoad();
+        });
+      });
+    }
+
+    function tagbarActivate(tag){
+      tagbarEl.querySelectorAll('.tagchip').forEach(t => {
+        const tt = t.getAttribute('data-tag') || '';
+        t.classList.toggle('active', (tag||'') === tt);
+      });
+    }
+
+    /* ---------- Post modal & interactions ---------- */
+    async function openPost(p){
+      mTitle.textContent = p.title || 'Untitled';
+      const when = p.publishedAt?.seconds ? new Date(p.publishedAt.seconds*1000).toLocaleString() : '';
+      mMeta.textContent = when ? `Published: ${when}` : '';
+      if (p.imageUrl){ mHero.src = p.imageUrl; mHero.style.display = 'block'; } else { mHero.style.display = 'none'; }
+      mTags.innerHTML = (p.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('');
+      mBody.innerHTML = p.bodyHtml || toHtml(p.fullText || p.shortText || '');
+
+      // Set like count
+      mLikesCount.textContent = Number(p.likes||0);
+
+      // Wire like/share for this post
+      mLikeBtn.onclick = () => likePost(p, true);
+      mShareBtn.onclick = () => sharePost(p, true);
+
+      postModal.classList.add('open');
+
+      // Count a view (once per 12h per browser)
+      const key = 'viewed_'+p.id;
+      const now = Date.now();
+      const last = Number(localStorage.getItem(key) || 0);
+      if (!last || now - last > 12*60*60*1000) {
+        try{
+          await updateDoc(doc(db,'blogs',p.id), { views: increment(1) });
+          localStorage.setItem(key, String(now));
+          // Update UI both in modal and card:
+          p.views = Number(p.views||0)+1;
+          mMeta.innerHTML = (mMeta.textContent||'') + ` &nbsp;·&nbsp; 👁️ ${p.views}`;
+          // Update the card’s meta
+          const card = document.querySelector(`.cardx[data-id="${p.id}"] .meta`);
+          if (card) card.innerHTML = card.innerHTML.replace(/👁️ \d+/, `👁️ ${p.views}`);
+        }catch(e){
+          console.warn('View increment failed (rules may block non-admin updates).', e);
+        }
+      }
+    }
+
+    async function likePost(p, fromModal=false){
+      const key = 'liked_'+p.id;
+      if (localStorage.getItem(key)) {
+        showToast('Already liked');
+        return;
+      }
+      try{
+        await updateDoc(doc(db,'blogs',p.id), { likes: increment(1) });
+        localStorage.setItem(key, '1');
+        p.likes = Number(p.likes||0)+1;
+        if (fromModal) mLikesCount.textContent = p.likes;
+        // update card count
+        const card = document.querySelector(`.cardx[data-id="${p.id}"] .meta`);
+        if (card) card.innerHTML = card.innerHTML.replace(/👍 \d+/, `👍 ${p.likes}`);
+        showToast('Thanks for the 👍');
+      }catch(e){
+        console.warn('Like increment failed (rules may block).', e);
+        showToast('Like failed');
+      }
+    }
+
+    async function sharePost(p, fromModal=false){
+      // Future-proof link (even if you add /blog/post.html later)
+      const url = `${location.origin}/blog/post.html?id=${encodeURIComponent(p.id)}`;
+      const title = p.title || 'Yangerila Blog';
+      const text = p.shortText || 'Check this out';
+      try{
+        if (navigator.share) {
+          await navigator.share({ title, text, url });
+        } else {
+          await navigator.clipboard.writeText(url);
+          showToast('Link copied');
+        }
+      }catch{
+        try{
+          await navigator.clipboard.writeText(url);
+          showToast('Link copied');
+        }catch{
+          showToast('Could not share');
+        }
+      }
+    }
+
+    /* ---------- Helpers ---------- */
+    function ts(t){ return t?.seconds ? t.seconds*1000 : 0; }
+    function toHtml(txt){
+      const safe = esc(txt || '');
+      const linkified = safe.replace(/(https?:\/\/[^\s]+)/g, m => `<a href="${m}" target="_blank" rel="noopener">${m}</a>`);
+      return linkified.split(/\n{2,}/).map(p => `<p>${p.replace(/\n/g,'<br>')}</p>`).join('');
+    }
+    function esc(s=''){return String(s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+    function showToast(msg){
+      toastEl.textContent = msg;
+      toastEl.classList.add('show');
+      setTimeout(()=> toastEl.classList.remove('show'), 1200);
+    }
+  </script>
+</body>
+</html>

@@ -2,15 +2,15 @@
 //  Yangerila Admin Login
 // =========================
 
-// --- Replace with your actual Firebase project config ---
+// --- One true Firebase config (same on admin & login) ---
 const firebaseConfig = {
-  apiKey: "AIzaSyDHDjHrnQ2IwwetQoV6cWAGnkMzANerVDE",
+  apiKey: "AIzaSyDHDJHrnQ2IwvetQoV6cWAGnkMzANerVDE",
   authDomain: "yangerila-studio.firebaseapp.com",
   projectId: "yangerila-studio",
-  storageBucket: "yangerila-studio.firebasestorage.app",
+  storageBucket: "yangerila-studio.appspot.com",
   messagingSenderId: "585529190595",
-  appId: "1:585529190595:web:7555d8334949c3b30f9a76",
-  measurementId: "G-39S037X9BB"
+  appId: "1:585529190595:web:755d5834949c3b30f9a76",
+  measurementId: "G-39S837X9BB"
 };
 
 // --- Firebase imports ---
@@ -22,10 +22,13 @@ import {
 import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
 // --- Initialize Firebase ---
-console.log("🔥 Initializing Firebase...");
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
+
+// Debug: verify both pages use the SAME project
+console.log('[FB] projectId:', app.options.projectId);
+console.log('[FB] appId:', app.options.appId);
 
 // --- Select elements ---
 const form = document.querySelector('#login-form');
@@ -37,26 +40,30 @@ const forgotBtn = document.querySelector('#forgot');
 const resetTpl = document.querySelector('#reset-template');
 
 function showError(msg) {
+  if (!errorEl) return;
   errorEl.textContent = msg;
   errorEl.style.visibility = 'visible';
   errorEl.focus?.();
-  console.warn("⚠️ Error:", msg);
 }
 
-// --- Auto-redirect if already logged in and authorized ---
+// --- If already signed in & authorised → send to /admin ---
 onAuthStateChanged(auth, async (user) => {
-  if (!user) return;
-  console.log("✅ User detected:", user.email);
+  if (!user) return; // stay on login
+
   try {
     const snap = await getDoc(doc(db, 'admins', user.uid));
     if (snap.exists()) {
-      console.log("✅ Admin verified, redirecting to /admin/");
-      window.location.assign('/admin/');
+      console.log('✅ Admin detected on login page; redirecting to /admin/');
+      // replace() avoids back/forward ping-pong
+      window.location.replace('/admin/');
     } else {
-      console.warn("⛔ User logged in but not in admins list.");
+      console.warn('Signed in but not in admins; stay on login.');
+      showError('Signed in but not authorised for admin access.');
     }
   } catch (e) {
-    console.error("Firestore check error:", e);
+    console.error('Admin check failed on login page:', e);
+    // stay on login; show a generic message
+    showError('Could not verify access. Please try again.');
   }
 });
 
@@ -74,30 +81,27 @@ form?.addEventListener('submit', async (e) => {
   }
 
   const btn = document.querySelector('#login-btn');
-  btn.disabled = true;
-  console.log("🔐 Attempting login for", email);
+  if (btn) btn.disabled = true;
 
   try {
-    await setPersistence(auth, rememberEl.checked ? browserLocalPersistence : browserSessionPersistence);
+    await setPersistence(auth, rememberEl?.checked ? browserLocalPersistence : browserSessionPersistence);
     const { user } = await signInWithEmailAndPassword(auth, email, password);
-    console.log("✅ Authenticated:", user.uid);
 
     // Check admin list in Firestore
     const adminDoc = await getDoc(doc(db, 'admins', user.uid));
     if (!adminDoc.exists()) {
-      throw new Error('not-authorised'); // custom flag for error mapping
+      // don’t redirect; tell the user
+      showError('This account is not authorised for admin access.');
+      return;
     }
 
-    console.log("✅ Admin verified, redirecting to /admin/");
-    window.location.assign('/admin/');
+    window.location.replace('/admin/');
   } catch (err) {
-  console.error('[Login error]', err);   // shows full object
-  alert(`Error code: ${err.code || 'none'}\nMessage: ${err.message || 'no message'}`);
-  showError(normaliseError(err));
-} finally {
-  btn.disabled = false;
-}
-
+    console.error('[Login error]', err);
+    showError(normaliseError(err));
+  } finally {
+    if (btn) btn.disabled = false;
+  }
 });
 
 // --- Forgot password flow ---
@@ -113,7 +117,6 @@ forgotBtn?.addEventListener('click', (e) => {
   const cancel = document.querySelector('#reset-cancel');
 
   emailInput.value = emailEl.value;
-  console.log("📨 Password reset dialog opened");
 
   send.addEventListener('click', async () => {
     msg.textContent = '';
@@ -121,18 +124,13 @@ forgotBtn?.addEventListener('click', (e) => {
       await sendPasswordResetEmail(auth, emailInput.value.trim());
       msg.style.color = 'var(--accent)';
       msg.textContent = 'If an account exists for this email, a reset link has been sent.';
-      console.log("✅ Password reset email sent");
     } catch (err) {
       msg.style.color = 'var(--error)';
       msg.textContent = normaliseError(err);
-      console.error("❌ Reset error:", err);
     }
   });
 
-  cancel.addEventListener('click', () => {
-    box.remove();
-    console.log("❎ Password reset dialog closed");
-  });
+  cancel.addEventListener('click', () => box.remove());
 });
 
 // --- Error message mapping ---
