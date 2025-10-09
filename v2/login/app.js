@@ -91,13 +91,11 @@ form?.addEventListener('submit', async (e) => {
     console.log("✅ Admin verified, redirecting to /admin/");
     window.location.assign('/admin/');
   } catch (err) {
-  console.error('[Login error]', err);   // shows full object
-  alert(`Error code: ${err.code || 'none'}\nMessage: ${err.message || 'no message'}`);
-  showError(normaliseError(err));
-} finally {
-  btn.disabled = false;
-}
-
+    console.error('[Login error]', err);
+    showError(normaliseError(err));
+  } finally {
+    btn.disabled = false;
+  }
 });
 
 // --- Forgot password flow ---
