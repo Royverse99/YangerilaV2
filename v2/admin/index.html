@@ -6,20 +6,20 @@
   <title>Yangerila — Admin</title>
 
   <!-- Admin-only CSS (login has its own CSS) -->
-  <link rel="stylesheet" href="/admin/style.css?v=2"/>
+  <link rel="stylesheet" href="/admin/style.css?v=3"/>
 </head>
-<body class="admin-page style-simple"><!-- style-simple = same bg as login -->
+<body class="admin-page style-simple"><!-- same bg as login -->
 
   <!-- Loading cover until auth + admin check passes -->
   <div id="loading">Checking login…</div>
 
   <header class="topbar">
-    <!-- ✅ Use the same logo path as your login page -->
+    <!-- ✅ Same logo path as login -->
     <img src="/wp-content/uploads/2022/04/coaching3-slider-pic1.webp" alt="Yangerila" class="logo"/>
+    <h1 class="brand">Yangerila Creative Studio &gt;</h1>
     <div class="top-actions">
       <span class="user" id="user-email">Loading…</span>
       <button class="btn primary" id="signout">Sign out</button>
-      <a class="btn ghost" href="/admin/blog-editor.html">Blog Editor</a>
     </div>
   </header>
 
@@ -95,7 +95,8 @@
       <div class="block">
         <div class="subhead">
           <h3>Recent posts</h3>
-          <a class="btn tiny ghost" href="/admin/blog-editor.html">Create / Edit</a>
+          <!-- ⬇️ moved here from the top bar -->
+          <a class="btn tiny ghost" href="/admin/blog-editor.html">Open Blog Editor</a>
         </div>
         <div class="blog-list" id="blog-list"></div>
       </div>
@@ -112,6 +113,6 @@
   <div class="toast" id="toast">Copied</div>
 
   <!-- Admin App (Firebase + Sheets) -->
-  <script type="module" src="/admin/adminapp.js?v=2"></script>
+  <script type="module" src="/admin/adminapp.js?v=3"></script>
 </body>
 </html>

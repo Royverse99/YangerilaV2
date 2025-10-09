@@ -1,6 +1,5 @@
 /* admin/adminapp.js — ADMIN-ONLY SCRIPT (login has its own app.js) */
 
-/* Firebase CDN (same version as login) */
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 import { getFirestore, doc, getDoc, collection, getDocs, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
@@ -15,7 +14,6 @@ const firebaseConfig = {
     appId: "1:585529190595:web:7555d8334949c3b30f9a76",
     measurementId: "G-39S037X9BB"
   };
-
 const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
@@ -30,6 +28,14 @@ const TABS = {
   ADM_DEMO: 'Admission & Demo Form Data',
   CONTACT: 'Contact Us Form Data',
   YCS: 'YCS Admissions'
+};
+
+/* ===== Per-sheet UI column excludes (hide from display only) ===== */
+const EXCLUDE = {
+  [TABS.COUPON]:  new Set(['Name', 'Email', 'Phone', 'Message']),
+  [TABS.ADM_DEMO]: new Set(['Email', 'Message']),
+  [TABS.CONTACT]: new Set(['Email']),
+  [TABS.YCS]:     new Set([]),
 };
 
 /* ===== Elements ===== */
@@ -92,18 +98,23 @@ async function fetchAndRenderAll(){
     const text = await r.text();
     if (!r.ok) throw new Error(`HTTP ${r.status}: ${text.slice(0,200)}`);
 
-    const data = JSON.parse(text);
+    let data = JSON.parse(text);
     if (data.error) throw new Error(`API error: ${data.error}`);
 
-    const rows = Array.isArray(data.leads) ? data.leads : [];
+    let rows = Array.isArray(data.leads) ? data.leads : [];
 
-    // Normalize image URLs (Drive / direct image links)
+    // 1) Normalize image URLs (Drive / direct image links); ignore host-relative paths
     rows.forEach(o => {
       Object.keys(o).forEach(k => {
-        const v = String(o[k] ?? '');
+        const v = String(o[k] ?? '').trim();
         if (looksLikeImageUrl(v)) o[k] = normalizeDriveUrl(v);
       });
     });
+
+    // 2) Drop useless rows:
+    //    - where Timestamp AND Message are both empty
+    //    - OR the entire row is empty
+    rows = rows.filter(row => !isRowEmptyOrNoTimestampMessage(row));
 
     // Group by source/tab name
     const coupon  = rows.filter(r => (r.Source||'').trim().toLowerCase() === TABS.COUPON.toLowerCase());
@@ -111,12 +122,11 @@ async function fetchAndRenderAll(){
     const contact = rows.filter(r => (r.Source||'').trim().toLowerCase() === TABS.CONTACT.toLowerCase());
     const ycs     = rows.filter(r => (r.Source||'').trim().toLowerCase() === TABS.YCS.toLowerCase());
 
-    /* ✅ EXACT columns per sub-sheet:
-       Use the first row's key order (as emitted by Apps Script) and drop "Source". */
-    renderTable(coupon,  'table-coupon',  getColumnsFromFirstRow(coupon));
-    renderTable(admDemo, 'table-admDemo', getColumnsFromFirstRow(admDemo));
-    renderTable(contact, 'table-contact', getColumnsFromFirstRow(contact));
-    renderTable(ycs,     'table-ycs',     getColumnsFromFirstRow(ycs));
+    // ✅ EXACT columns per sheet (first-row order) minus per-sheet excludes
+    renderTable(coupon,  'table-coupon',  columnsForSheet(coupon,  TABS.COUPON));
+    renderTable(admDemo, 'table-admDemo', columnsForSheet(admDemo, TABS.ADM_DEMO));
+    renderTable(contact, 'table-contact', columnsForSheet(contact, TABS.CONTACT));
+    renderTable(ycs,     'table-ycs',     columnsForSheet(ycs,     TABS.YCS));
 
     wireThumbnails();
     wireCopyButtons();
@@ -130,9 +140,20 @@ async function fetchAndRenderAll(){
   }
 }
 
-function getColumnsFromFirstRow(rows){
+function isRowEmptyOrNoTimestampMessage(r){
+  const isBlank = v => !v || !String(v).trim();
+  const ts = r.Timestamp ?? r.timestamp ?? '';
+  const msg = r.Message ?? r.message ?? '';
+  const allEmpty = Object.values(r).every(isBlank);
+  // remove if both ts & msg blank OR everything blank
+  return (isBlank(ts) && isBlank(msg)) || allEmpty;
+}
+
+function columnsForSheet(rows, sheetName){
   if (!rows || !rows.length) return [];
-  return Object.keys(rows[0]).filter(k => k !== 'Source'); // keep only columns that actually exist in that tab
+  const excludes = EXCLUDE[sheetName] || new Set();
+  const rawCols = Object.keys(rows[0]);     // original order from API
+  return rawCols.filter(k => k !== 'Source' && !excludes.has(k));
 }
 
 /* ===== Table helpers ===== */
@@ -155,8 +176,6 @@ function renderTable(rows, tableId, cols){
     tbody.innerHTML = `<tr><td class="muted center">No rows</td></tr>`;
     return;
   }
-
-  // Fallback if cols missing
   if (!cols || !cols.length) cols = Object.keys(rows[0]).filter(k => k !== 'Source');
 
   thead.innerHTML = `<tr>${cols.map(c => `<th>${esc(c)}</th>`).join('')}</tr>`;
@@ -165,9 +184,9 @@ function renderTable(rows, tableId, cols){
 
 function cellHtml(col, val){
   const v = String(val ?? '').trim();
-  if(!v) return `<td></td>`;
+  if(!v) return `<td class="tight"></td>`;
 
-  // phone helpers
+  // phone helpers (only for obvious phone columns)
   if (['phone','mobile','contact','contact number','phone number'].includes(col.toLowerCase())) {
     const tel = sanitizePhone(v);
     return `<td class="tight">
@@ -179,7 +198,7 @@ function cellHtml(col, val){
     </td>`;
   }
 
-  // images
+  // images: only render if it’s http(s) Drive file link or direct image URL
   if (looksLikeImageUrl(v)) {
     const src = normalizeDriveUrl(v);
     return `<td class="tight"><img class="thumbnail" src="${esc(src)}" alt="${esc(col)}" data-full="${esc(src)}"></td>`;
@@ -198,11 +217,18 @@ function sanitizePhone(raw){ const s=String(raw).trim(); const plus=s.startsWith
 /* ===== Image utils (Drive) ===== */
 function looksLikeImageUrl(s){
   if (!s) return false;
+  if (!/^https?:\/\//i.test(s)) return false; // prevent site-hosted paths
   const u = s.toLowerCase();
-  return u.includes('drive.google.com') ||
-         /\.(jpg|jpeg|png|gif|webp)(\?|$)/.test(u);
+  return (
+    u.includes('drive.google.com') || /\.(jpg|jpeg|png|gif|webp)(\?|$)/.test(u)
+  );
 }
 function normalizeDriveUrl(url){
+  if (!/drive\.google\.com/i.test(url)) return url;
+
+  // If it's a folder link, we cannot show a single image → leave as-is (no thumbnail)
+  if (/drive\.google\.com\/drive\/folders\//i.test(url)) return url;
+
   let id = '';
   const m1 = url.match(/\/file\/d\/([^/]+)/);
   const m2 = url.match(/[?&]id=([^&]+)/);
@@ -249,7 +275,7 @@ function failUI(msg){
 function svgPhone(){ return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 5c0-1.1.9-2 2-2h2a1 1 0 0 1 1 .82l.5 3a1 1 0 0 1-.28.9l-1.2 1.2a15 15 0 0 0 6.36 6.36l1.2-1.2a1 1 0 0 1 .9-.28l3 .5a1 1 0 0 1 .82 1v2a2 2 0 0 1-2 2h-1C9.61 20 4 14.39 4 7V6a2 2 0 0 1 2-2H5c-1.1 0-2 .9-2 2z" stroke="currentColor" stroke-width="1.4"/></svg>`; }
 function svgCopy(){ return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="9" y="9" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.4"/><rect x="5" y="5" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.4" opacity=".7"/></svg>`; }
 
-/* ===== Blogs preview ===== */
+/* ===== Blogs preview (same as before, editor button moved in HTML) ===== */
 async function loadBlogs() {
   const listEl = document.querySelector('#blog-list');
   if (!listEl) return;
