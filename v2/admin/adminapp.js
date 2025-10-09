@@ -15,6 +15,7 @@ const firebaseConfig = {
     appId: "1:585529190595:web:7555d8334949c3b30f9a76",
     measurementId: "G-39S037X9BB"
   };
+
 const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
@@ -23,7 +24,7 @@ const db   = getFirestore(app);
 const API_URL   = 'https://script.google.com/macros/s/AKfycbxlVwjnyNFfKJXOG3lJeYbF5_7ZVa6srhvByly6I3I8lyTW-PvHThosGTryRQOsqJMxTg/exec';
 const API_TOKEN = 'yngrla_6f3c1f9b4e2a47b2b1c9d0f8d7a6c5e4';
 
-/* ===== Sheet/tab names ===== */
+/* ===== Tab names (must match Google sub-sheets) ===== */
 const TABS = {
   COUPON: 'Coupon Forms Data',
   ADM_DEMO: 'Admission & Demo Form Data',
@@ -89,7 +90,6 @@ async function fetchAndRenderAll(){
     const url = `${API_URL}?token=${encodeURIComponent(API_TOKEN)}&limit=0`;
     const r = await fetch(url, { headers: { 'Accept': 'application/json' } });
     const text = await r.text();
-    console.log('[Sheets] status', r.status);
     if (!r.ok) throw new Error(`HTTP ${r.status}: ${text.slice(0,200)}`);
 
     const data = JSON.parse(text);
@@ -111,10 +111,12 @@ async function fetchAndRenderAll(){
     const contact = rows.filter(r => (r.Source||'').trim().toLowerCase() === TABS.CONTACT.toLowerCase());
     const ycs     = rows.filter(r => (r.Source||'').trim().toLowerCase() === TABS.YCS.toLowerCase());
 
-    renderTable(coupon,  'table-coupon');
-    renderTable(admDemo, 'table-admDemo');
-    renderTable(contact, 'table-contact');
-    renderTable(ycs,     'table-ycs');
+    /* ✅ EXACT columns per sub-sheet:
+       Use the first row's key order (as emitted by Apps Script) and drop "Source". */
+    renderTable(coupon,  'table-coupon',  getColumnsFromFirstRow(coupon));
+    renderTable(admDemo, 'table-admDemo', getColumnsFromFirstRow(admDemo));
+    renderTable(contact, 'table-contact', getColumnsFromFirstRow(contact));
+    renderTable(ycs,     'table-ycs',     getColumnsFromFirstRow(ycs));
 
     wireThumbnails();
     wireCopyButtons();
@@ -128,6 +130,11 @@ async function fetchAndRenderAll(){
   }
 }
 
+function getColumnsFromFirstRow(rows){
+  if (!rows || !rows.length) return [];
+  return Object.keys(rows[0]).filter(k => k !== 'Source'); // keep only columns that actually exist in that tab
+}
+
 /* ===== Table helpers ===== */
 function resetTable(id){
   const thead = document.querySelector(`#${id} thead`);
@@ -139,27 +146,23 @@ function setError(id, msg){
   const tbody = document.querySelector(`#${id} tbody`);
   tbody.innerHTML = `<tr><td class="center error">Failed to load: ${esc(msg)}</td></tr>`;
 }
-function renderTable(rows, tableId){
+function renderTable(rows, tableId, cols){
   const thead = document.querySelector(`#${tableId} thead`);
   const tbody = document.querySelector(`#${tableId} tbody`);
 
-  if(!rows.length){
+  if(!rows || !rows.length){
     thead.innerHTML = '';
     tbody.innerHTML = `<tr><td class="muted center">No rows</td></tr>`;
     return;
   }
 
-  const set = new Set();
-  rows.forEach(r => Object.keys(r).forEach(k => set.add(k)));
-  let cols = Array.from(set);
-  const preferred = ['Timestamp','Name','Email','Phone','Message','Image','ImageUrl','Source'];
-  cols.sort((a,b) => (indexOrEnd(preferred,a) - indexOrEnd(preferred,b)));
-  cols = cols.filter(c => c !== 'Source'); // hide Source in split views
+  // Fallback if cols missing
+  if (!cols || !cols.length) cols = Object.keys(rows[0]).filter(k => k !== 'Source');
 
   thead.innerHTML = `<tr>${cols.map(c => `<th>${esc(c)}</th>`).join('')}</tr>`;
   tbody.innerHTML = rows.map(r => `<tr>${cols.map(c => cellHtml(c, r[c])).join('')}</tr>`).join('');
 }
-function indexOrEnd(arr, key){ const i = arr.indexOf(key); return i === -1 ? Number.MAX_SAFE_INTEGER : i; }
+
 function cellHtml(col, val){
   const v = String(val ?? '').trim();
   if(!v) return `<td></td>`;
@@ -167,7 +170,7 @@ function cellHtml(col, val){
   // phone helpers
   if (['phone','mobile','contact','contact number','phone number'].includes(col.toLowerCase())) {
     const tel = sanitizePhone(v);
-    return `<td>
+    return `<td class="tight">
       <span class="phone-bundle">
         <a class="icon-btn" href="tel:${esc(tel)}" title="Call">${svgPhone()}</a>
         <button class="icon-btn copy-btn" data-copy="${esc(v)}" title="Copy number">${svgCopy()}</button>
@@ -179,16 +182,17 @@ function cellHtml(col, val){
   // images
   if (looksLikeImageUrl(v)) {
     const src = normalizeDriveUrl(v);
-    return `<td><img class="thumbnail" src="${esc(src)}" alt="${esc(col)}" data-full="${esc(src)}"></td>`;
+    return `<td class="tight"><img class="thumbnail" src="${esc(src)}" alt="${esc(col)}" data-full="${esc(src)}"></td>`;
   }
 
   // links
   if (/^https?:\/\//i.test(v)) {
-    return `<td><a class="link" href="${esc(v)}" target="_blank" rel="noopener">${esc(v)}</a></td>`;
+    return `<td class="tight"><a class="link" href="${esc(v)}" target="_blank" rel="noopener">${esc(v)}</a></td>`;
   }
 
-  return `<td>${esc(v)}</td>`;
+  return `<td class="tight">${esc(v)}</td>`;
 }
+
 function sanitizePhone(raw){ const s=String(raw).trim(); const plus=s.startsWith('+'); const digits=s.replace(/[^\d]/g,''); return plus?('+'+digits):digits; }
 
 /* ===== Image utils (Drive) ===== */
@@ -236,7 +240,7 @@ function esc(s=''){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':
 function failUI(msg){
   console.error('[ADMIN]', msg);
   document.getElementById('loading')?.remove();
-  const host = document.querySelector('.dashboard') || document.body;
+  const host = document.querySelector('main') || document.body;
   const div = document.createElement('div');
   div.className = 'error-banner';
   div.textContent = msg;

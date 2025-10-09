@@ -5,101 +5,99 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Yangerila — Admin</title>
 
-  <!-- Admin-only CSS (login has its own CSS—do not reuse) -->
-  <link rel="stylesheet" href="/admin/style.css?v=1"/>
+  <!-- Admin-only CSS (login has its own CSS) -->
+  <link rel="stylesheet" href="/admin/style.css?v=2"/>
 </head>
-<body class="admin-page">
+<body class="admin-page style-simple"><!-- style-simple = same bg as login -->
 
   <!-- Loading cover until auth + admin check passes -->
   <div id="loading">Checking login…</div>
 
-  <main class="wrap" aria-live="polite">
-    <section class="card">
-      <header class="head">
-        <!-- ✅ Same logo file as login, absolute path -->
-        <img src="/wp-content/uploads/2022/04/coaching3-slider-pic1.webp" alt="Yangerila" class="logo"/>
-        <h1>Yangerila Admin Panel</h1>
-        <p class="muted" id="user-email">Loading…</p>
-        <div class="head-actions">
-          <button class="btn primary" id="signout">Sign out</button>
-          <a class="btn" href="/admin/blog-editor.html">Open Blog Editor</a>
+  <header class="topbar">
+    <!-- ✅ Use the same logo path as your login page -->
+    <img src="/wp-content/uploads/2022/04/coaching3-slider-pic1.webp" alt="Yangerila" class="logo"/>
+    <div class="top-actions">
+      <span class="user" id="user-email">Loading…</span>
+      <button class="btn primary" id="signout">Sign out</button>
+      <a class="btn ghost" href="/admin/blog-editor.html">Blog Editor</a>
+    </div>
+  </header>
+
+  <main class="grid">
+
+    <!-- ================== Yangerila Web CRM (3 separate tabs) ================== -->
+    <section aria-labelledby="h-web">
+      <h2 id="h-web">Yangerila Web CRM</h2>
+
+      <!-- Coupon Forms Data -->
+      <div class="block">
+        <div class="subhead">
+          <h3>Coupon Forms Data</h3>
+          <button class="btn tiny" id="refresh-coupon">Refresh</button>
         </div>
-      </header>
+        <div class="table-wrap">
+          <table id="table-coupon">
+            <thead></thead>
+            <tbody><tr><td class="muted center">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
 
-      <div class="dashboard">
+      <!-- Admission & Demo Form Data -->
+      <div class="block">
+        <div class="subhead">
+          <h3>Admission &amp; Demo Form Data</h3>
+          <button class="btn tiny" id="refresh-admDemo">Refresh</button>
+        </div>
+        <div class="table-wrap">
+          <table id="table-admDemo">
+            <thead></thead>
+            <tbody><tr><td class="muted center">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
 
-        <!-- ================== Yangerila Web CRM (3 separate tabs) ================== -->
-        <section class="section" id="crm-web">
-          <h2>Yangerila Web CRM</h2>
+      <!-- Contact Us Form Data -->
+      <div class="block">
+        <div class="subhead">
+          <h3>Contact Us Form Data</h3>
+          <button class="btn tiny" id="refresh-contact">Refresh</button>
+        </div>
+        <div class="table-wrap">
+          <table id="table-contact">
+            <thead></thead>
+            <tbody><tr><td class="muted center">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
 
-          <!-- Coupon Forms Data -->
-          <div class="subsection">
-            <div class="subhead">
-              <h3>Coupon Forms Data</h3>
-              <div class="tools"><button class="btn small" id="refresh-coupon">Refresh</button></div>
-            </div>
-            <div class="table-wrap">
-              <table id="table-coupon">
-                <thead></thead>
-                <tbody><tr><td class="muted center">Loading…</td></tr></tbody>
-              </table>
-            </div>
-          </div>
+    <!-- ================== Form CRM (single sheet) ================== -->
+    <section aria-labelledby="h-form">
+      <h2 id="h-form">Form CRM</h2>
+      <div class="block">
+        <div class="subhead">
+          <h3>YCS Admissions</h3>
+          <button class="btn tiny" id="refresh-ycs">Refresh</button>
+        </div>
+        <div class="table-wrap tall">
+          <table id="table-ycs">
+            <thead></thead>
+            <tbody><tr><td class="muted center">Loading…</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
 
-          <!-- Admission & Demo Form Data -->
-          <div class="subsection">
-            <div class="subhead">
-              <h3>Admission &amp; Demo Form Data</h3>
-              <div class="tools"><button class="btn small" id="refresh-admDemo">Refresh</button></div>
-            </div>
-            <div class="table-wrap">
-              <table id="table-admDemo">
-                <thead></thead>
-                <tbody><tr><td class="muted center">Loading…</td></tr></tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- Contact Us Form Data -->
-          <div class="subsection">
-            <div class="subhead">
-              <h3>Contact Us Form Data</h3>
-              <div class="tools"><button class="btn small" id="refresh-contact">Refresh</button></div>
-            </div>
-            <div class="table-wrap">
-              <table id="table-contact">
-                <thead></thead>
-                <tbody><tr><td class="muted center">Loading…</td></tr></tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        <!-- ================== Form CRM (single sheet) ================== -->
-        <section class="section" id="crm-form">
-          <h2>Form CRM</h2>
-          <div class="subsection">
-            <div class="subhead">
-              <h3>YCS Admissions</h3>
-              <div class="tools"><button class="btn small" id="refresh-ycs">Refresh</button></div>
-            </div>
-            <div class="table-wrap tall">
-              <table id="table-ycs">
-                <thead></thead>
-                <tbody><tr><td class="muted center">Loading…</td></tr></tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-        <!-- ================== Blogs preview ================== -->
-        <section class="section" id="blogs-section">
-          <h2>Blogs</h2>
-          <div class="tools">
-            <a class="btn small" href="/admin/blog-editor.html">Create / Edit Blogs</a>
-          </div>
-          <div class="blog-list" id="blog-list"></div>
-        </section>
+    <!-- ================== Blogs preview ================== -->
+    <section aria-labelledby="h-blogs">
+      <h2 id="h-blogs">Blogs</h2>
+      <div class="block">
+        <div class="subhead">
+          <h3>Recent posts</h3>
+          <a class="btn tiny ghost" href="/admin/blog-editor.html">Create / Edit</a>
+        </div>
+        <div class="blog-list" id="blog-list"></div>
       </div>
     </section>
   </main>
@@ -114,6 +112,6 @@
   <div class="toast" id="toast">Copied</div>
 
   <!-- Admin App (Firebase + Sheets) -->
-  <script type="module" src="/admin/adminapp.js?v=1"></script>
+  <script type="module" src="/admin/adminapp.js?v=2"></script>
 </body>
 </html>
