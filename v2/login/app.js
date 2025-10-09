@@ -14,7 +14,7 @@ import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.12.2/firebas
 
 // --- One true Firebase config (same in /admin/index.html) ---
 const firebaseConfig = {
- apiKey: "AIzaSyDHDJHrnQ2IwvetQoV6cWAGnkMzANerVDE",
+ apiKey: "AIzaSyDHDjHrnQ2IwwetQoV6cWAGnkMzANerVDE",
 
   authDomain: "yangerila-studio.firebaseapp.com",
   projectId: "yangerila-studio",
