@@ -3,15 +3,15 @@ import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebase
 import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 // --- Correct Firebase configuration ---
-const firebaseConfig = {
-  apiKey: "AIzaSyDHDJHrnQ2IwvetQoV6cWAGnkMzANerVDE",
-  authDomain: "yangerila-studio.firebaseapp.com",
-  projectId: "yangerila-studio",
-  storageBucket: "yangerila-studio.appspot.com",
-  messagingSenderId: "585529190595",
-  appId: "1:585529190595:web:755d5834949c3b30f9a76",
-  measurementId: "G-39S837X9BB"
-};
+ const firebaseConfig = {
+    apiKey: "AIzaSyDHDjHrnQ2IwwetQoV6cWAGnkMzANerVDE",
+    authDomain: "yangerila-studio.firebaseapp.com",
+    projectId: "yangerila-studio",
+    storageBucket: "yangerila-studio.firebasestorage.app",
+    messagingSenderId: "585529190595",
+    appId: "1:585529190595:web:7555d8334949c3b30f9a76",
+    measurementId: "G-39S037X9BB"
+  };
 
 // --- Initialize Firebase (prevent double init) ---
 const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
