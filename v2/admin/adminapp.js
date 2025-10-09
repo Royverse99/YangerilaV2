@@ -15,7 +15,6 @@ const firebaseConfig = {
     appId: "1:585529190595:web:7555d8334949c3b30f9a76",
     measurementId: "G-39S037X9BB"
   };
-
 const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
@@ -81,7 +80,6 @@ function hookRefreshers(){
 
 /* ===== Fetch all sheets and render into 4 tables ===== */
 async function fetchAndRenderAll(){
-  // Reset placeholders
   resetTable('table-coupon');
   resetTable('table-admDemo');
   resetTable('table-contact');
@@ -97,7 +95,6 @@ async function fetchAndRenderAll(){
     const data = JSON.parse(text);
     if (data.error) throw new Error(`API error: ${data.error}`);
 
-    // rows
     const rows = Array.isArray(data.leads) ? data.leads : [];
 
     // Normalize image URLs (Drive / direct image links)
@@ -142,7 +139,6 @@ function setError(id, msg){
   const tbody = document.querySelector(`#${id} tbody`);
   tbody.innerHTML = `<tr><td class="center error">Failed to load: ${esc(msg)}</td></tr>`;
 }
-
 function renderTable(rows, tableId){
   const thead = document.querySelector(`#${tableId} thead`);
   const tbody = document.querySelector(`#${tableId} tbody`);
@@ -163,9 +159,7 @@ function renderTable(rows, tableId){
   thead.innerHTML = `<tr>${cols.map(c => `<th>${esc(c)}</th>`).join('')}</tr>`;
   tbody.innerHTML = rows.map(r => `<tr>${cols.map(c => cellHtml(c, r[c])).join('')}</tr>`).join('');
 }
-
 function indexOrEnd(arr, key){ const i = arr.indexOf(key); return i === -1 ? Number.MAX_SAFE_INTEGER : i; }
-
 function cellHtml(col, val){
   const v = String(val ?? '').trim();
   if(!v) return `<td></td>`;
@@ -195,7 +189,6 @@ function cellHtml(col, val){
 
   return `<td>${esc(v)}</td>`;
 }
-
 function sanitizePhone(raw){ const s=String(raw).trim(); const plus=s.startsWith('+'); const digits=s.replace(/[^\d]/g,''); return plus?('+'+digits):digits; }
 
 /* ===== Image utils (Drive) ===== */
