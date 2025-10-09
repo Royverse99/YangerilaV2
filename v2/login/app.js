@@ -1,8 +1,12 @@
-// --- Import Firebase SDKs (v10.12.2 stable CDN) ---
-import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+// Firebase CDN imports (v10.12.2)
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import {
+  getAuth, setPersistence, browserLocalPersistence, browserSessionPersistence,
+  signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut
+} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
-// --- Correct Firebase configuration ---
+// 1) >>> PASTE THE EXACT SAME WORKING CONFIG HERE <<< (same as admin)
  const firebaseConfig = {
     apiKey: "AIzaSyDHDjHrnQ2IwwetQoV6cWAGnkMzANerVDE",
     authDomain: "yangerila-studio.firebaseapp.com",
@@ -13,36 +17,47 @@ import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/fir
     measurementId: "G-39S037X9BB"
   };
 
-// --- Initialize Firebase (prevent double init) ---
-const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+
+const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db   = getFirestore(app);
 
-// --- DOM elements ---
-const form = document.getElementById("login-form");
-const emailInput = document.getElementById("email");
-const passInput = document.getElementById("password");
-const errorBox = document.getElementById("error");
+// Already signed-in? → check admin and redirect
+onAuthStateChanged(auth, async (user) => {
+  if (!user) return;
+  const snap = await getDoc(doc(db, 'admins', user.uid));
+  if (snap.exists()) window.location.replace('/admin/');
+  else { await signOut(auth); alert('This account is not authorised for admin access.'); }
+});
 
-// --- Helper: show errors ---
-function showError(msg) {
-  errorBox.textContent = msg;
-  errorBox.style.visibility = "visible";
-}
+// Handle login
+const form       = document.querySelector('#login-form');
+const emailEl    = document.querySelector('#email');
+const passEl     = document.querySelector('#password');
+const rememberEl = document.querySelector('#remember');
+const errorEl    = document.querySelector('#error');
+const loginBtn   = document.querySelector('#login-btn');
 
-// --- Handle login form ---
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  errorBox.style.visibility = "hidden";
+function showError(msg){ if(!errorEl){alert(msg);return;} errorEl.textContent=msg; errorEl.style.visibility='visible'; }
+function clearError(){ if(!errorEl) return; errorEl.textContent=''; errorEl.style.visibility='hidden'; }
 
-  const email = emailInput.value.trim();
-  const password = passInput.value;
+form?.addEventListener('submit', async (e) => {
+  e.preventDefault(); clearError();
+  const email = (emailEl?.value || '').trim();
+  const password = passEl?.value || '';
+  if (!email || !password) return showError('Please enter your email and password.');
 
   try {
-    const userCred = await signInWithEmailAndPassword(auth, email, password);
-    console.log("✅ Logged in as:", userCred.user.email);
-    alert("Login successful!");
+    loginBtn && (loginBtn.disabled = true);
+    await setPersistence(auth, rememberEl?.checked ? browserLocalPersistence : browserSessionPersistence);
+    const { user } = await signInWithEmailAndPassword(auth, email, password);
+    const ok = (await getDoc(doc(db, 'admins', user.uid))).exists();
+    if (!ok) { await signOut(auth); return showError('This account is not authorised for admin access.'); }
+    window.location.replace('/admin/');
   } catch (err) {
-    console.error("[Login error]", err);
-    showError(err.message);
+    console.error('[Login error]', err);
+    showError((err && (err.message || err.code)) || 'Login failed.');
+  } finally {
+    loginBtn && (loginBtn.disabled = false);
   }
 });
