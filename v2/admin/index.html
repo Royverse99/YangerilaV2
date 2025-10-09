@@ -153,25 +153,28 @@
   <!-- Firebase + App JS -->
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-    import {
-      getFirestore, doc, getDoc, collection, getDocs, addDoc, serverTimestamp
-    } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import {
+  getFirestore, doc, getDoc, collection, getDocs, addDoc, serverTimestamp
+} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js';
 
-    /* ---- One true Firebase config (same as /login) ---- */
-    const firebaseConfig = {
-      apiKey: "AIzaSyDHDJHrnQ2IwvetQoV6cWAGnkMzANerVDE",
-      authDomain: "yangerila-studio.firebaseapp.com",
-      projectId: "yangerila-studio",
-      storageBucket: "yangerila-studio.appspot.com",
-      messagingSenderId: "585529190595",
-      appId: "1:585529190595:web:755d5834949c3b30f9a76",
-      measurementId: "G-39S837X9BB"
-    };
+const firebaseConfig = {
+  apiKey: "AIzaSyDHDJHrnQ2IwvetQoV6cWAGnkMzANerVDE",
+  authDomain: "yangerila-studio.firebaseapp.com",
+  projectId: "yangerila-studio",
+  storageBucket: "yangerila-studio.appspot.com",     // ✅ not firebasestorage.app
+  messagingSenderId: "585529190595",
+  appId: "1:585529190595:web:755d5834949c3b30f9a76",
+  measurementId: "G-39S837X9BB"                     // ✅ not G-39S037X9BB
+};
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
 
     // Debug: verify both pages use the SAME project
     console.log('[FB] projectId:', app.options.projectId);
@@ -466,3 +469,4 @@
   </script>
 </body>
 </html>
+

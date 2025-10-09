@@ -3,28 +3,36 @@
 // =========================
 
 // --- One true Firebase config (same on admin & login) ---
-const firebaseConfig = {
-  apiKey: "AIzaSyDHDJHrnQ2IwvetQoV6cWAGnkMzANerVDE",
-  authDomain: "yangerila-studio.firebaseapp.com",
-  projectId: "yangerila-studio",
-  storageBucket: "yangerila-studio.appspot.com",
-  messagingSenderId: "585529190595",
-  appId: "1:585529190595:web:755d5834949c3b30f9a76",
-  measurementId: "G-39S837X9BB"
-};
-
-// --- Firebase imports ---
+// Correct CDN imports for browser usage (no bundler)
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 import {
   getAuth, setPersistence, browserLocalPersistence, browserSessionPersistence,
   signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+import {
+  getFirestore, doc, getDoc
+} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js';
 
-// --- Initialize Firebase ---
+// One true config (exact values matter)
+const firebaseConfig = {
+  apiKey: "AIzaSyDHDJHrnQ2IwvetQoV6cWAGnkMzANerVDE",
+  authDomain: "yangerila-studio.firebaseapp.com",
+  projectId: "yangerila-studio",
+  storageBucket: "yangerila-studio.appspot.com",     // ✅ not firebasestorage.app
+  messagingSenderId: "585529190595",
+  appId: "1:585529190595:web:755d5834949c3b30f9a76",
+  measurementId: "G-39S837X9BB"                     // ✅ not G-39S037X9BB
+};
+
+// Initialize once
 const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
 const auth = getAuth(app);
 const db = getFirestore(app);
+
+// (…rest of your login code stays the same…)
+
 
 // Debug: verify both pages use the SAME project
 console.log('[FB] projectId:', app.options.projectId);
