@@ -7,14 +7,14 @@ import { getFirestore, doc, getDoc, collection, getDocs, addDoc, serverTimestamp
 
 /* ===== Firebase config (keep exactly as your working setup) ===== */
 const firebaseConfig = {
-  apiKey: "AIzaSyDHDjHrnQ2IwwetQoV6cWAGnkMzANerVDE",
-  authDomain: "yangerila-studio.firebaseapp.com",
-  projectId: "yangerila-studio",
-  storageBucket: "yangerila-studio.firebasestorage.app",
-  messagingSenderId: "585529190595",
-  appId: "1:585529190595:web:7555d8334949c3b30f9a76",
-  measurementId: "G-39S037X9BB"
-};
+    apiKey: "AIzaSyDHDjHrnQ2IwwetQoV6cWAGnkMzANerVDE",
+    authDomain: "yangerila-studio.firebaseapp.com",
+    projectId: "yangerila-studio",
+    storageBucket: "yangerila-studio.firebasestorage.app",
+    messagingSenderId: "585529190595",
+    appId: "1:585529190595:web:7555d8334949c3b30f9a76",
+    measurementId: "G-39S037X9BB"
+  };
 const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
@@ -36,7 +36,7 @@ const HIDE = {
   [TABS.COUPON]:  new Set(['Name', 'Email', 'Phone', 'Message']),
   [TABS.ADM_DEMO]: new Set(['Email', 'Message']),
   [TABS.CONTACT]: new Set(['Email'])
-  // YCS uses an explicit whitelist below
+  // YCS uses explicit whitelist below
 };
 
 /* ===== YCS visible fields (exact order/labels you provided) ===== */
@@ -135,7 +135,7 @@ async function fetchAndRenderAll(){
 
     let rows = Array.isArray(data.leads) ? data.leads : [];
 
-    // Convert Drive file links to direct view links (ignore host-relative paths)
+    // Convert possible image links to Drive "view" URLs (ignore site-hosted relative paths)
     rows.forEach(o => {
       Object.keys(o).forEach(k => {
         const v = String(o[k] ?? '').trim();
@@ -172,6 +172,7 @@ async function fetchAndRenderAll(){
     renderTableYCS(ycs, 'table-ycs');
 
     wireThumbnails();
+    wireImageErrors();   // << NEW: fallback if image fails
     wireCopyButtons();
   }catch(err){
     console.error('[Sheets] fetch failed:', err);
@@ -207,7 +208,7 @@ function renderTableYCS(rows, tableId){
   const norm = s => String(s||'').toLowerCase().replace(/[\s_():\-]+/g,'').trim();
   const byNorm = new Map(actualKeys.map(k => [norm(k), k]));
 
-  // Map each desired label → actual key (exact label match; minimal aliasing via normalization)
+  // Map each desired label → actual key (exact label match after normalization)
   const resolved = YCS_FIELDS.map(label => {
     const hit = byNorm.get(norm(label));
     return hit ? { label, key: hit } : { label, key: null }; // keep blank cell if missing
@@ -235,7 +236,8 @@ function ycsCellHtml(key, val){
       return `<td class="tight"><a class="chip" href="${esc(v)}" target="_blank" rel="noopener">📁 Open folder</a></td>`;
     }
     const src = normalizeDriveUrl(v);
-    return `<td class="tight"><img class="thumbnail" src="${esc(src)}" alt="${esc(key)}" data-full="${esc(src)}"></td>`;
+    // add a data-original for fallback link if load fails
+    return `<td class="tight"><img class="thumbnail" src="${esc(src)}" data-original="${esc(v)}" alt="${esc(key)}" data-full="${esc(src)}"></td>`;
   }
 
   if (/^https?:\/\//i.test(v)) {
@@ -305,7 +307,7 @@ function cellHtml(col, val){
       return `<td class="tight"><a class="chip" href="${esc(v)}" target="_blank" rel="noopener">📁 Open folder</a></td>`;
     }
     const src = normalizeDriveUrl(v);
-    return `<td class="tight"><img class="thumbnail" src="${esc(src)}" alt="${esc(col)}" data-full="${esc(src)}"></td>`;
+    return `<td class="tight"><img class="thumbnail" src="${esc(src)}" data-original="${esc(v)}" alt="${esc(col)}" data-full="${esc(src)}"></td>`;
   }
 
   // URLs
@@ -317,28 +319,75 @@ function cellHtml(col, val){
   return `<td class="tight">${esc(v)}</td>`;
 }
 
-/* ===== Filters & utils ===== */
+/* ===== Image utils (robust) ===== */
+function looksLikeImageUrl(s){
+  if (!s) return false;
+  if (!/^https?:\/\//i.test(s)) return false; // ignore site-hosted relative paths
+  const u = s.toLowerCase();
+  return (
+    u.includes('drive.google.com') ||
+    /\.(jpg|jpeg|png|gif|webp|bmp|heic|heif|tiff?)(\?|$)/.test(u)
+  );
+}
+
+/** Extract a Drive file ID from many kinds of share URLs */
+function extractDriveId(url) {
+  try {
+    // /file/d/<id>/
+    const m1 = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+    if (m1 && m1[1]) return m1[1];
+
+    // Query parameters: id= or fileId=
+    const u = new URL(url);
+    const id = u.searchParams.get('id') || u.searchParams.get('fileId');
+    if (id) return id;
+
+    // /thumbnail?id=<id>
+    const m2 = url.match(/thumbnail\?id=([a-zA-Z0-9_-]+)/i);
+    if (m2 && m2[1]) return m2[1];
+
+    // /uc?id=<id>
+    const m3 = url.match(/\/uc\?id=([a-zA-Z0-9_-]+)/i);
+    if (m3 && m3[1]) return m3[1];
+
+    // Some links include /d/<id> without /file/
+    const m4 = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    if (m4 && m4[1]) return m4[1];
+  } catch {}
+  return '';
+}
+
+/** Normalize any Drive share URL to a viewable image URL (public "Anyone with link" required) */
+function normalizeDriveUrl(url){
+  if (!/drive\.google\.com/i.test(url)) return url;
+  if (/drive\.google\.com\/drive\/folders\//i.test(url)) return url; // folder → handled separately
+
+  const id = extractDriveId(url);
+  return id ? `https://drive.google.com/uc?export=view&id=${id}` : url;
+}
+
+/* If an <img> fails (404 or permission), replace with a clickable link */
+function wireImageErrors(){
+  document.querySelectorAll('img.thumbnail').forEach(img => {
+    img.addEventListener('error', () => {
+      const original = img.getAttribute('data-original') || img.src;
+      const a = document.createElement('a');
+      a.href = original;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.className = 'chip';
+      a.textContent = 'Open image';
+      img.replaceWith(a);
+    }, { once:true });
+  });
+}
+
+/* ===== Filters & misc utils ===== */
 function isRowTotallyEmpty(r){
   const isBlank = v => v == null || String(v).trim() === '';
   return Object.values(r).every(isBlank);
 }
 function sanitizePhone(raw){ const s=String(raw).trim(); const plus=s.startsWith('+'); const digits=s.replace(/[^\d]/g,''); return plus?('+'+digits):digits; }
-function looksLikeImageUrl(s){
-  if (!s) return false;
-  if (!/^https?:\/\//i.test(s)) return false; // ignore site-hosted paths
-  const u = s.toLowerCase();
-  return u.includes('drive.google.com') || /\.(jpg|jpeg|png|gif|webp)(\?|$)/.test(u);
-}
-function normalizeDriveUrl(url){
-  if (!/drive\.google\.com/i.test(url)) return url;
-  if (/drive\.google\.com\/drive\/folders\//i.test(url)) return url; // folder → shown as chip
-  let id = '';
-  const m1 = url.match(/\/file\/d\/([^/]+)/);
-  const m2 = url.match(/[?&]id=([^&]+)/);
-  if (m1 && m1[1]) id = m1[1];
-  if (!id && m2 && m2[1]) id = m2[1];
-  return id ? `https://drive.google.com/uc?export=view&id=${id}` : url;
-}
 function esc(s=''){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
 function histogramBySource(rows){
   const map = new Map();
