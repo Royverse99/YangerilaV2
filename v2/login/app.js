@@ -4,6 +4,10 @@
 
 // --- One true Firebase config (same on admin & login) ---
 // Correct CDN imports for browser usage (no bundler)
+console.log('[FB] projectId:', app.options.projectId);
+console.log('[FB] appId:', app.options.appId);
+console.log('[FB] apiKey:', app.options.apiKey); // <- see the real key in use
+
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 import {
   getAuth, setPersistence, browserLocalPersistence, browserSessionPersistence,
