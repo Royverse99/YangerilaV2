@@ -17,7 +17,7 @@ const firebaseConfig = {
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 import {
   getAuth, setPersistence, browserLocalPersistence, browserSessionPersistence,
-  signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged
+  signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut
 } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
@@ -54,15 +54,13 @@ onAuthStateChanged(auth, async (user) => {
     const snap = await getDoc(doc(db, 'admins', user.uid));
     if (snap.exists()) {
       console.log('✅ Admin detected on login page; redirecting to /admin/');
-      // replace() avoids back/forward ping-pong
-      window.location.replace('/admin/');
+      window.location.replace('/admin/');      // replace() avoids back/forward ping-pong
     } else {
       console.warn('Signed in but not in admins; stay on login.');
       showError('Signed in but not authorised for admin access.');
     }
   } catch (e) {
     console.error('Admin check failed on login page:', e);
-    // stay on login; show a generic message
     showError('Could not verify access. Please try again.');
   }
 });
@@ -87,10 +85,10 @@ form?.addEventListener('submit', async (e) => {
     await setPersistence(auth, rememberEl?.checked ? browserLocalPersistence : browserSessionPersistence);
     const { user } = await signInWithEmailAndPassword(auth, email, password);
 
-    // Check admin list in Firestore
+    // ✅ UID-based admin check (admins/{uid})
     const adminDoc = await getDoc(doc(db, 'admins', user.uid));
     if (!adminDoc.exists()) {
-      // don’t redirect; tell the user
+      await signOut(auth); // prevent stuck signed-in non-admin state
       showError('This account is not authorised for admin access.');
       return;
     }

@@ -181,46 +181,30 @@
     const signOutBtn = document.querySelector('#signout');
 
     let hasLoadedAdmin = false;
-    let loginRedirectTimer;
 
+    // ✅ NO fallback timers → rely ONLY on resolved auth state
     onAuthStateChanged(auth, async (user) => {
-      // cancel pending redirect if auth state changes
-      if (loginRedirectTimer) clearTimeout(loginRedirectTimer);
-
       if (!user) {
-        console.warn('No user yet on /admin – will redirect to /login in 1s if still signed out');
-        loginRedirectTimer = setTimeout(() => {
-          if (location.pathname !== '/login/') location.replace('/login/');
-        }, 1000);
+        // user is definitely signed out → go to login
+        document.getElementById('loading')?.remove();
+        location.replace('/login/');
         return;
       }
 
       // We have a user – show email
       emailEl.textContent = user.email || '';
 
-      // Double-check this user is an admin
+      // ✅ UID-based admin check
       try {
         const adminSnap = await getDoc(doc(db, 'admins', user.uid));
         if (!adminSnap.exists()) {
-          console.warn('User is signed in but not in admins; show access denied (no loop)');
-          document.getElementById('loading')?.remove();
-          document.body.innerHTML = `
-            <main class="wrap">
-              <section class="card">
-                <header class="head">
-                  <h1>Access denied</h1>
-                  <p class="muted">You are signed in as <strong>${user.email || ''}</strong> but this account does not have admin access.</p>
-                  <div style="display:flex;gap:10px;justify-content:center">
-                    <a class="btn" href="/login/">Back to Login</a>
-                  </div>
-                </header>
-              </section>
-            </main>`;
+          await signOut(auth);
+          alert('Access denied: this account is not an admin.');
+          location.replace('/login/');
           return;
         }
       } catch (e) {
         console.error('Admin check failed:', e);
-        // Show error, avoid redirect ping-pong
         document.getElementById('loading')?.remove();
         const host = document.querySelector('.dashboard') || document.body;
         const div = document.createElement('div');
