@@ -5,7 +5,7 @@ import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/fireba
 import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 import { getFirestore, doc, getDoc, collection, getDocs, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
-/* ===== Firebase config (working) ===== */
+/* ===== Firebase config (keep exactly as your working setup) ===== */
 const firebaseConfig = {
     apiKey: "AIzaSyDHDjHrnQ2IwwetQoV6cWAGnkMzANerVDE",
     authDomain: "yangerila-studio.firebaseapp.com",
@@ -31,15 +31,15 @@ const TABS = {
   YCS:     'YCS Admissions'
 };
 
-/* ===== UI-only column hides ===== */
+/* ===== UI-only column hides for Web CRM tables ===== */
 const HIDE = {
   [TABS.COUPON]:  new Set(['Name', 'Email', 'Phone', 'Message']),
   [TABS.ADM_DEMO]: new Set(['Email', 'Message']),
   [TABS.CONTACT]: new Set(['Email'])
-  // YCS: none (we whitelist below)
+  // YCS uses an explicit whitelist below
 };
 
-/* ===== YCS visible fields (exact order/labels as requested) ===== */
+/* ===== YCS visible fields (exact order/labels you want) ===== */
 const YCS_FIELDS = [
   'Timestamp (IST)',
   'Full Name',
@@ -58,6 +58,29 @@ const YCS_FIELDS = [
   'Payment Ref / Filename',
   'Payment Screenshot URL'
 ];
+
+/* Tolerant aliases so small header/name variations still match */
+const YCS_ALIASES = {
+  'timestamp (ist)': ['timestamp (ist)','timestamp(ist)','timestamp ist','timestamp'],
+  'full name': ['full name','name','fullname'],
+  'phone': ['phone','phone number','mobile','contact','contact number'],
+  'have you learned guitar before?': [
+    'have you learned guitar before?','haveyoulearnedbefore?','learned before','learnedbefore'
+  ],
+  'do you have a guitar?': [
+    'do you have a guitar?','haveguitar','guitar available'
+  ],
+  'preferred class mode': ['preferred class mode','class mode','mode'],
+  'how did you hear about us?': ['how did you hear about us?','discover','heard about us?'],
+  'course selected': ['course selected','course','course name'],
+  'course fee (at time of form)': ['course fee (at time of form)','course fee','fee'],
+  'terms accepted': ['terms accepted','termsaccepted','terms'],
+  'additional notes': ['additional notes','notes','message'],
+  'payment ref / filename': ['payment ref / filename','payment reference','paymentref','ref/filename','paymentreffilename'],
+  'payment screenshot url': [
+    'payment screenshot url','paymentscreenshoturl','screenshot','image','image url','file url','screenshot url'
+  ]
+};
 
 /* ===== Elements ===== */
 const emailEl = document.getElementById('user-email');
@@ -132,22 +155,33 @@ async function fetchAndRenderAll(){
       });
     });
 
-    // Remove useless tail rows (both Timestamp and Message blank) or fully empty
+    // Remove truly empty rows (or rows with both Timestamp & Message blank)
     rows = rows.filter(r => !isRowEmptyOrNoTimestampMessage(r));
 
-    // Group
-    const g = (name) => rows.filter(x => (x.Source||'').trim().toLowerCase() === name.toLowerCase());
-    const coupon  = g(TABS.COUPON);
-    const admDemo = g(TABS.ADM_DEMO);
-    const contact = g(TABS.CONTACT);
-    const ycs     = g(TABS.YCS);
+    // Group safely (case-insensitive)
+    const byName = (name) => rows.filter(x => (x.Source||'').toString().trim().toLowerCase() === name.toLowerCase());
+    const coupon  = byName(TABS.COUPON);
+    const admDemo = byName(TABS.ADM_DEMO);
+    const contact = byName(TABS.CONTACT);
 
-    // WEB CRM tables → show all columns from first row minus the UI hides
+    // YCS: prefer exact match, but also allow contains "ycs admissions" OR presence of key YCS fields
+    const ycs = rows.filter(x => {
+      const s = (x.Source||'').toString().toLowerCase();
+      if (s === TABS.YCS.toLowerCase() || s.includes('ycs admissions')) return true;
+      const keys = Object.keys(x).map(k => k.toLowerCase());
+      return keys.includes('preferred class mode') ||
+             keys.includes('payment screenshot url') ||
+             keys.includes('course fee (at time of form)') ||
+             keys.includes('terms accepted') ||
+             keys.includes('additional notes');
+    });
+
+    // Render Web CRM tables (deterministic columns minus hides)
     renderTableSimple(coupon,  'table-coupon',  columnsMinus(coupon,  HIDE[TABS.COUPON]));
     renderTableSimple(admDemo, 'table-admDemo', columnsMinus(admDemo, HIDE[TABS.ADM_DEMO]));
     renderTableSimple(contact, 'table-contact', columnsMinus(contact, HIDE[TABS.CONTACT]));
 
-    // YCS Admissions → only the requested fields, in that order
+    // Render YCS Admissions (only the requested fields, in that order)
     renderTableYCS(ycs, 'table-ycs');
 
     wireThumbnails();
@@ -169,7 +203,7 @@ function columnsMinus(rows, hideSet){
   return keys.filter(k => k !== 'Source' && !(hideSet?.has(k)));
 }
 
-/* ===== YCS Admissions renderer (with alias-tolerant header matching) ===== */
+/* ===== YCS Admissions renderer (alias-tolerant, shows ONLY your fields) ===== */
 function renderTableYCS(rows, tableId){
   const thead = document.querySelector(`#${tableId} thead`);
   const tbody = document.querySelector(`#${tableId} tbody`);
@@ -180,58 +214,50 @@ function renderTableYCS(rows, tableId){
     return;
   }
 
-  // Build a map from normalized key → actual key
   const first = rows[0];
   const actualKeys = Object.keys(first);
-  const norm = (s)=>String(s||'').toLowerCase().replace(/[\s_()-]+/g,'').trim();
 
-  const keyMap = new Map(); // desired label → actual key
-  YCS_FIELDS.forEach(label=>{
-    const want = norm(label);
-    // try exact label, then aliases
-    let found = actualKeys.find(k => norm(k) === want);
+  const norm = s => String(s||'').toLowerCase().replace(/[\s_():\-]+/g,'').trim();
+  const byNorm = new Map(actualKeys.map(k => [norm(k), k]));
 
-    if (!found) {
-      // some common aliases
-      const ALIASES = {
-        'fullname':['name','full name'],
-        'timestampist':['timestamp','timestampist'],
-        'paymentref/filename':['paymentref','paymentref/filename','paymentrefff','paymentreference','ref/filename','paymentreffilename'],
-        'paymentscreenshoturl':['screenshot','paymentscreenshoturl','paymentscreenshot','image','fileurl','imageurl'],
-        'haveyoulearnedguitarbefore?':['haveyoulearnedbefore?','haveyoulearnedguitarbefore?'],
-        'doyouhaveaguitar?':['doyouhaveaguitar?','haveguitar','do you have a guitar?']
-      };
-      const base = want;
-      for (const [normKey, list] of Object.entries(ALIASES)){
-        if (base === normKey){
-          found = actualKeys.find(k => list.some(a => norm(k) === norm(a)));
-          if (found) break;
-        }
-      }
+  // Map each desired label → actual key (using aliases when needed)
+  const resolved = YCS_FIELDS.map(label => {
+    const wantNorm = (label || '').toLowerCase();
+    const direct = byNorm.get(norm(label));
+    if (direct) return { label, key: direct };
+
+    const al = YCS_ALIASES[wantNorm];
+    if (al && al.length){
+      const hit = al.map(a => byNorm.get(norm(a))).find(Boolean);
+      if (hit) return { label, key: hit };
     }
-
-    if (found) keyMap.set(label, found);
+    // Missing column → keep an empty cell to preserve alignment
+    return { label, key: null };
   });
 
-  // Final column list: only those we matched, preserve the requested order
-  const cols = Array.from(keyMap.entries()).map(([label, key]) => ({label, key}));
+  // Explicitly ignore generic "timestamp" or "message" if they appear under different names
+  const banned = new Set(['timestamp','message']);
 
-  if (!cols.length){
-    thead.innerHTML = '';
-    tbody.innerHTML = `<tr><td class="muted center">No matching columns</td></tr>`;
-    return;
-  }
-
-  thead.innerHTML = `<tr>${cols.map(c => `<th>${esc(c.label)}</th>`).join('')}</tr>`;
-  tbody.innerHTML = rows.map(r => `<tr>${cols.map(c => ycsCellHtml(c.key, r[c.key])).join('')}</tr>`).join('');
+  thead.innerHTML = `<tr>${resolved.map(c => `<th>${esc(c.label)}</th>`).join('')}</tr>`;
+  tbody.innerHTML = rows.map(r => {
+    return `<tr>${
+      resolved.map(c => {
+        if (!c.key) return `<td class="tight"></td>`;
+        const keyLower = c.key.toLowerCase();
+        if (banned.has(keyLower)) return `<td class="tight"></td>`;
+        return ycsCellHtml(c.key, r[c.key]);
+      }).join('')
+    }</tr>`;
+  }).join('');
 }
 
+/* ===== Cell renderers ===== */
 function ycsCellHtml(key, val){
   const v = String(val ?? '').trim();
   if (!v) return `<td class="tight"></td>`;
 
+  // Google Drive file link → image; folder link → folder chip
   if (looksLikeImageUrl(v)) {
-    // Drive file link → image; folder link → open folder chip
     if (/drive\.google\.com\/drive\/folders\//i.test(v)){
       return `<td class="tight"><a class="chip" href="${esc(v)}" target="_blank" rel="noopener">📁 Open folder</a></td>`;
     }
@@ -243,7 +269,7 @@ function ycsCellHtml(key, val){
     return `<td class="tight"><a class="link" href="${esc(v)}" target="_blank" rel="noopener">${esc(v)}</a></td>`;
   }
 
-  // phone helpers
+  // Phone helpers
   if (['phone','mobile','contact','contact number','phone number'].includes(key.toLowerCase())) {
     const tel = sanitizePhone(v);
     return `<td class="tight">
@@ -258,7 +284,7 @@ function ycsCellHtml(key, val){
   return `<td class="tight">${esc(v)}</td>`;
 }
 
-/* ===== Table helpers ===== */
+/* ===== Generic table helpers ===== */
 function resetTable(id){
   const thead = document.querySelector(`#${id} thead`);
   const tbody = document.querySelector(`#${id} tbody`);
