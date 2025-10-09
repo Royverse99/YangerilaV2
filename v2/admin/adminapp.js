@@ -7,14 +7,14 @@ import { getFirestore, doc, getDoc, collection, getDocs, addDoc, serverTimestamp
 
 /* ===== Firebase config (keep exactly as your working setup) ===== */
 const firebaseConfig = {
-    apiKey: "AIzaSyDHDjHrnQ2IwwetQoV6cWAGnkMzANerVDE",
-    authDomain: "yangerila-studio.firebaseapp.com",
-    projectId: "yangerila-studio",
-    storageBucket: "yangerila-studio.firebasestorage.app",
-    messagingSenderId: "585529190595",
-    appId: "1:585529190595:web:7555d8334949c3b30f9a76",
-    measurementId: "G-39S037X9BB"
-  };
+  apiKey: "AIzaSyDHDjHrnQ2IwwetQoV6cWAGnkMzANerVDE",
+  authDomain: "yangerila-studio.firebaseapp.com",
+  projectId: "yangerila-studio",
+  storageBucket: "yangerila-studio.firebasestorage.app",
+  messagingSenderId: "585529190595",
+  appId: "1:585529190595:web:7555d8334949c3b30f9a76",
+  measurementId: "G-39S037X9BB"
+};
 const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
@@ -39,7 +39,7 @@ const HIDE = {
   // YCS uses an explicit whitelist below
 };
 
-/* ===== YCS visible fields (exact order/labels you want) ===== */
+/* ===== YCS visible fields (exact order/labels you provided) ===== */
 const YCS_FIELDS = [
   'Timestamp (IST)',
   'Full Name',
@@ -58,29 +58,6 @@ const YCS_FIELDS = [
   'Payment Ref / Filename',
   'Payment Screenshot URL'
 ];
-
-/* Tolerant aliases so small header/name variations still match */
-const YCS_ALIASES = {
-  'timestamp (ist)': ['timestamp (ist)','timestamp(ist)','timestamp ist','timestamp'],
-  'full name': ['full name','name','fullname'],
-  'phone': ['phone','phone number','mobile','contact','contact number'],
-  'have you learned guitar before?': [
-    'have you learned guitar before?','haveyoulearnedbefore?','learned before','learnedbefore'
-  ],
-  'do you have a guitar?': [
-    'do you have a guitar?','haveguitar','guitar available'
-  ],
-  'preferred class mode': ['preferred class mode','class mode','mode'],
-  'how did you hear about us?': ['how did you hear about us?','discover','heard about us?'],
-  'course selected': ['course selected','course','course name'],
-  'course fee (at time of form)': ['course fee (at time of form)','course fee','fee'],
-  'terms accepted': ['terms accepted','termsaccepted','terms'],
-  'additional notes': ['additional notes','notes','message'],
-  'payment ref / filename': ['payment ref / filename','payment reference','paymentref','ref/filename','paymentreffilename'],
-  'payment screenshot url': [
-    'payment screenshot url','paymentscreenshoturl','screenshot','image','image url','file url','screenshot url'
-  ]
-};
 
 /* ===== Elements ===== */
 const emailEl = document.getElementById('user-email');
@@ -129,6 +106,17 @@ function hookRefreshers(){
   document.getElementById('refresh-ycs')?.addEventListener('click', fetchAndRenderAll);
 }
 
+/* ===== Helper: header-based YCS detection (if Source is missing/different) ===== */
+function isLikelyYcsRow(row) {
+  const keys = new Set(Object.keys(row).map(k => k.toLowerCase().trim()));
+  let hits = 0;
+  for (const label of YCS_FIELDS) {
+    if (keys.has(label.toLowerCase().trim())) hits++;
+  }
+  // threshold: at least 6 matching YCS columns → treat as YCS
+  return hits >= 6;
+}
+
 /* ===== Fetch all sheets & render ===== */
 async function fetchAndRenderAll(){
   resetTable('table-coupon');
@@ -147,7 +135,7 @@ async function fetchAndRenderAll(){
 
     let rows = Array.isArray(data.leads) ? data.leads : [];
 
-    // Normalize/convert any image-like values to Drive view links; ignore host-relative paths
+    // Convert Drive file links to direct view links (ignore host-relative paths)
     rows.forEach(o => {
       Object.keys(o).forEach(k => {
         const v = String(o[k] ?? '').trim();
@@ -155,33 +143,32 @@ async function fetchAndRenderAll(){
       });
     });
 
-    // Remove truly empty rows (or rows with both Timestamp & Message blank)
-    rows = rows.filter(r => !isRowEmptyOrNoTimestampMessage(r));
+    // Keep any row that isn't entirely empty
+    rows = rows.filter(r => !isRowTotallyEmpty(r));
 
-    // Group safely (case-insensitive)
-    const byName = (name) => rows.filter(x => (x.Source||'').toString().trim().toLowerCase() === name.toLowerCase());
-    const coupon  = byName(TABS.COUPON);
-    const admDemo = byName(TABS.ADM_DEMO);
-    const contact = byName(TABS.CONTACT);
+    // Group by Source (case-insensitive) with tolerant YCS detection
+    const groupExact = (name) => rows.filter(x => (x.Source||'').toString().trim().toLowerCase() === name.toLowerCase());
+    const coupon  = groupExact(TABS.COUPON);
+    const admDemo = groupExact(TABS.ADM_DEMO);
+    const contact = groupExact(TABS.CONTACT);
 
-    // YCS: prefer exact match, but also allow contains "ycs admissions" OR presence of key YCS fields
     const ycs = rows.filter(x => {
-      const s = (x.Source||'').toString().toLowerCase();
-      if (s === TABS.YCS.toLowerCase() || s.includes('ycs admissions')) return true;
-      const keys = Object.keys(x).map(k => k.toLowerCase());
-      return keys.includes('preferred class mode') ||
-             keys.includes('payment screenshot url') ||
-             keys.includes('course fee (at time of form)') ||
-             keys.includes('terms accepted') ||
-             keys.includes('additional notes');
+      const s = (x.Source || '').toString().trim().toLowerCase();
+      if (s.includes('ycs admissions')) return true;
+      return isLikelyYcsRow(x);
     });
 
-    // Render Web CRM tables (deterministic columns minus hides)
+    // Diagnostics
+    console.log('[SOURCES]', histogramBySource(rows));
+    console.log('[GROUPS]', { coupon: coupon.length, admDemo: admDemo.length, contact: contact.length, ycs: ycs.length });
+    if (ycs.length) console.log('[YCS HEADERS]', Object.keys(ycs[0]));
+
+    // WEB CRM tables → columns from first row minus hides
     renderTableSimple(coupon,  'table-coupon',  columnsMinus(coupon,  HIDE[TABS.COUPON]));
     renderTableSimple(admDemo, 'table-admDemo', columnsMinus(admDemo, HIDE[TABS.ADM_DEMO]));
     renderTableSimple(contact, 'table-contact', columnsMinus(contact, HIDE[TABS.CONTACT]));
 
-    // Render YCS Admissions (only the requested fields, in that order)
+    // YCS Admissions → render only your fields, in your order
     renderTableYCS(ycs, 'table-ycs');
 
     wireThumbnails();
@@ -203,7 +190,7 @@ function columnsMinus(rows, hideSet){
   return keys.filter(k => k !== 'Source' && !(hideSet?.has(k)));
 }
 
-/* ===== YCS Admissions renderer (alias-tolerant, shows ONLY your fields) ===== */
+/* ===== YCS Admissions renderer (shows ONLY your fields, exact order) ===== */
 function renderTableYCS(rows, tableId){
   const thead = document.querySelector(`#${tableId} thead`);
   const tbody = document.querySelector(`#${tableId} tbody`);
@@ -220,31 +207,17 @@ function renderTableYCS(rows, tableId){
   const norm = s => String(s||'').toLowerCase().replace(/[\s_():\-]+/g,'').trim();
   const byNorm = new Map(actualKeys.map(k => [norm(k), k]));
 
-  // Map each desired label → actual key (using aliases when needed)
+  // Map each desired label → actual key (exact label match; minimal aliasing via normalization)
   const resolved = YCS_FIELDS.map(label => {
-    const wantNorm = (label || '').toLowerCase();
-    const direct = byNorm.get(norm(label));
-    if (direct) return { label, key: direct };
-
-    const al = YCS_ALIASES[wantNorm];
-    if (al && al.length){
-      const hit = al.map(a => byNorm.get(norm(a))).find(Boolean);
-      if (hit) return { label, key: hit };
-    }
-    // Missing column → keep an empty cell to preserve alignment
-    return { label, key: null };
+    const hit = byNorm.get(norm(label));
+    return hit ? { label, key: hit } : { label, key: null }; // keep blank cell if missing
   });
-
-  // Explicitly ignore generic "timestamp" or "message" if they appear under different names
-  const banned = new Set(['timestamp','message']);
 
   thead.innerHTML = `<tr>${resolved.map(c => `<th>${esc(c.label)}</th>`).join('')}</tr>`;
   tbody.innerHTML = rows.map(r => {
     return `<tr>${
       resolved.map(c => {
         if (!c.key) return `<td class="tight"></td>`;
-        const keyLower = c.key.toLowerCase();
-        if (banned.has(keyLower)) return `<td class="tight"></td>`;
         return ycsCellHtml(c.key, r[c.key]);
       }).join('')
     }</tr>`;
@@ -314,6 +287,7 @@ function cellHtml(col, val){
   const v = String(val ?? '').trim();
   if(!v) return `<td class="tight"></td>`;
 
+  // Phone helpers
   if (['phone','mobile','contact','contact number','phone number'].includes(col.toLowerCase())) {
     const tel = sanitizePhone(v);
     return `<td class="tight">
@@ -325,6 +299,7 @@ function cellHtml(col, val){
     </td>`;
   }
 
+  // Images (Google Drive file links → thumbnails; folders → chip)
   if (looksLikeImageUrl(v)) {
     if (/drive\.google\.com\/drive\/folders\//i.test(v)){
       return `<td class="tight"><a class="chip" href="${esc(v)}" target="_blank" rel="noopener">📁 Open folder</a></td>`;
@@ -333,20 +308,19 @@ function cellHtml(col, val){
     return `<td class="tight"><img class="thumbnail" src="${esc(src)}" alt="${esc(col)}" data-full="${esc(src)}"></td>`;
   }
 
+  // URLs
   if (/^https?:\/\//i.test(v)) {
     return `<td class="tight"><a class="link" href="${esc(v)}" target="_blank" rel="noopener">${esc(v)}</a></td>`;
   }
 
+  // Plain text
   return `<td class="tight">${esc(v)}</td>`;
 }
 
 /* ===== Filters & utils ===== */
-function isRowEmptyOrNoTimestampMessage(r){
-  const isBlank = v => !v || !String(v).trim();
-  const ts = r['Timestamp (IST)'] ?? r.Timestamp ?? r.timestamp ?? '';
-  const msg = r.Message ?? r.message ?? '';
-  const allEmpty = Object.values(r).every(isBlank);
-  return (isBlank(ts) && isBlank(msg)) || allEmpty;
+function isRowTotallyEmpty(r){
+  const isBlank = v => v == null || String(v).trim() === '';
+  return Object.values(r).every(isBlank);
 }
 function sanitizePhone(raw){ const s=String(raw).trim(); const plus=s.startsWith('+'); const digits=s.replace(/[^\d]/g,''); return plus?('+'+digits):digits; }
 function looksLikeImageUrl(s){
@@ -357,7 +331,7 @@ function looksLikeImageUrl(s){
 }
 function normalizeDriveUrl(url){
   if (!/drive\.google\.com/i.test(url)) return url;
-  if (/drive\.google\.com\/drive\/folders\//i.test(url)) return url; // folder → handled separately
+  if (/drive\.google\.com\/drive\/folders\//i.test(url)) return url; // folder → shown as chip
   let id = '';
   const m1 = url.match(/\/file\/d\/([^/]+)/);
   const m2 = url.match(/[?&]id=([^&]+)/);
@@ -366,6 +340,14 @@ function normalizeDriveUrl(url){
   return id ? `https://drive.google.com/uc?export=view&id=${id}` : url;
 }
 function esc(s=''){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+function histogramBySource(rows){
+  const map = new Map();
+  rows.forEach(r => {
+    const s = (r.Source || '(none)').toString();
+    map.set(s, (map.get(s) || 0) + 1);
+  });
+  return Object.fromEntries(map.entries());
+}
 
 /* ===== UI chrome ===== */
 function wireThumbnails(){
