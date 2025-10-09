@@ -1,5 +1,6 @@
-/* admin/adminapp.js — ADMIN-ONLY SCRIPT (login has its own app.js) */
+/* admin/adminapp.js — ADMIN-ONLY (login has its own app.js) */
 
+/* Firebase CDN (same version as login) */
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
 import { getFirestore, doc, getDoc, collection, getDocs, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
@@ -18,25 +19,45 @@ const app  = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db   = getFirestore(app);
 
-/* ===== Apps Script endpoint ===== */
+/* ===== Apps Script endpoint (confirmed) ===== */
 const API_URL   = 'https://script.google.com/macros/s/AKfycbxlVwjnyNFfKJXOG3lJeYbF5_7ZVa6srhvByly6I3I8lyTW-PvHThosGTryRQOsqJMxTg/exec';
 const API_TOKEN = 'yngrla_6f3c1f9b4e2a47b2b1c9d0f8d7a6c5e4';
 
 /* ===== Tab names (must match Google sub-sheets) ===== */
 const TABS = {
-  COUPON: 'Coupon Forms Data',
-  ADM_DEMO: 'Admission & Demo Form Data',
-  CONTACT: 'Contact Us Form Data',
-  YCS: 'YCS Admissions'
+  COUPON:  'Coupon Forms Data',
+  ADM_DEMO:'Admission & Demo Form Data',
+  CONTACT:'Contact Us Form Data',
+  YCS:     'YCS Admissions'
 };
 
-/* ===== Per-sheet UI column excludes (hide from display only) ===== */
-const EXCLUDE = {
+/* ===== UI-only column hides ===== */
+const HIDE = {
   [TABS.COUPON]:  new Set(['Name', 'Email', 'Phone', 'Message']),
   [TABS.ADM_DEMO]: new Set(['Email', 'Message']),
-  [TABS.CONTACT]: new Set(['Email']),
-  [TABS.YCS]:     new Set([]),
+  [TABS.CONTACT]: new Set(['Email'])
+  // YCS: none (we whitelist below)
 };
+
+/* ===== YCS visible fields (exact order/labels as requested) ===== */
+const YCS_FIELDS = [
+  'Timestamp (IST)',
+  'Full Name',
+  'Phone',
+  'Age',
+  'City',
+  'Email',
+  'Have you learned guitar before?',
+  'Do you have a guitar?',
+  'Preferred Class Mode',
+  'How did you hear about us?',
+  'Course Selected',
+  'Course Fee (at time of form)',
+  'Terms Accepted',
+  'Additional Notes',
+  'Payment Ref / Filename',
+  'Payment Screenshot URL'
+];
 
 /* ===== Elements ===== */
 const emailEl = document.getElementById('user-email');
@@ -85,7 +106,7 @@ function hookRefreshers(){
   document.getElementById('refresh-ycs')?.addEventListener('click', fetchAndRenderAll);
 }
 
-/* ===== Fetch all sheets and render into 4 tables ===== */
+/* ===== Fetch all sheets & render ===== */
 async function fetchAndRenderAll(){
   resetTable('table-coupon');
   resetTable('table-admDemo');
@@ -94,7 +115,7 @@ async function fetchAndRenderAll(){
 
   try{
     const url = `${API_URL}?token=${encodeURIComponent(API_TOKEN)}&limit=0`;
-    const r = await fetch(url, { headers: { 'Accept': 'application/json' } });
+    const r = await fetch(url, { headers: { 'Accept':'application/json' } });
     const text = await r.text();
     if (!r.ok) throw new Error(`HTTP ${r.status}: ${text.slice(0,200)}`);
 
@@ -103,7 +124,7 @@ async function fetchAndRenderAll(){
 
     let rows = Array.isArray(data.leads) ? data.leads : [];
 
-    // 1) Normalize image URLs (Drive / direct image links); ignore host-relative paths
+    // Normalize/convert any image-like values to Drive view links; ignore host-relative paths
     rows.forEach(o => {
       Object.keys(o).forEach(k => {
         const v = String(o[k] ?? '').trim();
@@ -111,22 +132,23 @@ async function fetchAndRenderAll(){
       });
     });
 
-    // 2) Drop useless rows:
-    //    - where Timestamp AND Message are both empty
-    //    - OR the entire row is empty
-    rows = rows.filter(row => !isRowEmptyOrNoTimestampMessage(row));
+    // Remove useless tail rows (both Timestamp and Message blank) or fully empty
+    rows = rows.filter(r => !isRowEmptyOrNoTimestampMessage(r));
 
-    // Group by source/tab name
-    const coupon  = rows.filter(r => (r.Source||'').trim().toLowerCase() === TABS.COUPON.toLowerCase());
-    const admDemo = rows.filter(r => (r.Source||'').trim().toLowerCase() === TABS.ADM_DEMO.toLowerCase());
-    const contact = rows.filter(r => (r.Source||'').trim().toLowerCase() === TABS.CONTACT.toLowerCase());
-    const ycs     = rows.filter(r => (r.Source||'').trim().toLowerCase() === TABS.YCS.toLowerCase());
+    // Group
+    const g = (name) => rows.filter(x => (x.Source||'').trim().toLowerCase() === name.toLowerCase());
+    const coupon  = g(TABS.COUPON);
+    const admDemo = g(TABS.ADM_DEMO);
+    const contact = g(TABS.CONTACT);
+    const ycs     = g(TABS.YCS);
 
-    // ✅ EXACT columns per sheet (first-row order) minus per-sheet excludes
-    renderTable(coupon,  'table-coupon',  columnsForSheet(coupon,  TABS.COUPON));
-    renderTable(admDemo, 'table-admDemo', columnsForSheet(admDemo, TABS.ADM_DEMO));
-    renderTable(contact, 'table-contact', columnsForSheet(contact, TABS.CONTACT));
-    renderTable(ycs,     'table-ycs',     columnsForSheet(ycs,     TABS.YCS));
+    // WEB CRM tables → show all columns from first row minus the UI hides
+    renderTableSimple(coupon,  'table-coupon',  columnsMinus(coupon,  HIDE[TABS.COUPON]));
+    renderTableSimple(admDemo, 'table-admDemo', columnsMinus(admDemo, HIDE[TABS.ADM_DEMO]));
+    renderTableSimple(contact, 'table-contact', columnsMinus(contact, HIDE[TABS.CONTACT]));
+
+    // YCS Admissions → only the requested fields, in that order
+    renderTableYCS(ycs, 'table-ycs');
 
     wireThumbnails();
     wireCopyButtons();
@@ -140,20 +162,100 @@ async function fetchAndRenderAll(){
   }
 }
 
-function isRowEmptyOrNoTimestampMessage(r){
-  const isBlank = v => !v || !String(v).trim();
-  const ts = r.Timestamp ?? r.timestamp ?? '';
-  const msg = r.Message ?? r.message ?? '';
-  const allEmpty = Object.values(r).every(isBlank);
-  // remove if both ts & msg blank OR everything blank
-  return (isBlank(ts) && isBlank(msg)) || allEmpty;
+/* ===== Deterministic columns ===== */
+function columnsMinus(rows, hideSet){
+  if (!rows || !rows.length) return [];
+  const keys = Object.keys(rows[0]);
+  return keys.filter(k => k !== 'Source' && !(hideSet?.has(k)));
 }
 
-function columnsForSheet(rows, sheetName){
-  if (!rows || !rows.length) return [];
-  const excludes = EXCLUDE[sheetName] || new Set();
-  const rawCols = Object.keys(rows[0]);     // original order from API
-  return rawCols.filter(k => k !== 'Source' && !excludes.has(k));
+/* ===== YCS Admissions renderer (with alias-tolerant header matching) ===== */
+function renderTableYCS(rows, tableId){
+  const thead = document.querySelector(`#${tableId} thead`);
+  const tbody = document.querySelector(`#${tableId} tbody`);
+
+  if(!rows || !rows.length){
+    thead.innerHTML = '';
+    tbody.innerHTML = `<tr><td class="muted center">No rows</td></tr>`;
+    return;
+  }
+
+  // Build a map from normalized key → actual key
+  const first = rows[0];
+  const actualKeys = Object.keys(first);
+  const norm = (s)=>String(s||'').toLowerCase().replace(/[\s_()-]+/g,'').trim();
+
+  const keyMap = new Map(); // desired label → actual key
+  YCS_FIELDS.forEach(label=>{
+    const want = norm(label);
+    // try exact label, then aliases
+    let found = actualKeys.find(k => norm(k) === want);
+
+    if (!found) {
+      // some common aliases
+      const ALIASES = {
+        'fullname':['name','full name'],
+        'timestampist':['timestamp','timestampist'],
+        'paymentref/filename':['paymentref','paymentref/filename','paymentrefff','paymentreference','ref/filename','paymentreffilename'],
+        'paymentscreenshoturl':['screenshot','paymentscreenshoturl','paymentscreenshot','image','fileurl','imageurl'],
+        'haveyoulearnedguitarbefore?':['haveyoulearnedbefore?','haveyoulearnedguitarbefore?'],
+        'doyouhaveaguitar?':['doyouhaveaguitar?','haveguitar','do you have a guitar?']
+      };
+      const base = want;
+      for (const [normKey, list] of Object.entries(ALIASES)){
+        if (base === normKey){
+          found = actualKeys.find(k => list.some(a => norm(k) === norm(a)));
+          if (found) break;
+        }
+      }
+    }
+
+    if (found) keyMap.set(label, found);
+  });
+
+  // Final column list: only those we matched, preserve the requested order
+  const cols = Array.from(keyMap.entries()).map(([label, key]) => ({label, key}));
+
+  if (!cols.length){
+    thead.innerHTML = '';
+    tbody.innerHTML = `<tr><td class="muted center">No matching columns</td></tr>`;
+    return;
+  }
+
+  thead.innerHTML = `<tr>${cols.map(c => `<th>${esc(c.label)}</th>`).join('')}</tr>`;
+  tbody.innerHTML = rows.map(r => `<tr>${cols.map(c => ycsCellHtml(c.key, r[c.key])).join('')}</tr>`).join('');
+}
+
+function ycsCellHtml(key, val){
+  const v = String(val ?? '').trim();
+  if (!v) return `<td class="tight"></td>`;
+
+  if (looksLikeImageUrl(v)) {
+    // Drive file link → image; folder link → open folder chip
+    if (/drive\.google\.com\/drive\/folders\//i.test(v)){
+      return `<td class="tight"><a class="chip" href="${esc(v)}" target="_blank" rel="noopener">📁 Open folder</a></td>`;
+    }
+    const src = normalizeDriveUrl(v);
+    return `<td class="tight"><img class="thumbnail" src="${esc(src)}" alt="${esc(key)}" data-full="${esc(src)}"></td>`;
+  }
+
+  if (/^https?:\/\//i.test(v)) {
+    return `<td class="tight"><a class="link" href="${esc(v)}" target="_blank" rel="noopener">${esc(v)}</a></td>`;
+  }
+
+  // phone helpers
+  if (['phone','mobile','contact','contact number','phone number'].includes(key.toLowerCase())) {
+    const tel = sanitizePhone(v);
+    return `<td class="tight">
+      <span class="phone-bundle">
+        <a class="icon-btn" href="tel:${esc(tel)}" title="Call">${svgPhone()}</a>
+        <button class="icon-btn copy-btn" data-copy="${esc(v)}" title="Copy number">${svgCopy()}</button>
+        <span class="phone-text">${esc(v)}</span>
+      </span>
+    </td>`;
+  }
+
+  return `<td class="tight">${esc(v)}</td>`;
 }
 
 /* ===== Table helpers ===== */
@@ -167,7 +269,7 @@ function setError(id, msg){
   const tbody = document.querySelector(`#${id} tbody`);
   tbody.innerHTML = `<tr><td class="center error">Failed to load: ${esc(msg)}</td></tr>`;
 }
-function renderTable(rows, tableId, cols){
+function renderTableSimple(rows, tableId, cols){
   const thead = document.querySelector(`#${tableId} thead`);
   const tbody = document.querySelector(`#${tableId} tbody`);
 
@@ -186,7 +288,6 @@ function cellHtml(col, val){
   const v = String(val ?? '').trim();
   if(!v) return `<td class="tight"></td>`;
 
-  // phone helpers (only for obvious phone columns)
   if (['phone','mobile','contact','contact number','phone number'].includes(col.toLowerCase())) {
     const tel = sanitizePhone(v);
     return `<td class="tight">
@@ -198,13 +299,14 @@ function cellHtml(col, val){
     </td>`;
   }
 
-  // images: only render if it’s http(s) Drive file link or direct image URL
   if (looksLikeImageUrl(v)) {
+    if (/drive\.google\.com\/drive\/folders\//i.test(v)){
+      return `<td class="tight"><a class="chip" href="${esc(v)}" target="_blank" rel="noopener">📁 Open folder</a></td>`;
+    }
     const src = normalizeDriveUrl(v);
     return `<td class="tight"><img class="thumbnail" src="${esc(src)}" alt="${esc(col)}" data-full="${esc(src)}"></td>`;
   }
 
-  // links
   if (/^https?:\/\//i.test(v)) {
     return `<td class="tight"><a class="link" href="${esc(v)}" target="_blank" rel="noopener">${esc(v)}</a></td>`;
   }
@@ -212,31 +314,32 @@ function cellHtml(col, val){
   return `<td class="tight">${esc(v)}</td>`;
 }
 
+/* ===== Filters & utils ===== */
+function isRowEmptyOrNoTimestampMessage(r){
+  const isBlank = v => !v || !String(v).trim();
+  const ts = r['Timestamp (IST)'] ?? r.Timestamp ?? r.timestamp ?? '';
+  const msg = r.Message ?? r.message ?? '';
+  const allEmpty = Object.values(r).every(isBlank);
+  return (isBlank(ts) && isBlank(msg)) || allEmpty;
+}
 function sanitizePhone(raw){ const s=String(raw).trim(); const plus=s.startsWith('+'); const digits=s.replace(/[^\d]/g,''); return plus?('+'+digits):digits; }
-
-/* ===== Image utils (Drive) ===== */
 function looksLikeImageUrl(s){
   if (!s) return false;
-  if (!/^https?:\/\//i.test(s)) return false; // prevent site-hosted paths
+  if (!/^https?:\/\//i.test(s)) return false; // ignore site-hosted paths
   const u = s.toLowerCase();
-  return (
-    u.includes('drive.google.com') || /\.(jpg|jpeg|png|gif|webp)(\?|$)/.test(u)
-  );
+  return u.includes('drive.google.com') || /\.(jpg|jpeg|png|gif|webp)(\?|$)/.test(u);
 }
 function normalizeDriveUrl(url){
   if (!/drive\.google\.com/i.test(url)) return url;
-
-  // If it's a folder link, we cannot show a single image → leave as-is (no thumbnail)
-  if (/drive\.google\.com\/drive\/folders\//i.test(url)) return url;
-
+  if (/drive\.google\.com\/drive\/folders\//i.test(url)) return url; // folder → handled separately
   let id = '';
   const m1 = url.match(/\/file\/d\/([^/]+)/);
   const m2 = url.match(/[?&]id=([^&]+)/);
   if (m1 && m1[1]) id = m1[1];
   if (!id && m2 && m2[1]) id = m2[1];
-  if (id) return `https://drive.google.com/uc?export=view&id=${id}`;
-  return url;
+  return id ? `https://drive.google.com/uc?export=view&id=${id}` : url;
 }
+function esc(s=''){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
 
 /* ===== UI chrome ===== */
 function wireThumbnails(){
@@ -262,7 +365,6 @@ function showToast(msg){
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 1200);
 }
-function esc(s=''){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
 function failUI(msg){
   console.error('[ADMIN]', msg);
   document.getElementById('loading')?.remove();
@@ -275,7 +377,7 @@ function failUI(msg){
 function svgPhone(){ return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 5c0-1.1.9-2 2-2h2a1 1 0 0 1 1 .82l.5 3a1 1 0 0 1-.28.9l-1.2 1.2a15 15 0 0 0 6.36 6.36l1.2-1.2a1 1 0 0 1 .9-.28l3 .5a1 1 0 0 1 .82 1v2a2 2 0 0 1-2 2h-1C9.61 20 4 14.39 4 7V6a2 2 0 0 1 2-2H5c-1.1 0-2 .9-2 2z" stroke="currentColor" stroke-width="1.4"/></svg>`; }
 function svgCopy(){ return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="9" y="9" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.4"/><rect x="5" y="5" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.4" opacity=".7"/></svg>`; }
 
-/* ===== Blogs preview (same as before, editor button moved in HTML) ===== */
+/* ===== Blogs preview (unchanged) ===== */
 async function loadBlogs() {
   const listEl = document.querySelector('#blog-list');
   if (!listEl) return;

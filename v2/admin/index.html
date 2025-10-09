@@ -4,17 +4,15 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Yangerila — Admin</title>
-
-  <!-- Admin-only CSS (login has its own CSS) -->
-  <link rel="stylesheet" href="/admin/style.css?v=3"/>
+  <link rel="stylesheet" href="/admin/style.css?v=4"/>
 </head>
-<body class="admin-page style-simple"><!-- same bg as login -->
+<body class="admin-page style-solid">
 
   <!-- Loading cover until auth + admin check passes -->
   <div id="loading">Checking login…</div>
 
   <header class="topbar">
-    <!-- ✅ Same logo path as login -->
+    <!-- ✅ same path as your login page -->
     <img src="/wp-content/uploads/2022/04/coaching3-slider-pic1.webp" alt="Yangerila" class="logo"/>
     <h1 class="brand">Yangerila Creative Studio &gt;</h1>
     <div class="top-actions">
@@ -95,7 +93,7 @@
       <div class="block">
         <div class="subhead">
           <h3>Recent posts</h3>
-          <!-- ⬇️ moved here from the top bar -->
+          <!-- ⬇️ moved here -->
           <a class="btn tiny ghost" href="/admin/blog-editor.html">Open Blog Editor</a>
         </div>
         <div class="blog-list" id="blog-list"></div>
@@ -113,6 +111,6 @@
   <div class="toast" id="toast">Copied</div>
 
   <!-- Admin App (Firebase + Sheets) -->
-  <script type="module" src="/admin/adminapp.js?v=3"></script>
+  <script type="module" src="/admin/adminapp.js?v=4"></script>
 </body>
 </html>
