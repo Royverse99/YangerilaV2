@@ -3,301 +3,458 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Yangerila – Blog</title>
+  <title>Blog Editor – Yangerila Admin</title>
 
-  <!-- Reuse your site look -->
-  <link rel="stylesheet" href="/login/style.css?v=7"/>
+  <!-- Reuse your admin/login theme -->
+  <link rel="stylesheet" href="/login/style.css?v=6"/>
+
+  <!-- Quill (free) -->
+  <link rel="stylesheet" href="https://cdn.quilljs.com/1.3.7/quill.snow.css">
 
   <style>
-    * { box-sizing: border-box; }
+    /* Reset for full screen */
+    body { margin: 0; padding: 0; overflow: hidden; }
+    .wrap { min-height: 100vh; padding: 0; display: block; }
     
-    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-    
-    /* Header styling */
-    .blog-header {
-      text-align: center;
-      padding: 60px 20px 40px;
-      background: linear-gradient(135deg, rgba(122,231,199,0.08) 0%, rgba(122,231,199,0.02) 100%);
+    /* Full screen editor layout */
+    .editor-container {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      height: 100vh;
+      background: var(--bg2);
+    }
+
+    /* Top navigation bar */
+    .top-nav {
+      background: var(--panel);
       border-bottom: 1px solid var(--border);
-      margin-bottom: 40px;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
-    
-    .blog-header .logo {
-      max-width: 180px;
-      margin-bottom: 20px;
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
     }
-    
-    .blog-header h1 {
-      font-size: 48px;
-      font-weight: 700;
-      margin: 0 0 12px;
-      background: linear-gradient(135deg, var(--accent), #5dd9a8);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+
+    .logo-small {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      object-fit: contain;
     }
-    
-    .blog-header .subtitle {
+
+    .nav-title {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .nav-title h1 {
+      margin: 0;
       font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .nav-title .user-email {
+      font-size: 12px;
       color: var(--muted);
       margin: 0;
     }
-    
-    /* Controls section */
-    .controls-wrapper {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 24px;
-      margin-bottom: 32px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-    
-    .controls {
+
+    .nav-actions {
       display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
       align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
     }
-    
-    .controls input, .controls select {
-      padding: 12px 16px;
-      border-radius: 12px;
+
+    .nav-actions .btn {
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+      width: auto;
+    }
+
+    .nav-actions .btn.primary {
+      padding: 8px 20px;
+    }
+
+    .publish-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .publish-toggle input {
+      width: auto;
+      margin: 0;
+    }
+
+    /* Main editor area */
+    .editor-main {
+      display: grid;
+      grid-template-columns: 280px 1fr 320px;
+      height: calc(100vh - 73px);
+      overflow: hidden;
+    }
+
+    @media (max-width: 1400px) {
+      .editor-main { grid-template-columns: 260px 1fr 300px; }
+    }
+
+    @media (max-width: 1024px) {
+      .editor-main { grid-template-columns: 240px 1fr; }
+      .metadata-panel { display: none; }
+    }
+
+    @media (max-width: 768px) {
+      .editor-main { grid-template-columns: 1fr; }
+      .posts-sidebar { display: none; }
+    }
+
+    /* Left sidebar - Posts list */
+    .posts-sidebar {
+      background: var(--panel);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .sidebar-header {
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-header h2 {
+      margin: 0 0 12px;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .sidebar-search {
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+      font-size: 13px;
+    }
+
+    .posts-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px;
+    }
+
+    .post-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      background: rgba(255,255,255,0.02);
+      margin-bottom: 8px;
+      transition: all 0.2s;
+    }
+
+    .post-item:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(122,231,199,0.3);
+    }
+
+    .post-item.active {
+      background: rgba(122,231,199,0.1);
+      border-color: var(--accent);
+    }
+
+    .post-thumb {
+      width: 48px;
+      height: 48px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.03);
+      flex-shrink: 0;
+    }
+
+    .post-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .post-info strong {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 4px;
+    }
+
+    .post-info small {
+      display: block;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* Center - Editor */
+    .editor-center {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background: var(--bg1);
+    }
+
+    .editor-header {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--panel);
+    }
+
+    .title-input {
+      width: 100%;
+      padding: 12px 0;
+      border: none;
+      background: transparent;
+      color: var(--text);
+      font-size: 32px;
+      font-weight: 700;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .title-input::placeholder {
+      color: var(--muted);
+      opacity: 0.5;
+    }
+
+    .editor-toolbar-container {
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+      padding: 0;
+    }
+
+    /* Enhanced Quill toolbar */
+    .ql-toolbar.ql-snow {
+      border: none;
+      background: transparent;
+      padding: 12px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .ql-toolbar .ql-formats {
+      margin-right: 12px;
+      display: flex;
+      gap: 2px;
+    }
+
+    .ql-snow .ql-stroke {
+      stroke: var(--muted);
+    }
+
+    .ql-snow .ql-fill {
+      fill: var(--muted);
+    }
+
+    .ql-snow .ql-picker-label {
+      color: var(--muted);
+    }
+
+    .ql-snow.ql-toolbar button:hover,
+    .ql-snow .ql-toolbar button:hover {
+      color: var(--accent);
+    }
+
+    .ql-snow.ql-toolbar button:hover .ql-stroke,
+    .ql-snow .ql-toolbar button:hover .ql-stroke {
+      stroke: var(--accent);
+    }
+
+    .ql-snow.ql-toolbar button.ql-active,
+    .ql-snow .ql-toolbar button.ql-active {
+      color: var(--accent);
+    }
+
+    .ql-snow.ql-toolbar button.ql-active .ql-stroke,
+    .ql-snow .ql-toolbar button.ql-active .ql-stroke {
+      stroke: var(--accent);
+    }
+
+    .ql-snow.ql-toolbar button.ql-active .ql-fill,
+    .ql-snow .ql-toolbar button.ql-active .ql-fill {
+      fill: var(--accent);
+    }
+
+    /* Editor content area */
+    .editor-scroll {
+      flex: 1;
+      overflow-y: auto;
+      background: var(--panel);
+    }
+
+    .ql-container.ql-snow {
+      border: none;
+      background: transparent;
+      color: var(--text);
+      font-size: 16px;
+      line-height: 1.8;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .ql-editor {
+      padding: 0;
+      min-height: calc(100vh - 300px);
+    }
+
+    .ql-editor.ql-blank::before {
+      color: var(--muted);
+      opacity: 0.5;
+      font-style: normal;
+      left: 0;
+    }
+
+    .ql-editor h1, .ql-editor h2, .ql-editor h3 {
+      color: var(--text);
+    }
+
+    .ql-editor a {
+      color: var(--accent);
+    }
+
+    /* Right sidebar - Metadata */
+    .metadata-panel {
+      background: var(--panel);
+      border-left: 1px solid var(--border);
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .metadata-section {
+      margin-bottom: 24px;
+    }
+
+    .metadata-section h3 {
+      margin: 0 0 12px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
       border: 1px solid var(--border);
       background: rgba(255,255,255,.04);
       color: var(--text);
-      font-size: 14px;
-      transition: all 0.2s;
-      flex: 1;
-      min-width: 200px;
-    }
-    
-    .controls input:focus, .controls select:focus {
-      outline: none;
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(122,231,199,0.1);
-    }
-    
-    .controls .btn {
-      padding: 12px 20px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 600;
-      transition: all 0.2s;
-      cursor: pointer;
-      border: none;
-    }
-    
-    .controls .btn.ghost {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text);
-    }
-    
-    .controls .btn.ghost:hover {
-      background: rgba(255,255,255,0.05);
-      border-color: var(--accent);
-    }
-    
-    .controls .btn.primary {
-      background: var(--accent);
-      color: #0a0a0a;
-    }
-    
-    .controls .btn.primary:hover {
-      background: #5dd9a8;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(122,231,199,0.3);
-    }
-    
-    /* Tags bar */
-    .tagsbar {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 32px;
-    }
-    
-    .tagchip {
       font-size: 13px;
-      font-weight: 500;
-      padding: 8px 16px;
-      border-radius: 24px;
-      cursor: pointer;
-      background: rgba(122,231,199,0.1);
-      border: 1px solid rgba(122,231,199,0.3);
-      color: var(--accent);
-      transition: all 0.2s;
+      font-family: inherit;
     }
-    
-    .tagchip:hover {
-      background: rgba(122,231,199,0.2);
-      transform: translateY(-2px);
+
+    .form-group textarea {
+      min-height: 80px;
+      resize: vertical;
     }
-    
-    .tagchip.active {
-      background: var(--accent);
-      color: #0a0a0a;
-      border-color: var(--accent);
-      box-shadow: 0 4px 12px rgba(122,231,199,0.3);
-    }
-    
-    /* Grid layout */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 24px;
-      margin-bottom: 40px;
-    }
-    
-    /* Card styling */
-    .cardx {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-      display: flex;
-      flex-direction: column;
-      transition: all 0.3s;
-      cursor: pointer;
-    }
-    
-    .cardx:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-      border-color: rgba(122,231,199,0.4);
-    }
-    
-    .cardx img {
+
+    .cover-preview {
       width: 100%;
-      height: 200px;
+      height: 160px;
       object-fit: cover;
-      border-bottom: 1px solid var(--border);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      margin-top: 8px;
+      display: none;
+      cursor: pointer;
+      transition: all 0.2s;
     }
-    
-    .card-content {
-      padding: 20px;
+
+    .cover-preview:hover {
+      opacity: 0.8;
+    }
+
+    .file-upload-group {
       display: flex;
-      flex-direction: column;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .file-upload-group input[type="file"] {
       flex: 1;
-    }
-    
-    .cardx h2 {
-      font-size: 20px;
-      font-weight: 600;
-      margin: 0 0 12px;
-      line-height: 1.3;
-      color: var(--text);
-    }
-    
-    .meta {
-      color: var(--muted);
-      font-size: 13px;
-      margin-bottom: 12px;
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    
-    .meta span {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    
-    .cardx p.excerpt {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.6;
-      margin: 0 0 12px;
-      flex: 1;
-    }
-    
-    .cardx .tags {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      margin-bottom: 16px;
-    }
-    
-    .cardx .tag {
       font-size: 11px;
-      background: rgba(122,231,199,0.12);
-      border: 1px solid rgba(122,231,199,0.25);
+      padding: 6px;
+    }
+
+    .file-upload-group .btn {
+      padding: 8px 12px;
+      font-size: 11px;
+      white-space: nowrap;
+      width: auto;
+    }
+
+    /* Tags display */
+    .tags-display {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .tag-pill {
+      font-size: 11px;
+      background: rgba(122,231,199,0.15);
+      border: 1px solid rgba(122,231,199,0.3);
       border-radius: 6px;
       padding: 4px 10px;
       color: var(--accent);
-      transition: all 0.2s;
     }
-    
-    .cardx .tag:hover {
-      background: rgba(122,231,199,0.2);
-    }
-    
-    .card-actions {
-      display: flex;
-      gap: 8px;
-      padding-top: 12px;
-      border-top: 1px solid var(--border);
-    }
-    
-    .card-actions .btn {
-      flex: 1;
-      padding: 10px;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 600;
-      transition: all 0.2s;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
-    
-    .card-actions .btn.primary {
-      background: var(--accent);
-      color: #0a0a0a;
-      border: none;
-    }
-    
-    .card-actions .btn.ghost {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--muted);
-    }
-    
-    .card-actions .btn:hover {
-      transform: translateY(-1px);
-    }
-    
-    .loadmore {
-      display: block;
-      margin: 0 auto 40px;
-      padding: 14px 32px;
-      font-size: 15px;
-      font-weight: 600;
-      background: var(--accent);
-      color: #0a0a0a;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    
-    .loadmore:hover {
-      background: #5dd9a8;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 16px rgba(122,231,199,0.3);
-    }
-    
-    /* Modal styling */
+
+    /* Preview Modal */
     .modal {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.8);
+      background: rgba(0,0,0,0.85);
       backdrop-filter: blur(8px);
       display: none;
       align-items: center;
@@ -305,11 +462,11 @@
       z-index: 1000;
       padding: 20px;
     }
-    
+
     .modal.open {
       display: flex;
     }
-    
+
     .modal-card {
       max-width: 900px;
       width: 100%;
@@ -317,11 +474,10 @@
       overflow: auto;
       background: var(--panel);
       border: 1px solid var(--border);
-      border-radius: 20px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-      position: relative;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
     }
-    
+
     .modal-header {
       position: sticky;
       top: 0;
@@ -333,218 +489,218 @@
       align-items: center;
       z-index: 10;
     }
-    
+
     .modal-header h2 {
-      font-size: 28px;
+      font-size: 24px;
       font-weight: 700;
       margin: 0;
-      flex: 1;
-      padding-right: 20px;
-    }
-    
-    .modal-header .close {
-      padding: 8px 16px;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--border);
-      color: var(--muted);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    
-    .modal-header .close:hover {
-      background: rgba(255,255,255,0.1);
       color: var(--text);
     }
-    
+
     .modal-body {
       padding: 24px;
     }
-    
-    .hero {
+
+    .modal-cover {
       width: 100%;
       max-height: 400px;
       object-fit: cover;
-      border-radius: 16px;
+      border-radius: 12px;
       border: 1px solid var(--border);
-      margin-bottom: 24px;
+      margin-bottom: 20px;
     }
-    
-    .content {
+
+    .preview-content {
       color: var(--text);
       line-height: 1.8;
       font-size: 16px;
     }
-    
-    .content p {
+
+    .preview-content p {
       margin: 0 0 16px;
     }
-    
-    .content a {
-      color: var(--accent);
-      text-decoration: underline;
-    }
-    
-    .modal-actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 24px;
-      padding-top: 24px;
-      border-top: 1px solid var(--border);
-    }
-    
-    .modal-actions .btn {
-      padding: 12px 24px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    
-    .modal-actions .btn.primary {
-      background: var(--accent);
-      color: #0a0a0a;
-      border: none;
-    }
-    
-    .modal-actions .btn.ghost {
-      background: transparent;
-      border: 1px solid var(--border);
+
+    .preview-content h1,
+    .preview-content h2,
+    .preview-content h3 {
       color: var(--text);
+      margin-top: 24px;
+      margin-bottom: 12px;
     }
-    
-    .modal-actions .btn:hover {
-      transform: translateY(-1px);
-    }
-    
-    /* Toast notification */
-    .toast {
-      position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: 24px;
-      background: rgba(0,0,0,0.9);
-      color: #fff;
-      padding: 14px 24px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 500;
-      z-index: 2000;
-      opacity: 0;
-      transition: opacity 0.2s;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-    }
-    
-    .toast.show {
-      opacity: 1;
-    }
-    
-    /* Empty state */
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
+
+    /* Status bar */
+    .status-bar {
+      background: var(--panel);
+      border-top: 1px solid var(--border);
+      padding: 8px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
       color: var(--muted);
     }
-    
-    .empty-state svg {
-      width: 80px;
-      height: 80px;
-      margin-bottom: 16px;
-      opacity: 0.3;
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
     }
-    
+
+    ::-webkit-scrollbar-track {
+      background: rgba(255,255,255,0.02);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(122,231,199,0.2);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(122,231,199,0.3);
+    }
+
     /* Responsive adjustments */
-    @media (max-width: 768px) {
-      .blog-header h1 {
-        font-size: 36px;
+    @media (max-width: 640px) {
+      .top-nav {
+        padding: 12px;
       }
-      
-      .grid {
-        grid-template-columns: 1fr;
-      }
-      
-      .controls {
-        flex-direction: column;
-      }
-      
-      .controls input, .controls select {
+
+      .nav-actions {
         width: 100%;
-        min-width: unset;
+        justify-content: flex-start;
       }
-      
-      .modal-header h2 {
-        font-size: 22px;
+
+      .nav-actions .btn {
+        font-size: 12px;
+        padding: 6px 12px;
+      }
+
+      .title-input {
+        font-size: 24px;
+      }
+
+      .ql-toolbar.ql-snow {
+        padding: 8px 12px;
       }
     }
   </style>
 </head>
 <body>
-  <main class="wrap">
-    <!-- Header -->
-    <header class="blog-header">
-      <img src="/v2/wp-content/uploads/2022/04/your-logo-file-name.png" class="logo" alt="Yangerila"/>
-      <h1>Blog</h1>
-      <p class="subtitle">Lessons, tips and stories from Yangerila</p>
-    </header>
-
-    <section class="container">
-      <!-- Controls -->
-      <div class="controls-wrapper">
-        <div class="controls">
-          <input id="search" placeholder="🔍 Search posts by title or content..."/>
-          <select id="sort">
-            <option value="date_desc">📅 Newest first</option>
-            <option value="views_desc">👁️ Most viewed</option>
-          </select>
-          <button class="btn ghost" id="clear">✕ Clear filters</button>
+  <div class="editor-container">
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+      <div class="nav-left">
+        <img src="/v2/wp-content/uploads/2022/04/your-logo-file-name.png" class="logo-small" alt="Yangerila"/>
+        <div class="nav-title">
+          <h1>Blog Editor</h1>
+          <p class="user-email" id="user-email">Loading...</p>
         </div>
       </div>
+      <div class="nav-actions">
+        <a class="btn" href="/admin/">Back to Admin</a>
+        <a class="btn" href="/blog/">View Blog</a>
+        <button class="btn" id="new-post">New Post</button>
+        <button class="btn" id="save-draft">Save Draft</button>
+        <button class="btn primary" id="publish">Publish</button>
+        <button class="btn" id="preview">Preview</button>
+        <button class="btn" id="unpublish">Unpublish</button>
+        <button class="btn" id="delete-post" style="background: rgba(255,107,107,0.1); border: 1px solid rgba(255,107,107,0.3); color: #ff6b6b;">Delete</button>
+        <label class="publish-toggle">
+          <input type="checkbox" id="published">
+          <span>Published</span>
+        </label>
+      </div>
+    </nav>
 
-      <!-- Tag filters -->
-      <div class="tagsbar" id="tagbar"></div>
+    <!-- Main Editor Area -->
+    <div class="editor-main">
+      <!-- Left Sidebar - Posts List -->
+      <aside class="posts-sidebar">
+        <div class="sidebar-header">
+          <h2>All Posts</h2>
+          <input class="sidebar-search" id="search" placeholder="Search posts..."/>
+        </div>
+        <div class="posts-list" id="post-list"></div>
+      </aside>
 
-      <!-- Blog cards grid -->
-      <div class="grid" id="cards"></div>
+      <!-- Center - Editor -->
+      <main class="editor-center">
+        <div class="editor-header">
+          <input class="title-input" id="title" placeholder="Post title..."/>
+        </div>
+        <div class="editor-toolbar-container">
+          <div id="toolbar"></div>
+        </div>
+        <div class="editor-scroll">
+          <div id="editor"></div>
+        </div>
+      </main>
 
-      <button class="btn loadmore" id="loadMore" style="display:none">Load more posts</button>
-    </section>
-  </main>
+      <!-- Right Sidebar - Metadata -->
+      <aside class="metadata-panel">
+        <div class="metadata-section">
+          <h3>Cover Image</h3>
+          <div class="form-group">
+            <label>Image URL</label>
+            <input id="imageUrl" placeholder="https://example.com/image.jpg"/>
+            <img id="imagePreview" class="cover-preview" src="" alt="Cover preview"/>
+          </div>
+          <div class="file-upload-group">
+            <input type="file" id="imageFile" accept="image/*"/>
+            <button class="btn" id="uploadCover">Upload</button>
+          </div>
+        </div>
 
-  <!-- Post reading modal -->
-  <div class="modal" id="postModal" aria-hidden="true">
+        <div class="metadata-section">
+          <h3>Tags</h3>
+          <div class="form-group">
+            <label>Comma separated</label>
+            <input id="tags" placeholder="practice, technique, tips"/>
+            <div class="tags-display" id="tagsDisplay"></div>
+          </div>
+        </div>
+
+        <div class="metadata-section">
+          <h3>Excerpt</h3>
+          <div class="form-group">
+            <label>Short Description</label>
+            <textarea id="shortText" placeholder="Brief summary for the blog listing page (auto-generated if empty)"></textarea>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <!-- Preview Modal -->
+  <div class="modal" id="previewModal" aria-hidden="true">
     <div class="modal-card">
       <div class="modal-header">
-        <h2 id="mTitle"></h2>
-        <button class="btn close" id="closeModal">✕</button>
+        <h2 id="pvTitle">Preview</h2>
+        <button class="btn" id="closePreview">Close</button>
       </div>
       <div class="modal-body">
-        <div class="meta" id="mMeta"></div>
-        <img id="mHero" class="hero" src="" alt="" style="display:none"/>
-        <div class="tags" id="mTags" style="margin-bottom: 20px"></div>
-        <article class="content" id="mBody"></article>
-        <div class="modal-actions">
-          <button class="btn primary" id="mLikeBtn">👍 <span id="mLikesCount">0</span> Likes</button>
-          <button class="btn ghost" id="mShareBtn">🔗 Share</button>
-        </div>
+        <img id="pvCover" class="modal-cover" style="display:none" />
+        <div class="tags-display" id="pvTags"></div>
+        <article class="preview-content" id="pvBody"></article>
       </div>
     </div>
   </div>
 
-  <div class="toast" id="toast">Copied</div>
-
+  <!-- Firebase + Quill -->
+  <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
     import {
-      getFirestore, collection, query, where, orderBy, limit, getDocs, startAfter,
-      doc, updateDoc, increment, getDoc
+      getFirestore, doc, getDoc, collection, getDocs, addDoc, updateDoc, deleteDoc,
+      serverTimestamp
     } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+    import {
+      getStorage, ref as sRef, uploadBytes, getDownloadURL
+    } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js';
 
-    /* Firebase config (yours) */
-    const firebaseConfig = {
+    // --- Firebase config
+   const firebaseConfig = {
     apiKey: "AIzaSyDHDjHrnQ2IwwetQoV6cWAGnkMzANerVDE",
     authDomain: "yangerila-studio.firebaseapp.com",
     projectId: "yangerila-studio",
@@ -555,345 +711,298 @@
   };
 
     const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
     const db = getFirestore(app);
+    const storage = getStorage(app);
 
     // UI refs
-    const cardsEl = document.getElementById('cards');
-    const searchEl = document.getElementById('search');
-    const sortEl   = document.getElementById('sort');
-    const clearBtn = document.getElementById('clear');
-    const tagbarEl = document.getElementById('tagbar');
-    const loadMoreBtn = document.getElementById('loadMore');
+    const emailEl = document.querySelector('#user-email');
+    const listEl  = document.querySelector('#post-list');
+    const searchEl= document.querySelector('#search');
 
-    // Modal refs
-    const postModal = document.getElementById('postModal');
-    const closeModal = document.getElementById('closeModal');
-    const mTitle = document.getElementById('mTitle');
-    const mMeta  = document.getElementById('mMeta');
-    const mHero  = document.getElementById('mHero');
-    const mTags  = document.getElementById('mTags');
-    const mBody  = document.getElementById('mBody');
-    const mLikeBtn = document.getElementById('mLikeBtn');
-    const mLikesCount = document.getElementById('mLikesCount');
-    const mShareBtn = document.getElementById('mShareBtn');
+    const titleEl = document.querySelector('#title');
+    const tagsEl  = document.querySelector('#tags');
+    const shortEl = document.querySelector('#shortText');
+    const imgUrlEl= document.querySelector('#imageUrl');
+    const imgFileEl = document.querySelector('#imageFile');
+    const uploadCoverBtn = document.querySelector('#uploadCover');
+    const imgPrev = document.querySelector('#imagePreview');
+    const tagsDisplay = document.querySelector('#tagsDisplay');
 
-    const toastEl = document.getElementById('toast');
+    const newBtn  = document.querySelector('#new-post');
+    const saveDraftBtn = document.querySelector('#save-draft');
+    const publishBtn = document.querySelector('#publish');
+    const unpublishBtn = document.querySelector('#unpublish');
+    const deleteBtn  = document.querySelector('#delete-post');
+    const publishedEl = document.querySelector('#published');
 
-    // State
-    let pageState = {
-      tag: null,
-      sort: 'date_desc',
-      search: '',
-      lastDoc: null,
-      exhausted: false,
-      pageSize: 12,
-      cache: [] // last fetched batch for building tag bar & client search
-    };
+    const previewBtn = document.querySelector('#preview');
+    const previewModal = document.querySelector('#previewModal');
+    const closePreview = document.querySelector('#closePreview');
+    const pvTitle = document.querySelector('#pvTitle');
+    const pvCover = document.querySelector('#pvCover');
+    const pvTags  = document.querySelector('#pvTags');
+    const pvBody  = document.querySelector('#pvBody');
 
-    /* ---------- Init ---------- */
-    sortEl.value = pageState.sort;
+    let currentId = null;
+    let postsCache = [];
 
-    searchEl.addEventListener('input', () => {
-      pageState.search = searchEl.value.trim().toLowerCase();
-      renderCards(); // client-side filter on cached
+    // --- Enhanced Quill init with more features
+    const toolbarOptions = [
+      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+      [{ 'font': [] }],
+      [{ 'size': ['small', false, 'large', 'huge'] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'color': [] }, { 'background': [] }],
+      [{ 'script': 'sub'}, { 'script': 'super' }],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'list': 'check' }],
+      [{ 'indent': '-1'}, { 'indent': '+1' }],
+      [{ 'direction': 'rtl' }],
+      [{ 'align': [] }],
+      ['blockquote', 'code-block'],
+      ['link', 'image', 'video'],
+      ['clean']
+    ];
+    
+    const quill = new Quill('#editor', {
+      theme: 'snow',
+      modules: { 
+        toolbar: toolbarOptions
+      },
+      placeholder: 'Start writing your post...'
     });
 
-    sortEl.addEventListener('change', async () => {
-      pageState.sort = sortEl.value;
-      await resetAndLoad();
+    // Custom image handler: upload to Storage then insert
+    const toolbar = quill.getModule('toolbar');
+    toolbar.addHandler('image', () => {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/*';
+      input.onchange = async () => {
+        const file = input.files && input.files[0];
+        if (!file) return;
+        try {
+          const path = `blogs/editor/${Date.now()}_${file.name}`;
+          const ref  = sRef(storage, path);
+          await uploadBytes(ref, file);
+          const url = await getDownloadURL(ref);
+          const range = quill.getSelection(true);
+          quill.insertEmbed(range.index, 'image', url, 'user');
+          quill.setSelection(range.index + 1);
+        } catch (e) {
+          console.error('Image upload failed', e);
+          alert('Image upload failed.');
+        }
+      };
+      input.click();
     });
 
-    clearBtn.addEventListener('click', async () => {
-      pageState.tag = null;
-      pageState.search = '';
-      searchEl.value = '';
-      tagbarEl.querySelectorAll('.tagchip').forEach(t => t.classList.remove('active'));
-      await resetAndLoad();
+    // --- Auth / admin gate
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) return location.replace('/login/');
+      emailEl.textContent = user.email || '';
+      const adminSnap = await getDoc(doc(db, 'admins', user.uid));
+      if (!adminSnap.exists()) {
+        await signOut(auth);
+        return location.replace('/login/?unauthorized=1');
+      }
+      await loadList();
+      wireEvents();
     });
 
-    loadMoreBtn.addEventListener('click', loadMore);
+    function wireEvents(){
+      newBtn.addEventListener('click', () => loadForm(null));
+      saveDraftBtn.addEventListener('click', () => onSave({ publish:false }));
+      publishBtn.addEventListener('click', () => onSave({ publish:true }));
+      unpublishBtn.addEventListener('click', () => onSave({ publish:false, forceUnpublish:true }));
+      deleteBtn.addEventListener('click', onDelete);
 
-    closeModal.addEventListener('click', () => postModal.classList.remove('open'));
-    postModal.addEventListener('click', (e)=>{ if (e.target === postModal) postModal.classList.remove('open'); });
+      imgUrlEl.addEventListener('input', syncCoverPreview);
+      uploadCoverBtn.addEventListener('click', uploadCover);
+      tagsEl.addEventListener('input', updateTagsDisplay);
 
-    // First load
-    resetAndLoad();
+      searchEl.addEventListener('input', () => renderList(filterPosts(searchEl.value)));
 
-    async function resetAndLoad(){
-      pageState.lastDoc = null;
-      pageState.exhausted = false;
-      pageState.cache = [];
-      cardsEl.innerHTML = `<div class="empty-state"><div class="muted">Loading posts...</div></div>`;
-      await loadMore(true);
+      previewBtn.addEventListener('click', openPreview);
+      closePreview.addEventListener('click', () => previewModal.classList.remove('open'));
+      previewModal.addEventListener('click', (e) => { if (e.target === previewModal) previewModal.classList.remove('open'); });
     }
 
-    /* ---------- Firestore fetching with sort/tag/paging ---------- */
-    async function loadMore(first = false){
-      if (pageState.exhausted) return;
+    function syncCoverPreview(){
+      const url = imgUrlEl.value.trim();
+      if (url){ imgPrev.src = url; imgPrev.style.display = 'block'; }
+      else { imgPrev.removeAttribute('src'); imgPrev.style.display='none'; }
+    }
+
+    function updateTagsDisplay(){
+      const tags = tagsEl.value.split(',').map(s => s.trim()).filter(Boolean);
+      tagsDisplay.innerHTML = tags.map(t => `<span class="tag-pill">${esc(t)}</span>`).join('');
+    }
+
+    async function uploadCover(){
+      const f = imgFileEl.files && imgFileEl.files[0];
+      if (!f) return alert('Choose an image file first.');
       try{
-        const constraints = [
-          where('published','==', true)
-        ];
-
-        // Tag filter (server-side)
-        if (pageState.tag) constraints.push(where('tags','array-contains', pageState.tag));
-
-        // Sorting
-        if (pageState.sort === 'views_desc') {
-          constraints.push(orderBy('views', 'desc'));
-          constraints.push(orderBy('publishedAt','desc')); // tie breaker (requires index)
-        } else { // date_desc
-          constraints.push(orderBy('publishedAt', 'desc'));
-        }
-
-        constraints.push(limit(pageState.pageSize));
-
-        // Cursor
-        if (pageState.lastDoc) constraints.push(startAfter(pageState.lastDoc));
-
-        const qRef = query(collection(db,'blogs'), ...constraints);
-        const snap = await getDocs(qRef);
-
-        if (first) cardsEl.innerHTML = '';
-
-        const batch = [];
-        let last = null;
-        snap.forEach(d => {
-          const x = d.data(); x.id = d.id; x.__ref = d.ref;
-          // fill defaults
-          x.views = Number(x.views || 0);
-          x.likes = Number(x.likes || 0);
-          batch.push(x); last = d;
-        });
-
-        if (!batch.length) {
-          if (first && !pageState.cache.length) cardsEl.innerHTML = `<div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg><div class="muted">No posts found</div></div>`;
-          pageState.exhausted = true;
-          loadMoreBtn.style.display = 'none';
-          return;
-        }
-
-        pageState.cache = pageState.cache.concat(batch);
-        pageState.lastDoc = last;
-        loadMoreBtn.style.display = batch.length < pageState.pageSize ? 'none' : 'block';
-
-        // Build / refresh tag bar from cache (lightweight)
-        buildTagBarFromCache();
-
-        renderCards();
+        const path = `blogs/covers/${Date.now()}_${f.name}`;
+        const ref  = sRef(storage, path);
+        await uploadBytes(ref, f);
+        const url = await getDownloadURL(ref);
+        imgUrlEl.value = url;
+        syncCoverPreview();
       }catch(e){
         console.error(e);
-        cardsEl.innerHTML = `<div class="empty-state" style="color:var(--error)">Failed to load posts. If sorting by views, you may need to create a Firestore index. Check the console for a link.</div>`;
+        alert('Cover upload failed.');
       }
     }
 
-    /* ---------- UI render ---------- */
-    function renderCards(){
-      const q = pageState.search;
-      let items = pageState.cache.slice();
-
-      if (q) {
-        items = items.filter(p =>
-          (p.title || '').toLowerCase().includes(q) ||
-          (p.shortText || '').toLowerCase().includes(q)
-        );
-      }
-
-      // For date sort, ensure client-side order in case server fallback occurred
-      if (pageState.sort === 'date_desc') {
-        items.sort((a,b) => (ts(b.publishedAt) - ts(a.publishedAt)));
-      } else if (pageState.sort === 'views_desc') {
-        items.sort((a,b) => (Number(b.views||0) - Number(a.views||0)) || (ts(b.publishedAt) - ts(a.publishedAt)));
-      }
-
-      cardsEl.innerHTML = items.map(p => cardHtml(p)).join('');
-      wireCardEvents(items);
+    function filterPosts(q){
+      if (!q) return postsCache;
+      const s = q.toLowerCase();
+      return postsCache.filter(p => (p.title||'').toLowerCase().includes(s));
     }
 
-    function cardHtml(p){
-      const img = p.imageUrl ? `<img src="${esc(p.imageUrl)}" alt="${esc(p.title||'')}" loading="lazy"/>` : '';
-      const when = p.publishedAt?.seconds ? new Date(p.publishedAt.seconds*1000).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '';
-      const tags = (p.tags || []).map(t => `<span class="tag">${esc(t)}</span>`).join('');
-      const excerpt = truncate(p.shortText || '', 120);
-      
-      return `
-        <article class="cardx" data-id="${p.id}">
-          ${img}
-          <div class="card-content">
-            <h2>${esc(p.title || 'Untitled')}</h2>
-            <div class="meta">
-              <span>📅 ${esc(when)}</span>
-              <span>👁️ ${Number(p.views||0)}</span>
-              <span>👍 ${Number(p.likes||0)}</span>
-            </div>
-            <p class="excerpt">${esc(excerpt)}</p>
-            <div class="tags">${tags}</div>
-            <div class="card-actions">
-              <button class="btn primary" data-action="open">Read More</button>
-              <button class="btn ghost" data-action="like">👍</button>
-              <button class="btn ghost" data-action="share">🔗</button>
-            </div>
-          </div>
-        </article>
-      `;
-    }
-
-    function wireCardEvents(items){
-      document.querySelectorAll('.cardx').forEach(el => {
-        const id = el.getAttribute('data-id');
-        const post = items.find(x => x.id === id);
-
-        el.querySelectorAll('[data-action]').forEach(btn => {
-          const action = btn.getAttribute('data-action');
-          btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (action === 'open') openPost(post);
-            else if (action === 'share') sharePost(post);
-            else if (action === 'like') likePost(post);
-          });
+    async function loadList(){
+      listEl.innerHTML = '<div style="padding:16px; color:var(--muted); text-align:center;">Loading...</div>';
+      try{
+        const snap = await getDocs(collection(db, 'blogs'));
+        postsCache = [];
+        snap.forEach(d => postsCache.push({ id:d.id, ...d.data() }));
+        postsCache.sort((a,b)=>{
+          const ap = !!a.published, bp = !!b.published;
+          if (ap !== bp) return ap ? -1 : 1;
+          const at = (a.publishedAt?.seconds || a.updatedAt?.seconds || 0);
+          const bt = (b.publishedAt?.seconds || b.updatedAt?.seconds || 0);
+          return bt - at;
         });
-
-        // Clicking anywhere on card also opens
-        el.addEventListener('click', (e)=>{
-          if (!(e.target instanceof HTMLElement) || e.target.closest('[data-action]')) return;
-          openPost(post);
-        });
-
-        // Tag clicks filter
-        el.querySelectorAll('.tag').forEach(tagEl => {
-          tagEl.addEventListener('click', (e) => {
-            e.stopPropagation();
-            pageState.tag = tagEl.textContent.trim();
-            tagbarActivate(pageState.tag);
-            resetAndLoad();
-          });
-        });
-      });
-    }
-
-    function buildTagBarFromCache(){
-      const counts = new Map();
-      pageState.cache.forEach(p => (p.tags||[]).forEach(t => counts.set(t, (counts.get(t)||0)+1)));
-      const top = Array.from(counts.entries()).sort((a,b)=>b[1]-a[1]).slice(0, 12);
-      tagbarEl.innerHTML = [
-        `<span class="tagchip ${!pageState.tag?'active':''}" data-tag="">All Posts</span>`,
-        ...top.map(([t,c]) => `<span class="tagchip ${pageState.tag===t?'active':''}" data-tag="${esc(t)}">${esc(t)} (${c})</span>`)
-      ].join('');
-      tagbarEl.querySelectorAll('.tagchip').forEach(chip => {
-        chip.addEventListener('click', async ()=>{
-          const tag = chip.getAttribute('data-tag');
-          pageState.tag = tag || null;
-          tagbarActivate(pageState.tag);
-          await resetAndLoad();
-        });
-      });
-    }
-
-    function tagbarActivate(tag){
-      tagbarEl.querySelectorAll('.tagchip').forEach(t => {
-        const tt = t.getAttribute('data-tag') || '';
-        t.classList.toggle('active', (tag||'') === tt);
-      });
-    }
-
-    /* ---------- Post modal & interactions ---------- */
-    async function openPost(p){
-      mTitle.textContent = p.title || 'Untitled';
-      const when = p.publishedAt?.seconds ? new Date(p.publishedAt.seconds*1000).toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
-      mMeta.innerHTML = when ? `<span>📅 Published: ${when}</span> <span>👁️ ${Number(p.views||0)} views</span>` : '';
-      if (p.imageUrl){ mHero.src = p.imageUrl; mHero.style.display = 'block'; } else { mHero.style.display = 'none'; }
-      mTags.innerHTML = (p.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('');
-      mBody.innerHTML = p.bodyHtml || toHtml(p.fullText || p.shortText || '');
-
-      // Set like count
-      mLikesCount.textContent = Number(p.likes||0);
-
-      // Wire like/share for this post
-      mLikeBtn.onclick = () => likePost(p, true);
-      mShareBtn.onclick = () => sharePost(p, true);
-
-      postModal.classList.add('open');
-
-      // Count a view (once per 12h per browser)
-      const key = 'viewed_'+p.id;
-      const now = Date.now();
-      const last = Number(localStorage.getItem(key) || 0);
-      if (!last || now - last > 12*60*60*1000) {
-        try{
-          await updateDoc(doc(db,'blogs',p.id), { views: increment(1) });
-          localStorage.setItem(key, String(now));
-          // Update UI both in modal and card:
-          p.views = Number(p.views||0)+1;
-          mMeta.innerHTML = mMeta.innerHTML.replace(/👁️ \d+ views/, `👁️ ${p.views} views`);
-          // Update the card's meta
-          const card = document.querySelector(`.cardx[data-id="${p.id}"] .meta`);
-          if (card) card.innerHTML = card.innerHTML.replace(/👁️ \d+/, `👁️ ${p.views}`);
-        }catch(e){
-          console.warn('View increment failed (rules may block non-admin updates).', e);
-        }
+        renderList(postsCache);
+        if (postsCache.length) select(postsCache[0].id);
+        else loadForm(null);
+      }catch(e){
+        console.error(e);
+        listEl.innerHTML = '<div style="padding:16px; color:var(--error);">Failed to load posts</div>';
       }
     }
 
-    async function likePost(p, fromModal=false){
-      const key = 'liked_'+p.id;
-      if (localStorage.getItem(key)) {
-        showToast('Already liked');
+    function renderList(items){
+      if (!items.length) {
+        listEl.innerHTML = '<div style="padding:16px; color:var(--muted); text-align:center;">No posts yet</div>';
         return;
       }
-      try{
-        await updateDoc(doc(db,'blogs',p.id), { likes: increment(1) });
-        localStorage.setItem(key, '1');
-        p.likes = Number(p.likes||0)+1;
-        if (fromModal) mLikesCount.textContent = p.likes;
-        // update card count
-        const card = document.querySelector(`.cardx[data-id="${p.id}"] .meta`);
-        if (card) card.innerHTML = card.innerHTML.replace(/👍 \d+/, `👍 ${p.likes}`);
-        showToast('Thanks for the 👍');
-      }catch(e){
-        console.warn('Like increment failed (rules may block).', e);
-        showToast('Like failed');
+      listEl.innerHTML = items.map(p => `
+        <div class="post-item" data-id="${p.id}">
+          ${p.imageUrl ? `<img class="post-thumb" src="${esc(p.imageUrl)}" onerror="this.style.display='none'"/>` : '<div class="post-thumb"></div>'}
+          <div class="post-info">
+            <strong>${esc(p.title || 'Untitled')}</strong>
+            <small>${p.published ? 'Published' : 'Draft'}${p.publishedAt ? ' • ' + new Date(p.publishedAt.seconds*1000).toLocaleDateString() : ''}</small>
+          </div>
+        </div>
+      `).join('');
+      listEl.querySelectorAll('.post-item').forEach(el => {
+        el.addEventListener('click', () => select(el.getAttribute('data-id')));
+      });
+      highlightSelection();
+    }
+
+    function select(id){
+      const p = postsCache.find(x => x.id === id);
+      if (!p) return;
+      currentId = id;
+      loadForm(p);
+      highlightSelection();
+    }
+
+    function highlightSelection(){
+      listEl.querySelectorAll('.post-item').forEach(el => {
+        el.classList.toggle('active', el.getAttribute('data-id') === currentId);
+      });
+    }
+
+    function loadForm(p){
+      currentId = p ? p.id : null;
+      titleEl.value = p?.title || '';
+      tagsEl.value  = (p?.tags || []).join(', ');
+      shortEl.value = p?.shortText || '';
+      imgUrlEl.value= p?.imageUrl || '';
+      publishedEl.checked = !!p?.published;
+
+      syncCoverPreview();
+      updateTagsDisplay();
+
+      // Load HTML into Quill
+      quill.setContents([]);
+      if (p?.bodyHtml) {
+        quill.root.innerHTML = p.bodyHtml;
+      } else if (p?.fullText) {
+        quill.setText(p.fullText);
       }
     }
 
-    async function sharePost(p, fromModal=false){
-      // Future-proof link (even if you add /blog/post.html later)
-      const url = `${location.origin}/blog/post.html?id=${encodeURIComponent(p.id)}`;
-      const title = p.title || 'Yangerila Blog';
-      const text = p.shortText || 'Check this out';
+    function openPreview(){
+      pvTitle.textContent = titleEl.value.trim() || 'Untitled';
+      const url = imgUrlEl.value.trim();
+      if (url){ pvCover.src = url; pvCover.style.display = 'block'; } else { pvCover.style.display = 'none'; }
+      
+      const tags = tagsEl.value.split(',').map(s=>s.trim()).filter(Boolean);
+      pvTags.innerHTML = tags.map(t=>`<span class="tag-pill">${esc(t)}</span>`).join('');
+      
+      pvBody.innerHTML = quill.root.innerHTML;
+      previewModal.classList.add('open');
+    }
+
+    function makeShort(html){
+      const text = html.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
+      return text.length > 220 ? text.slice(0, 220) + '…' : text;
+    }
+
+    async function onSave({ publish, forceUnpublish }){
+      const payload = {
+        title: titleEl.value.trim(),
+        imageUrl: imgUrlEl.value.trim(),
+        tags: tagsEl.value.split(',').map(s => s.trim()).filter(Boolean),
+        bodyHtml: quill.root.innerHTML,
+        shortText: (shortEl.value.trim() || makeShort(quill.root.innerHTML)),
+        updatedAt: serverTimestamp()
+      };
+
+      let desiredPublished = publishedEl.checked;
+      if (publish === true) desiredPublished = true;
+      if (forceUnpublish === true) desiredPublished = false;
+      payload.published = desiredPublished;
+      if (desiredPublished && !currentId) payload.publishedAt = serverTimestamp();
+
       try{
-        if (navigator.share) {
-          await navigator.share({ title, text, url });
+        if (currentId){
+          await updateDoc(doc(db, 'blogs', currentId), payload);
         } else {
-          await navigator.clipboard.writeText(url);
-          showToast('Link copied');
+          payload.createdAt = serverTimestamp();
+          if (desiredPublished) payload.publishedAt = serverTimestamp();
+          const ref = await addDoc(collection(db, 'blogs'), payload);
+          currentId = ref.id;
         }
-      }catch{
-        try{
-          await navigator.clipboard.writeText(url);
-          showToast('Link copied');
-        }catch{
-          showToast('Could not share');
-        }
+        await loadList();
+        alert('Saved successfully!');
+      }catch(e){
+        console.error(e);
+        alert('Save failed. Check rules and network.');
       }
     }
 
-    /* ---------- Helpers ---------- */
-    function ts(t){ return t?.seconds ? t.seconds*1000 : 0; }
-    function toHtml(txt){
-      const safe = esc(txt || '');
-      const linkified = safe.replace(/(https?:\/\/[^\s]+)/g, m => `<a href="${m}" target="_blank" rel="noopener">${m}</a>`);
-      return linkified.split(/\n{2,}/).map(p => `<p>${p.replace(/\n/g,'<br>')}</p>`).join('');
+    async function onDelete(){
+      if (!currentId) return alert('No post selected.');
+      if (!confirm('Delete this post? This action cannot be undone.')) return;
+      try{
+        await deleteDoc(doc(db, 'blogs', currentId));
+        currentId = null;
+        await loadList();
+        loadForm(null);
+        alert('Post deleted successfully.');
+      }catch(e){
+        console.error(e);
+        alert('Delete failed.');
+      }
     }
+
     function esc(s=''){return String(s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
-    function truncate(str, maxLen) {
-      if (str.length <= maxLen) return str;
-      return str.substr(0, maxLen).trim() + '...';
-    }
-    function showToast(msg){
-      toastEl.textContent = msg;
-      toastEl.classList.add('show');
-      setTimeout(()=> toastEl.classList.remove('show'), 1200);
-    }
   </script>
 </body>
 </html>
