@@ -1,8 +1,8 @@
-// --- Firebase CDN imports ---
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+// --- Import Firebase SDKs (v10.12.2 stable CDN) ---
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-// --- Minimal config (double-check every value) ---
+// --- Correct Firebase configuration ---
 const firebaseConfig = {
   apiKey: "AIzaSyDHDJHrnQ2IwvetQoV6cWAGnkMzANerVDE",
   authDomain: "yangerila-studio.firebaseapp.com",
@@ -13,35 +13,36 @@ const firebaseConfig = {
   measurementId: "G-39S837X9BB"
 };
 
-// --- Initialize Firebase ---
-const app = initializeApp(firebaseConfig);
+// --- Initialize Firebase (prevent double init) ---
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 // --- DOM elements ---
-const form = document.querySelector('#login-form');
-const emailEl = document.querySelector('#email');
-const passEl = document.querySelector('#password');
-const errorEl = document.querySelector('#error');
+const form = document.getElementById("login-form");
+const emailInput = document.getElementById("email");
+const passInput = document.getElementById("password");
+const errorBox = document.getElementById("error");
 
-// --- Show error helper ---
+// --- Helper: show errors ---
 function showError(msg) {
-  errorEl.textContent = msg;
-  errorEl.style.visibility = 'visible';
+  errorBox.textContent = msg;
+  errorBox.style.visibility = "visible";
 }
 
-// --- Handle submit ---
-form.addEventListener('submit', async (e) => {
+// --- Handle login form ---
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
-  errorEl.style.visibility = 'hidden';
+  errorBox.style.visibility = "hidden";
+
+  const email = emailInput.value.trim();
+  const password = passInput.value;
 
   try {
-    const email = emailEl.value.trim();
-    const password = passEl.value;
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    console.log('✅ Logged in as:', userCredential.user.email);
-    alert('Login success!');
+    const userCred = await signInWithEmailAndPassword(auth, email, password);
+    console.log("✅ Logged in as:", userCred.user.email);
+    alert("Login successful!");
   } catch (err) {
-    console.error('[Login error]', err);
+    console.error("[Login error]", err);
     showError(err.message);
   }
 });
