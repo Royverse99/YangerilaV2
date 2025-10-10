@@ -7,7 +7,7 @@
 *{box-sizing:border-box}
 html,body{height:100%}
 body.yc-fullscreen{
-  margin:0; background:linear-gradient(135deg,var(--bg1),var(--bg2)); color:var(--text);
+  margin:0; background:#112429;
   font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial;
   overflow:hidden; /* no page scrollbars */
 }
@@ -21,8 +21,7 @@ body.yc-fullscreen{
   border-bottom:1px solid var(--border); z-index:10;
 }
 .yc-brand{display:inline-flex; align-items:center; gap:8px; color:var(--text); text-decoration:none; font-weight:800}
-.yc-viewall{color:var(--accent); text-decoration:none; font-weight:800; border:1px solid var(--accent); padding:8px 12px; border-radius:10px}
-.yc-viewall:hover{background:rgba(122,231,199,.12)}
+
 
 /* Fullscreen grid: track area, readbar, dots */
 .yc-fs{
