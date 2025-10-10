@@ -5,159 +5,101 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Yangerila – Blog</title>
 
-  <!-- Shared site theme (matches admin/editor look) -->
-  <link rel="stylesheet" href="../login/style.css?v=7"/>
+  <!-- Shared theme (matches admin/editor) -->
+  <link rel="stylesheet" href="../login/style.css?v=8"/>
 
-  <!-- Page-specific light styles that use the same CSS variables -->
   <style>
     body { margin: 0; }
+    .hero-section{background:linear-gradient(135deg, rgba(122,231,199,.10), rgba(53,203,187,.05));border-bottom:1px solid var(--border);padding:64px 20px 44px;text-align:center}
+    .hero-section .logo{width:64px;height:64px;border-radius:12px;object-fit:contain;margin:0 auto 16px}
+    .hero-section h1{margin:0 0 10px;font-size:clamp(36px,5.2vw,56px);font-weight:800;letter-spacing:.2px;background:linear-gradient(135deg,var(--accent),#5dd9a8);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+    .hero-section p{color:var(--muted);margin:0}
 
-    /* Hero */
-    .hero-section{
-      background: linear-gradient(135deg, rgba(122,231,199,0.1) 0%, rgba(53,203,187,0.05) 100%);
-      border-bottom: 1px solid var(--border);
-      padding: 64px 20px 44px;
-      text-align: center;
-    }
-    .hero-section .logo{
-      width: 64px; height: 64px; border-radius: 12px; object-fit: contain; margin: 0 auto 16px;
-    }
-    .hero-section h1{
-      margin: 0 0 10px; font-size: clamp(36px, 5.2vw, 56px); font-weight: 800; letter-spacing:.2px;
-      background: linear-gradient(135deg, var(--accent), #5dd9a8);
-      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-    }
-    .hero-section p{ color: var(--muted); margin:0 }
+    .filter-bar{position:sticky;top:0;z-index:4;background:rgba(10,23,24,.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+    .filter-controls{max-width:1280px;margin:0 auto;padding:12px 20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    .search-box{flex:1;min-width:220px;position:relative}
+    .search-box input{width:100%;padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.05);color:var(--text);font-size:14px}
+    .sort-select{padding:10px 14px;border-radius:10px;border:1px solid var(--border);background:rgba(255,255,255,.05);color:var(--text);font-size:14px;font-weight:700;cursor:pointer}
+    .view-toggle{display:flex;gap:4px;padding:4px;border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,.05)}
+    .view-btn{padding:8px 12px;border:none;background:transparent;color:var(--muted);border-radius:8px;font-size:12.5px;font-weight:700;cursor:pointer}
+    .view-btn.active{background:var(--accent);color:#0a1718}
+    .clear-btn{padding:10px 16px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:13px;font-weight:700;cursor:pointer}
 
-    /* Filter bar */
-    .filter-bar{
-      position: sticky; top: 0; z-index: 4;
-      background: rgba(10,23,24,.96);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border);
-    }
-    .filter-controls{
-      max-width: 1280px; margin: 0 auto; padding: 12px 20px;
-      display:flex; gap:12px; align-items:center; flex-wrap:wrap;
-    }
-    .search-box{ flex:1; min-width: 220px; position:relative; }
-    .search-box input{
-      width:100%; padding:10px 14px 10px 42px; border-radius:10px;
-      border:1px solid var(--border); background: rgba(255,255,255,.05); color: var(--text); font-size:14px;
-    }
-    .search-icon{ position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--muted) }
-    .sort-select{
-      padding:10px 14px; border-radius:10px; border:1px solid var(--border);
-      background: rgba(255,255,255,.05); color: var(--text); font-size:14px; font-weight:700; cursor:pointer;
-    }
-    .view-toggle{ display:flex; gap:4px; padding:4px; border:1px solid var(--border); border-radius:10px; background: rgba(255,255,255,.05); }
-    .view-btn{ padding:8px 12px; border:none; background:transparent; color:var(--muted); border-radius:8px; font-size:12.5px; font-weight:700; cursor:pointer; }
-    .view-btn.active{ background: var(--accent); color:#0a1718; }
-    .clear-btn{
-      padding:10px 16px; border-radius:10px; border:1px solid var(--border);
-      background: transparent; color: var(--muted); font-size:13px; font-weight:700; cursor:pointer;
-    }
+    .container{max-width:1280px;margin:0 auto;padding:0 20px}
+    .tags-bar{padding:16px 0 10px}
+    .tags-container{display:flex;gap:10px;flex-wrap:wrap}
+    .tag-chip{font-size:12.5px;font-weight:700;padding:8px 14px;border-radius:999px;cursor:pointer;background:rgba(122,231,199,.12);border:1px solid rgba(122,231,199,.25);color:var(--accent)}
+    .tag-chip.active{background:var(--accent);color:#0a1718;border-color:var(--accent)}
 
-    /* Containers */
-    .container{ max-width:1280px; margin:0 auto; padding: 0 20px; }
-    .tags-bar{ padding:16px 0 10px; }
-    .tags-container{ display:flex; gap:10px; flex-wrap:wrap; }
-    .tag-chip{
-      font-size:12.5px; font-weight:700; padding:8px 14px; border-radius:999px; cursor:pointer;
-      background: rgba(122,231,199,.12); border:1px solid rgba(122,231,199,.25); color: var(--accent);
-    }
-    .tag-chip.active{ background: var(--accent); color:#0a1718; border-color: var(--accent); }
+    .stats-bar{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border);margin-bottom:16px}
+    .stats-info{color:var(--muted);font-size:14px}
+    .stats-info strong{color:var(--accent)}
 
-    .stats-bar{ display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid var(--border); margin-bottom:16px; }
-    .stats-info{ color: var(--muted); font-size:14px; }
-    .stats-info strong{ color: var(--accent); }
+    .grid-view{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px;margin-bottom:32px}
+    .list-view{display:flex;flex-direction:column;gap:16px;margin-bottom:32px}
 
-    /* Cards (grid/list share admin palette) */
-    .grid-view{ display:grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap:20px; margin-bottom:32px; }
-    .list-view{ display:flex; flex-direction:column; gap:16px; margin-bottom:32px; }
+    .blog-card{background:var(--panel);border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 4px 16px rgba(0,0,0,.2);transition:transform .2s,box-shadow .2s,border-color .2s;cursor:pointer}
+    .blog-card:hover{transform:translateY(-4px);border-color:rgba(122,231,199,.35);box-shadow:0 12px 30px rgba(0,0,0,.35)}
+    .blog-card.list-card{flex-direction:row}
+    .card-image{width:100%;height:200px;object-fit:cover;background:rgba(255,255,255,.03)}
+    .list-card .card-image{width:280px;height:auto;min-height:200px}
+    .card-content{padding:18px;display:flex;flex-direction:column;gap:10px}
+    .card-title{margin:0;font-size:20px;font-weight:800;color:var(--text);line-height:1.25}
+    .card-meta{display:flex;gap:14px;flex-wrap:wrap;align-items:center;color:var(--muted);font-size:12.5px}
+    .card-excerpt{color:var(--muted);font-size:14px;margin:0;line-height:1.6}
+    .card-tags{display:flex;gap:6px;flex-wrap:wrap}
+    .card-tag{font-size:11px;background:rgba(122,231,199,.12);border:1px solid rgba(122,231,199,.25);border-radius:6px;padding:4px 10px;color:var(--accent)}
+    .card-footer{display:flex;gap:8px;padding-top:12px;border-top:1px solid var(--border)}
+    .card-btn{flex:1;padding:9px 10px;border-radius:10px;font-size:12.5px;font-weight:800;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+    .card-btn.primary{background:var(--accent);color:#0a1718}
+    .card-btn.secondary{background:transparent;color:var(--muted);border:1px solid var(--border)}
+    .card-btn:hover{transform:translateY(-1px)}
 
-    .blog-card{
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 14px; overflow: hidden; display:flex; flex-direction:column;
-      box-shadow: 0 4px 16px rgba(0,0,0,.2); transition: transform .2s, box-shadow .2s, border-color .2s; cursor: pointer;
-    }
-    .blog-card:hover{ transform: translateY(-4px); border-color: rgba(122,231,199,.35); box-shadow: 0 12px 30px rgba(0,0,0,.35); }
-    .blog-card.list-card{ flex-direction:row; }
+    .featured-post{background:var(--panel);border:2px solid var(--accent);border-radius:16px;overflow:hidden;margin:18px 0 28px;box-shadow:0 8px 32px rgba(122,231,199,.15)}
+    .featured-content{display:grid;grid-template-columns:1fr 1fr}
+    .featured-image{width:100%;height:100%;min-height:340px;object-fit:cover}
+    .featured-info{padding:26px;display:flex;flex-direction:column;gap:10px;justify-content:center}
+    .featured-title{margin:0;font-size:30px;font-weight:800;color:var(--text)}
+    .featured-excerpt{color:var(--muted);margin:0;line-height:1.7}
 
-    .card-image{ width:100%; height:200px; object-fit:cover; background: rgba(255,255,255,.03); }
-    .list-card .card-image{ width:280px; height:auto; min-height:200px; }
+    .modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.85);backdrop-filter:blur(10px);z-index:50;padding:20px}
+    .modal.open{display:flex}
+    .modal-content{width:min(900px,96vw);max-height:90vh;overflow:auto;background:var(--panel);border:1px solid var(--border);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+    .modal-header{position:sticky;top:0;background:var(--panel);border-bottom:1px solid var(--border);padding:16px 20px;display:flex;justify-content:space-between;align-items:center;z-index:5}
+    .modal-title{margin:0;font-size:26px;font-weight:800;color:var(--text)}
+    .modal-close{padding:8px 12px;background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--muted);border-radius:8px;cursor:pointer}
+    .modal-body{padding:20px}
+    .modal-image{width:100%;max-height:440px;object-fit:cover;border-radius:12px;border:1px solid var(--border);margin-bottom:16px}
+    .modal-article{color:var(--text);line-height:1.8;font-size:16px}
+    .modal-actions{display:flex;gap:10px;margin-top:22px;padding-top:14px;border-top:1px solid var(--border)}
+    .action-btn{padding:12px 18px;border-radius:10px;border:none;font-weight:800;font-size:13px;cursor:pointer}
+    .action-btn.primary{background:var(--accent);color:#0a1718}
+    .action-btn.secondary{background:transparent;border:1px solid var(--border);color:var(--text)}
 
-    .card-content{ padding:18px; display:flex; flex-direction:column; gap:10px; }
-    .card-title{ margin:0; font-size:20px; font-weight:800; color: var(--text); line-height:1.25; }
-    .card-meta{ display:flex; gap:14px; flex-wrap:wrap; align-items:center; color:var(--muted); font-size:12.5px; }
-    .card-excerpt{ color: var(--muted); font-size:14px; margin:0; line-height:1.6; }
-    .card-tags{ display:flex; gap:6px; flex-wrap:wrap; }
-    .card-tag{ font-size:11px; background: rgba(122,231,199,.12); border:1px solid rgba(122,231,199,.25); border-radius:6px; padding:4px 10px; color: var(--accent) }
-
-    .card-footer{ display:flex; gap:8px; padding-top:12px; border-top:1px solid var(--border); }
-    .card-btn{ flex:1; padding:9px 10px; border-radius:10px; font-size:12.5px; font-weight:800; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; }
-    .card-btn.primary{ background: var(--accent); color:#0a1718; }
-    .card-btn.secondary{ background: transparent; color: var(--muted); border: 1px solid var(--border); }
-    .card-btn:hover{ transform: translateY(-1px); }
-
-    /* Featured */
-    .featured-post{ background: var(--panel); border: 2px solid var(--accent); border-radius:16px; overflow:hidden; margin: 18px 0 28px; box-shadow: 0 8px 32px rgba(122,231,199,.15); }
-    .featured-badge{ position:absolute; margin:14px; background: var(--accent); color:#0a1718; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:800; text-transform:uppercase; }
-    .featured-content{ display:grid; grid-template-columns: 1fr 1fr; }
-    .featured-image{ width:100%; height:100%; min-height:340px; object-fit:cover; }
-    .featured-info{ padding:26px; display:flex; flex-direction:column; gap:10px; justify-content:center; }
-    .featured-title{ margin:0; font-size:30px; font-weight:800; color: var(--text) }
-    .featured-excerpt{ color: var(--muted); margin:0; line-height:1.7; }
-
-    /* Modal (read more) */
-    .modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.85); backdrop-filter: blur(10px); z-index:50; padding:20px; }
-    .modal.open{ display:flex; }
-    .modal-content{ width:min(900px, 96vw); max-height:90vh; overflow:auto; background: var(--panel); border:1px solid var(--border); border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.6); }
-    .modal-header{ position:sticky; top:0; background:var(--panel); border-bottom:1px solid var(--border); padding:16px 20px; display:flex; justify-content:space-between; align-items:center; z-index:5; }
-    .modal-title{ margin:0; font-size:26px; font-weight:800; color: var(--text) }
-    .modal-close{ padding:8px 12px; background: rgba(255,255,255,.06); border:1px solid var(--border); color: var(--muted); border-radius:8px; cursor:pointer; }
-    .modal-body{ padding:20px; }
-    .modal-image{ width:100%; max-height:440px; object-fit:cover; border-radius:12px; border:1px solid var(--border); margin-bottom:16px; }
-    .modal-article{ color: var(--text); line-height:1.8; font-size:16px; }
-    .modal-actions{ display:flex; gap:10px; margin-top:22px; padding-top:14px; border-top:1px solid var(--border); }
-    .action-btn{ padding:12px 18px; border-radius:10px; border:none; font-weight:800; font-size:13px; cursor:pointer; }
-    .action-btn.primary{ background: var(--accent); color:#0a1718; }
-    .action-btn.secondary{ background: transparent; border:1px solid var(--border); color: var(--text) }
-
-    /* Responsive */
-    @media (max-width:1024px){
-      .featured-content{ grid-template-columns:1fr; }
-      .featured-image{ min-height:260px; }
-    }
+    @media (max-width:1024px){.featured-content{grid-template-columns:1fr}.featured-image{min-height:260px}}
     @media (max-width:768px){
-      .filter-controls{ flex-direction:column; align-items:stretch; }
-      .grid-view{ grid-template-columns: 1fr; }
-      .list-card{ flex-direction:column; }
-      .list-card .card-image{ width:100%; height:200px; }
-      .featured-title{ font-size:24px }
-      .modal-title{ font-size:22px }
+      .filter-controls{flex-direction:column;align-items:stretch}
+      .grid-view{grid-template-columns:1fr}
+      .list-card{flex-direction:column}
+      .list-card .card-image{width:100%;height:200px}
+      .featured-title{font-size:24px}
+      .modal-title{font-size:22px}
     }
-
-    /* Toast (shared look) */
-    .toast{ position:fixed; left:50%; transform:translateX(-50%); bottom:20px; background:rgba(0,0,0,.9); color:#fff; padding:12px 16px; border-radius:10px; font-size:13px; z-index:100; opacity:0; transition:opacity .2s; }
-    .toast.show{ opacity:1; }
+    .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:20px;background:rgba(0,0,0,.9);color:#fff;padding:12px 16px;border-radius:10px;font-size:13px;z-index:100;opacity:0;transition:opacity .2s}
+    .toast.show{opacity:1}
   </style>
 </head>
 <body>
-  <!-- Hero -->
   <section class="hero-section">
     <img src="/wp-content/uploads/2022/04/coaching3-slider-pic1.webp" class="logo" alt="Yangerila"/>
     <h1>Blog</h1>
-    <p>Discover lessons, tips, and stories from Yangerila</p>
+    <p>Lessons, tips, and stories</p>
   </section>
 
-  <!-- Filter Bar -->
   <div class="filter-bar">
     <div class="filter-controls">
       <div class="search-box">
-        <span class="search-icon">🔍</span>
-        <input id="searchInput" placeholder="Search posts by title or content..."/>
+        <input id="searchInput" placeholder="Search posts by title or excerpt..."/>
       </div>
       <select class="sort-select" id="sortSelect">
         <option value="date_desc">Newest First</option>
@@ -174,27 +116,13 @@
   </div>
 
   <main class="container">
-    <!-- Tags -->
-    <section class="tags-bar">
-      <div class="tags-container" id="tagsContainer"></div>
-    </section>
-
-    <!-- Stats -->
-    <div class="stats-bar">
-      <div class="stats-info">Showing <strong id="postCount">0</strong> posts</div>
-    </div>
-
-    <!-- Featured -->
+    <section class="tags-bar"><div class="tags-container" id="tagsContainer"></div></section>
+    <div class="stats-bar"><div class="stats-info">Showing <strong id="postCount">0</strong> posts</div></div>
     <div id="featuredContainer"></div>
-
-    <!-- Posts -->
     <div id="postsContainer" class="grid-view"></div>
-
-    <!-- Load more -->
     <button class="load-more" id="loadMoreBtn" style="display:none">Load More</button>
   </main>
 
-  <!-- Modal -->
   <div class="modal" id="postModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -207,166 +135,100 @@
         <div class="card-tags" id="modalTags"></div>
         <article class="modal-article" id="modalContent"></article>
         <div class="modal-actions">
-          <button class="action-btn primary" id="modalLikeBtn"><span>👍</span> <span id="modalLikes">0</span> Likes</button>
-          <button class="action-btn secondary" id="modalShareBtn"><span>🔗</span> Share</button>
+          <button class="action-btn primary" id="modalLikeBtn"><span id="modalLikes">0</span> Likes</button>
+          <button class="action-btn secondary" id="modalShareBtn">Share</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Toast -->
   <div class="toast" id="toast"></div>
 
-  <!-- Firebase + Blog logic -->
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-    import {
-      getFirestore, collection, query, where, orderBy, getDocs,
-      doc, updateDoc, increment
-    } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+    import { getFirestore, collection, query, where, getDocs, doc, updateDoc, increment } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
-    // Public Firestore (no auth needed for reads of published posts)
-const firebaseConfig = {
-    apiKey: "AIzaSyDHDjHrnQ2IwwetQoV6cWAGnkMzANerVDE",
-    authDomain: "yangerila-studio.firebaseapp.com",
-    projectId: "yangerila-studio",
-    };
+    const firebaseConfig = { apiKey:"AIzaSyDHDJHrnQ2IwvetQoV6cWAGnkMzANerVDE", authDomain:"yangerila-studio.firebaseapp.com", projectId:"yangerila-studio" };
     const app = initializeApp(firebaseConfig);
     const db  = getFirestore(app);
 
-    // State
-    let state = {
-      posts: [], filteredPosts: [], displayedPosts: [],
-      selectedTag: null, searchQuery: '', sortBy: 'date_desc',
-      viewMode: 'grid', pageSize: 12, currentPage: 1
-    };
+    let state = { posts:[], filtered:[], view:'grid', sort:'date_desc', tag:null, q:'', page:1, size:12 };
 
-    // DOM
-    const searchInput = document.getElementById('searchInput');
-    const sortSelect  = document.getElementById('sortSelect');
-    const clearBtn    = document.getElementById('clearBtn');
-    const tagsContainer   = document.getElementById('tagsContainer');
-    const postsContainer  = document.getElementById('postsContainer');
-    const featuredContainer = document.getElementById('featuredContainer');
-    const postCountEl     = document.getElementById('postCount');
-    const loadMoreBtn     = document.getElementById('loadMoreBtn');
+    const searchInput=document.getElementById('searchInput');
+    const sortSelect=document.getElementById('sortSelect');
+    const clearBtn=document.getElementById('clearBtn');
+    const tagsContainer=document.getElementById('tagsContainer');
+    const postsContainer=document.getElementById('postsContainer');
+    const featuredContainer=document.getElementById('featuredContainer');
+    const postCountEl=document.getElementById('postCount');
+    const loadMoreBtn=document.getElementById('loadMoreBtn');
+    const postModal=document.getElementById('postModal'), modalClose=document.getElementById('modalClose'), toast=document.getElementById('toast');
 
-    const postModal  = document.getElementById('postModal');
-    const modalClose = document.getElementById('modalClose');
-    const toast      = document.getElementById('toast');
-
-    // Init
-    loadPosts();
-    setupUI();
+    init();
+    async function init(){
+      setupUI();
+      await loadPosts();          // PUBLIC READ (published == true)
+      buildTags();
+      renderFeatured();
+      applyFilters();
+      openByQuery();
+    }
 
     function setupUI(){
-      searchInput.addEventListener('input', handleSearch);
-      sortSelect.addEventListener('change', handleSort);
-      clearBtn.addEventListener('click', clearFilters);
-
-      // View toggle
-      document.querySelectorAll('.view-btn').forEach(btn=>{
-        btn.addEventListener('click', ()=>{
-          document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));
-          btn.classList.add('active');
-          state.viewMode = btn.dataset.view;
-          renderPosts();
-        });
-      });
-
-      // Modal controls
-      modalClose.addEventListener('click', closeModal);
-      postModal.addEventListener('click', (e)=>{ if(e.target===postModal) closeModal(); });
-
-      // Load more
-      loadMoreBtn.addEventListener('click', ()=>{
-        state.currentPage++;
-        renderPosts();
-        window.scrollTo({ top: postsContainer.offsetTop - 80, behavior: 'smooth' });
-      });
+      document.querySelectorAll('.view-btn').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.view-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');state.view=b.dataset.view;renderPosts();}));
+      searchInput.addEventListener('input',()=>{state.q=searchInput.value.trim().toLowerCase();state.page=1;applyFilters();});
+      sortSelect.addEventListener('change',()=>{state.sort=sortSelect.value;state.page=1;applyFilters();});
+      clearBtn.addEventListener('click',()=>{state.q='';state.tag=null;state.sort='date_desc';searchInput.value='';sortSelect.value='date_desc';applyFilters();tagsContainer.querySelectorAll('.tag-chip').forEach(c=>c.classList.toggle('active',(c.dataset.tag||'')===''));});
+      loadMoreBtn.addEventListener('click',()=>{state.page++;renderPosts();window.scrollTo({top:postsContainer.offsetTop-80,behavior:'smooth'});});
+      modalClose.addEventListener('click',closeModal);
+      postModal.addEventListener('click',e=>{if(e.target===postModal)closeModal();});
     }
 
     async function loadPosts(){
-      postsContainer.innerHTML = '<div class="loading">Loading posts…</div>';
-      try{
-        const q = query(collection(db,'blogs'), where('published','==',true), orderBy('publishedAt','desc'));
-        const snap = await getDocs(q);
-        state.posts = [];
-        snap.forEach(d => state.posts.push({ id: d.id, ...d.data(), likes: Number(d.data().likes || 0), views: Number(d.data().views || 0) }));
-        buildTags(); renderFeatured(); applyFilters(); openByQuery();
-      }catch(err){
-        console.error(err);
-        postsContainer.innerHTML = '<div class="empty-state">Couldn’t load posts.</div>';
-      }
+      postsContainer.innerHTML='<div class="empty-state">Loading…</div>';
+      const q = query(collection(db,'blogs'), where('published','==', true));
+      const snap = await getDocs(q);
+      state.posts=[];
+      snap.forEach(d=>state.posts.push({ id:d.id, ...d.data(), likes:Number(d.data().likes||0), views:Number(d.data().views||0) }));
+      // sort client-side (avoids composite index requirement)
+      state.posts.sort((a,b)=>ts(b.publishedAt||b.updatedAt)-ts(a.publishedAt||a.updatedAt));
     }
 
     function buildTags(){
-      const tally = new Map();
-      state.posts.forEach(p => (p.tags||[]).forEach(t => tally.set(t, (tally.get(t)||0)+1)));
-      const list = Array.from(tally.entries()).sort((a,b)=>b[1]-a[1]).slice(0,15);
-      tagsContainer.innerHTML = [
-        `<div class="tag-chip ${!state.selectedTag?'active':''}" data-tag="">All Posts (${state.posts.length})</div>`,
-        ...list.map(([t,c])=>`<div class="tag-chip ${state.selectedTag===t?'active':''}" data-tag="${esc(t)}">${esc(t)} (${c})</div>`)
+      const tally=new Map();
+      state.posts.forEach(p=>(p.tags||[]).forEach(t=>tally.set(t,(tally.get(t)||0)+1)));
+      const list=[...tally.entries()].sort((a,b)=>b[1]-a[1]).slice(0,15);
+      tagsContainer.innerHTML=[
+        `<div class="tag-chip ${!state.tag?'active':''}" data-tag="">All Posts (${state.posts.length})</div>`,
+        ...list.map(([t,c])=>`<div class="tag-chip ${state.tag===t?'active':''}" data-tag="${esc(t)}">${esc(t)} (${c})</div>`)
       ].join('');
-      tagsContainer.querySelectorAll('.tag-chip').forEach(chip=>{
-        chip.addEventListener('click', ()=>{
-          const tag = chip.dataset.tag;
-          state.selectedTag = tag || null;
-          applyFilters();
-          tagsContainer.querySelectorAll('.tag-chip').forEach(c=>{
-            c.classList.toggle('active', (c.dataset.tag||null)===state.selectedTag);
-          });
-        });
-      });
-    }
-
-    function handleSearch(){ state.searchQuery = searchInput.value.trim().toLowerCase(); state.currentPage=1; applyFilters(); }
-    function handleSort(){ state.sortBy = sortSelect.value; state.currentPage=1; applyFilters(); }
-    function clearFilters(){
-      state.selectedTag=null; state.searchQuery=''; state.sortBy='date_desc'; state.currentPage=1;
-      searchInput.value=''; sortSelect.value='date_desc'; applyFilters();
-      tagsContainer.querySelectorAll('.tag-chip').forEach(c=>c.classList.toggle('active', (c.dataset.tag||'')===''));
+      tagsContainer.querySelectorAll('.tag-chip').forEach(chip=>chip.addEventListener('click',()=>{state.tag=chip.dataset.tag||null;applyFilters();tagsContainer.querySelectorAll('.tag-chip').forEach(c=>c.classList.toggle('active',(c.dataset.tag||null)===state.tag));}));
     }
 
     function applyFilters(){
-      let out = [...state.posts];
-      if(state.selectedTag) out = out.filter(p => (p.tags||[]).includes(state.selectedTag));
-      if(state.searchQuery){
-        out = out.filter(p =>
-          (p.title||'').toLowerCase().includes(state.searchQuery) ||
-          (p.shortText||'').toLowerCase().includes(state.searchQuery)
-        );
+      let out=[...state.posts];
+      if(state.tag) out=out.filter(p=>(p.tags||[]).includes(state.tag));
+      if(state.q) out=out.filter(p=>(p.title||'').toLowerCase().includes(state.q)||(p.shortText||'').toLowerCase().includes(state.q));
+      switch(state.sort){
+        case 'date_asc': out.sort((a,b)=>ts(a.publishedAt||a.updatedAt)-ts(b.publishedAt||b.updatedAt)); break;
+        case 'views_desc': out.sort((a,b)=>(b.views||0)-(a.views||0)); break;
+        case 'likes_desc': out.sort((a,b)=>(b.likes||0)-(a.likes||0)); break;
+        default: out.sort((a,b)=>ts(b.publishedAt||b.updatedAt)-ts(a.publishedAt||a.updatedAt));
       }
-      out.sort((a,b)=>{
-        switch(state.sortBy){
-          case 'date_asc': return ts(a.publishedAt) - ts(b.publishedAt);
-          case 'views_desc': return (b.views||0) - (a.views||0);
-          case 'likes_desc': return (b.likes||0) - (a.likes||0);
-          default: return ts(b.publishedAt) - ts(a.publishedAt);
-        }
-      });
-      state.filteredPosts = out;
-      state.currentPage = 1;
-      renderPosts();
+      state.filtered=out; state.page=1; renderPosts();
     }
 
     function renderFeatured(){
-      const el = document.getElementById('featuredContainer');
-      if(!state.posts.length){ el.innerHTML=''; return; }
-      const f = state.posts[0];
-      el.innerHTML = `
+      if(!state.posts.length){ featuredContainer.innerHTML=''; return; }
+      const f=state.posts[0];
+      featuredContainer.innerHTML=`
         <div class="featured-post" onclick="openPost('${f.id}')">
-          <div class="featured-badge">Featured</div>
           <div class="featured-content">
             ${f.imageUrl?`<img src="${esc(f.imageUrl)}" class="featured-image" alt="${esc(f.title)}">`:''}
             <div class="featured-info">
               <h2 class="featured-title">${esc(f.title||'Untitled')}</h2>
-              <div class="card-meta">
-                <div>📅 ${fmt(f.publishedAt)}</div>
-                <div>👁️ ${f.views}</div>
-                <div>👍 ${f.likes}</div>
-              </div>
-              <p class="featured-excerpt">${esc((f.shortText||'').slice(0,200))}${(f.shortText||'').length>200?'…':''}</p>
+              <div class="card-meta"><div>Date: ${fmt(f.publishedAt||f.updatedAt)}</div><div>Views: ${f.views}</div><div>Likes: ${f.likes}</div></div>
+              <p class="featured-excerpt">${esc((f.shortText||'').slice(0,220))}${(f.shortText||'').length>220?'…':''}</p>
               <div class="card-tags">${(f.tags||[]).map(t=>`<span class="card-tag">${esc(t)}</span>`).join('')}</div>
             </div>
           </div>
@@ -374,109 +236,70 @@ const firebaseConfig = {
     }
 
     function renderPosts(){
-      const end = state.currentPage * state.pageSize;
-      const items = state.filteredPosts.slice(0,end);
-      postCountEl.textContent = state.filteredPosts.length;
-      const listClass = state.viewMode==='grid' ? 'grid-view' : 'list-view';
-      postsContainer.className = listClass;
-
-      if(!items.length){ postsContainer.innerHTML = '<div class="empty-state">No posts found.</div>'; loadMoreBtn.style.display='none'; return; }
-
+      const end = state.page*state.size, items=state.filtered.slice(0,end);
+      postCountEl.textContent=state.filtered.length;
+      postsContainer.className = state.view==='grid'?'grid-view':'list-view';
+      if(!items.length){ postsContainer.innerHTML='<div class="empty-state">No posts found.</div>'; loadMoreBtn.style.display='none'; return; }
       postsContainer.innerHTML = items.map(p=>{
-        const cls = state.viewMode==='list'?'blog-card list-card':'blog-card';
+        const cls=state.view==='list'?'blog-card list-card':'blog-card';
         return `
           <article class="${cls}" onclick="openPost('${p.id}')">
             ${p.imageUrl?`<img src="${esc(p.imageUrl)}" class="card-image" alt="${esc(p.title)}">`:''}
             <div class="card-content">
               <h3 class="card-title">${esc(p.title||'Untitled')}</h3>
-              <div class="card-meta">
-                <div>📅 ${fmt(p.publishedAt)}</div>
-                <div>👁️ ${p.views}</div>
-                <div>👍 ${p.likes}</div>
-              </div>
+              <div class="card-meta"><div>Date: ${fmt(p.publishedAt||p.updatedAt)}</div><div>Views: ${p.views}</div><div>Likes: ${p.likes}</div></div>
               <p class="card-excerpt">${esc(p.shortText||'')}</p>
               <div class="card-tags">${(p.tags||[]).map(t=>`<span class="card-tag">${esc(t)}</span>`).join('')}</div>
               <div class="card-footer">
                 <button class="card-btn primary" onclick="event.stopPropagation(); openPost('${p.id}')">Read</button>
-                <button class="card-btn secondary" onclick="event.stopPropagation(); likePost('${p.id}')">👍 Like</button>
-                <button class="card-btn secondary" onclick="event.stopPropagation(); sharePost('${p.id}')">🔗 Share</button>
+                <button class="card-btn secondary" onclick="event.stopPropagation(); likePost('${p.id}')">Like</button>
+                <button class="card-btn secondary" onclick="event.stopPropagation(); sharePost('${p.id}')">Share</button>
               </div>
             </div>
           </article>`;
       }).join('');
-
-      loadMoreBtn.style.display = items.length < state.filteredPosts.length ? 'block' : 'none';
+      loadMoreBtn.style.display = items.length < state.filtered.length ? 'block':'none';
     }
 
-    // Modal & actions
     window.openPost = async function(id){
-      const p = state.posts.find(x=>x.id===id); if(!p) return;
-      document.getElementById('modalTitle').textContent = p.title || 'Untitled';
-      document.getElementById('modalMeta').innerHTML = `
-        <div>📅 ${fmt(p.publishedAt)}</div>
-        <div>👁️ ${p.views} views</div>
-        <div>👍 ${p.likes} likes</div>`;
-      const img = document.getElementById('modalImage');
-      if(p.imageUrl){ img.src = p.imageUrl; img.style.display='block'; } else { img.style.display='none'; }
-      document.getElementById('modalTags').innerHTML = (p.tags||[]).map(t=>`<span class="card-tag">${esc(t)}</span>`).join('');
-      document.getElementById('modalContent').innerHTML = p.bodyHtml || toHtml(p.fullText||p.shortText||'');
-      document.getElementById('modalLikes').textContent = p.likes;
-      document.getElementById('modalLikeBtn').onclick = ()=>likePost(id);
-      document.getElementById('modalShareBtn').onclick = ()=>sharePost(id);
+      const p=state.posts.find(x=>x.id===id); if(!p) return;
+      document.getElementById('modalTitle').textContent=p.title||'Untitled';
+      document.getElementById('modalMeta').innerHTML=`<div>Date: ${fmt(p.publishedAt||p.updatedAt)}</div><div>Views: ${p.views}</div><div>Likes: ${p.likes}</div>`;
+      const mi=document.getElementById('modalImage'); if(p.imageUrl){mi.src=p.imageUrl;mi.style.display='block';}else{mi.style.display='none';}
+      document.getElementById('modalTags').innerHTML=(p.tags||[]).map(t=>`<span class="card-tag">${esc(t)}</span>`).join('');
+      document.getElementById('modalContent').innerHTML=p.bodyHtml||toHtml(p.fullText||p.shortText||'');
+      document.getElementById('modalLikes').textContent=p.likes;
+      document.getElementById('modalLikeBtn').onclick=()=>likePost(id);
+      document.getElementById('modalShareBtn').onclick=()=>sharePost(id);
+      postModal.classList.add('open'); document.body.style.overflow='hidden';
 
-      // open
-      document.getElementById('postModal').classList.add('open');
-      document.body.style.overflow='hidden';
-
-      // views +1 (12h cooldown)
-      const key = 'viewed_'+id, now = Date.now(), last = Number(localStorage.getItem(key)||0);
-      if(!last || now-last > 12*60*60*1000){
-        try{
-          await updateDoc(doc(db,'blogs',id), { views: increment(1) });
-          localStorage.setItem(key, String(now));
-          p.views++; // optimistic UI
-          document.getElementById('modalMeta').innerHTML = `
-            <div>📅 ${fmt(p.publishedAt)}</div>
-            <div>👁️ ${p.views} views</div>
-            <div>👍 ${p.likes} likes</div>`;
-        }catch(e){ console.warn('view +1 failed', e); }
+      const key='viewed_'+id, now=Date.now(), last=Number(localStorage.getItem(key)||0);
+      if(!last || now-last>12*60*60*1000){
+        try{ await updateDoc(doc(db,'blogs',id),{views:increment(1)}); localStorage.setItem(key,String(now)); p.views++; document.getElementById('modalMeta').innerHTML=`<div>Date: ${fmt(p.publishedAt||p.updatedAt)}</div><div>Views: ${p.views}</div><div>Likes: ${p.likes}</div>`; }
+        catch(e){ console.warn('view +1 failed',e); }
       }
     };
-    function closeModal(){ document.getElementById('postModal').classList.remove('open'); document.body.style.overflow=''; }
+    function closeModal(){ postModal.classList.remove('open'); document.body.style.overflow=''; }
 
     window.likePost = async function(id){
-      const key = 'liked_'+id; if(localStorage.getItem(key)) return show('You already liked');
-      try{
-        await updateDoc(doc(db,'blogs',id), { likes: increment(1) });
-        localStorage.setItem(key,'1');
-        const p = state.posts.find(x=>x.id===id); if(p){ p.likes++; renderPosts(); if(document.getElementById('postModal').classList.contains('open')) document.getElementById('modalLikes').textContent=p.likes; }
-        show('Thanks for the like!');
-      }catch(e){ console.error(e); show('Like failed'); }
+      const key='liked_'+id; if(localStorage.getItem(key)) return show('Already liked');
+      try{ await updateDoc(doc(db,'blogs',id),{likes:increment(1)}); localStorage.setItem(key,'1'); const p=state.posts.find(x=>x.id===id); if(p){p.likes++; renderPosts(); if(postModal.classList.contains('open')) document.getElementById('modalLikes').textContent=p.likes;} show('Thanks!'); }
+      catch(e){ console.error(e); show('Like failed'); }
     };
-
     window.sharePost = async function(id){
-      const p = state.posts.find(x=>x.id===id); if(!p) return;
-      const url = `${location.origin}/blog/?post=${id}`;
-      const text = p.shortText || p.title || 'Yangerila Blog';
-      try{
-        if(navigator.share) await navigator.share({ title: p.title, text, url });
-        else { await navigator.clipboard.writeText(url); show('Link copied'); }
-      }catch{ try{ await navigator.clipboard.writeText(url); show('Link copied'); } catch{ show('Could not share'); } }
+      const p=state.posts.find(x=>x.id===id); if(!p) return;
+      const url=`${location.origin}/blog/?post=${id}`, text=p.shortText||p.title||'Blog';
+      try{ if(navigator.share) await navigator.share({title:p.title,text,url}); else { await navigator.clipboard.writeText(url); show('Link copied'); } }
+      catch{ try{ await navigator.clipboard.writeText(url); show('Link copied'); } catch{ show('Could not share'); } }
     };
 
-    // helpers
     function fmt(ts){ if(!ts?.seconds) return ''; return new Date(ts.seconds*1000).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}); }
-    function ts(ts){ return ts?.seconds ? ts.seconds*1000 : 0; }
-    function toHtml(txt){ const safe=esc(txt||''); const linkified=safe.replace(/(https?:\/\/[^\s]+)/g,m=>`<a href="${m}" target="_blank" rel="noopener">${m}</a>`); return linkified.split(/\n{2,}/).map(p=>`<p>${p.replace(/\n/g,'<br>')}</p>`).join(''); }
-    function esc(s=''){ return String(s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-    function show(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 2000); }
+    function ts(t){ return t?.seconds ? t.seconds*1000 : 0; }
+    function toHtml(txt){ const safe=esc(txt||''); const link=safe.replace(/(https?:\/\/[^\s]+)/g,m=>`<a href="${m}" target="_blank" rel="noopener">${m}</a>`); return link.split(/\n{2,}/).map(p=>`<p>${p.replace(/\n/g,'<br>')}</p>`).join(''); }
+    function esc(s=''){ return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+    function show(msg){ toast.textContent=msg; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'),1500); }
 
-    // deep link ?post=ID
-    function openByQuery(){
-      const id = new URLSearchParams(location.search).get('post');
-      if(!id) return;
-      const iv = setInterval(()=>{ if(state.posts.length){ clearInterval(iv); window.openPost(id); } }, 100);
-    }
+    function openByQuery(){ const id=new URLSearchParams(location.search).get('post'); if(!id) return; const iv=setInterval(()=>{ if(state.posts.length){clearInterval(iv); window.openPost(id);} },100); }
   </script>
 </body>
 </html>
