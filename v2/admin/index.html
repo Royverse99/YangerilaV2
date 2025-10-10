@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Yangerila — Admin</title>
-  <link rel="stylesheet" href="/admin/style.css?v=5"/>
+  <link rel="stylesheet" href="/admin/style.css?v=6"/>
 </head>
 <body class="admin-page style-solid">
 
@@ -12,18 +12,18 @@
   <div id="loading">Checking login…</div>
 
   <header class="topbar">
-    <!-- ✅ same path as your login page -->
     <img src="/wp-content/uploads/2022/04/coaching3-slider-pic1.webp" alt="Yangerila" class="logo"/>
     <h1 class="brand">Yangerila Creative Studio - Admin Panel</h1>
     <div class="top-actions">
       <span class="user" id="user-email">Loading…</span>
-      <button class="btn primary" id="signout">Sign out</button>
+      <button class="btn primary has-tip" id="signout" data-tip="Sign out of the admin dashboard">Sign out</button>
     </div>
   </header>
 
-  <main class="grid">
+  <!-- STACKED LAYOUT (single column blocks) -->
+  <main class="stack">
 
-    <!-- ================== Yangerila Web CRM (3 separate tabs) ================== -->
+    <!-- ================== Yangerila Web CRM ================== -->
     <section aria-labelledby="h-web">
       <div class="h2-row">
         <h2 id="h-web">Yangerila Web CRM</h2>
@@ -34,18 +34,19 @@
         <div class="subhead">
           <h3>Coupon Forms Data</h3>
           <div class="sub-actions">
-            <details class="cols">
-              <summary class="btn tiny ghost">Columns</summary>
+            <details class="cols has-tip" data-tip="Show/hide table columns to reduce clutter">
+              <summary class="btn tiny ghost" aria-label="Toggle column visibility">Columns</summary>
               <form class="col-filter" data-table="table-coupon"></form>
             </details>
-            <button class="btn tiny" id="refresh-coupon">Refresh</button>
+            <button class="btn tiny has-tip" id="refresh-coupon" data-tip="Reload the latest Coupon Forms data">Refresh</button>
           </div>
         </div>
         <div class="table-wrap">
-          <table id="table-coupon">
+          <table id="table-coupon" aria-describedby="coupon-help">
             <thead></thead>
             <tbody><tr><td class="muted center">Loading…</td></tr></tbody>
           </table>
+          <p id="coupon-help" class="sr-only">Use the Columns button to hide or show fields. Refresh gets the latest entries.</p>
         </div>
       </div>
 
@@ -54,18 +55,19 @@
         <div class="subhead">
           <h3>Admission &amp; Demo Form Data</h3>
           <div class="sub-actions">
-            <details class="cols">
-              <summary class="btn tiny ghost">Columns</summary>
+            <details class="cols has-tip" data-tip="Choose which fields to display in this table">
+              <summary class="btn tiny ghost" aria-label="Toggle column visibility">Columns</summary>
               <form class="col-filter" data-table="table-admDemo"></form>
             </details>
-            <button class="btn tiny" id="refresh-admDemo">Refresh</button>
+            <button class="btn tiny has-tip" id="refresh-admDemo" data-tip="Reload the latest Admission & Demo data">Refresh</button>
           </div>
         </div>
         <div class="table-wrap">
-          <table id="table-admDemo">
+          <table id="table-admDemo" aria-describedby="adm-help">
             <thead></thead>
             <tbody><tr><td class="muted center">Loading…</td></tr></tbody>
           </table>
+          <p id="adm-help" class="sr-only">Use the Columns button to hide or show fields. Refresh gets the latest entries.</p>
         </div>
       </div>
 
@@ -74,18 +76,19 @@
         <div class="subhead">
           <h3>Contact Us Form Data</h3>
           <div class="sub-actions">
-            <details class="cols">
-              <summary class="btn tiny ghost">Columns</summary>
+            <details class="cols has-tip" data-tip="Select columns to show/hide for a cleaner view">
+              <summary class="btn tiny ghost" aria-label="Toggle column visibility">Columns</summary>
               <form class="col-filter" data-table="table-contact"></form>
             </details>
-            <button class="btn tiny" id="refresh-contact">Refresh</button>
+            <button class="btn tiny has-tip" id="refresh-contact" data-tip="Reload the latest Contact submissions">Refresh</button>
           </div>
         </div>
         <div class="table-wrap">
-          <table id="table-contact">
+          <table id="table-contact" aria-describedby="contact-help">
             <thead></thead>
             <tbody><tr><td class="muted center">Loading…</td></tr></tbody>
           </table>
+          <p id="contact-help" class="sr-only">Use the Columns button to hide or show fields. Refresh gets the latest entries.</p>
         </div>
       </div>
     </section>
@@ -99,27 +102,31 @@
         <div class="subhead">
           <h3>YCS Admissions</h3>
           <div class="sub-actions">
-            <details class="cols">
-              <summary class="btn tiny ghost">Columns</summary>
+            <details class="cols has-tip" data-tip="Toggle visibility of any column in this sheet">
+              <summary class="btn tiny ghost" aria-label="Toggle column visibility">Columns</summary>
               <form class="col-filter" data-table="table-ycs"></form>
             </details>
-            <button class="btn tiny" id="refresh-ycs">Refresh</button>
+            <button class="btn tiny has-tip" id="refresh-ycs" data-tip="Reload the latest YCS Admissions data">Refresh</button>
           </div>
         </div>
-        <div class="table-wrap tall">
-          <table id="table-ycs">
+        <div class="table-wrap">
+          <table id="table-ycs" aria-describedby="ycs-help">
             <thead></thead>
             <tbody><tr><td class="muted center">Loading…</td></tr></tbody>
           </table>
+          <p id="ycs-help" class="sr-only">Use the Columns button to hide or show fields. Refresh gets the latest entries.</p>
         </div>
       </div>
     </section>
 
-    <!-- ================== Blogs preview ================== -->
+    <!-- ================== Blogs preview (BOTTOM) ================== -->
     <section aria-labelledby="h-blogs">
       <div class="h2-row">
         <h2 id="h-blogs">Blogs</h2>
-        <a class="btn blog-editor-btn" href="/admin/blog-editor.html" title="Open Blog Editor">✍️ Blog Editor</a>
+        <a class="btn blog-editor-btn has-tip" href="/admin/blog-editor.html"
+           title="Open Blog Editor" data-tip="Create or edit blog posts">
+          ✍️ Blog Editor
+        </a>
       </div>
       <div class="block">
         <div class="subhead">
@@ -132,29 +139,25 @@
 
   <!-- Image preview modal -->
   <div class="img-modal" id="imgModal" aria-hidden="true">
-    <button class="close" aria-label="Close image preview">Close</button>
+    <button class="close has-tip" aria-label="Close image preview" data-tip="Close the image preview">Close</button>
     <img src="" alt="preview">
   </div>
 
   <!-- Toast -->
   <div class="toast" id="toast">Copied</div>
 
-  <!-- ================== Column filter helper (no changes to adminapp.js) ================== -->
+  <!-- ================== Column filter helper (unchanged logic) ================== -->
   <script>
-    // Build/refresh column checkboxes whenever a table header appears/changes
     const tables = ['table-coupon','table-admDemo','table-contact','table-ycs'];
     const styleBucket = document.createElement('style');
     styleBucket.id = 'col-hide-rules';
     document.head.appendChild(styleBucket);
 
     function applyHiddenColumns(tableId, hiddenIdxSet){
-      // Build CSS rules to hide selected column indexes for this table
       const parts = [];
       hiddenIdxSet.forEach(idx => {
-        // idx is 1-based nth-child index
         parts.push(`#${tableId} th:nth-child(${idx}), #${tableId} td:nth-child(${idx}){ display:none; }`);
       });
-      // Remove existing rules for this table, then append new ones
       const all = styleBucket.textContent.split('\n').filter(line => !line.includes(`#${tableId} th:nth-child(`));
       all.push(parts.join('\n'));
       styleBucket.textContent = all.join('\n');
@@ -162,13 +165,12 @@
 
     function buildFilterFor(tableId){
       const table = document.getElementById(tableId);
-      const form = document.querySelector(`.col-filter[data-table="${tableId}"]`);
+      const form = document.querySelector(\`.col-filter[data-table="\${tableId}"]\`);
       if (!table || !form) return;
 
       const ths = Array.from(table.querySelectorAll('thead th'));
       if (!ths.length) return;
 
-      // If form already has checkboxes for these headers, skip rebuilding
       const currentKeys = Array.from(form.querySelectorAll('input[type="checkbox"]')).map(i => i.dataset.key);
       const headerKeys  = ths.map(th => th.textContent.trim());
       const same = currentKeys.length === headerKeys.length && currentKeys.every((k,i) => k === headerKeys[i]);
@@ -176,18 +178,18 @@
 
       form.innerHTML = '';
       ths.forEach((th, i) => {
-        const label = th.textContent.trim() || `Column ${i+1}`;
-        const id = `${tableId}-col-${i+1}`;
+        const label = th.textContent.trim() || \`Column \${i+1}\`;
+        const id = \`\${tableId}-col-\${i+1}\`;
         const wrap = document.createElement('label');
         wrap.className = 'col-check';
-        wrap.innerHTML = `
-          <input type="checkbox" id="${id}" data-key="${label}" data-idx="${i+1}" checked>
-          <span>${label}</span>
-        `;
+        wrap.innerHTML = \`
+          <input type="checkbox" id="\${id}" data-key="\${label}" data-idx="\${i+1}" checked aria-label="Toggle \${label} column">
+          <span>\${label}</span>
+        \`;
         form.appendChild(wrap);
       });
 
-      const hidden = new Set(); // 1-based indexes hidden
+      const hidden = new Set();
       applyHiddenColumns(tableId, hidden);
 
       form.addEventListener('change', (e) => {
@@ -200,13 +202,11 @@
       });
     }
 
-    // Observe tables for header changes (adminapp.js renders async)
     const observer = new MutationObserver(() => {
       tables.forEach(buildFilterFor);
     });
     observer.observe(document.body, { childList:true, subtree:true });
 
-    // Also try once on DOM ready
     document.addEventListener('DOMContentLoaded', () => tables.forEach(buildFilterFor));
   </script>
 
