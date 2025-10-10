@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Yangerila — Admin</title>
-  <link rel="stylesheet" href="/admin/style.css?v=4"/>
+  <link rel="stylesheet" href="/admin/style.css?v=5"/>
 </head>
 <body class="admin-page style-solid">
 
@@ -25,13 +25,21 @@
 
     <!-- ================== Yangerila Web CRM (3 separate tabs) ================== -->
     <section aria-labelledby="h-web">
-      <h2 id="h-web">Yangerila Web CRM</h2>
+      <div class="h2-row">
+        <h2 id="h-web">Yangerila Web CRM</h2>
+      </div>
 
       <!-- Coupon Forms Data -->
       <div class="block">
         <div class="subhead">
           <h3>Coupon Forms Data</h3>
-          <button class="btn tiny" id="refresh-coupon">Refresh</button>
+          <div class="sub-actions">
+            <details class="cols">
+              <summary class="btn tiny ghost">Columns</summary>
+              <form class="col-filter" data-table="table-coupon"></form>
+            </details>
+            <button class="btn tiny" id="refresh-coupon">Refresh</button>
+          </div>
         </div>
         <div class="table-wrap">
           <table id="table-coupon">
@@ -45,7 +53,13 @@
       <div class="block">
         <div class="subhead">
           <h3>Admission &amp; Demo Form Data</h3>
-          <button class="btn tiny" id="refresh-admDemo">Refresh</button>
+          <div class="sub-actions">
+            <details class="cols">
+              <summary class="btn tiny ghost">Columns</summary>
+              <form class="col-filter" data-table="table-admDemo"></form>
+            </details>
+            <button class="btn tiny" id="refresh-admDemo">Refresh</button>
+          </div>
         </div>
         <div class="table-wrap">
           <table id="table-admDemo">
@@ -59,7 +73,13 @@
       <div class="block">
         <div class="subhead">
           <h3>Contact Us Form Data</h3>
-          <button class="btn tiny" id="refresh-contact">Refresh</button>
+          <div class="sub-actions">
+            <details class="cols">
+              <summary class="btn tiny ghost">Columns</summary>
+              <form class="col-filter" data-table="table-contact"></form>
+            </details>
+            <button class="btn tiny" id="refresh-contact">Refresh</button>
+          </div>
         </div>
         <div class="table-wrap">
           <table id="table-contact">
@@ -72,11 +92,19 @@
 
     <!-- ================== Form CRM (single sheet) ================== -->
     <section aria-labelledby="h-form">
-      <h2 id="h-form">Form CRM</h2>
+      <div class="h2-row">
+        <h2 id="h-form">Form CRM</h2>
+      </div>
       <div class="block">
         <div class="subhead">
           <h3>YCS Admissions</h3>
-          <button class="btn tiny" id="refresh-ycs">Refresh</button>
+          <div class="sub-actions">
+            <details class="cols">
+              <summary class="btn tiny ghost">Columns</summary>
+              <form class="col-filter" data-table="table-ycs"></form>
+            </details>
+            <button class="btn tiny" id="refresh-ycs">Refresh</button>
+          </div>
         </div>
         <div class="table-wrap tall">
           <table id="table-ycs">
@@ -89,12 +117,13 @@
 
     <!-- ================== Blogs preview ================== -->
     <section aria-labelledby="h-blogs">
-      <h2 id="h-blogs">Blogs</h2>
+      <div class="h2-row">
+        <h2 id="h-blogs">Blogs</h2>
+        <a class="btn blog-editor-btn" href="/admin/blog-editor.html" title="Open Blog Editor">✍️ Blog Editor</a>
+      </div>
       <div class="block">
         <div class="subhead">
           <h3>Recent posts</h3>
-          <!-- ⬇️ moved here -->
-          <a class="btn tiny ghost" href="/admin/blog-editor.html">Open Blog Editor</a>
         </div>
         <div class="blog-list" id="blog-list"></div>
       </div>
@@ -109,6 +138,77 @@
 
   <!-- Toast -->
   <div class="toast" id="toast">Copied</div>
+
+  <!-- ================== Column filter helper (no changes to adminapp.js) ================== -->
+  <script>
+    // Build/refresh column checkboxes whenever a table header appears/changes
+    const tables = ['table-coupon','table-admDemo','table-contact','table-ycs'];
+    const styleBucket = document.createElement('style');
+    styleBucket.id = 'col-hide-rules';
+    document.head.appendChild(styleBucket);
+
+    function applyHiddenColumns(tableId, hiddenIdxSet){
+      // Build CSS rules to hide selected column indexes for this table
+      const parts = [];
+      hiddenIdxSet.forEach(idx => {
+        // idx is 1-based nth-child index
+        parts.push(`#${tableId} th:nth-child(${idx}), #${tableId} td:nth-child(${idx}){ display:none; }`);
+      });
+      // Remove existing rules for this table, then append new ones
+      const all = styleBucket.textContent.split('\n').filter(line => !line.includes(`#${tableId} th:nth-child(`));
+      all.push(parts.join('\n'));
+      styleBucket.textContent = all.join('\n');
+    }
+
+    function buildFilterFor(tableId){
+      const table = document.getElementById(tableId);
+      const form = document.querySelector(`.col-filter[data-table="${tableId}"]`);
+      if (!table || !form) return;
+
+      const ths = Array.from(table.querySelectorAll('thead th'));
+      if (!ths.length) return;
+
+      // If form already has checkboxes for these headers, skip rebuilding
+      const currentKeys = Array.from(form.querySelectorAll('input[type="checkbox"]')).map(i => i.dataset.key);
+      const headerKeys  = ths.map(th => th.textContent.trim());
+      const same = currentKeys.length === headerKeys.length && currentKeys.every((k,i) => k === headerKeys[i]);
+      if (same) return;
+
+      form.innerHTML = '';
+      ths.forEach((th, i) => {
+        const label = th.textContent.trim() || `Column ${i+1}`;
+        const id = `${tableId}-col-${i+1}`;
+        const wrap = document.createElement('label');
+        wrap.className = 'col-check';
+        wrap.innerHTML = `
+          <input type="checkbox" id="${id}" data-key="${label}" data-idx="${i+1}" checked>
+          <span>${label}</span>
+        `;
+        form.appendChild(wrap);
+      });
+
+      const hidden = new Set(); // 1-based indexes hidden
+      applyHiddenColumns(tableId, hidden);
+
+      form.addEventListener('change', (e) => {
+        const cb = e.target;
+        if (cb && cb.matches('input[type="checkbox"]')) {
+          const idx = Number(cb.getAttribute('data-idx'));
+          if (cb.checked) hidden.delete(idx); else hidden.add(idx);
+          applyHiddenColumns(tableId, hidden);
+        }
+      });
+    }
+
+    // Observe tables for header changes (adminapp.js renders async)
+    const observer = new MutationObserver(() => {
+      tables.forEach(buildFilterFor);
+    });
+    observer.observe(document.body, { childList:true, subtree:true });
+
+    // Also try once on DOM ready
+    document.addEventListener('DOMContentLoaded', () => tables.forEach(buildFilterFor));
+  </script>
 
   <!-- Admin App (Firebase + Sheets) -->
   <script type="module" src="/admin/adminapp.js?v=4"></script>
