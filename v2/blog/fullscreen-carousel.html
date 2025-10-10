@@ -10,33 +10,43 @@
 </head>
 <body class="yc-fullscreen">
 
-  <!-- Header strip (keeps brand minimal in FS mode) -->
+  <!-- Header -->
+  <header class="yc-topbar">
+    <a class="yc-brand" href="/" aria-label="Yangerila home">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor"/></svg>
+      <span>Yangerila</span>
+    </a>
+    <a class="yc-viewall" href="/blog/" aria-label="View all blogs">View all blogs</a>
+  </header>
 
-
-  <!-- ======== Fullscreen Carousel ======== -->
+  <!-- Fullscreen Carousel -->
   <main id="yc-fs-carousel" class="yc-fs">
-    <button class="yc-nav yc-prev" aria-label="Previous slide">
-      <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none"><path stroke-width="2" d="M15 6l-6 6 6 6"/></svg>
-    </button>
+    <div class="yc-track-wrap">
+      <button class="yc-nav yc-prev" aria-label="Previous slide">
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none"><path stroke-width="2" d="M15 6l-6 6 6 6"/></svg>
+      </button>
 
-    <ul class="yc-track" id="ycTrack">
-      <!-- Slides injected by JS -->
-      <li class="yc-status">Loading latest posts…</li>
-    </ul>
+      <ul class="yc-track" id="ycTrack">
+        <!-- Slides injected by JS -->
+        <li class="yc-status">Loading latest posts…</li>
+      </ul>
 
-    <button class="yc-nav yc-next" aria-label="Next slide">
-      <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none"><path stroke-width="2" d="M9 6l6 6-6 6"/></svg>
-    </button>
+      <button class="yc-nav yc-next" aria-label="Next slide">
+        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none"><path stroke-width="2" d="M9 6l6 6-6 6"/></svg>
+      </button>
+    </div>
 
-    <div class="yc-dots" id="ycDots"></div>
-
-    <!-- Floating action (shows when a slide is active or clicked) -->
-    <div class="yc-fab" id="ycFab">
-      <a class="yc-read" href="/blog/" aria-label="Open blog index" target="_self">
+    <!-- Appears only when a card is clicked (engaged mode) -->
+    <div class="yc-readbar" id="ycReadbar" hidden>
+      <a class="yc-read" href="/blog/" aria-label="Open blog index">
         View blog
-        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none"><path stroke-width="2" d="M5 12h14M13 5l7 7-7 7"/></svg>
+        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none">
+          <path stroke-width="2" d="M5 12h14M13 5l7 7-7 7"/>
+        </svg>
       </a>
     </div>
+
+    <div class="yc-dots" id="ycDots"></div>
   </main>
 
   <!-- Firebase + Carousel logic -->

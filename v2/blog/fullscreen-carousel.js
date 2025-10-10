@@ -1,11 +1,10 @@
-// /blog/fullscreen-carousel.js
-// Fullscreen carousel with: no bottom scrollbar, auto-rotate, click-to-focus (engaged mode)
-// Shows "View blog" below the focused card; click anywhere outside to collapse.
+// Fullscreen carousel — single "View blog" button, appears only on card click.
+// Arrows/dots just navigate. Clicking outside collapses (hides button).
 
 import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
 import { getFirestore, collection, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
-/* ---- Firebase (init) ---- */
+/* Firebase */
 const firebaseConfig = {
   apiKey: "AIzaSyDHDjHrnQ2IwvetQoV6cWAGnkMzANerVDE",
   authDomain: "yangerila-studio.firebaseapp.com",
@@ -14,40 +13,23 @@ const firebaseConfig = {
 const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
 const db  = getFirestore(app);
 
-/* ---- DOM ---- */
-const root   = document.getElementById('yc-fs-carousel');
-const trackWrap = document.createElement('div');
-trackWrap.className = 'yc-track-wrap';
-const track  = document.getElementById('ycTrack');
-track.parentNode.replaceChild(trackWrap, track);
-trackWrap.appendChild(track);
+/* DOM */
+const root     = document.getElementById('yc-fs-carousel');
+const track    = document.getElementById('ycTrack');
+const dotsEl   = document.getElementById('ycDots');
+const readbar  = document.getElementById('ycReadbar');
+const prev     = root.querySelector('.yc-prev');
+const next     = root.querySelector('.yc-next');
 
-const dotsEl = document.getElementById('ycDots');
-const prev   = root.querySelector('.yc-prev');
-const next   = root.querySelector('.yc-next');
-
-/* Below-card read button bar */
-const readBar = document.createElement('div');
-readBar.className = 'yc-readbar';
-readBar.innerHTML = `
-  <a class="yc-read" href="/blog/" target="_self" aria-label="Open blog index">
-    View blog
-    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none">
-      <path stroke-width="2" d="M5 12h14M13 5l7 7-7 7"/>
-    </svg>
-  </a>
-`;
-root.insertBefore(readBar, dotsEl); // ensure bar is above dots, below track
-
-/* ---- State ---- */
+/* State */
 let posts = [];
 let active = 0;
 let timer  = 0;
-let engaged = false;          // when true: button shown, autoplay paused
-const interval = 6000;        // ms between slides (0 disables)
+let engaged = false;               // true only after clicking a card
+const interval = 6000;             // ms (0 disables)
 const LIMIT    = 10;
 
-/* ---- Helpers ---- */
+/* Helpers */
 const esc = s => String(s||'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 const ts  = t => (t?.seconds ? t.seconds * 1000 : 0);
 const fmt = t => t?.seconds ? new Date(t.seconds*1000).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}) : '';
@@ -55,12 +37,12 @@ const fmt = t => t?.seconds ? new Date(t.seconds*1000).toLocaleDateString('en-US
 function centerActive(smooth=true){
   const card = track.children[active];
   if(!card) return;
-  const left = card.offsetLeft + (card.clientWidth/2);
-  const target = Math.max(0, left - (track.clientWidth/2));
+  const leftCenter = card.offsetLeft + (card.clientWidth/2);
+  const target = Math.max(0, leftCenter - (track.clientWidth/2));
   track.scrollTo({ left: target, behavior: smooth ? 'smooth' : 'auto' });
 }
 
-/* ---- Data ---- */
+/* Data */
 async function fetchLatest(limit=LIMIT){
   try{
     const qRef = query(collection(db,'blogs'), where('published','==',true));
@@ -74,7 +56,7 @@ async function fetchLatest(limit=LIMIT){
   }
 }
 
-/* ---- Render ---- */
+/* Render */
 function renderSlides(list){
   if(!list.length){
     track.innerHTML = `<li class="yc-status">No posts found. Publish a post in the editor.</li>`;
@@ -91,10 +73,12 @@ function renderSlides(list){
       </div>
     </li>
   `).join('');
-  // attach click → engage
-  Array.from(track.children).forEach((el,i)=> el.addEventListener('click', (e)=> {
-    e.stopPropagation();        // don't bubble to outside click
-    engage(i);
+
+  // Click a card -> engage (show button, pause autoplay)
+  Array.from(track.children).forEach((el,i)=> el.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    setActive(i);
+    engage();
   }));
 }
 
@@ -102,53 +86,52 @@ function renderDots(n){
   dotsEl.innerHTML = Array.from({length:n}, (_,i)=>`<button class="yc-dot" data-i="${i}" aria-label="Go to slide ${i+1}"></button>`).join('');
   dotsEl.querySelectorAll('.yc-dot').forEach(d => d.addEventListener('click', e => {
     e.stopPropagation();
-    engage(+e.currentTarget.dataset.i);
+    setActive(+e.currentTarget.dataset.i);
+    // dots do NOT engage; they just navigate
   }));
 }
 
-/* ---- Behavior ---- */
+/* Behavior */
 function setActive(i, smooth=true){
   if(!posts.length) return;
   active = (i + posts.length) % posts.length;
   Array.from(track.children).forEach((el,j)=> el.classList.toggle('active', j===active));
   dotsEl.querySelectorAll('.yc-dot').forEach((d,j)=> d.classList.toggle('active', j===active));
   centerActive(smooth);
+  restart(); // keeps autoplay alive unless engaged
 }
 
 function auto(){ if(interval>0 && !engaged){ stop(); timer = setInterval(()=> setActive(active+1), interval); } }
 function stop(){ if(timer){ clearInterval(timer); timer=0; } }
+function restart(){ if(!engaged) auto(); }
 
-function engage(i){
-  setActive(i);
+function engage(){
   engaged = true;
   stop();
-  readBar.style.display = 'grid';
+  readbar.hidden = false;
 }
-
 function disengage(){
   engaged = false;
-  readBar.style.display = 'none';
+  readbar.hidden = true;
   auto();
 }
 
-/* Prev/Next */
-prev.addEventListener('click', (e)=>{ e.stopPropagation(); engaged ? engage(active-1) : setActive(active-1); });
-next.addEventListener('click', (e)=>{ e.stopPropagation(); engaged ? engage(active+1) : setActive(active+1); });
+/* Prev/Next: just navigate; never auto-engage */
+prev.addEventListener('click', (e)=>{ e.stopPropagation(); setActive(active-1); });
+next.addEventListener('click', (e)=>{ e.stopPropagation(); setActive(active+1); });
 
 /* Outside click collapses */
 document.addEventListener('click', (e)=>{
-  const inside = root.contains(e.target);
-  const inTrack = track.contains(e.target);
-  if(inside && !inTrack && engaged){
-    disengage();
-  }
+  // Ignore clicks inside the track or on the read button
+  if (track.contains(e.target) || readbar.contains(e.target)) return;
+  if (engaged) disengage();
 });
 
 /* Keyboard + swipe */
 function onKey(e){
   if(e.key === 'Escape' && engaged) return disengage();
-  if(e.key === 'ArrowLeft')  engaged ? engage(active-1) : setActive(active-1);
-  if(e.key === 'ArrowRight') engaged ? engage(active+1) : setActive(active+1);
+  if(e.key === 'ArrowLeft')  setActive(active-1);
+  if(e.key === 'ArrowRight') setActive(active+1);
 }
 window.addEventListener('keydown', onKey);
 
@@ -156,14 +139,19 @@ let touchX=0;
 track.addEventListener('touchstart', e => touchX = e.touches[0].clientX, {passive:true});
 track.addEventListener('touchend',   e => {
   const dx = e.changedTouches[0].clientX - touchX;
-  if(Math.abs(dx) > 40) (engaged ? engage : setActive)(active + (dx < 0 ? 1 : -1));
+  if(Math.abs(dx) > 40) setActive(active + (dx < 0 ? 1 : -1));
 }, {passive:true});
 
-/* Hover pause on desktop */
-root.addEventListener('mouseenter', ()=> !engaged && stop());
-root.addEventListener('mouseleave', ()=> !engaged && auto());
+/* Keep centered on resize/rotate */
+let resizeTimer = 0;
+function reCenterSoon(){
+  if(resizeTimer) cancelAnimationFrame(resizeTimer);
+  resizeTimer = requestAnimationFrame(()=> setActive(active, false)); // recenter w/o animation
+}
+window.addEventListener('resize', reCenterSoon);
+window.addEventListener('orientationchange', reCenterSoon);
 
-/* ---- init ---- */
+/* Init */
 (async function init(){
   posts = await fetchLatest(LIMIT);
   renderSlides(posts);
@@ -171,19 +159,3 @@ root.addEventListener('mouseleave', ()=> !engaged && auto());
   setActive(0, false);
   auto();
 })();
-
-
-/* ----- keep things centered on resize / rotate ----- */
-let resizeTimer = 0;
-function reCenterSoon(){
-  if(resizeTimer) cancelAnimationFrame(resizeTimer);
-  resizeTimer = requestAnimationFrame(()=> {
-    // Recenter without animation to avoid seasick effect during resize
-    const smooth = false;
-    // If you're in engaged mode, keep that feel; else just center
-    (engaged ? engage : setActive)(active, smooth);
-  });
-}
-
-window.addEventListener('resize', reCenterSoon);
-window.addEventListener('orientationchange', reCenterSoon);
