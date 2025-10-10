@@ -27,6 +27,8 @@ img:is([sizes="auto" i], [sizes^="auto," i]) {
 contain-intrinsic-size: 3000px 1500px
 }
         </style>
+        <script type="module" src="/blog/carousel.js"></script>
+
 <meta content="telephone=no" name="format-detection"/>
 <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport"/>
 <link href="wp-content/themes/betheme/images/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
@@ -4870,6 +4872,53 @@ document.getElementById("slider-1-slide-1-layer-17").addEventListener("click", f
 </div>
 </div>
 </div>
+<!-- ===================== BLOG CAROUSEL WRAPPER (matches Fun Facts) ===================== -->
+<section class="section mcb-section" id="yc-blog-carousel-section" style="">
+  <div class="section_wrapper mcb-section-inner">
+    <div class="wrap mcb-wrap one valign-top clearfix" style="">
+      <div class="mcb-wrap-inner">
+        <div class="column mcb-column one column_column" style="">
+          <div class="mcb-column-inner">
+            <div class="column_attr mfn-inline-editor clearfix" style="">
+              
+              <!-- === Yangerila Blog Carousel (start) === -->
+              <section id="yc-blog-carousel"
+                       class="yc-blog-carousel mcb-section"
+                       data-limit="8"
+                       data-autoplay="6000"
+                       data-blog-url="/blog/">
+                <div class="yc-head">
+                  <h4 class="cta-head">
+                    <span class="ready" style="color:#7ae7c7; font-size: 40px;">Latest from the Blog</span><br/>
+                    <span class="sub" style="color:#FFF;">Lessons, tips &amp; stories</span>
+                  </h4>
+                </div>
+
+                <div class="yc-viewport">
+                  <button class="yc-nav yc-prev" aria-label="Previous">
+                    <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" fill="none"><path stroke-width="2" d="M15 6l-6 6 6 6"/></svg>
+                  </button>
+
+                  <ul class="yc-track" id="ycTrack"><!-- slides injected by /blog/carousel.js --></ul>
+
+                  <button class="yc-nav yc-next" aria-label="Next">
+                    <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" fill="none"><path stroke-width="2" d="M9 6l6 6-6 6"/></svg>
+                  </button>
+                </div>
+
+                <div class="yc-dots" id="ycDots"></div>
+              </section>
+              <!-- === /Yangerila Blog Carousel (end) === -->
+
+            </div><!-- /.column_attr -->
+          </div><!-- /.mcb-column-inner -->
+        </div><!-- /.mcb-column -->
+      </div><!-- /.mcb-wrap-inner -->
+    </div><!-- /.mcb-wrap -->
+  </div><!-- /.section_wrapper -->
+</section>
+<!-- =================== /BLOG CAROUSEL WRAPPER ====================== -->
+
 
 <div class="column mcb-column mcb-item-2e047add7 three-fifth tablet-three-fifth mobile-one column_column" style="">
 <div class="mcb-column-inner mcb-item-column-inner">
