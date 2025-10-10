@@ -3,45 +3,71 @@
   --accent:#7ae7c7; --accent-2:#35cbbb;
   --bg1:#0d1e20; --bg2:#11262a; --panel:#0a1718;
   --text:#e6fffb; --muted:#b7deda; --border:rgba(122,231,199,.22);
+  --topbar:56px;
 }
 *{box-sizing:border-box}
 html,body{height:100%}
 body.yc-fullscreen{
   margin:0; background:linear-gradient(135deg,var(--bg1),var(--bg2)); color:var(--text);
-  font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial; overflow:hidden;
+  font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial;
+  overflow:hidden; /* no page scrollbars */
 }
 
 /* Top bar */
 .yc-topbar{
-  position:fixed; top:0; left:0; right:0; height:56px; display:flex; align-items:center; justify-content:space-between;
-  padding:0 14px; background:rgba(10,23,24,.6); backdrop-filter: blur(6px);
+  position:fixed; inset:0 0 auto 0; height:var(--topbar);
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 clamp(12px,3vw,18px);
+  background:rgba(10,23,24,.6); backdrop-filter: blur(6px);
   border-bottom:1px solid var(--border); z-index:10;
 }
 .yc-brand{display:inline-flex; align-items:center; gap:8px; color:var(--text); text-decoration:none; font-weight:800}
 .yc-viewall{color:var(--accent); text-decoration:none; font-weight:800; border:1px solid var(--accent); padding:8px 12px; border-radius:10px}
 .yc-viewall:hover{background:rgba(122,231,199,.12)}
 
-/* Fullscreen area */
-.yc-fs{ position:fixed; inset:56px 0 0 0; display:grid; place-items:center }
-.yc-track{
-  width:min(1200px,100vw); height:min(72vh, calc(100vh - 120px));
-  display:flex; gap:20px; align-items:center; justify-content:flex-start;
-  overflow-x:auto; overflow-y:hidden; padding:0 72px; scroll-behavior:smooth;
+/* Fullscreen grid: track area, readbar, dots */
+.yc-fs{
+  position:fixed; inset:var(--topbar) 0 0 0;
+  display:grid; grid-template-rows: 1fr auto auto;
 }
-.yc-track::-webkit-scrollbar{height:10px}
-.yc-track::-webkit-scrollbar-thumb{background:var(--accent); border-radius:6px}
+
+/* Track wrapper centers content; no horizontal scrollbar */
+.yc-track-wrap{ position:relative; display:grid; place-items:center; }
+.yc-track{
+  /* width + side padding scale with viewport to avoid side emptiness & clipping */
+  width:min(1400px, 100%);
+  height: min(76vh, calc(100vh - 160px));
+  display:flex; align-items:center; gap: clamp(12px, 2vw, 20px);
+  overflow:hidden;                /* HIDE SCROLLBAR */
+  padding-inline: clamp(12px, 4vw, 48px); /* less empty space on sides */
+  scroll-behavior:smooth;
+}
 .yc-status{ color:var(--muted) }
 
-/* Slide card */
+/* Slide card
+   - Width scales with viewport: wide on phone, a bit narrower on desktop so next card peeks
+   - Never gets cut thanks to track padding + centering logic in JS
+*/
 .yc-card{
-  flex:0 0 78%; max-width:78%;
+  flex: 0 0 clamp(88%, 62vw, 96%);     /* key: reduce side emptiness & avoid clipping */
+  max-width: clamp(88%, 62vw, 96%);
   background:var(--panel); border:1px solid var(--border); border-radius:16px;
   box-shadow:0 18px 60px rgba(0,0,0,.35);
-  display:grid; grid-template-columns: 42% 1fr; gap:18px; padding:18px;
-  transform:scale(.92); opacity:.75; transition:transform .25s ease, opacity .25s ease, border-color .2s;
+  display:grid; grid-template-columns: 40% 1fr; gap: clamp(12px, 2vw, 18px);
+  padding: clamp(12px, 2vw, 18px);
+  transform:scale(.94); opacity:.80;
+  transition:transform .25s ease, opacity .25s ease, border-color .2s;
 }
 .yc-card.active{ transform:scale(1); opacity:1; border-color:rgba(122,231,199,.38) }
-.yc-cover{ width:100%; height:100%; max-height:58vh; object-fit:cover; border-radius:12px; background:#0e1d20 }
+
+/* Cover keeps aspect; never stretches weirdly */
+.yc-cover{
+  width:100%;
+  aspect-ratio: 16 / 10;          /* consistent aspect, responsive */
+  height:auto; max-height: 60vh;  /* keep reasonable height on big screens */
+  object-fit:cover; border-radius:12px; background:#0e1d20;
+}
+
 .yc-body{ min-width:0; display:flex; flex-direction:column }
 .yc-title{ margin:0 0 8px; color:var(--text); font-size: clamp(20px,3.4vw,34px); font-weight:900; letter-spacing:.2px }
 .yc-meta{ color:var(--muted); font-size: 12.5px; margin-bottom:8px }
@@ -49,8 +75,12 @@ body.yc-fullscreen{
 .yc-tags{ display:flex; gap:8px; flex-wrap:wrap; margin-top:10px }
 .yc-tag{ font-size:12px; font-weight:800; padding:6px 12px; border-radius:999px; color:var(--accent); background:rgba(122,231,199,.12); border:1px solid rgba(122,231,199,.28) }
 
-/* Floating Read button */
-.yc-fab{ position:fixed; left:50%; transform:translateX(-50%); bottom:26px; z-index:9 }
+/* Read button BAR (below the focused card; never covers dots) */
+.yc-readbar{
+  display:none; /* shown only when “engaged” (card clicked) */
+  place-items:center;
+  padding:14px 0 8px;
+}
 .yc-read{
   display:inline-flex; align-items:center; gap:10px; padding:14px 18px;
   border-radius:12px; border:none; background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#0a1718;
@@ -58,30 +88,33 @@ body.yc-fullscreen{
 }
 .yc-read svg{ stroke:#0a1718 }
 
-/* Arrows */
+/* Dots (always visible) */
+.yc-dots{ display:flex; gap:10px; justify-content:center; padding:0 0 14px }
+.yc-dot{ width:10px; height:10px; border-radius:50%; background:rgba(122,231,199,.28); border:1px solid var(--border); cursor:pointer }
+.yc-dot.active{ background:var(--accent); box-shadow:0 0 0 3px rgba(122,231,199,.22) }
+
+/* Arrows (stay inside the track area) */
 .yc-nav{
   position:absolute; top:50%; transform:translateY(-50%);
   width:46px; height:46px; border-radius:12px; border:1px solid var(--border);
   background:rgba(255,255,255,.06); color:var(--accent); display:grid; place-items:center; cursor:pointer; z-index:8;
 }
-.yc-prev{ left:18px } .yc-next{ right:18px }
+.yc-prev{ left: clamp(8px, 2vw, 18px) }
+.yc-next{ right: clamp(8px, 2vw, 18px) }
 .yc-nav:hover{ border-color:var(--accent) }
 
-/* Dots */
-.yc-dots{ position:absolute; bottom:22px; left:50%; transform:translateX(-50%); display:flex; gap:10px; z-index:8 }
-.yc-dot{ width:10px; height:10px; border-radius:50%; background:rgba(122,231,199,.28); border:1px solid var(--border); cursor:pointer }
-.yc-dot.active{ background:var(--accent); box-shadow:0 0 0 3px rgba(122,231,199,.22) }
-
-/* Touch helpers (optional visual feedback) */
-.yc-card:active{ transform:scale(.985) }
-
-/* Responsive */
+/* Responsive refinements */
+@media (max-width: 1024px){
+  .yc-card{ grid-template-columns: 1fr; }
+}
 @media (max-width: 900px){
-  .yc-card{ grid-template-columns: 1fr; gap:14px; flex-basis:90%; max-width:90% }
-  .yc-cover{ max-height:40vh }
-  .yc-track{ padding:0 64px }
+  .yc-card{
+    flex-basis: clamp(92%, 86vw, 98%);
+    max-width: clamp(92%, 86vw, 98%);
+  }
+  .yc-track{ padding-inline: clamp(10px, 5vw, 24px) }
 }
 @media (max-width: 520px){
-  .yc-track{ padding:0 54px }
+  .yc-track{ padding-inline: clamp(8px, 6vw, 20px) }
   .yc-prev,.yc-next{ width:40px; height:40px }
 }
