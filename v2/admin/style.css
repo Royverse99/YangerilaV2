@@ -4,8 +4,8 @@
 
 :root{
   /* Page & panel */
-  --bg-solid: #0c1f1b;     /* page background (darkest green) */
-  --panel:    #0f2620;     /* top bar / dropdowns */
+  --bg-solid: #054f57;     /* page background (darkest green) */
+  --panel:    #01292d;     /* top bar / dropdowns */
   --border:   #1b3b33;     /* hairlines */
 
   /* Tables (deep body + flipped header for contrast) */
@@ -105,15 +105,27 @@ h3{ margin:0; color:#dff9f3; font-size:15px; }
 .sub-actions{ display:flex; align-items:center; gap:8px; }
 
 /* ---------- Columns dropdown ---------- */
+/* Columns dropdown */
 .cols{ position:relative; }
 .cols > summary{ list-style:none; cursor:pointer; display:inline-block; }
 .cols[open] > summary { filter: brightness(1.05); }
+
+/* FIX: ensure the menu opens fully, is scrollable, and sits above sticky headers */
 .col-filter{
-  position:absolute; right:0; top:110%;
-  background: #0f2620; border:1px solid var(--border);
-  border-radius:10px; padding:8px; min-width:220px; z-index:50;
-  box-shadow:0 10px 30px rgba(0,0,0,.35);
+  position:absolute;
+  right:0;
+  top: calc(100% + 8px);     /* a bit lower than before so it clears controls */
+  background: #0f2620;
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:8px;
+  min-width:220px;
+  max-height: 70vh;          /* scroll if very tall */
+  overflow:auto;             /* <- lets you reach all checkboxes */
+  z-index: 3000;             /* above tables / sticky headers */
+  box-shadow:0 12px 32px rgba(0,0,0,.45);
 }
+
 .col-check{
   display:flex; align-items:center; gap:8px;
   padding:4px 2px; font-size:12.5px; white-space:nowrap;
@@ -234,7 +246,7 @@ a.link{ color: #c8fff1; text-decoration: underline; }
 }
 
 .blog-card{
-  background: rgba(255,255,255,.03);
+  background: #073d41;
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 12px;

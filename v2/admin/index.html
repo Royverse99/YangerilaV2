@@ -216,6 +216,23 @@
 
     document.addEventListener('DOMContentLoaded', () => tables.forEach(buildFilterFor));
   </script>
+<script>
+  // Show tooltip only once per element: remove data-tip after first hover
+  document.addEventListener('mouseenter', (e) => {
+    const el = e.target.closest('.has-tip[data-tip]');
+    if (!el) return;
+    // delay a tick so the user can actually see it once
+    if (!el.__tipSeen) {
+      el.__tipSeen = true;
+      // after the first hover ends, remove the tooltip forever
+      el.addEventListener('mouseleave', function once() {
+        el.removeAttribute('data-tip');   // disables the CSS ::after tooltip
+        el.classList.remove('has-tip');   // and the class as a backup
+        el.removeEventListener('mouseleave', once);
+      }, { once: true });
+    }
+  }, { capture: true });
+</script>
 
   <!-- Admin App (Firebase + Sheets) -->
   <script type="module" src="/admin/adminapp.js?v=4"></script>
