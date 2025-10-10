@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Yangerila — Blog Carousel</title>
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="./fullscreen-carousel.css">
+  <meta name="theme-color" content="#0d1e20">
+</head>
+<body class="yc-fullscreen">
+
+  <!-- Header strip (keeps brand minimal in FS mode) -->
+
+
+  <!-- ======== Fullscreen Carousel ======== -->
+  <main id="yc-fs-carousel" class="yc-fs">
+    <button class="yc-nav yc-prev" aria-label="Previous slide">
+      <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none"><path stroke-width="2" d="M15 6l-6 6 6 6"/></svg>
+    </button>
+
+    <ul class="yc-track" id="ycTrack">
+      <!-- Slides injected by JS -->
+      <li class="yc-status">Loading latest posts…</li>
+    </ul>
+
+    <button class="yc-nav yc-next" aria-label="Next slide">
+      <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none"><path stroke-width="2" d="M9 6l6 6-6 6"/></svg>
+    </button>
+
+    <div class="yc-dots" id="ycDots"></div>
+
+    <!-- Floating action (shows when a slide is active or clicked) -->
+    <div class="yc-fab" id="ycFab">
+      <a class="yc-read" href="/blog/" aria-label="Open blog index" target="_self">
+        View blog
+        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none"><path stroke-width="2" d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </main>
+
+  <!-- Firebase + Carousel logic -->
+  <script type="module" src="./fullscreen-carousel.js"></script>
+</body>
+</html>
