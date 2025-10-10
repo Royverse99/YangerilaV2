@@ -103,27 +103,37 @@ h3{ margin:0; color:#dff9f3; font-size:15px; }
   display:flex; align-items:center; justify-content:space-between; gap:10px;
 }
 .sub-actions{ display:flex; align-items:center; gap:8px; }
+/* Ensure no ancestor clips the dropdown */
+main, section, .block, .subhead { overflow: visible; }
 
 /* ---------- Columns dropdown ---------- */
 /* Columns dropdown */
-.cols{ position:relative; }
-.cols > summary{ list-style:none; cursor:pointer; display:inline-block; }
+/* Details summary should sit above sticky table heads */
+.cols { position: relative; z-index: 3100; }
+.cols > summary { list-style: none; cursor: pointer; display: inline-block; }
 .cols[open] > summary { filter: brightness(1.05); }
-
-/* FIX: ensure the menu opens fully, is scrollable, and sits above sticky headers */
+/* The in-flow panel (used as a fallback if JS fails) */
 .col-filter{
-  position:absolute;
-  right:0;
-  top: calc(100% + 8px);     /* a bit lower than before so it clears controls */
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
   background: #0f2620;
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:8px;
-  min-width:220px;
-  max-height: 70vh;          /* scroll if very tall */
-  overflow:auto;             /* <- lets you reach all checkboxes */
-  z-index: 3000;             /* above tables / sticky headers */
-  box-shadow:0 12px 32px rgba(0,0,0,.45);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 8px;
+  min-width: 220px;
+  max-height: 70vh;
+  overflow: auto;
+  z-index: 3200;              /* sit above sticky headers */
+  box-shadow: 0 12px 32px rgba(0,0,0,.45);
+}
+
+/* Floating (teleported) panel styles */
+.col-filter.floating {
+  position: fixed !important; /* pinned to viewport, never clipped */
+  left: 0; top: 0;            /* will be updated by JS */
+  transform: translate(0,0);
+  z-index: 99999;             /* above everything */
 }
 
 .col-check{
