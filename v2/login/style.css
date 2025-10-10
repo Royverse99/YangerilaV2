@@ -1,5 +1,5 @@
 /* Yangerila shared theme
-   v9 — login restored; blog/editor styles scoped under body.blog-editor / body.blog-view
+   v10 — login fixes + editor mobile controls
 */
 
 /* ===== Theme variables ===== */
@@ -30,6 +30,7 @@ a{color:var(--accent)}
 .logo{width:32px;height:32px;border-radius:12px;object-fit:contain;margin-bottom:10px}
 h1{margin:0 0 6px;font-size:clamp(20px,3.4vw,28px);font-weight:800;letter-spacing:.2px}
 .muted{color:var(--muted);margin:0 0 8px;font-size:clamp(12px,2.6vw,14px)}
+
 label{display:block;font-weight:700;font-size:clamp(12px,2.4vw,14px);margin:0 0 6px}
 input,textarea,select{
   width:100%;border:1.5px solid rgba(255,255,255,.14);border-radius:10px;padding:14px;background:rgba(255,255,255,.05);color:var(--text);
@@ -40,20 +41,40 @@ textarea{resize:vertical;min-height:100px}
 .err{min-height:22px;color:var(--error);margin:8px 0 0}
 .tiny{font-size:clamp(11px,2.4vw,12px);color:var(--muted)}
 .foot{margin-top:clamp(12px,3vw,18px)}
-/* Minimal login buttons (so login looks like before) */
+
+/* Minimal login buttons (base) */
 .btn{appearance:none;border:0;cursor:pointer;font-weight:800;letter-spacing:.2px;padding:12px 16px;border-radius:12px;font-size:15px;background:rgba(255,255,255,.06);color:var(--text)}
 .btn:hover{background:rgba(255,255,255,.08)}
 .btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent-strong));color:#0b2a2d}
 .btn.danger{background:rgba(255,107,107,.12);border:1px solid rgba(255,107,107,.3);color:#ff6b6b}
-@media (max-width:640px){.card{border-radius:14px}}
 
-/* Neon scrollbars globally (OK for all pages) */
+/* === LOGIN PAGE SPECIFICS (scoped) === */
+body.style-simple .form{display:block}
+body.style-simple #login-btn{
+  display:block;
+  width:100%;                 /* full width like inputs */
+  margin-top:12px;            /* slight space above */
+  padding:14px 16px;
+}
+body.style-simple .meta{
+  display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+  margin:6px 0 10px;
+}
+body.style-simple .remember{
+  display:inline-flex; align-items:center; gap:8px; /* checkbox inline with text */
+  color:var(--muted); font-size:clamp(12px,2.8vw,14px);
+}
+body.style-simple .remember input{
+  width:auto; height:auto; accent-color: var(--accent);
+}
+
+/* Neon scrollbars globally */
 *::-webkit-scrollbar{width:10px;height:10px}
 *::-webkit-scrollbar-track{background:rgba(255,255,255,.06)}
 *::-webkit-scrollbar-thumb{background:var(--accent);border-radius:6px}
 
 /* =========================================================
-   BLOG EDITOR — all rules scoped with body.blog-editor
+   BLOG EDITOR — scoped with body.blog-editor
    ========================================================= */
 body.blog-editor .top-nav{
   background:var(--panel);border-bottom:1px solid var(--accent);
@@ -80,19 +101,20 @@ body.blog-editor .nav-actions .btn.primary{padding:8px 14px}
 body.blog-editor .editor-main{display:grid;grid-template-columns:260px 1fr 320px;height:calc(100vh - 70px);overflow:hidden}
 @media (max-width:1160px){body.blog-editor .editor-main{grid-template-columns:220px 1fr 280px}}
 @media (max-width:1024px){body.blog-editor .editor-main{grid-template-columns:240px 1fr} body.blog-editor .metadata-panel{display:none}}
-@media (max-width:768px){ body.blog-editor .editor-main{grid-template-columns:1fr; } }
+@media (max-width:768px){ body.blog-editor .editor-main{grid-template-columns:1fr;} }
 
-/* Sidebar: All Posts (compact by default on phone) */
+/* Sidebar: All Posts */
 body.blog-editor .posts-sidebar{background:var(--panel);border-right:1px solid var(--accent);display:flex;flex-direction:column;overflow:hidden}
 body.blog-editor .sidebar-header{padding:10px 12px;border-bottom:1px solid var(--accent);display:flex;align-items:center;justify-content:space-between;gap:8px}
 body.blog-editor .sidebar-header h2{margin:0;font-size:16px;font-weight:800;color:var(--accent)}
 body.blog-editor .sidebar-tools{display:flex;gap:6px}
+@media (min-width:769px){ body.blog-editor .sidebar-tools{ display:none; } }  /* hide expand/collapse on desktop */
 body.blog-editor .icon-btn{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid var(--accent);color:var(--accent);cursor:pointer}
 body.blog-editor .sidebar-search-wrap{padding:8px 10px;border-bottom:1px solid var(--accent)}
 body.blog-editor .sidebar-search{width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--accent);background:rgba(255,255,255,.05);color:var(--text);font-size:13px}
 body.blog-editor .posts-list{flex:1;overflow-y:auto;padding:8px}
 
-/* Compact card: square thumb + single-line title; meta hidden on phone */
+/* Compact card: square thumb + single-line title */
 body.blog-editor .post-item{display:flex;gap:10px;align-items:center;padding:8px;border:1px solid var(--accent);border-radius:8px;background:rgba(255,255,255,.02);margin-bottom:8px;transition:.2s}
 body.blog-editor .post-item:hover{background:rgba(255,255,255,.05)}
 body.blog-editor .post-item.active{background:rgba(122,231,199,.10)}
@@ -102,7 +124,7 @@ body.blog-editor .post-info strong{display:block;font-size:13px;font-weight:700;
 body.blog-editor .post-info small{display:block;font-size:11px;color:var(--muted)}
 @media (max-width:768px){
   body.blog-editor .post-info small{display:none}
-  /* Height states via class on sidebar */
+  /* height states for phone controlled by classes set in JS if needed */
   body.blog-editor .posts-sidebar.collapsed{height:44px}
   body.blog-editor .posts-sidebar:not(.collapsed):not(.expanded){height:33vh}
   body.blog-editor .posts-sidebar.expanded{height:80vh}
@@ -141,5 +163,3 @@ body.blog-editor.editor-fullscreen .nav-actions,
 body.blog-editor.editor-fullscreen .posts-sidebar,
 body.blog-editor.editor-fullscreen .metadata-panel{display:none!important}
 body.blog-editor.editor-fullscreen .editor-main{grid-template-columns:1fr;height:100vh}
-
-/* Toast / modal (if used elsewhere) remain default; borders are neon via --accent */
