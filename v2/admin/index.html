@@ -4,11 +4,10 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Yangerila — Admin</title>
-  <link rel="stylesheet" href="/admin/style.css?v=6"/>
+  <link rel="stylesheet" href="/admin/style.css?v=7"/>
 </head>
 <body class="admin-page style-solid">
 
-  <!-- Loading cover until auth + admin check passes -->
   <div id="loading">Checking login…</div>
 
   <header class="topbar">
@@ -20,14 +19,11 @@
     </div>
   </header>
 
-  <!-- STACKED LAYOUT (single column blocks) -->
   <main class="stack">
 
     <!-- ================== Yangerila Web CRM ================== -->
     <section aria-labelledby="h-web">
-      <div class="h2-row">
-        <h2 id="h-web">Yangerila Web CRM</h2>
-      </div>
+      <div class="h2-row"><h2 id="h-web">Yangerila Web CRM</h2></div>
 
       <!-- Coupon Forms Data -->
       <div class="block">
@@ -42,15 +38,11 @@
           </div>
         </div>
         <div class="table-wrap">
-          <table id="table-coupon" aria-describedby="coupon-help">
-            <thead></thead>
-            <tbody><tr><td class="muted center">Loading…</td></tr></tbody>
-          </table>
-          <p id="coupon-help" class="sr-only">Use the Columns button to hide or show fields. Refresh gets the latest entries.</p>
+          <table id="table-coupon"><thead></thead><tbody><tr><td class="muted center">Loading…</td></tr></tbody></table>
         </div>
       </div>
 
-      <!-- Admission & Demo Form Data -->
+      <!-- Admission & Demo -->
       <div class="block">
         <div class="subhead">
           <h3>Admission &amp; Demo Form Data</h3>
@@ -63,15 +55,11 @@
           </div>
         </div>
         <div class="table-wrap">
-          <table id="table-admDemo" aria-describedby="adm-help">
-            <thead></thead>
-            <tbody><tr><td class="muted center">Loading…</td></tr></tbody>
-          </table>
-          <p id="adm-help" class="sr-only">Use the Columns button to hide or show fields. Refresh gets the latest entries.</p>
+          <table id="table-admDemo"><thead></thead><tbody><tr><td class="muted center">Loading…</td></tr></tbody></table>
         </div>
       </div>
 
-      <!-- Contact Us Form Data -->
+      <!-- Contact Us -->
       <div class="block">
         <div class="subhead">
           <h3>Contact Us Form Data</h3>
@@ -84,20 +72,14 @@
           </div>
         </div>
         <div class="table-wrap">
-          <table id="table-contact" aria-describedby="contact-help">
-            <thead></thead>
-            <tbody><tr><td class="muted center">Loading…</td></tr></tbody>
-          </table>
-          <p id="contact-help" class="sr-only">Use the Columns button to hide or show fields. Refresh gets the latest entries.</p>
+          <table id="table-contact"><thead></thead><tbody><tr><td class="muted center">Loading…</td></tr></tbody></table>
         </div>
       </div>
     </section>
 
-    <!-- ================== Form CRM (single sheet) ================== -->
+    <!-- ================== Form CRM ================== -->
     <section aria-labelledby="h-form">
-      <div class="h2-row">
-        <h2 id="h-form">Form CRM</h2>
-      </div>
+      <div class="h2-row"><h2 id="h-form">Form CRM</h2></div>
       <div class="block">
         <div class="subhead">
           <h3>YCS Admissions</h3>
@@ -110,223 +92,65 @@
           </div>
         </div>
         <div class="table-wrap">
-          <table id="table-ycs" aria-describedby="ycs-help">
-            <thead></thead>
-            <tbody><tr><td class="muted center">Loading…</td></tr></tbody>
-          </table>
-          <p id="ycs-help" class="sr-only">Use the Columns button to hide or show fields. Refresh gets the latest entries.</p>
+          <table id="table-ycs"><thead></thead><tbody><tr><td class="muted center">Loading…</td></tr></tbody></table>
         </div>
       </div>
     </section>
 
-    <!-- ================== Blogs preview (BOTTOM) ================== -->
+    <!-- ================== Blogs ================== -->
     <section aria-labelledby="h-blogs">
       <div class="h2-row">
-          <h2 id="h-blogs">Blogs</h2>
-          <div class="h2-actions">
-            <a class="btn blog-editor-btn has-tip" href="/admin/blog-editor.html"
-               title="Open Blog Editor" data-tip="Create or edit blog posts">
-              Blog Editor
-            </a>
-            <a class="btn blog-view-btn has-tip" href="/blog/index.html"
-               title="Open public blog listing" data-tip="View your live Blogs page">
-              View Blogs
-            </a>
-          </div>
+        <h2 id="h-blogs">Blogs</h2>
+        <div class="h2-actions">
+          <a class="btn blog-editor-btn has-tip" href="/admin/blog-editor.html" title="Open Blog Editor" data-tip="Create or edit blog posts">Blog Editor</a>
+          <a class="btn blog-view-btn has-tip" href="/blog/index.html" title="Open public blog listing" data-tip="View your live Blogs page">View Blogs</a>
         </div>
-
+      </div>
       <div class="block">
-        <div class="subhead">
-          <h3>Recent posts</h3>
-        </div>
+        <div class="subhead"><h3>Recent posts</h3></div>
         <div class="blog-list" id="blog-list"></div>
       </div>
     </section>
   </main>
 
-  <!-- Image preview modal -->
   <div class="img-modal" id="imgModal" aria-hidden="true">
     <button class="close has-tip" aria-label="Close image preview" data-tip="Close the image preview">Close</button>
     <img src="" alt="preview">
   </div>
 
-  <!-- Toast -->
   <div class="toast" id="toast">Copied</div>
 
-  <!-- ================== Column filter helper (unchanged logic) ================== -->
+  <!-- Column Filter Script (no change) -->
   <script>
-    const tables = ['table-coupon','table-admDemo','table-contact','table-ycs'];
-    const styleBucket = document.createElement('style');
-    styleBucket.id = 'col-hide-rules';
+    const tables=['table-coupon','table-admDemo','table-contact','table-ycs'];
+    const styleBucket=document.createElement('style');
+    styleBucket.id='col-hide-rules';
     document.head.appendChild(styleBucket);
-
-    function applyHiddenColumns(tableId, hiddenIdxSet){
-      const parts = [];
-      hiddenIdxSet.forEach(idx => {
-        parts.push(`#${tableId} th:nth-child(${idx}), #${tableId} td:nth-child(${idx}){ display:none; }`);
-      });
-      const all = styleBucket.textContent.split('\n').filter(line => !line.includes(`#${tableId} th:nth-child(`));
-      all.push(parts.join('\n'));
-      styleBucket.textContent = all.join('\n');
-    }
-
-    function buildFilterFor(tableId){
-      const table = document.getElementById(tableId);
-      const form = document.querySelector(\`.col-filter[data-table="\${tableId}"]\`);
-      if (!table || !form) return;
-
-      const ths = Array.from(table.querySelectorAll('thead th'));
-      if (!ths.length) return;
-
-      const currentKeys = Array.from(form.querySelectorAll('input[type="checkbox"]')).map(i => i.dataset.key);
-      const headerKeys  = ths.map(th => th.textContent.trim());
-      const same = currentKeys.length === headerKeys.length && currentKeys.every((k,i) => k === headerKeys[i]);
-      if (same) return;
-
-      form.innerHTML = '';
-      ths.forEach((th, i) => {
-        const label = th.textContent.trim() || \`Column \${i+1}\`;
-        const id = \`\${tableId}-col-\${i+1}\`;
-        const wrap = document.createElement('label');
-        wrap.className = 'col-check';
-        wrap.innerHTML = \`
-          <input type="checkbox" id="\${id}" data-key="\${label}" data-idx="\${i+1}" checked aria-label="Toggle \${label} column">
-          <span>\${label}</span>
-        \`;
-        form.appendChild(wrap);
-      });
-
-      const hidden = new Set();
-      applyHiddenColumns(tableId, hidden);
-
-      form.addEventListener('change', (e) => {
-        const cb = e.target;
-        if (cb && cb.matches('input[type="checkbox"]')) {
-          const idx = Number(cb.getAttribute('data-idx'));
-          if (cb.checked) hidden.delete(idx); else hidden.add(idx);
-          applyHiddenColumns(tableId, hidden);
-        }
-      });
-    }
-
-    const observer = new MutationObserver(() => {
-      tables.forEach(buildFilterFor);
-    });
-    observer.observe(document.body, { childList:true, subtree:true });
-
-    document.addEventListener('DOMContentLoaded', () => tables.forEach(buildFilterFor));
+    function applyHiddenColumns(id,s){const p=[];s.forEach(i=>p.push(`#${id} th:nth-child(${i}),#${id} td:nth-child(${i}){display:none;}`));
+      const all=styleBucket.textContent.split('\n').filter(l=>!l.includes(`#${id} th:nth-child(`));all.push(p.join('\n'));styleBucket.textContent=all.join('\n');}
+    function buildFilterFor(id){const t=document.getElementById(id),f=document.querySelector(`.col-filter[data-table="${id}"]`);
+      if(!t||!f)return;const ths=[...t.querySelectorAll('thead th')];if(!ths.length)return;
+      const cur=[...f.querySelectorAll('input[type="checkbox"]')].map(i=>i.dataset.key),hdr=ths.map(th=>th.textContent.trim());
+      if(cur.length===hdr.length&&cur.every((k,i)=>k===hdr[i]))return;
+      f.innerHTML='';ths.forEach((th,i)=>{const l=th.textContent.trim()||`Column ${i+1}`,idc=`${id}-col-${i+1}`;
+        const w=document.createElement('label');w.className='col-check';
+        w.innerHTML=`<input type="checkbox" id="${idc}" data-key="${l}" data-idx="${i+1}" checked><span>${l}</span>`;f.appendChild(w);});
+      const h=new Set();applyHiddenColumns(id,h);
+      f.addEventListener('change',e=>{const cb=e.target;if(cb.matches('input[type="checkbox"]')){const i=+cb.dataset.idx;
+        if(cb.checked)h.delete(i);else h.add(i);applyHiddenColumns(id,h);}});}
+    const obs=new MutationObserver(()=>tables.forEach(buildFilterFor));obs.observe(document.body,{childList:true,subtree:true});
+    document.addEventListener('DOMContentLoaded',()=>tables.forEach(buildFilterFor));
   </script>
-<script>
-  // Show tooltip only once per element: remove data-tip after first hover
-  document.addEventListener('mouseenter', (e) => {
-    const el = e.target.closest('.has-tip[data-tip]');
-    if (!el) return;
-    // delay a tick so the user can actually see it once
-    if (!el.__tipSeen) {
-      el.__tipSeen = true;
-      // after the first hover ends, remove the tooltip forever
-      el.addEventListener('mouseleave', function once() {
-        el.removeAttribute('data-tip');   // disables the CSS ::after tooltip
-        el.classList.remove('has-tip');   // and the class as a backup
-        el.removeEventListener('mouseleave', once);
-      }, { once: true });
-    }
-  }, { capture: true });
-</script>
-<script>
-  // Teleport "Columns" dropdowns so they never get clipped by parents or sticky headers
-  (function(){
-    const body = document.body;
 
-    function placeFloating(panel, trigger){
-      const rect = trigger.getBoundingClientRect();
-      const panelRect = panel.getBoundingClientRect();
-      const vw = window.innerWidth, vh = window.innerHeight;
+  <!-- Tooltip show-once -->
+  <script>
+    document.addEventListener('mouseenter',e=>{
+      const el=e.target.closest('.has-tip[data-tip]');if(!el)return;
+      if(!el.__tipSeen){el.__tipSeen=true;
+        el.addEventListener('mouseleave',function once(){el.removeAttribute('data-tip');el.classList.remove('has-tip');el.removeEventListener('mouseleave',once);},{once:true});}
+    },{capture:true});
+  </script>
 
-      // Default: align right edge of panel to trigger's right edge
-      let left = rect.right - panelRect.width;
-      let top  = rect.bottom + 8;
-
-      // Keep inside viewport horizontally
-      if (left < 8) left = 8;
-      if (left + panelRect.width > vw - 8) left = vw - panelRect.width - 8;
-
-      // And vertically; if not enough space below, flip above
-      if (top + panelRect.height > vh - 8) {
-        top = rect.top - panelRect.height - 8;
-        if (top < 8) top = Math.max(8, vh - panelRect.height - 8); // last resort: pin
-      }
-
-      panel.style.left = left + 'px';
-      panel.style.top  = top  + 'px';
-    }
-
-    function openFloating(detailsEl){
-      const trigger = detailsEl.querySelector('summary');
-      const panel   = detailsEl.querySelector('.col-filter');
-      if (!trigger || !panel) return;
-
-      // Make it floating
-      panel.classList.add('floating');
-      // Move to body so no ancestor can clip it
-      body.appendChild(panel);
-
-      // Position now and on scroll/resize
-      const upd = () => placeFloating(panel, trigger);
-      upd();
-      panel.__upd = upd;
-      window.addEventListener('scroll', upd, true);
-      window.addEventListener('resize', upd, true);
-
-      // Close if you click outside
-      panel.__outside = (e) => {
-        if (!detailsEl.contains(e.target) && !panel.contains(e.target)) {
-          detailsEl.removeAttribute('open');
-        }
-      };
-      document.addEventListener('mousedown', panel.__outside, true);
-      document.addEventListener('touchstart', panel.__outside, true);
-    }
-
-    function closeFloating(detailsEl){
-      const origForm = detailsEl.querySelector('form.col-filter'); // placeholder if exists
-      const panel = document.querySelector('.col-filter.floating');
-      if (!panel) return;
-
-      // Stop listeners
-      window.removeEventListener('scroll', panel.__upd, true);
-      window.removeEventListener('resize', panel.__upd, true);
-      document.removeEventListener('mousedown', panel.__outside, true);
-      document.removeEventListener('touchstart', panel.__outside, true);
-
-      panel.__upd = panel.__outside = null;
-
-      // Return the panel back inside the details element (so future opens work)
-      if (origForm) {
-        detailsEl.appendChild(panel); // append back inside, order doesn't matter
-      } else {
-        detailsEl.appendChild(panel);
-      }
-      panel.classList.remove('floating');
-      panel.style.left = panel.style.top = '';
-    }
-
-    // Watch all current and future .cols details
-    function handleToggle(e){
-      const d = e.target;
-      if (d.matches && d.matches('details.cols')) {
-        if (d.hasAttribute('open')) openFloating(d);
-        else closeFloating(d);
-      }
-    }
-    document.addEventListener('toggle', handleToggle, true);
-
-    // If any are pre-opened by the browser restore on load
-    document.querySelectorAll('details.cols[open]').forEach(openFloating);
-  })();
-</script>
-
-  <!-- Admin App (Firebase + Sheets) -->
   <script type="module" src="/admin/adminapp.js?v=4"></script>
 </body>
 </html>
