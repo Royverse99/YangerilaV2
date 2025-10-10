@@ -5,744 +5,149 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Yangerila – Blog</title>
 
-  <!-- Reuse your site look -->
+  <!-- Shared site theme (matches admin/editor look) -->
   <link rel="stylesheet" href="../login/style.css?v=7"/>
 
+  <!-- Page-specific light styles that use the same CSS variables -->
   <style>
-    body { margin: 0; padding: 0; }
-    
-    /* Hero Section */
-    .hero-section {
+    body { margin: 0; }
+
+    /* Hero */
+    .hero-section{
       background: linear-gradient(135deg, rgba(122,231,199,0.1) 0%, rgba(53,203,187,0.05) 100%);
       border-bottom: 1px solid var(--border);
-      padding: 80px 20px 60px;
+      padding: 64px 20px 44px;
       text-align: center;
     }
-
-    .hero-section .logo {
-      width: 80px;
-      height: 80px;
-      margin: 0 auto 24px;
-      border-radius: 16px;
-      object-fit: contain;
+    .hero-section .logo{
+      width: 64px; height: 64px; border-radius: 12px; object-fit: contain; margin: 0 auto 16px;
     }
-
-    .hero-section h1 {
-      font-size: clamp(42px, 6vw, 64px);
-      font-weight: 800;
-      margin: 0 0 16px;
+    .hero-section h1{
+      margin: 0 0 10px; font-size: clamp(36px, 5.2vw, 56px); font-weight: 800; letter-spacing:.2px;
       background: linear-gradient(135deg, var(--accent), #5dd9a8);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
     }
+    .hero-section p{ color: var(--muted); margin:0 }
 
-    .hero-section p {
-      font-size: clamp(16px, 2vw, 20px);
-      color: var(--muted);
-      max-width: 600px;
-      margin: 0 auto;
-    }
-
-    /* Container */
-    .container {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
-
-    /* Filter Bar */
-    .filter-bar {
-      position: sticky;
-      top: 0;
-      background: var(--panel);
-      border-bottom: 1px solid var(--border);
-      padding: 20px 0;
-      z-index: 100;
+    /* Filter bar */
+    .filter-bar{
+      position: sticky; top: 0; z-index: 4;
+      background: rgba(10,23,24,.96);
       backdrop-filter: blur(10px);
-      background: rgba(10, 23, 24, 0.95);
-    }
-
-    .filter-controls {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      align-items: center;
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 0 20px;
-    }
-
-    .search-box {
-      flex: 1;
-      min-width: 250px;
-      position: relative;
-    }
-
-    .search-box input {
-      width: 100%;
-      padding: 12px 16px 12px 44px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,.05);
-      color: var(--text);
-      font-size: 14px;
-      transition: all 0.2s;
-    }
-
-    .search-box input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(122, 231, 199, .15);
-      background: rgba(255,255,255,.08);
-    }
-
-    .search-icon {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--muted);
-      pointer-events: none;
-    }
-
-    .sort-select {
-      padding: 12px 16px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: rgba(255,255,255,.05);
-      color: var(--text);
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .sort-select:hover {
-      border-color: var(--accent);
-      background: rgba(255,255,255,.08);
-    }
-
-    .view-toggle {
-      display: flex;
-      gap: 4px;
-      background: rgba(255,255,255,.05);
-      padding: 4px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-    }
-
-    .view-btn {
-      padding: 8px 16px;
-      border: none;
-      background: transparent;
-      color: var(--muted);
-      cursor: pointer;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 600;
-      transition: all 0.2s;
-    }
-
-    .view-btn.active {
-      background: var(--accent);
-      color: #0a1718;
-    }
-
-    .clear-btn {
-      padding: 12px 20px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: transparent;
-      color: var(--muted);
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .clear-btn:hover {
-      background: rgba(255,255,255,.05);
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    /* Tags Bar */
-    .tags-bar {
-      padding: 24px 0;
-    }
-
-    .tags-container {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .tag-chip {
-      font-size: 13px;
-      font-weight: 500;
-      padding: 10px 18px;
-      border-radius: 24px;
-      cursor: pointer;
-      background: rgba(122,231,199,0.1);
-      border: 1px solid rgba(122,231,199,0.25);
-      color: var(--accent);
-      transition: all 0.2s;
-    }
-
-    .tag-chip:hover {
-      background: rgba(122,231,199,0.15);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(122,231,199,0.2);
-    }
-
-    .tag-chip.active {
-      background: var(--accent);
-      color: #0a1718;
-      border-color: var(--accent);
-      box-shadow: 0 4px 12px rgba(122,231,199,0.3);
-    }
-
-    /* Stats Bar */
-    .stats-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px 0;
-      margin-bottom: 24px;
       border-bottom: 1px solid var(--border);
     }
-
-    .stats-info {
-      font-size: 14px;
-      color: var(--muted);
+    .filter-controls{
+      max-width: 1280px; margin: 0 auto; padding: 12px 20px;
+      display:flex; gap:12px; align-items:center; flex-wrap:wrap;
+    }
+    .search-box{ flex:1; min-width: 220px; position:relative; }
+    .search-box input{
+      width:100%; padding:10px 14px 10px 42px; border-radius:10px;
+      border:1px solid var(--border); background: rgba(255,255,255,.05); color: var(--text); font-size:14px;
+    }
+    .search-icon{ position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--muted) }
+    .sort-select{
+      padding:10px 14px; border-radius:10px; border:1px solid var(--border);
+      background: rgba(255,255,255,.05); color: var(--text); font-size:14px; font-weight:700; cursor:pointer;
+    }
+    .view-toggle{ display:flex; gap:4px; padding:4px; border:1px solid var(--border); border-radius:10px; background: rgba(255,255,255,.05); }
+    .view-btn{ padding:8px 12px; border:none; background:transparent; color:var(--muted); border-radius:8px; font-size:12.5px; font-weight:700; cursor:pointer; }
+    .view-btn.active{ background: var(--accent); color:#0a1718; }
+    .clear-btn{
+      padding:10px 16px; border-radius:10px; border:1px solid var(--border);
+      background: transparent; color: var(--muted); font-size:13px; font-weight:700; cursor:pointer;
     }
 
-    .stats-info strong {
-      color: var(--accent);
-      font-weight: 700;
+    /* Containers */
+    .container{ max-width:1280px; margin:0 auto; padding: 0 20px; }
+    .tags-bar{ padding:16px 0 10px; }
+    .tags-container{ display:flex; gap:10px; flex-wrap:wrap; }
+    .tag-chip{
+      font-size:12.5px; font-weight:700; padding:8px 14px; border-radius:999px; cursor:pointer;
+      background: rgba(122,231,199,.12); border:1px solid rgba(122,231,199,.25); color: var(--accent);
     }
+    .tag-chip.active{ background: var(--accent); color:#0a1718; border-color: var(--accent); }
 
-    /* Grid Layouts */
-    .grid-view {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-      gap: 28px;
-      margin-bottom: 48px;
-    }
+    .stats-bar{ display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid var(--border); margin-bottom:16px; }
+    .stats-info{ color: var(--muted); font-size:14px; }
+    .stats-info strong{ color: var(--accent); }
 
-    .list-view {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      margin-bottom: 48px;
-    }
+    /* Cards (grid/list share admin palette) */
+    .grid-view{ display:grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap:20px; margin-bottom:32px; }
+    .list-view{ display:flex; flex-direction:column; gap:16px; margin-bottom:32px; }
 
-    /* Card Styles */
-    .blog-card {
+    .blog-card{
       background: var(--panel);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      overflow: hidden;
-      transition: all 0.3s;
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      border-radius: 14px; overflow: hidden; display:flex; flex-direction:column;
+      box-shadow: 0 4px 16px rgba(0,0,0,.2); transition: transform .2s, box-shadow .2s, border-color .2s; cursor: pointer;
     }
+    .blog-card:hover{ transform: translateY(-4px); border-color: rgba(122,231,199,.35); box-shadow: 0 12px 30px rgba(0,0,0,.35); }
+    .blog-card.list-card{ flex-direction:row; }
 
-    .blog-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 12px 32px rgba(0,0,0,0.4);
-      border-color: rgba(122,231,199,0.4);
-    }
+    .card-image{ width:100%; height:200px; object-fit:cover; background: rgba(255,255,255,.03); }
+    .list-card .card-image{ width:280px; height:auto; min-height:200px; }
 
-    .blog-card.list-card {
-      flex-direction: row;
-    }
+    .card-content{ padding:18px; display:flex; flex-direction:column; gap:10px; }
+    .card-title{ margin:0; font-size:20px; font-weight:800; color: var(--text); line-height:1.25; }
+    .card-meta{ display:flex; gap:14px; flex-wrap:wrap; align-items:center; color:var(--muted); font-size:12.5px; }
+    .card-excerpt{ color: var(--muted); font-size:14px; margin:0; line-height:1.6; }
+    .card-tags{ display:flex; gap:6px; flex-wrap:wrap; }
+    .card-tag{ font-size:11px; background: rgba(122,231,199,.12); border:1px solid rgba(122,231,199,.25); border-radius:6px; padding:4px 10px; color: var(--accent) }
 
-    .card-image {
-      width: 100%;
-      height: 220px;
-      object-fit: cover;
-      background: rgba(255,255,255,0.03);
-    }
+    .card-footer{ display:flex; gap:8px; padding-top:12px; border-top:1px solid var(--border); }
+    .card-btn{ flex:1; padding:9px 10px; border-radius:10px; font-size:12.5px; font-weight:800; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; }
+    .card-btn.primary{ background: var(--accent); color:#0a1718; }
+    .card-btn.secondary{ background: transparent; color: var(--muted); border: 1px solid var(--border); }
+    .card-btn:hover{ transform: translateY(-1px); }
 
-    .list-card .card-image {
-      width: 280px;
-      height: auto;
-      min-height: 200px;
-    }
+    /* Featured */
+    .featured-post{ background: var(--panel); border: 2px solid var(--accent); border-radius:16px; overflow:hidden; margin: 18px 0 28px; box-shadow: 0 8px 32px rgba(122,231,199,.15); }
+    .featured-badge{ position:absolute; margin:14px; background: var(--accent); color:#0a1718; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:800; text-transform:uppercase; }
+    .featured-content{ display:grid; grid-template-columns: 1fr 1fr; }
+    .featured-image{ width:100%; height:100%; min-height:340px; object-fit:cover; }
+    .featured-info{ padding:26px; display:flex; flex-direction:column; gap:10px; justify-content:center; }
+    .featured-title{ margin:0; font-size:30px; font-weight:800; color: var(--text) }
+    .featured-excerpt{ color: var(--muted); margin:0; line-height:1.7; }
 
-    .card-content {
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-    }
-
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 12px;
-    }
-
-    .card-title {
-      font-size: 22px;
-      font-weight: 700;
-      margin: 0 0 12px;
-      color: var(--text);
-      line-height: 1.3;
-    }
-
-    .card-meta {
-      display: flex;
-      gap: 16px;
-      align-items: center;
-      flex-wrap: wrap;
-      margin-bottom: 12px;
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .meta-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .card-excerpt {
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.6;
-      margin: 0 0 16px;
-      flex: 1;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
-    .card-tags {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      margin-bottom: 16px;
-    }
-
-    .card-tag {
-      font-size: 11px;
-      background: rgba(122,231,199,0.12);
-      border: 1px solid rgba(122,231,199,0.25);
-      border-radius: 6px;
-      padding: 4px 10px;
-      color: var(--accent);
-    }
-
-    .card-footer {
-      display: flex;
-      gap: 8px;
-      padding-top: 16px;
-      border-top: 1px solid var(--border);
-    }
-
-    .card-btn {
-      flex: 1;
-      padding: 10px;
-      border-radius: 10px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      border: none;
-    }
-
-    .card-btn.primary {
-      background: var(--accent);
-      color: #0a1718;
-    }
-
-    .card-btn.secondary {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--muted);
-    }
-
-    .card-btn:hover {
-      transform: translateY(-2px);
-    }
-
-    /* Featured Post */
-    .featured-post {
-      background: var(--panel);
-      border: 2px solid var(--accent);
-      border-radius: 20px;
-      overflow: hidden;
-      margin-bottom: 48px;
-      box-shadow: 0 8px 32px rgba(122,231,199,0.15);
-      position: relative;
-    }
-
-    .featured-badge {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      background: var(--accent);
-      color: #0a1718;
-      padding: 8px 16px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      z-index: 10;
-    }
-
-    .featured-content {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0;
-    }
-
-    .featured-image {
-      width: 100%;
-      height: 100%;
-      min-height: 400px;
-      object-fit: cover;
-    }
-
-    .featured-info {
-      padding: 48px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .featured-title {
-      font-size: 36px;
-      font-weight: 800;
-      margin: 0 0 16px;
-      color: var(--text);
-      line-height: 1.2;
-    }
-
-    .featured-excerpt {
-      font-size: 16px;
-      color: var(--muted);
-      line-height: 1.7;
-      margin-bottom: 24px;
-    }
-
-    /* Load More */
-    .load-more {
-      display: block;
-      margin: 0 auto 48px;
-      padding: 16px 40px;
-      font-size: 15px;
-      font-weight: 700;
-      background: var(--accent);
-      color: #0a1718;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .load-more:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 24px rgba(122,231,199,0.4);
-    }
-
-    /* Modal */
-    .modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.85);
-      backdrop-filter: blur(12px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      padding: 20px;
-      overflow-y: auto;
-    }
-
-    .modal.open {
-      display: flex;
-    }
-
-    .modal-content {
-      max-width: 900px;
-      width: 100%;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-      max-height: 90vh;
-      overflow-y: auto;
-      position: relative;
-    }
-
-    .modal-header {
-      position: sticky;
-      top: 0;
-      background: var(--panel);
-      border-bottom: 1px solid var(--border);
-      padding: 24px 32px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 10;
-    }
-
-    .modal-close {
-      padding: 8px 16px;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--border);
-      color: var(--muted);
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 600;
-      transition: all 0.2s;
-    }
-
-    .modal-close:hover {
-      background: rgba(255,255,255,0.1);
-      color: var(--text);
-    }
-
-    .modal-body {
-      padding: 32px;
-    }
-
-    .modal-title {
-      font-size: 36px;
-      font-weight: 800;
-      margin: 0 0 20px;
-      color: var(--text);
-      line-height: 1.2;
-    }
-
-    .modal-image {
-      width: 100%;
-      max-height: 450px;
-      object-fit: cover;
-      border-radius: 16px;
-      margin-bottom: 24px;
-      border: 1px solid var(--border);
-    }
-
-    .modal-article {
-      color: var(--text);
-      line-height: 1.8;
-      font-size: 17px;
-    }
-
-    .modal-article p {
-      margin: 0 0 20px;
-    }
-
-    .modal-article h1,
-    .modal-article h2,
-    .modal-article h3 {
-      color: var(--text);
-      margin-top: 32px;
-      margin-bottom: 16px;
-      font-weight: 700;
-    }
-
-    .modal-article h1 { font-size: 32px; }
-    .modal-article h2 { font-size: 26px; }
-    .modal-article h3 { font-size: 20px; }
-
-    .modal-article a {
-      color: var(--accent);
-      text-decoration: underline;
-    }
-
-    .modal-article blockquote {
-      border-left: 4px solid var(--accent);
-      padding-left: 20px;
-      margin: 24px 0;
-      color: var(--muted);
-      font-style: italic;
-    }
-
-    .modal-article code {
-      background: rgba(255,255,255,0.1);
-      padding: 3px 8px;
-      border-radius: 4px;
-      font-family: 'Courier New', monospace;
-      font-size: 0.9em;
-    }
-
-    .modal-article pre {
-      background: rgba(255,255,255,0.05);
-      padding: 20px;
-      border-radius: 12px;
-      overflow-x: auto;
-      border: 1px solid var(--border);
-      margin: 24px 0;
-    }
-
-    .modal-actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 32px;
-      padding-top: 24px;
-      border-top: 1px solid var(--border);
-    }
-
-    .action-btn {
-      padding: 14px 24px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      border: none;
-    }
-
-    .action-btn.primary {
-      background: var(--accent);
-      color: #0a1718;
-    }
-
-    .action-btn.secondary {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text);
-    }
-
-    .action-btn:hover {
-      transform: translateY(-2px);
-    }
-
-    /* Empty State */
-    .empty-state {
-      text-align: center;
-      padding: 80px 20px;
-      color: var(--muted);
-    }
-
-    .empty-icon {
-      font-size: 64px;
-      margin-bottom: 16px;
-      opacity: 0.3;
-    }
-
-    /* Loading */
-    .loading {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--muted);
-      font-size: 16px;
-    }
-
-    /* Toast */
-    .toast {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,0.9);
-      color: #fff;
-      padding: 14px 24px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 500;
-      z-index: 2000;
-      opacity: 0;
-      transition: opacity 0.3s;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-    }
-
-    .toast.show {
-      opacity: 1;
-    }
+    /* Modal (read more) */
+    .modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.85); backdrop-filter: blur(10px); z-index:50; padding:20px; }
+    .modal.open{ display:flex; }
+    .modal-content{ width:min(900px, 96vw); max-height:90vh; overflow:auto; background: var(--panel); border:1px solid var(--border); border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.6); }
+    .modal-header{ position:sticky; top:0; background:var(--panel); border-bottom:1px solid var(--border); padding:16px 20px; display:flex; justify-content:space-between; align-items:center; z-index:5; }
+    .modal-title{ margin:0; font-size:26px; font-weight:800; color: var(--text) }
+    .modal-close{ padding:8px 12px; background: rgba(255,255,255,.06); border:1px solid var(--border); color: var(--muted); border-radius:8px; cursor:pointer; }
+    .modal-body{ padding:20px; }
+    .modal-image{ width:100%; max-height:440px; object-fit:cover; border-radius:12px; border:1px solid var(--border); margin-bottom:16px; }
+    .modal-article{ color: var(--text); line-height:1.8; font-size:16px; }
+    .modal-actions{ display:flex; gap:10px; margin-top:22px; padding-top:14px; border-top:1px solid var(--border); }
+    .action-btn{ padding:12px 18px; border-radius:10px; border:none; font-weight:800; font-size:13px; cursor:pointer; }
+    .action-btn.primary{ background: var(--accent); color:#0a1718; }
+    .action-btn.secondary{ background: transparent; border:1px solid var(--border); color: var(--text) }
 
     /* Responsive */
-    @media (max-width: 1024px) {
-      .featured-content {
-        grid-template-columns: 1fr;
-      }
-
-      .featured-info {
-        padding: 32px;
-      }
-
-      .list-card {
-        flex-direction: column;
-      }
-
-      .list-card .card-image {
-        width: 100%;
-        height: 220px;
-      }
+    @media (max-width:1024px){
+      .featured-content{ grid-template-columns:1fr; }
+      .featured-image{ min-height:260px; }
+    }
+    @media (max-width:768px){
+      .filter-controls{ flex-direction:column; align-items:stretch; }
+      .grid-view{ grid-template-columns: 1fr; }
+      .list-card{ flex-direction:column; }
+      .list-card .card-image{ width:100%; height:200px; }
+      .featured-title{ font-size:24px }
+      .modal-title{ font-size:22px }
     }
 
-    @media (max-width: 768px) {
-      .hero-section {
-        padding: 60px 20px 40px;
-      }
-
-      .filter-controls {
-        flex-direction: column;
-      }
-
-      .search-box {
-        width: 100%;
-      }
-
-      .grid-view {
-        grid-template-columns: 1fr;
-      }
-
-      .featured-title {
-        font-size: 28px;
-      }
-
-      .modal-title {
-        font-size: 28px;
-      }
-
-      .modal-body {
-        padding: 24px;
-      }
-    }
-
-    /* Scrollbar */
-    ::-webkit-scrollbar {
-      width: 10px;
-      height: 10px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: rgba(255,255,255,0.02);
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: rgba(122,231,199,0.2);
-      border-radius: 5px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: rgba(122,231,199,0.3);
-    }
+    /* Toast (shared look) */
+    .toast{ position:fixed; left:50%; transform:translateX(-50%); bottom:20px; background:rgba(0,0,0,.9); color:#fff; padding:12px 16px; border-radius:10px; font-size:13px; z-index:100; opacity:0; transition:opacity .2s; }
+    .toast.show{ opacity:1; }
   </style>
 </head>
 <body>
-  <!-- Hero Section -->
+  <!-- Hero -->
   <section class="hero-section">
-    <img src="../v2/wp-content/uploads/2022/04/your-logo-file-name.png" class="logo" alt="Yangerila"/>
+    <img src="/wp-content/uploads/2022/04/coaching3-slider-pic1.webp" class="logo" alt="Yangerila"/>
     <h1>Blog</h1>
     <p>Discover lessons, tips, and stories from Yangerila</p>
   </section>
@@ -764,31 +169,29 @@
         <button class="view-btn active" data-view="grid">Grid</button>
         <button class="view-btn" data-view="list">List</button>
       </div>
-      <button class="clear-btn" id="clearBtn">Clear Filters</button>
+      <button class="clear-btn" id="clearBtn">Clear</button>
     </div>
   </div>
 
   <main class="container">
-    <!-- Tags Bar -->
+    <!-- Tags -->
     <section class="tags-bar">
       <div class="tags-container" id="tagsContainer"></div>
     </section>
 
-    <!-- Stats Bar -->
+    <!-- Stats -->
     <div class="stats-bar">
-      <div class="stats-info">
-        Showing <strong id="postCount">0</strong> posts
-      </div>
+      <div class="stats-info">Showing <strong id="postCount">0</strong> posts</div>
     </div>
 
-    <!-- Featured Post -->
+    <!-- Featured -->
     <div id="featuredContainer"></div>
 
-    <!-- Posts Grid/List -->
+    <!-- Posts -->
     <div id="postsContainer" class="grid-view"></div>
 
-    <!-- Load More -->
-    <button class="load-more" id="loadMoreBtn" style="display:none">Load More Posts</button>
+    <!-- Load more -->
+    <button class="load-more" id="loadMoreBtn" style="display:none">Load More</button>
   </main>
 
   <!-- Modal -->
@@ -800,19 +203,12 @@
       </div>
       <div class="modal-body">
         <div class="card-meta" id="modalMeta"></div>
-        <img id="modalImage" class="modal-image" style="display:none"/>
+        <img id="modalImage" class="modal-image" style="display:none" alt="">
         <div class="card-tags" id="modalTags"></div>
         <article class="modal-article" id="modalContent"></article>
         <div class="modal-actions">
-          <button class="action-btn primary" id="modalLikeBtn">
-            <span>👍</span>
-            <span id="modalLikes">0</span>
-            <span>Likes</span>
-          </button>
-          <button class="action-btn secondary" id="modalShareBtn">
-            <span>🔗</span>
-            <span>Share</span>
-          </button>
+          <button class="action-btn primary" id="modalLikeBtn"><span>👍</span> <span id="modalLikes">0</span> Likes</button>
+          <button class="action-btn secondary" id="modalShareBtn"><span>🔗</span> Share</button>
         </div>
       </div>
     </div>
@@ -821,462 +217,265 @@
   <!-- Toast -->
   <div class="toast" id="toast"></div>
 
+  <!-- Firebase + Blog logic -->
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
     import {
-      getFirestore, collection, query, where, orderBy, limit, getDocs, startAfter,
+      getFirestore, collection, query, where, orderBy, getDocs,
       doc, updateDoc, increment
     } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDHDJHrnQ2IwvetQoV6cWAGnkMzANerVDE",
-      authDomain: "yangerila-studio.firebaseapp.com",
-      projectId: "yangerila-studio",
-      storageBucket: "yangerila-studio.appspot.com",
-      messagingSenderId: "585529190595",
-      appId: "1:585529190595:web:755d5834949c3b30f9a76",
-      measurementId: "G-39S837X9BB"
+    // Public Firestore (no auth needed for reads of published posts)
+const firebaseConfig = {
+    apiKey: "AIzaSyDHDjHrnQ2IwwetQoV6cWAGnkMzANerVDE",
+    authDomain: "yangerila-studio.firebaseapp.com",
+    projectId: "yangerila-studio",
     };
-
     const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    const db  = getFirestore(app);
 
     // State
     let state = {
-      posts: [],
-      filteredPosts: [],
-      displayedPosts: [],
-      selectedTag: null,
-      searchQuery: '',
-      sortBy: 'date_desc',
-      viewMode: 'grid',
-      pageSize: 12,
-      currentPage: 1
+      posts: [], filteredPosts: [], displayedPosts: [],
+      selectedTag: null, searchQuery: '', sortBy: 'date_desc',
+      viewMode: 'grid', pageSize: 12, currentPage: 1
     };
 
-    // DOM Elements
+    // DOM
     const searchInput = document.getElementById('searchInput');
-    const sortSelect = document.getElementById('sortSelect');
-    const clearBtn = document.getElementById('clearBtn');
-    const tagsContainer = document.getElementById('tagsContainer');
-    const postsContainer = document.getElementById('postsContainer');
+    const sortSelect  = document.getElementById('sortSelect');
+    const clearBtn    = document.getElementById('clearBtn');
+    const tagsContainer   = document.getElementById('tagsContainer');
+    const postsContainer  = document.getElementById('postsContainer');
     const featuredContainer = document.getElementById('featuredContainer');
-    const postCountEl = document.getElementById('postCount');
-    const loadMoreBtn = document.getElementById('loadMoreBtn');
-    const postModal = document.getElementById('postModal');
+    const postCountEl     = document.getElementById('postCount');
+    const loadMoreBtn     = document.getElementById('loadMoreBtn');
+
+    const postModal  = document.getElementById('postModal');
     const modalClose = document.getElementById('modalClose');
-    const toast = document.getElementById('toast');
+    const toast      = document.getElementById('toast');
 
     // Init
     loadPosts();
-    setupEventListeners();
+    setupUI();
 
-    function setupEventListeners() {
+    function setupUI(){
       searchInput.addEventListener('input', handleSearch);
       sortSelect.addEventListener('change', handleSort);
       clearBtn.addEventListener('click', clearFilters);
-      modalClose.addEventListener('click', closeModal);
-      postModal.addEventListener('click', (e) => {
-        if (e.target === postModal) closeModal();
-      });
-      loadMoreBtn.addEventListener('click', loadMorePosts);
 
       // View toggle
-      document.querySelectorAll('.view-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.view-btn').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          document.querySelectorAll('.view-btn').forEach(b=>b.classList.remove('active'));
           btn.classList.add('active');
           state.viewMode = btn.dataset.view;
           renderPosts();
         });
       });
+
+      // Modal controls
+      modalClose.addEventListener('click', closeModal);
+      postModal.addEventListener('click', (e)=>{ if(e.target===postModal) closeModal(); });
+
+      // Load more
+      loadMoreBtn.addEventListener('click', ()=>{
+        state.currentPage++;
+        renderPosts();
+        window.scrollTo({ top: postsContainer.offsetTop - 80, behavior: 'smooth' });
+      });
     }
 
-    async function loadPosts() {
-      postsContainer.innerHTML = '<div class="loading">Loading posts...</div>';
-      try {
-        const q = query(
-          collection(db, 'blogs'),
-          where('published', '==', true),
-          orderBy('publishedAt', 'desc')
-        );
-        const snapshot = await getDocs(q);
-        
+    async function loadPosts(){
+      postsContainer.innerHTML = '<div class="loading">Loading posts…</div>';
+      try{
+        const q = query(collection(db,'blogs'), where('published','==',true), orderBy('publishedAt','desc'));
+        const snap = await getDocs(q);
         state.posts = [];
-        snapshot.forEach(doc => {
-          const data = doc.data();
-          state.posts.push({
-            id: doc.id,
-            ...data,
-            views: Number(data.views || 0),
-            likes: Number(data.likes || 0)
-          });
-        });
-
-        state.filteredPosts = [...state.posts];
-        buildTagsBar();
-        renderFeaturedPost();
-        applyFilters();
-      } catch (error) {
-        console.error('Error loading posts:', error);
-        postsContainer.innerHTML = '<div class="empty-state"><div class="empty-icon">⚠️</div><p>Failed to load posts</p></div>';
+        snap.forEach(d => state.posts.push({ id: d.id, ...d.data(), likes: Number(d.data().likes || 0), views: Number(d.data().views || 0) }));
+        buildTags(); renderFeatured(); applyFilters(); openByQuery();
+      }catch(err){
+        console.error(err);
+        postsContainer.innerHTML = '<div class="empty-state">Couldn’t load posts.</div>';
       }
     }
 
-    function buildTagsBar() {
-      const tagCounts = new Map();
-      state.posts.forEach(post => {
-        (post.tags || []).forEach(tag => {
-          tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
-        });
-      });
-
-      const topTags = Array.from(tagCounts.entries())
-        .sort((a, b) => b[1] - a[1])
-        .slice(0, 15);
-
-      const html = [
-        `<div class="tag-chip ${!state.selectedTag ? 'active' : ''}" data-tag="">All Posts (${state.posts.length})</div>`,
-        ...topTags.map(([tag, count]) => 
-          `<div class="tag-chip ${state.selectedTag === tag ? 'active' : ''}" data-tag="${esc(tag)}">${esc(tag)} (${count})</div>`
-        )
+    function buildTags(){
+      const tally = new Map();
+      state.posts.forEach(p => (p.tags||[]).forEach(t => tally.set(t, (tally.get(t)||0)+1)));
+      const list = Array.from(tally.entries()).sort((a,b)=>b[1]-a[1]).slice(0,15);
+      tagsContainer.innerHTML = [
+        `<div class="tag-chip ${!state.selectedTag?'active':''}" data-tag="">All Posts (${state.posts.length})</div>`,
+        ...list.map(([t,c])=>`<div class="tag-chip ${state.selectedTag===t?'active':''}" data-tag="${esc(t)}">${esc(t)} (${c})</div>`)
       ].join('');
-
-      tagsContainer.innerHTML = html;
-
-      tagsContainer.querySelectorAll('.tag-chip').forEach(chip => {
-        chip.addEventListener('click', () => {
+      tagsContainer.querySelectorAll('.tag-chip').forEach(chip=>{
+        chip.addEventListener('click', ()=>{
           const tag = chip.dataset.tag;
           state.selectedTag = tag || null;
-          state.currentPage = 1;
           applyFilters();
-          updateTagsActive();
+          tagsContainer.querySelectorAll('.tag-chip').forEach(c=>{
+            c.classList.toggle('active', (c.dataset.tag||null)===state.selectedTag);
+          });
         });
       });
     }
 
-    function updateTagsActive() {
-      tagsContainer.querySelectorAll('.tag-chip').forEach(chip => {
-        const tag = chip.dataset.tag || null;
-        chip.classList.toggle('active', tag === state.selectedTag);
-      });
+    function handleSearch(){ state.searchQuery = searchInput.value.trim().toLowerCase(); state.currentPage=1; applyFilters(); }
+    function handleSort(){ state.sortBy = sortSelect.value; state.currentPage=1; applyFilters(); }
+    function clearFilters(){
+      state.selectedTag=null; state.searchQuery=''; state.sortBy='date_desc'; state.currentPage=1;
+      searchInput.value=''; sortSelect.value='date_desc'; applyFilters();
+      tagsContainer.querySelectorAll('.tag-chip').forEach(c=>c.classList.toggle('active', (c.dataset.tag||'')===''));
     }
 
-    function renderFeaturedPost() {
-      if (state.posts.length === 0) return;
-      
-      const featured = state.posts[0];
-      const html = `
-        <div class="featured-post" onclick="openPost('${featured.id}')">
+    function applyFilters(){
+      let out = [...state.posts];
+      if(state.selectedTag) out = out.filter(p => (p.tags||[]).includes(state.selectedTag));
+      if(state.searchQuery){
+        out = out.filter(p =>
+          (p.title||'').toLowerCase().includes(state.searchQuery) ||
+          (p.shortText||'').toLowerCase().includes(state.searchQuery)
+        );
+      }
+      out.sort((a,b)=>{
+        switch(state.sortBy){
+          case 'date_asc': return ts(a.publishedAt) - ts(b.publishedAt);
+          case 'views_desc': return (b.views||0) - (a.views||0);
+          case 'likes_desc': return (b.likes||0) - (a.likes||0);
+          default: return ts(b.publishedAt) - ts(a.publishedAt);
+        }
+      });
+      state.filteredPosts = out;
+      state.currentPage = 1;
+      renderPosts();
+    }
+
+    function renderFeatured(){
+      const el = document.getElementById('featuredContainer');
+      if(!state.posts.length){ el.innerHTML=''; return; }
+      const f = state.posts[0];
+      el.innerHTML = `
+        <div class="featured-post" onclick="openPost('${f.id}')">
           <div class="featured-badge">Featured</div>
           <div class="featured-content">
-            ${featured.imageUrl ? `<img src="${esc(featured.imageUrl)}" class="featured-image" alt="${esc(featured.title)}"/>` : ''}
+            ${f.imageUrl?`<img src="${esc(f.imageUrl)}" class="featured-image" alt="${esc(f.title)}">`:''}
             <div class="featured-info">
-              <h2 class="featured-title">${esc(featured.title || 'Untitled')}</h2>
+              <h2 class="featured-title">${esc(f.title||'Untitled')}</h2>
               <div class="card-meta">
-                <div class="meta-item">📅 ${formatDate(featured.publishedAt)}</div>
-                <div class="meta-item">👁️ ${featured.views} views</div>
-                <div class="meta-item">👍 ${featured.likes} likes</div>
+                <div>📅 ${fmt(f.publishedAt)}</div>
+                <div>👁️ ${f.views}</div>
+                <div>👍 ${f.likes}</div>
               </div>
-              <p class="featured-excerpt">${esc(truncate(featured.shortText || '', 200))}</p>
-              <div class="card-tags">
-                ${(featured.tags || []).map(t => `<span class="card-tag">${esc(t)}</span>`).join('')}
-              </div>
+              <p class="featured-excerpt">${esc((f.shortText||'').slice(0,200))}${(f.shortText||'').length>200?'…':''}</p>
+              <div class="card-tags">${(f.tags||[]).map(t=>`<span class="card-tag">${esc(t)}</span>`).join('')}</div>
             </div>
           </div>
-        </div>
-      `;
-      featuredContainer.innerHTML = html;
+        </div>`;
     }
 
-    function handleSearch() {
-      state.searchQuery = searchInput.value.trim().toLowerCase();
-      state.currentPage = 1;
-      applyFilters();
-    }
-
-    function handleSort() {
-      state.sortBy = sortSelect.value;
-      applyFilters();
-    }
-
-    function clearFilters() {
-      state.selectedTag = null;
-      state.searchQuery = '';
-      state.sortBy = 'date_desc';
-      searchInput.value = '';
-      sortSelect.value = 'date_desc';
-      state.currentPage = 1;
-      updateTagsActive();
-      applyFilters();
-    }
-
-    function applyFilters() {
-      let filtered = [...state.posts];
-
-      // Filter by tag
-      if (state.selectedTag) {
-        filtered = filtered.filter(post => 
-          (post.tags || []).includes(state.selectedTag)
-        );
-      }
-
-      // Filter by search
-      if (state.searchQuery) {
-        filtered = filtered.filter(post =>
-          (post.title || '').toLowerCase().includes(state.searchQuery) ||
-          (post.shortText || '').toLowerCase().includes(state.searchQuery)
-        );
-      }
-
-      // Sort
-      filtered.sort((a, b) => {
-        switch (state.sortBy) {
-          case 'date_desc':
-            return getTimestamp(b.publishedAt) - getTimestamp(a.publishedAt);
-          case 'date_asc':
-            return getTimestamp(a.publishedAt) - getTimestamp(b.publishedAt);
-          case 'views_desc':
-            return b.views - a.views;
-          case 'likes_desc':
-            return b.likes - a.likes;
-          default:
-            return 0;
-        }
-      });
-
-      state.filteredPosts = filtered;
-      state.currentPage = 1;
-      renderPosts();
-    }
-
-    function renderPosts() {
-      const startIdx = 0;
-      const endIdx = state.currentPage * state.pageSize;
-      state.displayedPosts = state.filteredPosts.slice(startIdx, endIdx);
-
+    function renderPosts(){
+      const end = state.currentPage * state.pageSize;
+      const items = state.filteredPosts.slice(0,end);
       postCountEl.textContent = state.filteredPosts.length;
+      const listClass = state.viewMode==='grid' ? 'grid-view' : 'list-view';
+      postsContainer.className = listClass;
 
-      if (state.displayedPosts.length === 0) {
-        postsContainer.innerHTML = '<div class="empty-state"><div class="empty-icon">📝</div><p>No posts found</p></div>';
-        loadMoreBtn.style.display = 'none';
-        return;
-      }
+      if(!items.length){ postsContainer.innerHTML = '<div class="empty-state">No posts found.</div>'; loadMoreBtn.style.display='none'; return; }
 
-      postsContainer.className = state.viewMode === 'grid' ? 'grid-view' : 'list-view';
-      
-      const html = state.displayedPosts.map(post => {
-        const cardClass = state.viewMode === 'list' ? 'blog-card list-card' : 'blog-card';
+      postsContainer.innerHTML = items.map(p=>{
+        const cls = state.viewMode==='list'?'blog-card list-card':'blog-card';
         return `
-          <article class="${cardClass}" onclick="openPost('${post.id}')">
-            ${post.imageUrl ? `<img src="${esc(post.imageUrl)}" class="card-image" alt="${esc(post.title)}"/>` : ''}
+          <article class="${cls}" onclick="openPost('${p.id}')">
+            ${p.imageUrl?`<img src="${esc(p.imageUrl)}" class="card-image" alt="${esc(p.title)}">`:''}
             <div class="card-content">
-              <h3 class="card-title">${esc(post.title || 'Untitled')}</h3>
+              <h3 class="card-title">${esc(p.title||'Untitled')}</h3>
               <div class="card-meta">
-                <div class="meta-item">📅 ${formatDate(post.publishedAt)}</div>
-                <div class="meta-item">👁️ ${post.views}</div>
-                <div class="meta-item">👍 ${post.likes}</div>
+                <div>📅 ${fmt(p.publishedAt)}</div>
+                <div>👁️ ${p.views}</div>
+                <div>👍 ${p.likes}</div>
               </div>
-              <p class="card-excerpt">${esc(post.shortText || '')}</p>
-              <div class="card-tags">
-                ${(post.tags || []).map(t => `<span class="card-tag">${esc(t)}</span>`).join('')}
-              </div>
+              <p class="card-excerpt">${esc(p.shortText||'')}</p>
+              <div class="card-tags">${(p.tags||[]).map(t=>`<span class="card-tag">${esc(t)}</span>`).join('')}</div>
               <div class="card-footer">
-                <button class="card-btn primary" onclick="event.stopPropagation(); openPost('${post.id}')">Read More</button>
-                <button class="card-btn secondary" onclick="event.stopPropagation(); likePost('${post.id}')">👍 Like</button>
-                <button class="card-btn secondary" onclick="event.stopPropagation(); sharePost('${post.id}')">🔗 Share</button>
+                <button class="card-btn primary" onclick="event.stopPropagation(); openPost('${p.id}')">Read</button>
+                <button class="card-btn secondary" onclick="event.stopPropagation(); likePost('${p.id}')">👍 Like</button>
+                <button class="card-btn secondary" onclick="event.stopPropagation(); sharePost('${p.id}')">🔗 Share</button>
               </div>
             </div>
-          </article>
-        `;
+          </article>`;
       }).join('');
 
-      postsContainer.innerHTML = html;
-
-      // Show/hide load more button
-      loadMoreBtn.style.display = state.displayedPosts.length < state.filteredPosts.length ? 'block' : 'none';
+      loadMoreBtn.style.display = items.length < state.filteredPosts.length ? 'block' : 'none';
     }
 
-    function loadMorePosts() {
-      state.currentPage++;
-      renderPosts();
-      window.scrollTo({ top: postsContainer.offsetTop - 100, behavior: 'smooth' });
-    }
+    // Modal & actions
+    window.openPost = async function(id){
+      const p = state.posts.find(x=>x.id===id); if(!p) return;
+      document.getElementById('modalTitle').textContent = p.title || 'Untitled';
+      document.getElementById('modalMeta').innerHTML = `
+        <div>📅 ${fmt(p.publishedAt)}</div>
+        <div>👁️ ${p.views} views</div>
+        <div>👍 ${p.likes} likes</div>`;
+      const img = document.getElementById('modalImage');
+      if(p.imageUrl){ img.src = p.imageUrl; img.style.display='block'; } else { img.style.display='none'; }
+      document.getElementById('modalTags').innerHTML = (p.tags||[]).map(t=>`<span class="card-tag">${esc(t)}</span>`).join('');
+      document.getElementById('modalContent').innerHTML = p.bodyHtml || toHtml(p.fullText||p.shortText||'');
+      document.getElementById('modalLikes').textContent = p.likes;
+      document.getElementById('modalLikeBtn').onclick = ()=>likePost(id);
+      document.getElementById('modalShareBtn').onclick = ()=>sharePost(id);
 
-    window.openPost = async function(postId) {
-      const post = state.posts.find(p => p.id === postId);
-      if (!post) return;
+      // open
+      document.getElementById('postModal').classList.add('open');
+      document.body.style.overflow='hidden';
 
-      const modalTitle = document.getElementById('modalTitle');
-      const modalMeta = document.getElementById('modalMeta');
-      const modalImage = document.getElementById('modalImage');
-      const modalTags = document.getElementById('modalTags');
-      const modalContent = document.getElementById('modalContent');
-      const modalLikes = document.getElementById('modalLikes');
-      const modalLikeBtn = document.getElementById('modalLikeBtn');
-      const modalShareBtn = document.getElementById('modalShareBtn');
-
-      modalTitle.textContent = post.title || 'Untitled';
-      modalMeta.innerHTML = `
-        <div class="meta-item">📅 ${formatDate(post.publishedAt)}</div>
-        <div class="meta-item">👁️ ${post.views} views</div>
-        <div class="meta-item">👍 ${post.likes} likes</div>
-      `;
-
-      if (post.imageUrl) {
-        modalImage.src = post.imageUrl;
-        modalImage.style.display = 'block';
-      } else {
-        modalImage.style.display = 'none';
-      }
-
-      modalTags.innerHTML = (post.tags || []).map(t => `<span class="card-tag">${esc(t)}</span>`).join('');
-      modalContent.innerHTML = post.bodyHtml || toHtml(post.fullText || post.shortText || '');
-      modalLikes.textContent = post.likes;
-
-      modalLikeBtn.onclick = () => likePost(postId);
-      modalShareBtn.onclick = () => sharePost(postId);
-
-      postModal.classList.add('open');
-      document.body.style.overflow = 'hidden';
-
-      // Increment view count
-      const viewKey = 'viewed_' + postId;
-      const now = Date.now();
-      const lastView = Number(localStorage.getItem(viewKey) || 0);
-      
-      if (!lastView || now - lastView > 12 * 60 * 60 * 1000) {
-        try {
-          await updateDoc(doc(db, 'blogs', postId), { views: increment(1) });
-          localStorage.setItem(viewKey, String(now));
-          post.views++;
-          modalMeta.innerHTML = `
-            <div class="meta-item">📅 ${formatDate(post.publishedAt)}</div>
-            <div class="meta-item">👁️ ${post.views} views</div>
-            <div class="meta-item">👍 ${post.likes} likes</div>
-          `;
-        } catch (e) {
-          console.warn('View increment failed', e);
-        }
+      // views +1 (12h cooldown)
+      const key = 'viewed_'+id, now = Date.now(), last = Number(localStorage.getItem(key)||0);
+      if(!last || now-last > 12*60*60*1000){
+        try{
+          await updateDoc(doc(db,'blogs',id), { views: increment(1) });
+          localStorage.setItem(key, String(now));
+          p.views++; // optimistic UI
+          document.getElementById('modalMeta').innerHTML = `
+            <div>📅 ${fmt(p.publishedAt)}</div>
+            <div>👁️ ${p.views} views</div>
+            <div>👍 ${p.likes} likes</div>`;
+        }catch(e){ console.warn('view +1 failed', e); }
       }
     };
+    function closeModal(){ document.getElementById('postModal').classList.remove('open'); document.body.style.overflow=''; }
 
-    function closeModal() {
-      postModal.classList.remove('open');
-      document.body.style.overflow = '';
-    }
-
-    window.likePost = async function(postId) {
-      const likeKey = 'liked_' + postId;
-      if (localStorage.getItem(likeKey)) {
-        showToast('You already liked this post');
-        return;
-      }
-
-      try {
-        await updateDoc(doc(db, 'blogs', postId), { likes: increment(1) });
-        localStorage.setItem(likeKey, '1');
-        
-        const post = state.posts.find(p => p.id === postId);
-        if (post) {
-          post.likes++;
-          renderPosts();
-          
-          // Update modal if open
-          if (postModal.classList.contains('open')) {
-            document.getElementById('modalLikes').textContent = post.likes;
-            document.getElementById('modalMeta').innerHTML = `
-              <div class="meta-item">📅 ${formatDate(post.publishedAt)}</div>
-              <div class="meta-item">👁️ ${post.views} views</div>
-              <div class="meta-item">👍 ${post.likes} likes</div>
-            `;
-          }
-        }
-        
-        showToast('Thanks for the like!');
-      } catch (e) {
-        console.error('Like failed', e);
-        showToast('Like failed');
-      }
+    window.likePost = async function(id){
+      const key = 'liked_'+id; if(localStorage.getItem(key)) return show('You already liked');
+      try{
+        await updateDoc(doc(db,'blogs',id), { likes: increment(1) });
+        localStorage.setItem(key,'1');
+        const p = state.posts.find(x=>x.id===id); if(p){ p.likes++; renderPosts(); if(document.getElementById('postModal').classList.contains('open')) document.getElementById('modalLikes').textContent=p.likes; }
+        show('Thanks for the like!');
+      }catch(e){ console.error(e); show('Like failed'); }
     };
 
-    window.sharePost = async function(postId) {
-      const post = state.posts.find(p => p.id === postId);
-      if (!post) return;
-
-      const url = `${location.origin}/blog/?post=${postId}`;
-      const title = post.title || 'Yangerila Blog';
-      const text = post.shortText || 'Check out this post';
-
-      try {
-        if (navigator.share) {
-          await navigator.share({ title, text, url });
-        } else {
-          await navigator.clipboard.writeText(url);
-          showToast('Link copied to clipboard');
-        }
-      } catch {
-        try {
-          await navigator.clipboard.writeText(url);
-          showToast('Link copied to clipboard');
-        } catch {
-          showToast('Could not share');
-        }
-      }
+    window.sharePost = async function(id){
+      const p = state.posts.find(x=>x.id===id); if(!p) return;
+      const url = `${location.origin}/blog/?post=${id}`;
+      const text = p.shortText || p.title || 'Yangerila Blog';
+      try{
+        if(navigator.share) await navigator.share({ title: p.title, text, url });
+        else { await navigator.clipboard.writeText(url); show('Link copied'); }
+      }catch{ try{ await navigator.clipboard.writeText(url); show('Link copied'); } catch{ show('Could not share'); } }
     };
 
-    function showToast(message) {
-      toast.textContent = message;
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2000);
-    }
+    // helpers
+    function fmt(ts){ if(!ts?.seconds) return ''; return new Date(ts.seconds*1000).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}); }
+    function ts(ts){ return ts?.seconds ? ts.seconds*1000 : 0; }
+    function toHtml(txt){ const safe=esc(txt||''); const linkified=safe.replace(/(https?:\/\/[^\s]+)/g,m=>`<a href="${m}" target="_blank" rel="noopener">${m}</a>`); return linkified.split(/\n{2,}/).map(p=>`<p>${p.replace(/\n/g,'<br>')}</p>`).join(''); }
+    function esc(s=''){ return String(s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+    function show(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 2000); }
 
-    function formatDate(timestamp) {
-      if (!timestamp || !timestamp.seconds) return '';
-      const date = new Date(timestamp.seconds * 1000);
-      return date.toLocaleDateString('en-US', { 
-        year: 'numeric', 
-        month: 'short', 
-        day: 'numeric' 
-      });
-    }
-
-    function getTimestamp(t) {
-      return t?.seconds ? t.seconds * 1000 : 0;
-    }
-
-    function truncate(str, maxLen) {
-      if (str.length <= maxLen) return str;
-      return str.substr(0, maxLen).trim() + '...';
-    }
-
-    function toHtml(txt) {
-      const safe = esc(txt || '');
-      const linkified = safe.replace(/(https?:\/\/[^\s]+)/g, m => `<a href="${m}" target="_blank" rel="noopener">${m}</a>`);
-      return linkified.split(/\n{2,}/).map(p => `<p>${p.replace(/\n/g,'<br>')}</p>`).join('');
-    }
-
-    function esc(s = '') {
-      return String(s).replace(/[&<>"']/g, m => ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#39;'
-      }[m]));
-    }
-
-    // Check for direct post link
-    const urlParams = new URLSearchParams(window.location.search);
-    const postId = urlParams.get('post');
-    if (postId) {
-      // Wait for posts to load then open
-      const checkLoaded = setInterval(() => {
-        if (state.posts.length > 0) {
-          clearInterval(checkLoaded);
-          openPost(postId);
-        }
-      }, 100);
+    // deep link ?post=ID
+    function openByQuery(){
+      const id = new URLSearchParams(location.search).get('post');
+      if(!id) return;
+      const iv = setInterval(()=>{ if(state.posts.length){ clearInterval(iv); window.openPost(id); } }, 100);
     }
   </script>
 </body>
