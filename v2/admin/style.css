@@ -1,53 +1,27 @@
 /* ================================
-   Yangerila Admin — Stacked layout, dark green tables
+   Yangerila Admin — Stacked layout, wide center, dark green tables
    ================================ */
 
 :root{
-  --bg-solid: #0c1f1b; /* page background */
-  --panel: #0f2620;
+  /* Page & panel */
+  --bg-solid: #0c1f1b;     /* page background (darkest green) */
+  --panel:    #0f2620;     /* top bar / dropdowns */
+  --border:   #1b3b33;     /* hairlines */
 
-  /* table body (deep green) & flipped header */
-  --tbl-bg: #073327;        /* darker green body background */
-  --tbl-text: #ffffff;      /* white text for body */
-  --tbl-head-bg: #ffffff;   /* flipped header: white */
-  --tbl-head-text: #083428; /* deep green text on header */
+  /* Tables (deep body + flipped header for contrast) */
+  --tbl-bg:        #112429; /* darker table body */
+  --tbl-text:      #ffffff; /* body text */
+  --tbl-head-bg:   #ffffff; /* header background (flipped) */
+  --tbl-head-text: #083428; /* header text (deep green) */
 
-  --muted: #9fcab9;
-  --accent: #50e3c2;
-  --border: #1b3b33;
+  --muted:  #9fcab9;
+  --accent: #50e3c2;       /* heading / icon lime */
 
-  --btn-a: #44cdb3;
-  --btn-b: #61efc9;
+  --btn-a:  #44cdb3;
+  --btn-b:  #61efc9;
 
   --tooltip-bg: rgba(0,0,0,.9);
   --tooltip-text: #e8fff9;
-}
-
-/* Lime green icons for Call / Copy (matches headings via --accent) */
-.icon-btn,
-.icon-btn svg,
-.icon-btn path,
-.icon-btn use {
-  color: var(--accent);
-  fill: var(--accent);
-  stroke: var(--accent);
-}
-
-/* In case the SVGs are using currentColor */
-.icon-btn { color: var(--accent); }
-
-/* Hover/focus: a touch brighter without changing the theme */
-.icon-btn:hover,
-.icon-btn:focus-visible {
-  filter: brightness(1.1);
-}
-
-/* If your copy/call controls are not inside .icon-btn, cover common cases: */
-.copy-btn svg, .copy-btn path,
-.call-btn svg, .call-btn path {
-  fill: var(--accent);
-  stroke: var(--accent);
-  color: var(--accent);
 }
 
 *,*:before,*:after{ box-sizing: border-box; }
@@ -83,8 +57,11 @@ body.admin-page.style-solid{
 }
 .btn.tiny{ padding:5px 7px; font-size:12px; border-radius:8px; }
 
-/* Blog editor button near H2 */
-.blog-editor-btn{
+/* Blog actions next to the Blogs heading */
+.h2-actions{ display:flex; gap:10px; align-items:center; }
+
+.blog-editor-btn,
+.blog-view-btn{
   text-decoration:none; display:inline-flex; align-items:center; gap:6px;
   border:1px solid var(--border);
   background: linear-gradient(180deg, rgba(97,239,201,.15), rgba(68,205,179,.10));
@@ -92,7 +69,7 @@ body.admin-page.style-solid{
   padding:8px 10px; border-radius:10px; font-weight:800;
 }
 
-/* ---------- Titles & stacked layout ---------- */
+/* ---------- Titles & stacked page layout ---------- */
 .h2-row{
   display:flex; align-items:center; justify-content:space-between;
   gap:10px; margin:10px 2px 6px;
@@ -100,10 +77,24 @@ body.admin-page.style-solid{
 h2{ margin:0; color: var(--accent); font-size:18px; }
 h3{ margin:0; color:#dff9f3; font-size:15px; }
 
-/* Stacked blocks with spacing between tables */
-.stack{ display:block; padding:14px; max-width:1200px; margin:0 auto; }
+/* Stacked blocks with wide centered content (80%) */
+.stack{
+  display:block;
+  width:80%;
+  max-width:1600px;
+  margin:0 auto;
+  padding:14px 0; /* slim gutters since it's centered */
+}
+@media (max-width: 900px){
+  .stack{ width:90%; }
+}
+@media (max-width: 768px){
+  .stack{ width:100%; padding:14px; }
+}
+
+/* Each section/table card spacing */
 .block{
-  margin:0 0 18px 0; /* spacing between tables/sections */
+  margin:0 0 20px 0;
   padding:0;
 }
 
@@ -133,19 +124,18 @@ h3{ margin:0; color:#dff9f3; font-size:15px; }
 .table-wrap{
   overflow:auto; border:1px solid var(--border);
   border-radius:10px; background: var(--tbl-bg);
-  margin-top:8px;
+  margin-top:10px;
 }
 table{
   width:100%; border-collapse:collapse; font-size:13px; table-layout:auto;
-  color: var(--tbl-text); /* body text white */
+  color: var(--tbl-text);
 }
 th, td{ padding:6px 8px; border-bottom:1px solid var(--border); vertical-align:top; }
 td.tight{ padding:5px 6px; }
 
-/* Flipped header */
 th{
   position: sticky; top: 0; z-index: 1;
-  background: var(--tbl-head-bg);       /* white header */
+  background: var(--tbl-head-bg);       /* flipped white header */
   color: var(--tbl-head-text);          /* deep green text */
   text-align: left; white-space: nowrap; font-weight:800;
   border-bottom:1px solid var(--border);
@@ -160,7 +150,7 @@ a.link{ color: #c8fff1; text-decoration: underline; }
 .muted{ color: var(--muted); }
 .center{ text-align:center; }
 
-/* Phone helpers */
+/* Phone helpers inside tables */
 .phone-bundle{ display:inline-flex; align-items:center; gap:6px; min-width:140px; }
 .icon-btn{
   display:inline-flex; align-items:center; justify-content:center;
@@ -171,14 +161,32 @@ a.link{ color: #c8fff1; text-decoration: underline; }
 }
 .phone-text{ white-space:nowrap; }
 
-/* Chips */
+/* ---------- Lime green for call/copy icons (matches headings) ---------- */
+.icon-btn,
+.icon-btn svg,
+.icon-btn path,
+.icon-btn use {
+  color: var(--accent);
+  fill: var(--accent);
+  stroke: var(--accent);
+}
+.icon-btn:hover,
+.icon-btn:focus-visible { filter: brightness(1.1); }
+.copy-btn svg, .copy-btn path,
+.call-btn svg, .call-btn path {
+  fill: var(--accent);
+  stroke: var(--accent);
+  color: var(--accent);
+}
+
+/* Chips (e.g., folder link) */
 .chip{
   display:inline-block; padding:4px 8px; border-radius:999px;
   background:#184f36; border:1px solid var(--border); color:#d9fff5;
   text-decoration:none;
 }
 
-/* Thumbnails + modal */
+/* ---------- Thumbnails + modal ---------- */
 .thumbnail{
   width:50px; height:50px; object-fit:cover;
   border-radius:8px; border:1px solid var(--border);
@@ -200,7 +208,7 @@ a.link{ color: #c8fff1; text-decoration: underline; }
   color: #fff; padding:8px 12px; border-radius:8px; cursor:pointer;
 }
 
-/* Toast */
+/* ---------- Toast ---------- */
 .toast{
   position:fixed; left:50%; transform:translateX(-50%);
   bottom:18px; background: rgba(0,0,0,.85); color:#fff;
@@ -209,38 +217,54 @@ a.link{ color: #c8fff1; text-decoration: underline; }
 }
 .toast.show{ opacity:1; }
 
-/* Loading overlay */
+/* ---------- Loading overlay ---------- */
 #loading{
   position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
   background: var(--bg-solid);
   color:#fff; z-index:9999; font-weight:800; letter-spacing:.3px;
 }
 
-/* Blogs preview */
+/* ================================
+   Blogs: grid cards with proper images
+   ================================ */
 #blog-list{
-  display:grid; grid-template-columns: 1fr;
-  gap:12px;
-}
-.blog-card{
-  background: rgba(255,255,255,.03);
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:10px;
-}
-.blog-img{
-  width:100%; height:140px; object-fit:cover;
-  border-radius:8px; border:1px solid var(--border);
-}
-.tag{
-  display:inline-block; margin-right:6px; margin-top:4px;
-  padding:4px 8px; border-radius:999px;
-  background:#184f36; border:1px solid var(--border); color:#d9fff5;
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap:14px;
 }
 
-/* ---------- Tooltips ---------- */
-.has-tip{
-  position:relative;
+.blog-card{
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
 }
+
+/* Keep image aspect ratio, fill the card nicely */
+.blog-img{
+  width:100%;
+  aspect-ratio: 16 / 9;    /* change to 4/3 or 1/1 if you prefer */
+  object-fit: cover;
+  border-radius:8px;
+  border:1px solid var(--border);
+  display:block;
+}
+
+.blog-title{
+  margin:0;
+  font-size:15px;
+  color:#dff9f3;
+  font-weight:800;
+}
+.blog-meta{ color:var(--muted); font-size:12.5px; margin:0; }
+/* No clamping: you already provide a short description. */
+.blog-desc{ margin:0; color:#eaf8f3; line-height:1.45; }
+
+/* ---------- Tooltips (for buttons/controls with .has-tip + data-tip) ---------- */
+.has-tip{ position:relative; }
 .has-tip::after{
   content: attr(data-tip);
   position:absolute;
@@ -253,11 +277,9 @@ a.link{ color: #c8fff1; text-decoration: underline; }
   opacity:0; pointer-events:none; transition:opacity .12s ease, transform .12s ease;
   box-shadow: 0 6px 20px rgba(0,0,0,.35);
 }
-.has-tip:hover::after{
-  opacity:1; transform: translateX(-50%) translateY(-2px);
-}
+.has-tip:hover::after{ opacity:1; transform: translateX(-50%) translateY(-2px); }
 
-/* Assistive text (for screen readers) */
+/* Assistive text (screen readers) */
 .sr-only{
   position:absolute !important; width:1px; height:1px; padding:0; margin:-1px;
   overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
