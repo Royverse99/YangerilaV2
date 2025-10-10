@@ -233,6 +233,98 @@
     }
   }, { capture: true });
 </script>
+<script>
+  // Teleport "Columns" dropdowns so they never get clipped by parents or sticky headers
+  (function(){
+    const body = document.body;
+
+    function placeFloating(panel, trigger){
+      const rect = trigger.getBoundingClientRect();
+      const panelRect = panel.getBoundingClientRect();
+      const vw = window.innerWidth, vh = window.innerHeight;
+
+      // Default: align right edge of panel to trigger's right edge
+      let left = rect.right - panelRect.width;
+      let top  = rect.bottom + 8;
+
+      // Keep inside viewport horizontally
+      if (left < 8) left = 8;
+      if (left + panelRect.width > vw - 8) left = vw - panelRect.width - 8;
+
+      // And vertically; if not enough space below, flip above
+      if (top + panelRect.height > vh - 8) {
+        top = rect.top - panelRect.height - 8;
+        if (top < 8) top = Math.max(8, vh - panelRect.height - 8); // last resort: pin
+      }
+
+      panel.style.left = left + 'px';
+      panel.style.top  = top  + 'px';
+    }
+
+    function openFloating(detailsEl){
+      const trigger = detailsEl.querySelector('summary');
+      const panel   = detailsEl.querySelector('.col-filter');
+      if (!trigger || !panel) return;
+
+      // Make it floating
+      panel.classList.add('floating');
+      // Move to body so no ancestor can clip it
+      body.appendChild(panel);
+
+      // Position now and on scroll/resize
+      const upd = () => placeFloating(panel, trigger);
+      upd();
+      panel.__upd = upd;
+      window.addEventListener('scroll', upd, true);
+      window.addEventListener('resize', upd, true);
+
+      // Close if you click outside
+      panel.__outside = (e) => {
+        if (!detailsEl.contains(e.target) && !panel.contains(e.target)) {
+          detailsEl.removeAttribute('open');
+        }
+      };
+      document.addEventListener('mousedown', panel.__outside, true);
+      document.addEventListener('touchstart', panel.__outside, true);
+    }
+
+    function closeFloating(detailsEl){
+      const origForm = detailsEl.querySelector('form.col-filter'); // placeholder if exists
+      const panel = document.querySelector('.col-filter.floating');
+      if (!panel) return;
+
+      // Stop listeners
+      window.removeEventListener('scroll', panel.__upd, true);
+      window.removeEventListener('resize', panel.__upd, true);
+      document.removeEventListener('mousedown', panel.__outside, true);
+      document.removeEventListener('touchstart', panel.__outside, true);
+
+      panel.__upd = panel.__outside = null;
+
+      // Return the panel back inside the details element (so future opens work)
+      if (origForm) {
+        detailsEl.appendChild(panel); // append back inside, order doesn't matter
+      } else {
+        detailsEl.appendChild(panel);
+      }
+      panel.classList.remove('floating');
+      panel.style.left = panel.style.top = '';
+    }
+
+    // Watch all current and future .cols details
+    function handleToggle(e){
+      const d = e.target;
+      if (d.matches && d.matches('details.cols')) {
+        if (d.hasAttribute('open')) openFloating(d);
+        else closeFloating(d);
+      }
+    }
+    document.addEventListener('toggle', handleToggle, true);
+
+    // If any are pre-opened by the browser restore on load
+    document.querySelectorAll('details.cols[open]').forEach(openFloating);
+  })();
+</script>
 
   <!-- Admin App (Firebase + Sheets) -->
   <script type="module" src="/admin/adminapp.js?v=4"></script>
