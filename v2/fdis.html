@@ -1,109 +1,323 @@
 <!DOCTYPE html>
-<html lang="en-US" class="no-js ">
-
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Festive Discount - Yangerila Creative Studio</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Yangerila — Diwali Coupon</title>
+<style>
+  :root{
+    --bg-top: rgba(24,47,53,0.65);
+    --bg-bottom: rgba(18,39,41,0.95);
+    --accent: #4fd1c7;
+    --coupon-radius: 14px;
+    --stroke-width: 4;        /* thickness of marching-ants border */
+    --dash-size: 10;          /* length of dash */
+    --dash-gap: 8;            /* gap between dashes */
+    --march-speed: 1.6s;      /* speed of marching animation */
+  }
 
-    body {
-      /* Make background fully transparent with a blurred glass effect */
-      background: transparent;
-      font-family: 'Arial', sans-serif;
-      color: #4fd1c7;
-      width: 100%;
-      min-height: 100vh;
-      overflow-x: hidden;
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+    background:
+      radial-gradient(1000px 500px at 10% 10%, rgba(16,28,29,0.5), transparent 8%),
+      radial-gradient(800px 400px at 90% 90%, rgba(26,46,47,0.45), transparent 10%),
+      linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+    color: #e7fbf8;
+    padding:28px;
+  }
 
-      /* Background blur glass effect */
-      background: rgba(24, 47, 53, 0.25);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-radius: 0;
-      /* No solid color behind, just blur */
-    }
+  .frame {
+    width: 100%;
+    max-width: 820px;
+    padding: 46px 36px 56px;
+    border-radius: calc(var(--coupon-radius) + 6px);
+    position: relative;
+    text-align: center;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));
+    border: 1px solid rgba(255,255,255,0.03);
+    box-shadow: 0 12px 48px rgba(0,0,0,0.45);
+    overflow: visible;
+  }
 
-    .form-container {
-      background: rgba(24, 47, 53, 0.6); /* Semi-transparent same color */
-      border: 1px solid rgba(79, 209, 199, 0.3);
-      border-radius: 16px;
-      padding: 40px;
-      width: 100%;
-      max-width: 600px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-      color: #4fd1c7;
-      text-align: center;
-    }
+  h1{ margin:0 0 10px; font-size:26px; color:var(--accent); font-weight:700; letter-spacing:0.2px; text-shadow: 0 4px 18px rgba(0,0,0,0.45) }
+  p.lead{ margin:0 0 22px; color: rgba(255,255,255,0.88); max-width:760px; line-height:1.45 }
 
-    h1 {
-      color: #4fd1c7;
-      margin-bottom: 20px;
-      font-weight: 600;
-      font-size: 28px;
-    }
+  /* Coupon area wrapper */
+  .coupon-wrap {
+    display:inline-block;
+    position:relative;
+    padding: 18px;
+    border-radius: calc(var(--coupon-radius) + 8px);
+    margin-top: 14px;
+    background: rgba(10,12,12,0.02);
+  }
 
-    p.description {
-      font-size: 16px;
-      color: rgba(79, 209, 199, 0.8);
-      line-height: 1.5;
-    }
+  /* The coupon box itself (frosted, semi-transparent) */
+  .coupon-box {
+    position: relative;
+    display:flex;
+    align-items:center;
+    gap:16px;
+    padding: 14px 20px;
+    border-radius: var(--coupon-radius);
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 12px 24px rgba(4,8,10,0.45), inset 0 1px 0 rgba(255,255,255,0.02);
+    min-width: 360px;
+    z-index: 6; /* above background, but we'll place SVG on top */
+    backdrop-filter: blur(6px) saturate(110%);
+    -webkit-backdrop-filter: blur(6px) saturate(110%);
+    overflow: visible; /* allow svg overlay within */
+  }
 
-    /* Responsive adjustments */
-    @media (max-width: 480px) {
-      .form-container {
-        padding: 30px 20px;
-      }
+  .coupon-text {
+    font-weight:800;
+    font-size:22px;
+    color:#bffbf6;
+    letter-spacing:0.4px;
+    text-shadow: 0 2px 10px rgba(71,255,232,0.10);
+    user-select: all;
+  }
 
-      h1 {
-        font-size: 24px;
-      }
-    }
+  .copy-btn {
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));
+    border: 1px solid rgba(255,255,255,0.06);
+    color: #fff;
+    padding: 8px 12px;
+    font-weight:700;
+    border-radius:10px;
+    cursor:pointer;
+    transition: transform .12s ease, box-shadow .12s ease;
+    box-shadow: 0 8px 20px rgba(8,12,14,0.5);
+  }
+  .copy-btn:hover{ transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0,0,0,0.55) }
+  .copy-btn:active{ transform: translateY(0) }
+  .copy-btn:focus { outline: 3px solid rgba(79,209,199,0.12); outline-offset: 2px }
 
-    /* Submit button style (margin-top added as before) */
-    .submit-btn {
-      width: 100%;
-      padding: 16px;
-      background: linear-gradient(135deg, #4fd1c7 0%, #38b2ac 100%);
-      border: none;
-      border-radius: 8px;
-      color: #1a202c;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      box-shadow: 0 0 25px rgba(79, 209, 199, 0.4);
-      margin-top: 25px;
-    }
+  /* NEW: place the SVG *on top* of coupon-box with no gap.
+     We insert the SVG inside the coupon-box and absolutely position it
+     to match the box exactly. The rect sits above the content (higher z-index). */
+  .coupon-box svg.top-overlay {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 30; /* on top of coupon content */
+    overflow: visible;
+  }
 
-    .submit-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(79, 209, 199, 0.6);
-    }
-  </style>
+  /* marching-ants stroke style (the rect stroke) */
+  .marching {
+    stroke-linecap: round;
+    fill: none;
+    stroke-width: var(--stroke-width);
+    stroke-dasharray: calc(var(--dash-size)) calc(var(--dash-gap));
+    stroke: url(#rainbowStroke);
+    /* We will animate stroke-dashoffset via JS for precise control and to allow pausing/resizing. */
+    will-change: stroke-dashoffset;
+  }
+
+  /* responsive adjustments */
+  @media (max-width:640px) {
+    .coupon-box { min-width: 260px; gap:10px; padding:12px 14px; }
+    .coupon-text { font-size:18px }
+    :root { --dash-size: 8; --dash-gap:6; --stroke-width:3; --march-speed:1.2s; }
+  }
+</style>
 </head>
-
 <body>
-  <div class="form-container">
-    <h1>Festive Discount</h1>
-    <p class="description">
-      At Yangerila Creative Studio, we regularly announce special festive discounts for both new and ongoing students. Check this space during festive seasons to grab exciting offers and enjoy learning guitar at even more value.
-    </p>
-  </div>
-</body>
+  <main class="frame" role="main" aria-label="Diwali coupon">
+    <h1>Celebrate Diwali with Us</h1>
+    <p class="lead">Yangerila Creative Studio — Come celebrate Diwali with us with this Coupon, limited-time Diwali offer: 15% off your first month.</p>
 
+    <div class="coupon-wrap" id="couponWrap">
+      <!-- The coupon content. We place an SVG *inside* this box so its stroke can run directly on top, no gap. -->
+      <div class="coupon-box" id="couponBox" aria-live="polite">
+        <div class="coupon-text" id="couponText">YangerilaDiwali25</div>
+        <button class="copy-btn" id="copyBtn" aria-label="Copy discount code">COPY</button>
+
+        <!-- SVG overlay exactly matches coupon-box size (positioned top/left 0; width/height 100%) -->
+        <svg class="top-overlay" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="rainbowStroke" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%"  stop-color="#ff4d6d"/>
+              <stop offset="15%" stop-color="#ff9a4d"/>
+              <stop offset="30%" stop-color="#ffd24d"/>
+              <stop offset="45%" stop-color="#7fff6b"/>
+              <stop offset="60%" stop-color="#4de3ff"/>
+              <stop offset="75%" stop-color="#9a6bff"/>
+              <stop offset="90%" stop-color="#ff6bd6"/>
+              <stop offset="100%" stop-color="#ff4d6d"/>
+            </linearGradient>
+          </defs>
+
+          <!-- rect to stroke; its dimensions are synced via JS -->
+          <rect class="marching" x="0" y="0" rx="14" ry="14" width="100%" height="100%"></rect>
+        </svg>
+      </div>
+    </div>
+  </main>
+
+<script>
+/*
+  JS responsibilities:
+  1) Precisely size the SVG rect to match the coupon-box inner area (including border-radius).
+  2) Compute a dash length that matches CSS vars and set stroke-dasharray on the rect.
+  3) Animate stroke-dashoffset smoothly to create marching-ants effect.
+  4) Keep everything in sync on resize and respond to changes (ResizeObserver).
+*/
+
+(function(){
+  const couponBox = document.getElementById('couponBox');
+  const svg = couponBox.querySelector('svg.top-overlay');
+  const rect = svg.querySelector('rect.marching');
+  const root = document.documentElement;
+  const copyBtn = document.getElementById('copyBtn');
+  const couponText = document.getElementById('couponText');
+
+  // read CSS vars with fallback
+  function getCSSVar(name, fallback) {
+    const v = getComputedStyle(root).getPropertyValue(name);
+    return v ? parseFloat(v) : fallback;
+  }
+
+  // update svg viewBox and rect geometry to match couponBox's inner content box exactly
+  function updateSVGGeometry() {
+    // Because svg is width:100% height:100% and positioned overlay, we can set viewBox to 0 0 w h
+    const w = couponBox.clientWidth;
+    const h = couponBox.clientHeight;
+    if (w === 0 || h === 0) return;
+
+    svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    svg.setAttribute('width', `${w}`);
+    svg.setAttribute('height', `${h}`);
+
+    // If the rect uses width/height 100% in markup, ensure attributes present as numbers for stroke calculations
+    rect.setAttribute('width', w);
+    rect.setAttribute('height', h);
+
+    // set rx/ry from CSS var
+    const radius = getCSSVar('--coupon-radius', 14);
+    rect.setAttribute('rx', radius);
+    rect.setAttribute('ry', radius);
+
+    // sync stroke width & dash lengths
+    const dash = getCSSVar('--dash-size', 10);
+    const gap = getCSSVar('--dash-gap', 8);
+    const strokeW = getCSSVar('--stroke-width', 4);
+
+    rect.style.strokeWidth = strokeW;
+    rect.style.strokeDasharray = `${dash} ${gap}`;
+
+    // compute perimeter of rounded rect to set dash offset limits
+    const perimeter = roundedRectPerimeter(w, h, radius);
+    rect._perimeter = perimeter;
+  }
+
+  // approximate perimeter of a rounded rect: perimeter of rect minus 4*(radius) + 2*pi*radius
+  function roundedRectPerimeter(w, h, r) {
+    const cornerArc = Math.PI * 2 * r * 0.25; // quarter-circumference per corner; four corners sum to 2*pi*r
+    const straight = 2 * ( (w - 2*r) + (h - 2*r) );
+    return straight + 2 * Math.PI * r;
+  }
+
+  // marching animation using requestAnimationFrame — animates strokeDashoffset continuously
+  let animId = null;
+  let lastTs = null;
+  // speed: pixels per second. Convert CSS --march-speed (duration for one dash+gap?) to px/s:
+  function getSpeed() {
+    // We'll compute speed so that the dash+gap distance moves across in --march-speed time.
+    const dash = getCSSVar('--dash-size', 10);
+    const gap = getCSSVar('--dash-gap', 8);
+    const duration = parseFloat(getComputedStyle(root).getPropertyValue('--march-speed')) || 1.6; // seconds
+    const distance = dash + gap;
+    return distance / duration; // px per second (we animate by updating offset in px)
+  }
+
+  let offset = 0;
+
+  function animate(ts) {
+    if (!lastTs) lastTs = ts;
+    const delta = (ts - lastTs) / 1000; // seconds
+    lastTs = ts;
+
+    const speed = getSpeed(); // px per second
+    // move negative direction so ants march clockwise (adjust sign if you want other direction)
+    offset = (offset - speed * delta) % (rect._perimeter || 1);
+    rect.style.strokeDashoffset = offset;
+
+    animId = requestAnimationFrame(animate);
+  }
+
+  function startAnimation() {
+    if (animId) return;
+    lastTs = null;
+    animId = requestAnimationFrame(animate);
+  }
+  function stopAnimation() {
+    if (!animId) return;
+    cancelAnimationFrame(animId);
+    animId = null;
+  }
+
+  // keep geometry in sync on resize or content change
+  const ro = new ResizeObserver(() => {
+    updateSVGGeometry();
+    // reset offset so dashes don't jump weirdly after resize
+    rect.style.strokeDashoffset = offset = 0;
+  });
+  ro.observe(couponBox);
+  ro.observe(svg);
+
+  // initial setup
+  updateSVGGeometry();
+  startAnimation();
+
+  // Optional: pause animation when user focuses/clicks coupon area (good UX for copying)
+  couponBox.addEventListener('mouseenter', stopAnimation);
+  couponBox.addEventListener('mouseleave', startAnimation);
+  couponBox.addEventListener('focusin', stopAnimation);
+  couponBox.addEventListener('focusout', startAnimation);
+
+  // copy button behaviour preserved
+  async function copyText() {
+    const text = couponText.textContent.trim();
+    try {
+      await navigator.clipboard.writeText(text);
+      showCopied();
+    } catch (e) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); showCopied(); } catch (err) { alert('Copy failed — select and press Ctrl/Cmd+C'); }
+      ta.remove();
+    }
+  }
+  function showCopied() {
+    const prev = copyBtn.textContent;
+    copyBtn.textContent = 'COPIED';
+    copyBtn.disabled = true;
+    setTimeout(() => { copyBtn.textContent = prev; copyBtn.disabled = false; }, 1200);
+  }
+  copyBtn.addEventListener('click', copyText);
+  couponText.addEventListener('click', copyText);
+  couponText.setAttribute('tabindex','0');
+  couponText.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); copyText(); }
+  });
+
+  // expose for debugging if needed
+  window.__couponSVG = { svg, rect, update: updateSVGGeometry, start: startAnimation, stop: stopAnimation };
+
+})();
+</script>
+</body>
 </html>
