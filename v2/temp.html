@@ -1,0 +1,5523 @@
+<!DOCTYPE html>
+
+<html class="no-js" itemscope="" itemtype="https://schema.org/WebPage" lang="en-US">
+<head><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="True" href="https://fonts.gstatic.com" rel="preconnect"/>
+<meta charset="utf-8"/>
+<link href="index.html" hreflang="en-US" rel="alternate"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Courgette&amp;display=swap" rel="stylesheet"/>
+<script>
+        
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','../../../www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-31305350-1', 'Yangerila.com');
+  ga('send', 'pageview');
+        </script>
+
+<title>Yangerila Creative Studio | A Guitar Speciality Academy</title>
+<meta name="description" content="Yangerila Creative Studio offers the best online and offline guitar lessons in Delhi NCR. Learn rhythm, lead, and fingerpicking guitar through our modular courses, Smart Sheets, and expert coaches who keep you always performance ready.">
+<meta name="keywords" content="Yangerila, guitar academy Delhi NCR, online guitar classes, learn guitar online India, rhythm guitar course, lead guitar lessons, fingerpicking guitar, hobby guitar classes, Smart Sheets, modular grading structure">
+<meta name="robots" content="index, follow"/>
+<style>
+          
+
+
+        
+img:is([sizes="auto" i], [sizes^="auto," i]) {
+contain-intrinsic-size: 3000px 1500px
+}
+        </style>
+<meta content="telephone=no" name="format-detection"/>
+<meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport"/>
+<link rel="icon" href="/favicon.ico" type="image/x-icon"/>
+<link rel="apple-touch-icon" href="/favicon.ico"/>
+
+<meta content="#ffffff" media="(prefers-color-scheme: light)" name="theme-color"/>
+<meta content="#ffffff" media="(prefers-color-scheme: dark)" name="theme-color"/>
+<link href="http://fonts.googleapis.com/" rel="dns-prefetch">
+<style>
+        
+
+
+  /* === Popup wrapper (only handles sliding) === */
+#course-popup {
+  position: fixed;
+  top: 0;
+  left: 250px;  /* start after sidebar */
+  width: calc(100% - 250px); /* don’t overlap sidebar */
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transform: translateX(-100%);   /* fully hidden off-screen */
+  transition: transform 0.5s ease-in-out; /* smooth slide */
+  z-index: 8000;
+  background: transparent; /* no ghost blur layer */
+}
+
+/* active → slide into view */
+#course-popup.active {
+  transform: translateX(0);
+}
+
+/* === Inner popup content (blur + transparency here) === */
+#popup-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: rgba(255,255,255,0.25);
+  backdrop-filter: blur(15px) saturate(180%);
+  -webkit-backdrop-filter: blur(15px) saturate(180%);
+  border-radius: 8px 0 0 8px;
+  box-shadow: -2px 0 20px rgba(0,0,0,0.4);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* close button */
+#popup-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 40px;
+  color: #fff;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  z-index: 1001;
+}
+
+
+
+/* toggle button */
+#popup-toggle {
+  position: absolute;
+  top: 50%;
+  right: -40px;
+  transform: translateY(-50%);
+  width: 35px;
+  height: 60px;
+  background: #333;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0 8px 8px 0;
+  cursor: pointer;
+  font-size: 20px;
+  z-index: 1001;
+}
+
+/* ✅ Mobile fix: full width if sidebar collapses */
+@media (max-width: 768px) {
+  #course-popup {
+    left: 0;
+    width: 100%;
+  }
+  #popup-content {
+    width: 100%;
+    margin-left: 0;
+    border-radius: 0;
+  }
+}
+        </style>
+<style>
+        
+        /* Minimal additions to make divs clickable buttons with hover effects */
+        .service-wrap {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            padding: 10px;
+            background-color: rgba(20, 20, 20, 0.8) !important;
+        }
+        
+        .service-wrap:hover {
+            background-color: rgba(20, 20, 20, 0.8) !important;
+            box-shadow: 0 0 15px rgba(122, 231, 199, 0.3);
+        }
+        
+        .service-wrap:hover .title,
+        .service-wrap:hover .column_attr {
+            color: #7ae7c7 !important;
+            text-shadow: 0 0 10px rgba(122, 231, 199, 0.3);
+        }
+        
+        .service-wrap:hover .fas {
+            color: #7ae7c7 !important;
+            text-shadow: 0 0 8px rgba(122, 231, 199, 0.3);
+        }
+        
+        .service-wrap:active {
+            transform: translateY(1px);
+        }
+        </style>
+<style>
+        
+.accordion h3 {
+  cursor: pointer;
+  padding: 10px;
+  margin: 0;
+  font-size: 1.2em;
+  position: relative;
+}
+
+.accordion h3::before {
+  content: "▼"; /* arrow */
+  position: absolute;
+  left: -20px;
+  transition: transform 0.3s;
+}
+
+.accordion h3.active::before {
+  transform: rotate(-90deg); /* arrow rotates when active */
+}
+
+.accordion .panel {
+  display: none;
+  padding: 0 0px 10px 0px;
+
+}
+
+.accordion .panel.open {
+  display: block;
+}
+        </style>
+<link href="wp-content/plugins/contact-form-7/includes/css/styles5406.css?ver=5.5.6" id="contact-form-7-css" media="all" rel="stylesheet" type="text/css"/>
+<link href="wp-content/themes/betheme/css/be3eb3.css?ver=26.3.2.1" id="mfn-be-css" media="all" rel="stylesheet" type="text/css"/>
+<link href="wp-content/themes/betheme/assets/animations/animations.min3eb3.css?ver=26.3.2.1" id="mfn-animations-css" media="all" rel="stylesheet" type="text/css"/>
+<link href="wp-content/themes/betheme/fonts/fontawesome/fontawesome3eb3.css?ver=26.3.2.1" id="mfn-font-awesome-css" media="all" rel="stylesheet" type="text/css"/>
+<link href="wp-content/themes/betheme/assets/jplayer/css/jplayer.blue.monday.min3eb3.css?ver=26.3.2.1" id="mfn-jplayer-css" media="all" rel="stylesheet" type="text/css"/>
+<link href="wp-content/themes/betheme/css/responsive3eb3.css?ver=26.3.2.1" id="mfn-responsive-css" media="all" rel="stylesheet" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Inter%3A1%2C300%2C400%2C400italic%2C500%2C600%2C700%2C700italic%7CSpace+Grotesk%3A1%2C300%2C400%2C400italic%2C500%2C600%2C700%2C700italic&amp;display=swap&amp;ver=6.8.2" id="mfn-fonts-css" media="all" rel="stylesheet" type="text/css"/>
+<link href="https://fonts.googleapis.com/css?family=Space+Grotesk%3A400%2C700&amp;display=swap&amp;ver=6.8.2" id="mfn-font-button-css" media="all" rel="stylesheet" type="text/css"/>
+<style id="mfn-dynamic-inline-css" type="text/css">
+        
+html {
+  background-color: #112429;
+}
+#Wrapper,
+#Content,
+.mfn-popup .mfn-popup-content,
+.mfn-off-canvas-sidebar .mfn-off-canvas-content-wrapper,
+.mfn-cart-holder,
+.mfn-header-login,
+#Top_bar .search_wrapper,
+#Top_bar .top_bar_right .mfn-live-search-box,
+.column_livesearch .mfn-live-search-wrapper,
+.column_livesearch .mfn-live-search-box {
+  background-color: #112429;
+}
+body:not(.template-slider) #Header {
+  min-height: 0px;
+}
+body.header-below:not(.template-slider) #Header {
+  padding-top: 0px;
+}
+body,
+button,
+span.date_label,
+.timeline_items li h3 span,
+input[type="submit"],
+input[type="reset"],
+input[type="button"],
+input[type="date"],
+input[type="text"],
+input[type="password"],
+input[type="tel"],
+input[type="email"],
+textarea,
+select,
+.offer_li .title h3 {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+#menu > ul > li > a,
+a.action_button,
+#overlay-menu ul li a {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+#Subheader .title {
+  font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+h1,
+h2,
+h3,
+h4,
+.text-logo #logo {
+  font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+h5,
+h6 {
+  font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+blockquote {
+  font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+.chart_box .chart .num,
+.counter .desc_wrapper .number-wrapper,
+.how_it_works .image .number,
+.pricing-box .plan-header .price,
+.quick_fact .number-wrapper,
+.woocommerce .product div.entry-summary .price {
+  font-family: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+body {
+  font-size: 16px;
+  line-height: 26px;
+  font-weight: 400;
+  letter-spacing: 0px;
+}
+.big {
+  font-size: 17px;
+  line-height: 28px;
+  font-weight: 500;
+  letter-spacing: 0px;
+}
+#menu > ul > li > a,
+a.action_button,
+#overlay-menu ul li a {
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0px;
+}
+#overlay-menu ul li a {
+  line-height: 24px;
+}
+#Subheader .title {
+  font-size: 70px;
+  line-height: 75px;
+  font-weight: 500;
+  letter-spacing: 0px;
+}
+h1,
+.text-logo #logo {
+  font-size: 70px;
+  line-height: 75px;
+  font-weight: 500;
+  letter-spacing: 0px;
+}
+h2 {
+  font-size: 55px;
+  line-height: 60px;
+  font-weight: 500;
+  letter-spacing: 0px;
+}
+h3,
+.woocommerce ul.products li.product h3,
+.woocommerce #customer_login h2 {
+  font-size: 36px;
+  line-height: 42px;
+  font-weight: 500;
+  letter-spacing: -1px;
+}
+h4,
+.woocommerce .woocommerce-order-details__title,
+.woocommerce .wc-bacs-bank-details-heading,
+.woocommerce .woocommerce-customer-details h2 {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 500;
+  letter-spacing: 0px;
+}
+h5 {
+  font-size: 20px;
+  line-height: 30px;
+  font-weight: 500;
+  letter-spacing: 0px;
+}
+h6 {
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 500;
+  letter-spacing: 0px;
+}
+#Intro .intro-title {
+  font-size: 70px;
+  line-height: 75px;
+  font-weight: 500;
+  letter-spacing: 0px;
+}
+@media only screen and (min-width: 768px) and (max-width: 959px) {
+  body {
+    font-size: 14px;
+    line-height: 22px;
+    font-weight: 400;
+    letter-spacing: 0px;
+  }
+  .big {
+    font-size: 14px;
+    line-height: 24px;
+    font-weight: 500;
+    letter-spacing: 0px;
+  }
+  #menu > ul > li > a,
+  a.action_button,
+  #overlay-menu ul li a {
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0px;
+  }
+  #overlay-menu ul li a {
+    line-height: 21px;
+  }
+  #Subheader .title {
+    font-size: 60px;
+    line-height: 64px;
+    font-weight: 500;
+    letter-spacing: 0px;
+  }
+  h1,
+  .text-logo #logo {
+    font-size: 60px;
+    line-height: 64px;
+    font-weight: 500;
+    letter-spacing: 0px;
+  }
+  h2 {
+    font-size: 47px;
+    line-height: 51px;
+    font-weight: 500;
+    letter-spacing: 0px;
+  }
+  h3,
+  .woocommerce ul.products li.product h3,
+  .woocommerce #customer_login h2 {
+    font-size: 31px;
+    line-height: 36px;
+    font-weight: 500;
+    letter-spacing: 0px;
+  }
+  h4,
+  .woocommerce .woocommerce-order-details__title,
+  .woocommerce .wc-bacs-bank-details-heading,
+  .woocommerce .woocommerce-customer-details h2 {
+    font-size: 20px;
+    line-height: 27px;
+    font-weight: 500;
+    letter-spacing: 0px;
+  }
+  h5 {
+    font-size: 17px;
+    line-height: 26px;
+    font-weight: 500;
+    letter-spacing: 0px;
+  }
+  h6 {
+    font-size: 13px;
+    line-height: 20px;
+    font-weight: 500;
+    letter-spacing: 0px;
+  }
+  #Intro .intro-title {
+    font-size: 60px;
+    line-height: 64px;
+    font-weight: 500;
+    letter-spacing: 0px;
+  }
+  blockquote {
+    font-size: 15px;
+  }
+  .chart_box .chart .num {
+    font-size: 45px;
+    line-height: 45px;
+  }
+  .counter .desc_wrapper .number-wrapper {
+    font-size: 45px;
+    line-height: 45px;
+  }
+  .counter .desc_wrapper .title {
+    font-size: 14px;
+    line-height: 18px;
+  }
+  .faq .question .title {
+    font-size: 14px;
+  }
+  .fancy_heading .title {
+    font-size: 38px;
+    line-height: 38px;
+  }
+  .offer .offer_li .desc_wrapper .title h3 {
+    font-size: 32px;
+    line-height: 32px;
+  }
+  .offer_thumb_ul li.offer_thumb_li .desc_wrapper .title h3 {
+    font-size: 32px;
+    line-height: 32px;
+  }
+  .pricing-box .plan-header h2 {
+    font-size: 27px;
+    line-height: 27px;
+  }
+  .pricing-box .plan-header .price > span {
+    font-size: 40px;
+    line-height: 40px;
+  }
+  .pricing-box .plan-header .price sup.currency {
+    font-size: 18px;
+    line-height: 18px;
+  }
+  .pricing-box .plan-header .price sup.period {
+    font-size: 14px;
+    line-height: 14px;
+  }
+  .quick_fact .number {
+    font-size: 80px;
+    line-height: 80px;
+  }
+  .trailer_box .desc h2 {
+    font-size: 35px;
+    font-weight: bold;
+    line-height: 27px;
+  }
+  .widget > h3 {
+    font-size: 17px;
+    line-height: 20px;
+  }
+}
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+  body {
+    font-size: 13px;
+    line-height: 20px;
+    font-weight: 400;
+    letter-spacing: 0px;
+  }
+  .big {
+    font-size: 13px;
+    line-height: 21px;
+    font-weight: 500;
+    letter-spacing: 0px;
+  }
+  #menu > ul > li > a,
+  a.action_button,
+  #overlay-menu ul li a {
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0px;
+  }
+  #overlay-menu ul li a {
+    line-height: 19.5px;
+  }
+  #Subheader .title {
+    font-size: 53px;
+    line-height: 56px;
+    font-weight: 500;
+    letter-spacing: 0px;
+  }
+  h1,
+  .text-logo #logo {
+    font-size: 53px;
+    line-height: 56px;
+    font-weight: 500;
+    letter-spacing: 0px;
+  }
+  h2 {
+    font-size: 41px;
+    line-height: 45px;
+    font-weight: 500;
+    letter-spacing: 0px;
+  }
+  h3,
+  .woocommerce ul.products li.product h3,
+  .woocommerce #customer_login h2 {
+    font-size: 27px;
+    line-height: 32px;
+    font-weight: 500;
+    letter-spacing: 0px;
+  }
+  h4,
+  .woocommerce .woocommerce-order-details__title,
+  .woocommerce .wc-bacs-bank-details-heading,
+  .woocommerce .woocommerce-customer-details h2 {
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: 500;
+    letter-spacing: 0px;
+  }
+  h5 {
+    font-size: 15px;
+    line-height: 23px;
+    font-weight: 500;
+    letter-spacing: 0px;
+  }
+  h6 {
+    font-size: 13px;
+    line-height: 19px;
+    font-weight: 500;
+    letter-spacing: 0px;
+  }
+  #Intro .intro-title {
+    font-size: 53px;
+    line-height: 56px;
+    font-weight: 500;
+    letter-spacing: 0px;
+  }
+  blockquote {
+    font-size: 14px;
+  }
+  .chart_box .chart .num {
+    font-size: 40px;
+    line-height: 40px;
+  }
+  .counter .desc_wrapper .number-wrapper {
+    font-size: 40px;
+    line-height: 40px;
+  }
+  .counter .desc_wrapper .title {
+    font-size: 13px;
+    line-height: 16px;
+  }
+  .faq .question .title {
+    font-size: 13px;
+  }
+  .fancy_heading .title {
+    font-size: 34px;
+    line-height: 34px;
+  }
+  .offer .offer_li .desc_wrapper .title h3 {
+    font-size: 28px;
+    line-height: 28px;
+  }
+  .offer_thumb_ul li.offer_thumb_li .desc_wrapper .title h3 {
+    font-size: 28px;
+    line-height: 28px;
+  }
+  .pricing-box .plan-header h2 {
+    font-size: 24px;
+    line-height: 24px;
+  }
+  .pricing-box .plan-header .price > span {
+    font-size: 34px;
+    line-height: 34px;
+  }
+  .pricing-box .plan-header .price sup.currency {
+    font-size: 16px;
+    line-height: 16px;
+  }
+  .pricing-box .plan-header .price sup.period {
+    font-size: 13px;
+    line-height: 13px;
+  }
+  .quick_fact .number {
+    font-size: 70px;
+    line-height: 70px;
+  }
+  .trailer_box .desc h2 {
+    font-size: 24px;
+    line-height: 24px;
+  }
+  .widget > h3 {
+    font-size: 16px;
+    line-height: 19px;
+  }
+}
+@media only screen and (max-width: 479px) {
+  body {
+    font-size: 13px;
+    line-height: 19px;
+    font-weight: 400;
+    letter-spacing: 0px;
+  }
+  .big {
+    font-size: 13px;
+    line-height: 19px;
+    font-weight: 500;
+    letter-spacing: 0px;
+  }
+  #menu > ul > li > a,
+  a.action_button,
+  #overlay-menu ul li a {
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0px;
+  }
+  #overlay-menu ul li a {
+    line-height: 19.5px;
+  }
+  #Subheader .title {
+    font-size: 42px;
+    line-height: 45px;
+    font-weight: 500;
+    letter-spacing: 0px;
+  }
+  h1,
+  .text-logo #logo {
+    font-size: 42px;
+    line-height: 45px;
+    font-weight: 500;
+    letter-spacing: 0px;
+  }
+  h2 {
+    font-size: 40px;
+    line-height: 36px;
+    font-weight: 500;
+    letter-spacing: 0px;
+  }
+  h3,
+  .woocommerce ul.products li.product h3,
+  .woocommerce #customer_login h2 {
+   
+    line-height: 25px;
+    font-weight: 500;
+    letter-spacing: 0px;
+  }
+  h4,
+  .woocommerce .woocommerce-order-details__title,
+  .woocommerce .wc-bacs-bank-details-heading,
+  .woocommerce .woocommerce-customer-details h2 {
+   
+    line-height: 19px;
+    font-weight: 500;
+    letter-spacing: 0px;
+  }
+  h5 {
+    font-size: 13px;
+    line-height: 19px;
+    font-weight: 500;
+    letter-spacing: 0px;
+  }
+  h6 {
+    font-size: 13px;
+    line-height: 19px;
+    font-weight: 500;
+    letter-spacing: 0px;
+  }
+  #Intro .intro-title {
+    font-size: 42px;
+    line-height: 45px;
+    font-weight: 500;
+    letter-spacing: 0px;
+  }
+  blockquote {
+    font-size: 13px;
+  }
+  .chart_box .chart .num {
+    font-size: 35px;
+    line-height: 35px;
+  }
+  .counter .desc_wrapper .number-wrapper {
+    font-size: 35px;
+    line-height: 35px;
+  }
+  .counter .desc_wrapper .title {
+    font-size: 13px;
+    line-height: 26px;
+  }
+  .faq .question .title {
+    font-size: 13px;
+  }
+  .fancy_heading .title {
+    font-size: 30px;
+    line-height: 30px;
+  }
+  .offer .offer_li .desc_wrapper .title h3 {
+    font-size: 26px;
+    line-height: 26px;
+  }
+  .offer_thumb_ul li.offer_thumb_li .desc_wrapper .title h3 {
+    font-size: 26px;
+    line-height: 26px;
+  }
+  .pricing-box .plan-header h2 {
+    font-size: 21px;
+    line-height: 21px;
+  }
+  .pricing-box .plan-header .price > span {
+    font-size: 32px;
+    line-height: 32px;
+  }
+  .pricing-box .plan-header .price sup.currency {
+    font-size: 14px;
+    line-height: 14px;
+  }
+  .pricing-box .plan-header .price sup.period {
+    font-size: 13px;
+    line-height: 13px;
+  }
+  .quick_fact .number {
+    font-size: 60px;
+    line-height: 60px;
+  }
+  .trailer_box .desc h2 {
+    font-size: 21px;
+    line-height: 21px;
+  }
+  .widget > h3 {
+    font-size: 15px;
+    line-height: 18px;
+  }
+}
+.with_aside .sidebar.columns {
+  width: 23%;
+}
+.with_aside .sections_group {
+  width: 77%;
+}
+.aside_both .sidebar.columns {
+  width: 18%;
+}
+.aside_both .sidebar.sidebar-1 {
+  margin-left: -82%;
+}
+.aside_both .sections_group {
+  width: 64%;
+  margin-left: 18%;
+}
+@media only screen and (min-width: 1240px) {
+  #Wrapper,
+  .with_aside .content_wrapper {
+    max-width: 1140px;
+  }
+  .section_wrapper,
+  .container {
+    max-width: 1150px;
+    max-height: 1000px;
+  }
+  .layout-boxed.header-boxed #Top_bar.is-sticky {
+    max-width: 1140px;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .section_wrapper,
+  .container,
+  .four.columns .widget-area {
+    max-width: 550px !important;
+  }
+}
+.button-default .button,
+.button-flat .button,
+.button-round .button {
+  background-color: #f7f7f7;
+  color: #747474;
+}
+.button-stroke .button {
+  border-color: #f7f7f7;
+  color: #747474;
+}
+.button-stroke .button:hover {
+  background-color: #f7f7f7;
+  color: #fff;
+}
+.button-default .button_theme,
+.button-default button,
+.button-default input[type="button"],
+.button-default input[type="reset"],
+.button-default input[type="submit"],
+.button-flat .button_theme,
+.button-flat button,
+.button-flat input[type="button"],
+.button-flat input[type="reset"],
+.button-flat input[type="submit"],
+.button-round .button_theme,
+.button-round button,
+.button-round input[type="button"],
+.button-round input[type="reset"],
+.button-round input[type="submit"],
+.woocommerce #respond input#submit,
+.woocommerce a.button:not(.default),
+.woocommerce button.button,
+.woocommerce input.button,
+.woocommerce #respond input#submit:hover,
+.woocommerce a.button:hover,
+.woocommerce button.button:hover,
+.woocommerce input.button:hover {
+  color: #ffffff;
+}
+.button-default #respond input#submit.alt.disabled,
+.button-default #respond input#submit.alt.disabled:hover,
+.button-default #respond input#submit.alt:disabled,
+.button-default #respond input#submit.alt:disabled:hover,
+.button-default #respond input#submit.alt:disabled[disabled],
+.button-default #respond input#submit.alt:disabled[disabled]:hover,
+.button-default a.button.alt.disabled,
+.button-default a.button.alt.disabled:hover,
+.button-default a.button.alt:disabled,
+.button-default a.button.alt:disabled:hover,
+.button-default a.button.alt:disabled[disabled],
+.button-default a.button.alt:disabled[disabled]:hover,
+.button-default button.button.alt.disabled,
+.button-default button.button.alt.disabled:hover,
+.button-default button.button.alt:disabled,
+.button-default button.button.alt:disabled:hover,
+.button-default button.button.alt:disabled[disabled],
+.button-default button.button.alt:disabled[disabled]:hover,
+.button-default input.button.alt.disabled,
+.button-default input.button.alt.disabled:hover,
+.button-default input.button.alt:disabled,
+.button-default input.button.alt:disabled:hover,
+.button-default input.button.alt:disabled[disabled],
+.button-default input.button.alt:disabled[disabled]:hover,
+.button-default #respond input#submit.alt,
+.button-default a.button.alt,
+.button-default button.button.alt,
+.button-default input.button.alt,
+.button-default #respond input#submit.alt:hover,
+.button-default a.button.alt:hover,
+.button-default button.button.alt:hover,
+.button-default input.button.alt:hover,
+.button-flat #respond input#submit.alt.disabled,
+.button-flat #respond input#submit.alt.disabled:hover,
+.button-flat #respond input#submit.alt:disabled,
+.button-flat #respond input#submit.alt:disabled:hover,
+.button-flat #respond input#submit.alt:disabled[disabled],
+.button-flat #respond input#submit.alt:disabled[disabled]:hover,
+.button-flat a.button.alt.disabled,
+.button-flat a.button.alt.disabled:hover,
+.button-flat a.button.alt:disabled,
+.button-flat a.button.alt:disabled:hover,
+.button-flat a.button.alt:disabled[disabled],
+.button-flat a.button.alt:disabled[disabled]:hover,
+.button-flat button.button.alt.disabled,
+.button-flat button.button.alt.disabled:hover,
+.button-flat button.button.alt:disabled,
+.button-flat button.button.alt:disabled:hover,
+.button-flat button.button.alt:disabled[disabled],
+.button-flat button.button.alt:disabled[disabled]:hover,
+.button-flat input.button.alt.disabled,
+.button-flat input.button.alt.disabled:hover,
+.button-flat input.button.alt:disabled,
+.button-flat input.button.alt:disabled:hover,
+.button-flat input.button.alt:disabled[disabled],
+.button-flat input.button.alt:disabled[disabled]:hover,
+.button-flat #respond input#submit.alt,
+.button-flat a.button.alt,
+.button-flat button.button.alt,
+.button-flat input.button.alt,
+.button-flat #respond input#submit.alt:hover,
+.button-flat a.button.alt:hover,
+.button-flat button.button.alt:hover,
+.button-flat input.button.alt:hover,
+.button-round #respond input#submit.alt.disabled,
+.button-round #respond input#submit.alt.disabled:hover,
+.button-round #respond input#submit.alt:disabled,
+.button-round #respond input#submit.alt:disabled:hover,
+.button-round #respond input#submit.alt:disabled[disabled],
+.button-round #respond input#submit.alt:disabled[disabled]:hover,
+.button-round a.button.alt.disabled,
+.button-round a.button.alt.disabled:hover,
+.button-round a.button.alt:disabled,
+.button-round a.button.alt:disabled:hover,
+.button-round a.button.alt:disabled[disabled],
+.button-round a.button.alt:disabled[disabled]:hover,
+.button-round button.button.alt.disabled,
+.button-round button.button.alt.disabled:hover,
+.button-round button.button.alt:disabled,
+.button-round button.button.alt:disabled:hover,
+.button-round button.button.alt:disabled[disabled],
+.button-round button.button.alt:disabled[disabled]:hover,
+.button-round input.button.alt.disabled,
+.button-round input.button.alt.disabled:hover,
+.button-round input.button.alt:disabled,
+.button-round input.button.alt:disabled:hover,
+.button-round input.button.alt:disabled[disabled],
+.button-round input.button.alt:disabled[disabled]:hover,
+.button-round #respond input#submit.alt,
+.button-round a.button.alt,
+.button-round button.button.alt,
+.button-round input.button.alt,
+.button-round #respond input#submit.alt:hover,
+.button-round a.button.alt:hover,
+.button-round button.button.alt:hover,
+.button-round input.button.alt:hover {
+  background-color: #0089f7;
+  color: #ffffff;
+}
+.button-stroke #respond input#submit.alt.disabled,
+.button-stroke #respond input#submit.alt.disabled:hover,
+.button-stroke #respond input#submit.alt:disabled,
+.button-stroke #respond input#submit.alt:disabled:hover,
+.button-stroke #respond input#submit.alt:disabled[disabled],
+.button-stroke #respond input#submit.alt:disabled[disabled]:hover,
+.button-stroke a.button.alt.disabled,
+.button-stroke a.button.alt.disabled:hover,
+.button-stroke a.button.alt:disabled,
+.button-stroke a.button.alt:disabled:hover,
+.button-stroke a.button.alt:disabled[disabled],
+.button-stroke a.button.alt:disabled[disabled]:hover,
+.button-stroke button.button.alt.disabled,
+.button-stroke button.button.alt.disabled:hover,
+.button-stroke button.button.alt:disabled,
+.button-stroke button.button.alt:disabled:hover,
+.button-stroke button.button.alt:disabled[disabled],
+.button-stroke button.button.alt:disabled[disabled]:hover,
+.button-stroke input.button.alt.disabled,
+.button-stroke input.button.alt.disabled:hover,
+.button-stroke input.button.alt:disabled,
+.button-stroke input.button.alt:disabled:hover,
+.button-stroke input.button.alt:disabled[disabled],
+.button-stroke input.button.alt:disabled[disabled]:hover,
+.button-stroke #respond input#submit.alt,
+.button-stroke a.button.alt,
+.button-stroke button.button.alt,
+.button-stroke input.button.alt {
+  border-color: #0089f7;
+  background: none;
+  color: #747474;
+}
+.button-stroke #respond input#submit.alt:hover,
+.button-stroke a.button.alt:hover,
+.button-stroke button.button.alt:hover,
+.button-stroke input.button.alt:hover,
+.button-stroke a.action_button:hover {
+  background-color: #0089f7;
+  color: #ffffff;
+}
+.action_button,
+.action_button:hover {
+  background-color: #0089f7;
+  color: #ffffff;
+}
+.button-stroke a.action_button {
+  border-color: #0089f7;
+}
+.footer_button {
+  color: #ffffff !important;
+  background: #7ae7c7;
+}
+.button-stroke .footer_button {
+  border-color: #7ae7c7;
+}
+.button-stroke .footer_button:hover {
+  background-color: #7ae7c7 !important;
+}
+.button-custom .button,
+.button-custom .action_button,
+.button-custom .footer_button,
+.button-custom button,
+.button-custom button.button,
+.button-custom input[type="button"],
+.button-custom input[type="reset"],
+.button-custom input[type="submit"],
+.button-custom .woocommerce #respond input#submit,
+.button-custom .woocommerce a.button,
+.button-custom .woocommerce button.button,
+.button-custom .woocommerce input.button {
+  font-family: Space Grotesk;
+  font-size: 15px;
+  line-height: 15px;
+  font-weight: 700;
+  letter-spacing: 0px;
+  padding: 10px 30px 10px 30px;
+  border-width: 1px;
+  border-radius: 70px;
+}
+.button-custom .button {
+  color: #112429;
+  background-color: rgba(255, 255, 255, 0);
+  border-color: #112429;
+}
+.button-custom .button:hover {
+  color: #112429;
+  background-color: #70ffd5;
+  border-color: #112429;
+}
+.button-custom .button_theme,
+.button-custom button,
+.button-custom input[type="button"],
+.button-custom input[type="reset"],
+.button-custom input[type="submit"],
+.button-custom .woocommerce #respond input#submit,
+.button-custom .woocommerce a.button:not(.default),
+.button-custom .woocommerce button.button,
+.button-custom .woocommerce input.button {
+  color: #262828;
+  background-color: #7ae7c7;
+  border-color: #7ae7c7;
+}
+.button-custom .button_theme:hover,
+.button-custom button:hover,
+.button-custom input[type="button"]:hover,
+.button-custom input[type="reset"]:hover,
+.button-custom input[type="submit"]:hover,
+.button-custom .woocommerce #respond input#submit:hover,
+.button-custom .woocommerce a.button:not(.default):hover,
+.button-custom .woocommerce button.button:hover,
+.button-custom .woocommerce input.button:hover {
+  color: #262828;
+  background-color: #70ffd5;
+  border-color: #70ffd5;
+}
+.button-custom .action_button {
+  color: #7ae7c7;
+  background-color: #2c464a;
+  border-color: #2c464a;
+}
+.button-custom .action_button:hover {
+  color: #2c464a;
+  background-color: #7ae7c7;
+  border-color: #7ae7c7;
+}
+.button-custom #respond input#submit.alt.disabled,
+.button-custom #respond input#submit.alt.disabled:hover,
+.button-custom #respond input#submit.alt:disabled,
+.button-custom #respond input#submit.alt:disabled:hover,
+.button-custom #respond input#submit.alt:disabled[disabled],
+.button-custom #respond input#submit.alt:disabled[disabled]:hover,
+.button-custom a.button.alt.disabled,
+.button-custom a.button.alt.disabled:hover,
+.button-custom a.button.alt:disabled,
+.button-custom a.button.alt:disabled:hover,
+.button-custom a.button.alt:disabled[disabled],
+.button-custom a.button.alt:disabled[disabled]:hover,
+.button-custom button.button.alt.disabled,
+.button-custom button.button.alt.disabled:hover,
+.button-custom button.button.alt:disabled,
+.button-custom button.button.alt:disabled:hover,
+.button-custom button.button.alt:disabled[disabled],
+.button-custom button.button.alt:disabled[disabled]:hover,
+.button-custom input.button.alt.disabled,
+.button-custom input.button.alt.disabled:hover,
+.button-custom input.button.alt:disabled,
+.button-custom input.button.alt:disabled:hover,
+.button-custom input.button.alt:disabled[disabled],
+.button-custom input.button.alt:disabled[disabled]:hover,
+.button-custom #respond input#submit.alt,
+.button-custom a.button.alt,
+.button-custom button.button.alt,
+.button-custom input.button.alt {
+  line-height: 15px;
+  padding: 10px 30px 10px 30px;
+  color: #262828;
+  background-color: #7ae7c7;
+  font-family: Space Grotesk;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0px;
+  border-width: 1px;
+  border-radius: 70px;
+}
+.button-custom #respond input#submit.alt:hover,
+.button-custom a.button.alt:hover,
+.button-custom button.button.alt:hover,
+.button-custom input.button.alt:hover,
+.button-custom a.action_button:hover {
+  color: #262828;
+  background-color: #70ffd5;
+}
+#Top_bar #logo,
+.header-fixed #Top_bar #logo,
+.header-plain #Top_bar #logo,
+.header-transparent #Top_bar #logo {
+  height: 100px;
+  line-height: 100px;
+  padding: 50px 0;
+}
+.logo-overflow #Top_bar:not(.is-sticky) .logo {
+  height: 200px;
+}
+#Top_bar .menu > li > a {
+  padding: 70px 0;
+}
+.menu-highlight:not(.header-creative) #Top_bar .menu > li > a {
+  margin: 75px 0;
+}
+.header-plain:not(.menu-highlight)
+  #Top_bar
+  .menu
+  > li
+  > a
+  span:not(.description) {
+  line-height: 200px;
+}
+.header-fixed #Top_bar .menu > li > a {
+  padding: 85px 0;
+}
+@media only screen and (max-width: 767px) {
+  .mobile-header-mini #Top_bar #logo {
+    height: 50px !important;
+    line-height: 50px !important;
+    margin: 5px 0;
+  }
+}
+#Top_bar #logo img.svg {
+}
+.image_frame,
+.wp-caption {
+  border-width: 0px;
+}
+.alert {
+  border-radius: 0px;
+}
+#Top_bar .top_bar_right .top-bar-right-input input {
+  width: 200px;
+}
+.mfn-live-search-box .mfn-live-search-list {
+  max-height: 300px;
+}
+input[type="date"],
+input[type="email"],
+input[type="number"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="text"],
+input[type="url"],
+select,
+textarea,
+.woocommerce .quantity input.qty {
+  border-width: 0 0 2px 0;
+  box-shadow: unset;
+  resize: none;
+}
+.select2-container--default .select2-selection--single,
+.select2-dropdown,
+.select2-container--default.select2-container--open .select2-selection--single {
+  border-width: 0 0 2px 0;
+}
+#Side_slide {
+  right: -250px;
+  width: 250px;
+}
+#Side_slide.left {
+  left: -250px;
+}
+.blog-teaser li .desc-wrapper .desc {
+  background-position-y: -1px;
+}
+@media only screen and (max-width: 767px) {
+}
+@media only screen and (min-width: 1240px) {
+  body:not(.header-simple) #Top_bar #menu {
+    display: block !important;
+  }
+  .tr-menu #Top_bar #menu {
+    background: none !important;
+  }
+  #Top_bar .menu > li > ul.mfn-megamenu > li {
+    float: left;
+  }
+  #Top_bar .menu > li > ul.mfn-megamenu > li.mfn-megamenu-cols-1 {
+    width: 100%;
+  }
+  #Top_bar .menu > li > ul.mfn-megamenu > li.mfn-megamenu-cols-2 {
+    width: 50%;
+  }
+  #Top_bar .menu > li > ul.mfn-megamenu > li.mfn-megamenu-cols-3 {
+    width: 33.33%;
+  }
+  #Top_bar .menu > li > ul.mfn-megamenu > li.mfn-megamenu-cols-4 {
+    width: 25%;
+  }
+  #Top_bar .menu > li > ul.mfn-megamenu > li.mfn-megamenu-cols-5 {
+    width: 20%;
+  }
+  #Top_bar .menu > li > ul.mfn-megamenu > li.mfn-megamenu-cols-6 {
+    width: 16.66%;
+  }
+  #Top_bar .menu > li > ul.mfn-megamenu > li > ul {
+    display: block !important;
+    position: inherit;
+    left: auto;
+    top: auto;
+    border-width: 0 1px 0 0;
+  }
+  #Top_bar .menu > li > ul.mfn-megamenu > li:last-child > ul {
+    border: 0;
+  }
+  #Top_bar .menu > li > ul.mfn-megamenu > li > ul li {
+    width: auto;
+  }
+  #Top_bar .menu > li > ul.mfn-megamenu a.mfn-megamenu-title {
+    text-transform: uppercase;
+    font-weight: 400;
+    background: none;
+  }
+  #Top_bar .menu > li > ul.mfn-megamenu a .menu-arrow {
+    display: none;
+  }
+  .menuo-right #Top_bar .menu > li > ul.mfn-megamenu {
+    left: 0;
+    width: 98% !important;
+    margin: 0 1%;
+    padding: 20px 0;
+  }
+  .menuo-right #Top_bar .menu > li > ul.mfn-megamenu-bg {
+    box-sizing: border-box;
+  }
+  #Top_bar .menu > li > ul.mfn-megamenu-bg {
+    padding: 20px 166px 20px 20px;
+    background-repeat: no-repeat;
+    background-position: right bottom;
+  }
+  .rtl #Top_bar .menu > li > ul.mfn-megamenu-bg {
+    padding-left: 166px;
+    padding-right: 20px;
+    background-position: left bottom;
+  }
+  #Top_bar .menu > li > ul.mfn-megamenu-bg > li {
+    background: none;
+  }
+  #Top_bar .menu > li > ul.mfn-megamenu-bg > li a {
+    border: none;
+  }
+  #Top_bar .menu > li > ul.mfn-megamenu-bg > li > ul {
+    background: none !important;
+    -webkit-box-shadow: 0 0 0 0;
+    -moz-box-shadow: 0 0 0 0;
+    box-shadow: 0 0 0 0;
+  }
+  .mm-vertical #Top_bar .container {
+    position: relative;
+  }
+  .mm-vertical #Top_bar .top_bar_left {
+    position: static;
+  }
+  .mm-vertical #Top_bar .menu > li ul {
+    box-shadow: 0 0 0 0 transparent !important;
+    background-image: none;
+  }
+  .mm-vertical #Top_bar .menu > li > ul.mfn-megamenu {
+    padding: 20px 0;
+  }
+  .mm-vertical.header-plain #Top_bar .menu > li > ul.mfn-megamenu {
+    width: 100% !important;
+    margin: 0;
+  }
+  .mm-vertical #Top_bar .menu > li > ul.mfn-megamenu > li {
+    display: table-cell;
+    float: none !important;
+    width: 10%;
+    padding: 0 15px;
+    border-right: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  .mm-vertical #Top_bar .menu > li > ul.mfn-megamenu > li:last-child {
+    border-right-width: 0;
+  }
+  .mm-vertical #Top_bar .menu > li > ul.mfn-megamenu > li.hide-border {
+    border-right-width: 0;
+  }
+  .mm-vertical #Top_bar .menu > li > ul.mfn-megamenu > li a {
+    border-bottom-width: 0;
+    padding: 9px 15px;
+    line-height: 120%;
+  }
+  .mm-vertical #Top_bar .menu > li > ul.mfn-megamenu a.mfn-megamenu-title {
+    font-weight: 700;
+  }
+  .rtl .mm-vertical #Top_bar .menu > li > ul.mfn-megamenu > li:first-child {
+    border-right-width: 0;
+  }
+  .rtl .mm-vertical #Top_bar .menu > li > ul.mfn-megamenu > li:last-child {
+    border-right-width: 1px;
+  }
+  body.header-shop #Top_bar #menu {
+    display: flex !important;
+  }
+  .header-shop #Top_bar.is-sticky .top_bar_row_second {
+    display: none;
+  }
+  .header-plain:not(.menuo-right) #Header .top_bar_left {
+    width: auto !important;
+  }
+  .header-stack.header-center #Top_bar #menu {
+    display: inline-block !important;
+  }
+  .header-simple #Top_bar #menu {
+    display: none;
+    height: auto;
+    width: 300px;
+    bottom: auto;
+    top: 100%;
+    right: 1px;
+    position: absolute;
+    margin: 0;
+  }
+  .header-simple #Header a.responsive-menu-toggle {
+    display: block;
+    right: 10px;
+  }
+  .header-simple #Top_bar #menu > ul {
+    width: 100%;
+    float: left;
+  }
+  .header-simple #Top_bar #menu ul li {
+    width: 100%;
+    padding-bottom: 0;
+    border-right: 0;
+    position: relative;
+  }
+  .header-simple #Top_bar #menu ul li a {
+    padding: 0 20px;
+    margin: 0;
+    display: block;
+    height: auto;
+    line-height: normal;
+    border: none;
+  }
+  .header-simple #Top_bar #menu ul li a:not(.menu-toggle):after {
+    display: none;
+  }
+  .header-simple #Top_bar #menu ul li a span {
+    border: none;
+    line-height: 44px;
+    display: inline;
+    padding: 0;
+  }
+  .header-simple #Top_bar #menu ul li.submenu .menu-toggle {
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 44px;
+    height: 44px;
+    line-height: 44px;
+    font-size: 30px;
+    font-weight: 300;
+    text-align: center;
+    cursor: pointer;
+    color: #444;
+    opacity: 0.33;
+    transform: unset;
+  }
+  .header-simple #Top_bar #menu ul li.submenu .menu-toggle:after {
+    content: "+";
+    position: static;
+  }
+  .header-simple #Top_bar #menu ul li.hover > .menu-toggle:after {
+    content: "-";
+  }
+  .header-simple #Top_bar #menu ul li.hover a {
+    border-bottom: 0;
+  }
+  .header-simple #Top_bar #menu ul.mfn-megamenu li .menu-toggle {
+    display: none;
+  }
+  .header-simple #Top_bar #menu ul li ul {
+    position: relative !important;
+    left: 0 !important;
+    top: 0;
+    padding: 0;
+    margin: 0 !important;
+    width: auto !important;
+    background-image: none;
+  }
+  .header-simple #Top_bar #menu ul li ul li {
+    width: 100% !important;
+    display: block;
+    padding: 0;
+  }
+  .header-simple #Top_bar #menu ul li ul li a {
+    padding: 0 20px 0 30px;
+  }
+  .header-simple #Top_bar #menu ul li ul li a .menu-arrow {
+    display: none;
+  }
+  .header-simple #Top_bar #menu ul li ul li a span {
+    padding: 0;
+  }
+  .header-simple #Top_bar #menu ul li ul li a span:after {
+    display: none !important;
+  }
+  .header-simple #Top_bar .menu > li > ul.mfn-megamenu a.mfn-megamenu-title {
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+  .header-simple #Top_bar .menu > li > ul.mfn-megamenu > li > ul {
+    display: block !important;
+    position: inherit;
+    left: auto;
+    top: auto;
+  }
+  .header-simple #Top_bar #menu ul li ul li ul {
+    border-left: 0 !important;
+    padding: 0;
+    top: 0;
+  }
+  .header-simple #Top_bar #menu ul li ul li ul li a {
+    padding: 0 20px 0 40px;
+  }
+  .rtl.header-simple #Top_bar #menu {
+    left: 1px;
+    right: auto;
+  }
+  .rtl.header-simple #Top_bar a.responsive-menu-toggle {
+    left: 10px;
+    right: auto;
+  }
+  .rtl.header-simple #Top_bar #menu ul li.submenu .menu-toggle {
+    left: 0;
+    right: auto;
+  }
+  .rtl.header-simple #Top_bar #menu ul li ul {
+    left: auto !important;
+    right: 0 !important;
+  }
+  .rtl.header-simple #Top_bar #menu ul li ul li a {
+    padding: 0 30px 0 20px;
+  }
+  .rtl.header-simple #Top_bar #menu ul li ul li ul li a {
+    padding: 0 40px 0 20px;
+  }
+  .menu-highlight #Top_bar .menu > li {
+    margin: 0 2px;
+  }
+  .menu-highlight:not(.header-creative) #Top_bar .menu > li > a {
+    padding: 0;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+  }
+  .menu-highlight #Top_bar .menu > li > a:after {
+    display: none;
+  }
+  .menu-highlight #Top_bar .menu > li > a span:not(.description) {
+    line-height: 50px;
+  }
+  .menu-highlight #Top_bar .menu > li > a span.description {
+    display: none;
+  }
+  .menu-highlight.header-stack #Top_bar .menu > li > a {
+    margin: 10px 0 !important;
+  }
+  .menu-highlight.header-stack #Top_bar .menu > li > a span:not(.description) {
+    line-height: 40px;
+  }
+  .menu-highlight.header-simple #Top_bar #menu ul li,
+  .menu-highlight.header-creative #Top_bar #menu ul li {
+    margin: 0;
+  }
+  .menu-highlight.header-simple #Top_bar #menu ul li > a,
+  .menu-highlight.header-creative #Top_bar #menu ul li > a {
+    -webkit-border-radius: 0;
+    border-radius: 0;
+  }
+  .menu-highlight:not(.header-fixed):not(.header-simple)
+    #Top_bar.is-sticky
+    .menu
+    > li
+    > a {
+    margin: 10px 0 !important;
+    padding: 5px 0 !important;
+  }
+  .menu-highlight:not(.header-fixed):not(.header-simple)
+    #Top_bar.is-sticky
+    .menu
+    > li
+    > a
+    span {
+    line-height: 30px !important;
+  }
+  .header-modern.menu-highlight.menuo-right .menu_wrapper {
+    margin-right: 20px;
+  }
+  .menu-line-below #Top_bar .menu > li > a:after {
+    top: auto;
+    bottom: -4px;
+  }
+  .menu-line-below #Top_bar.is-sticky .menu > li > a:after {
+    top: auto;
+    bottom: -4px;
+  }
+  .menu-line-below-80 #Top_bar:not(.is-sticky) .menu > li > a:after {
+    height: 4px;
+    left: 10%;
+    top: 50%;
+    margin-top: 20px;
+    width: 80%;
+  }
+  .menu-line-below-80-1 #Top_bar:not(.is-sticky) .menu > li > a:after {
+    height: 1px;
+    left: 10%;
+    top: 50%;
+    margin-top: 20px;
+    width: 80%;
+  }
+  .menu-link-color #Top_bar .menu > li > a:not(.menu-toggle):after {
+    display: none !important;
+  }
+  .menu-arrow-top #Top_bar .menu > li > a:after {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0) !important;
+    border-color: #ccc transparent transparent;
+    border-style: solid;
+    border-width: 7px 7px 0;
+    display: block;
+    height: 0;
+    left: 50%;
+    margin-left: -7px;
+    top: 0 !important;
+    width: 0;
+  }
+  .menu-arrow-top #Top_bar.is-sticky .menu > li > a:after {
+    top: 0 !important;
+  }
+  .menu-arrow-bottom #Top_bar .menu > li > a:after {
+    background: none !important;
+    border-color: transparent transparent #ccc;
+    border-style: solid;
+    border-width: 0 7px 7px;
+    display: block;
+    height: 0;
+    left: 50%;
+    margin-left: -7px;
+    top: auto;
+    bottom: 0;
+    width: 0;
+  }
+  .menu-arrow-bottom #Top_bar.is-sticky .menu > li > a:after {
+    top: auto;
+    bottom: 0;
+  }
+  .menuo-no-borders #Top_bar .menu > li > a span {
+    border-width: 0 !important;
+  }
+  .menuo-no-borders #Header_creative #Top_bar .menu > li > a span {
+    border-bottom-width: 0;
+  }
+  .menuo-no-borders.header-plain #Top_bar a#header_cart,
+  .menuo-no-borders.header-plain #Top_bar a#search_button,
+  .menuo-no-borders.header-plain #Top_bar .wpml-languages,
+  .menuo-no-borders.header-plain #Top_bar a.action_button {
+    border-width: 0;
+  }
+  .menuo-right #Top_bar .menu_wrapper {
+    float: right;
+  }
+  .menuo-right.header-stack:not(.header-center) #Top_bar .menu_wrapper {
+    margin-right: 150px;
+  }
+  body.header-creative {
+    padding-left: 50px;
+  }
+  body.header-creative.header-open {
+    padding-left: 250px;
+  }
+  body.error404,
+  body.under-construction,
+  body.template-blank,
+  body.under-construction.header-rtl.header-creative.header-open {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .header-creative.footer-fixed #Footer,
+  .header-creative.footer-sliding #Footer,
+  .header-creative.footer-stick #Footer.is-sticky {
+    box-sizing: border-box;
+    padding-left: 50px;
+  }
+  .header-open.footer-fixed #Footer,
+  .header-open.footer-sliding #Footer,
+  .header-creative.footer-stick #Footer.is-sticky {
+    padding-left: 250px;
+  }
+  .header-rtl.header-creative.footer-fixed #Footer,
+  .header-rtl.header-creative.footer-sliding #Footer,
+  .header-rtl.header-creative.footer-stick #Footer.is-sticky {
+    padding-left: 0;
+    padding-right: 50px;
+  }
+  .header-rtl.header-open.footer-fixed #Footer,
+  .header-rtl.header-open.footer-sliding #Footer,
+  .header-rtl.header-creative.footer-stick #Footer.is-sticky {
+    padding-right: 250px;
+  }
+  #Header_creative {
+    background-color: #fff;
+    position: fixed;
+    width: 250px;
+    height: 100%;
+    left: -200px;
+    top: 0;
+    z-index: 9002;
+    -webkit-box-shadow: 2px 0 4px 2px rgba(0, 0, 0, 0.15);
+    box-shadow: 2px 0 4px 2px rgba(0, 0, 0, 0.15);
+  }
+  #Header_creative .container {
+    width: 100%;
+  }
+  #Header_creative .creative-wrapper {
+    opacity: 0;
+    margin-right: 50px;
+  }
+  #Header_creative a.creative-menu-toggle {
+    display: block;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+    font-size: 22px;
+    text-align: center;
+    position: absolute;
+    top: 10px;
+    right: 8px;
+    border-radius: 3px;
+  }
+  .admin-bar #Header_creative a.creative-menu-toggle {
+    top: 42px;
+  }
+  #Header_creative #Top_bar {
+    position: static;
+    width: 100%;
+  }
+  #Header_creative #Top_bar .top_bar_left {
+    width: 100% !important;
+    float: none;
+  }
+  #Header_creative #Top_bar .logo {
+    float: none;
+    text-align: center;
+    margin: 15px 0;
+  }
+  #Header_creative #Top_bar #menu {
+    background-color: transparent;
+  }
+  #Header_creative #Top_bar .menu_wrapper {
+    float: none;
+    margin: 0 0 30px;
+  }
+  #Header_creative #Top_bar .menu > li {
+    width: 100%;
+    float: none;
+    position: relative;
+  }
+  #Header_creative #Top_bar .menu > li > a {
+    padding: 0;
+    text-align: center;
+  }
+  #Header_creative #Top_bar .menu > li > a:after {
+    display: none;
+  }
+  #Header_creative #Top_bar .menu > li > a span {
+    border-right: 0;
+    border-bottom-width: 1px;
+    line-height: 38px;
+  }
+  #Header_creative #Top_bar .menu li ul {
+    left: 100%;
+    right: auto;
+    top: 0;
+    box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.03);
+    -webkit-box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.03);
+  }
+  #Header_creative #Top_bar .menu > li > ul.mfn-megamenu {
+    margin: 0;
+    width: 700px !important;
+  }
+  #Header_creative #Top_bar .menu > li > ul.mfn-megamenu > li > ul {
+    left: 0;
+  }
+  #Header_creative #Top_bar .menu li ul li a {
+    padding-top: 9px;
+    padding-bottom: 8px;
+  }
+  #Header_creative #Top_bar .menu li ul li ul {
+    top: 0;
+  }
+  #Header_creative #Top_bar .menu > li > a span.description {
+    display: block;
+    font-size: 13px;
+    line-height: 28px !important;
+    clear: both;
+  }
+  .menuo-arrows #Top_bar .menu > li.submenu > a > span:after {
+    content: unset !important;
+  }
+  #Header_creative #Top_bar .top_bar_right {
+    width: 100% !important;
+    float: left;
+    height: auto;
+    margin-bottom: 35px;
+    text-align: center;
+    padding: 0 20px;
+    top: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  #Header_creative #Top_bar .top_bar_right:before {
+    content: none;
+  }
+  #Header_creative #Top_bar .top_bar_right .top_bar_right_wrapper {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  #Header_creative #Top_bar .top_bar_right .top-bar-right-icon,
+  #Header_creative #Top_bar .top_bar_right .wpml-languages,
+  #Header_creative #Top_bar .top_bar_right .top-bar-right-button,
+  #Header_creative #Top_bar .top_bar_right .top-bar-right-input {
+    min-height: 30px;
+    margin: 5px;
+  }
+  #Header_creative #Top_bar .search_wrapper {
+    left: 100%;
+    top: auto;
+  }
+  #Header_creative #Top_bar .banner_wrapper {
+    display: block;
+    text-align: center;
+  }
+  #Header_creative #Top_bar .banner_wrapper img {
+    max-width: 100%;
+    height: auto;
+    display: inline-block;
+  }
+  #Header_creative #Action_bar {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    top: auto;
+    clear: both;
+    padding: 0 20px;
+    box-sizing: border-box;
+  }
+  #Header_creative #Action_bar .contact_details {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  #Header_creative #Action_bar .contact_details li {
+    padding: 0;
+  }
+  #Header_creative #Action_bar .social {
+    float: none;
+    text-align: center;
+    padding: 5px 0 15px;
+  }
+  #Header_creative #Action_bar .social li {
+    margin-bottom: 2px;
+  }
+  #Header_creative #Action_bar .social-menu {
+    float: none;
+    text-align: center;
+  }
+  #Header_creative #Action_bar .social-menu li {
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+  #Header_creative .social li a {
+    color: rgba(0, 0, 0, 0.5);
+  }
+  #Header_creative .social li a:hover {
+    color: #000;
+  }
+  #Header_creative .creative-social {
+    position: absolute;
+    bottom: 10px;
+    right: 0;
+    width: 50px;
+  }
+  #Header_creative .creative-social li {
+    display: block;
+    float: none;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 5px;
+  }
+  .header-creative .fixed-nav.fixed-nav-prev {
+    margin-left: 50px;
+  }
+  .header-creative.header-open .fixed-nav.fixed-nav-prev {
+    margin-left: 250px;
+  }
+  .menuo-last #Header_creative #Top_bar .menu li.last ul {
+    top: auto;
+    bottom: 0;
+  }
+  .header-open #Header_creative {
+    left: 0;
+  }
+  .header-open #Header_creative .creative-wrapper {
+    opacity: 1;
+    margin: 0 !important;
+  }
+  .header-open #Header_creative .creative-menu-toggle,
+  .header-open #Header_creative .creative-social {
+    display: none;
+  }
+  .header-open #Header_creative #Action_bar {
+    display: block;
+  }
+  body.header-rtl.header-creative {
+    padding-left: 0;
+    padding-right: 50px;
+  }
+  .header-rtl #Header_creative {
+    left: auto;
+    right: -200px;
+  }
+  .header-rtl #Header_creative .creative-wrapper {
+    margin-left: 50px;
+    margin-right: 0;
+  }
+  .header-rtl #Header_creative a.creative-menu-toggle {
+    left: 8px;
+    right: auto;
+  }
+  .header-rtl #Header_creative .creative-social {
+    left: 0;
+    right: auto;
+  }
+  .header-rtl #Footer #back_to_top.sticky {
+    right: 125px;
+  }
+  .header-rtl #popup_contact {
+    right: 70px;
+  }
+  .header-rtl #Header_creative #Top_bar .menu li ul {
+    left: auto;
+    right: 100%;
+  }
+  .header-rtl #Header_creative #Top_bar .search_wrapper {
+    left: auto;
+    right: 100%;
+  }
+  .header-rtl .fixed-nav.fixed-nav-prev {
+    margin-left: 0 !important;
+  }
+  .header-rtl .fixed-nav.fixed-nav-next {
+    margin-right: 50px;
+  }
+  body.header-rtl.header-creative.header-open {
+    padding-left: 0;
+    padding-right: 250px !important;
+  }
+  .header-rtl.header-open #Header_creative {
+    left: auto;
+    right: 0;
+  }
+  .header-rtl.header-open #Footer #back_to_top.sticky {
+    right: 325px;
+  }
+  .header-rtl.header-open #popup_contact {
+    right: 270px;
+  }
+  .header-rtl.header-open .fixed-nav.fixed-nav-next {
+    margin-right: 250px;
+  }
+  #Header_creative.active {
+    left: -1px;
+  }
+  .header-rtl #Header_creative.active {
+    left: auto;
+    right: -1px;
+  }
+  #Header_creative.active .creative-wrapper {
+    opacity: 1;
+    margin: 0;
+  }
+  .header-creative .vc_row[data-vc-full-width] {
+    padding-left: 50px;
+  }
+  .header-creative.header-open .vc_row[data-vc-full-width] {
+    padding-left: 250px;
+  }
+  .header-open .vc_parallax .vc_parallax-inner {
+    left: auto;
+    width: calc(100% - 250px);
+  }
+  .header-open.header-rtl .vc_parallax .vc_parallax-inner {
+    left: 0;
+    right: auto;
+  }
+  #Header_creative.scroll {
+    height: 100%;
+    overflow-y: auto;
+  }
+  #Header_creative.scroll:not(.dropdown) .menu li ul {
+    display: none !important;
+  }
+  #Header_creative.scroll #Action_bar {
+    position: static;
+  }
+  #Header_creative.dropdown {
+    outline: none;
+  }
+  #Header_creative.dropdown #Top_bar .menu_wrapper {
+    float: left;
+    width: 100%;
+  }
+  #Header_creative.dropdown #Top_bar #menu ul li {
+    position: relative;
+    float: left;
+  }
+  #Header_creative.dropdown #Top_bar #menu ul li a:not(.menu-toggle):after {
+    display: none;
+  }
+  #Header_creative.dropdown #Top_bar #menu ul li a span {
+    line-height: 38px;
+    padding: 0;
+  }
+  #Header_creative.dropdown #Top_bar #menu ul li.submenu .menu-toggle {
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 38px;
+    height: 38px;
+    line-height: 38px;
+    font-size: 26px;
+    font-weight: 300;
+    text-align: center;
+    cursor: pointer;
+    color: #444;
+    opacity: 0.33;
+    z-index: 203;
+  }
+  #Header_creative.dropdown #Top_bar #menu ul li.submenu .menu-toggle:after {
+    content: "+";
+    position: static;
+  }
+  #Header_creative.dropdown #Top_bar #menu ul li.hover > .menu-toggle:after {
+    content: "-";
+  }
+  #Header_creative.dropdown #Top_bar #menu ul.sub-menu li:not(:last-of-type) a {
+    border-bottom: 0;
+  }
+  #Header_creative.dropdown #Top_bar #menu ul.mfn-megamenu li .menu-toggle {
+    display: none;
+  }
+  #Header_creative.dropdown #Top_bar #menu ul li ul {
+    position: relative !important;
+    left: 0 !important;
+    top: 0;
+    padding: 0;
+    margin-left: 0 !important;
+    width: auto !important;
+    background-image: none;
+  }
+
+  #Header_creative.dropdown #Top_bar #menu ul li ul li {
+    width: 100% !important;
+  }
+  #Header_creative.dropdown #Top_bar #menu ul li ul li a {
+    padding: 0 10px;
+    text-align: center;
+  }
+  #Header_creative.dropdown #Top_bar #menu ul li ul li a .menu-arrow {
+    display: none;
+  }
+  #Header_creative.dropdown #Top_bar #menu ul li ul li a span {
+    padding: 0;
+  }
+  #Header_creative.dropdown #Top_bar #menu ul li ul li a span:after {
+    display: none !important;
+  }
+  #Header_creative.dropdown
+    #Top_bar
+    .menu
+    > li
+    > ul.mfn-megamenu
+    a.mfn-megamenu-title {
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+  #Header_creative.dropdown #Top_bar .menu > li > ul.mfn-megamenu > li > ul {
+    display: block !important;
+    position: inherit;
+    left: auto;
+    top: auto;
+  }
+  #Header_creative.dropdown #Top_bar #menu ul li ul li ul {
+    border-left: 0 !important;
+    padding: 0;
+    top: 0;
+  }
+  #Header_creative {
+    transition: left 0.5s ease-in-out, right 0.5s ease-in-out;
+  }
+  #Header_creative .creative-wrapper {
+    transition: opacity 0.5s ease-in-out, margin 0s ease-in-out 0.5s;
+  }
+  #Header_creative.active .creative-wrapper {
+    transition: opacity 0.5s ease-in-out, margin 0s ease-in-out;
+  }
+}
+@media only screen and (min-width: 1240px) {
+  #Top_bar.is-sticky {
+    position: fixed !important;
+    width: 100%;
+    left: 0;
+    top: -60px;
+    height: 60px;
+    z-index: 701;
+    background: #fff;
+    opacity: 0.97;
+    -webkit-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1);
+    -moz-box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1);
+  }
+  .layout-boxed.header-boxed #Top_bar.is-sticky {
+    max-width: 1240px;
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+  }
+  #Top_bar.is-sticky .top_bar_left,
+  #Top_bar.is-sticky .top_bar_right,
+  #Top_bar.is-sticky .top_bar_right:before {
+    background: none;
+    box-shadow: unset;
+  }
+  #Top_bar.is-sticky .logo {
+    width: auto;
+    margin: 0 30px 0 20px;
+    padding: 0;
+  }
+  #Top_bar.is-sticky #logo,
+  #Top_bar.is-sticky .custom-logo-link {
+    padding: 5px 0 !important;
+    height: 50px !important;
+    line-height: 50px !important;
+  }
+  .logo-no-sticky-padding #Top_bar.is-sticky #logo {
+    height: 60px !important;
+    line-height: 60px !important;
+  }
+  #Top_bar.is-sticky #logo img.logo-main {
+    display: none;
+  }
+  #Top_bar.is-sticky #logo img.logo-sticky {
+    display: inline;
+    max-height: 35px;
+  }
+  .logo-sticky-width-auto #Top_bar.is-sticky #logo img.logo-sticky {
+    width: auto;
+  }
+  #Top_bar.is-sticky .menu_wrapper {
+    clear: none;
+  }
+  #Top_bar.is-sticky .menu_wrapper .menu > li > a {
+    padding: 15px 0;
+  }
+  #Top_bar.is-sticky .menu > li > a,
+  #Top_bar.is-sticky .menu > li > a span {
+    line-height: 30px;
+  }
+  #Top_bar.is-sticky .menu > li > a:after {
+    top: auto;
+    bottom: -4px;
+  }
+  #Top_bar.is-sticky .menu > li > a span.description {
+    display: none;
+  }
+  #Top_bar.is-sticky .secondary_menu_wrapper,
+  #Top_bar.is-sticky .banner_wrapper {
+    display: none;
+  }
+  .header-overlay #Top_bar.is-sticky {
+    display: none;
+  }
+  .sticky-dark #Top_bar.is-sticky,
+  .sticky-dark #Top_bar.is-sticky #menu {
+    background: rgba(0, 0, 0, 0.8);
+  }
+  .sticky-dark #Top_bar.is-sticky .menu > li:not(.current-menu-item) > a {
+    color: #fff;
+  }
+  .sticky-dark #Top_bar.is-sticky .top_bar_right .top-bar-right-icon {
+    color: rgba(255, 255, 255, 0.9);
+  }
+  .sticky-dark #Top_bar.is-sticky .top_bar_right .top-bar-right-icon svg .path {
+    stroke: rgba(255, 255, 255, 0.9);
+  }
+  .sticky-dark #Top_bar.is-sticky .wpml-languages a.active,
+  .sticky-dark #Top_bar.is-sticky .wpml-languages ul.wpml-lang-dropdown {
+    background: rgba(0, 0, 0, 0.1);
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+  .sticky-white #Top_bar.is-sticky,
+  .sticky-white #Top_bar.is-sticky #menu {
+    background: rgba(255, 255, 255, 0.8);
+  }
+  .sticky-white #Top_bar.is-sticky .menu > li:not(.current-menu-item) > a {
+    color: #222;
+  }
+  .sticky-white #Top_bar.is-sticky .top_bar_right .top-bar-right-icon {
+    color: rgba(0, 0, 0, 0.8);
+  }
+  .sticky-white
+    #Top_bar.is-sticky
+    .top_bar_right
+    .top-bar-right-icon
+    svg
+    .path {
+    stroke: rgba(0, 0, 0, 0.8);
+  }
+  .sticky-white #Top_bar.is-sticky .wpml-languages a.active,
+  .sticky-white #Top_bar.is-sticky .wpml-languages ul.wpml-lang-dropdown {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(0, 0, 0, 0.1);
+  }
+}
+@media only screen and (min-width: 768px) and (max-width: 1240px) {
+  .header_placeholder {
+    height: 0 !important;
+  }
+}
+@media only screen and (max-width: 1239px) {
+  #Top_bar #menu {
+    display: none;
+    height: auto;
+    width: 300px;
+    bottom: auto;
+    top: 100%;
+    right: 1px;
+    position: absolute;
+    margin: 0;
+  }
+  #Top_bar a.responsive-menu-toggle {
+    display: block;
+  }
+  #Top_bar #menu > ul {
+    width: 100%;
+    float: left;
+  }
+  #Top_bar #menu ul li {
+    width: 100%;
+    padding-bottom: 0;
+    border-right: 0;
+    position: relative;
+  }
+  #Top_bar #menu ul li a {
+    padding: 0 25px;
+    margin: 0;
+    display: block;
+    height: auto;
+    line-height: normal;
+    border: none;
+  }
+  #Top_bar #menu ul li a:not(.menu-toggle):after {
+    display: none;
+  }
+  #Top_bar #menu ul li a span {
+    border: none;
+    line-height: 44px;
+    display: inline;
+    padding: 0;
+  }
+  #Top_bar #menu ul li a span.description {
+    margin: 0 0 0 5px;
+  }
+  #Top_bar #menu ul li.submenu .menu-toggle {
+    display: block;
+    position: absolute;
+    right: 15px;
+    top: 0;
+    width: 44px;
+    height: 44px;
+    line-height: 44px;
+    font-size: 30px;
+    font-weight: 300;
+    text-align: center;
+    cursor: pointer;
+    color: #444;
+    opacity: 0.33;
+    transform: unset;
+  }
+  #Top_bar #menu ul li.submenu .menu-toggle:after {
+    content: "+";
+    position: static;
+  }
+  #Top_bar #menu ul li.hover > .menu-toggle:after {
+    content: "-";
+  }
+  #Top_bar #menu ul li.hover a {
+    border-bottom: 0;
+  }
+  #Top_bar #menu ul li a span:after {
+    display: none !important;
+  }
+  #Top_bar #menu ul.mfn-megamenu li .menu-toggle {
+    display: none;
+  }
+  #Top_bar #menu ul li ul {
+    position: relative !important;
+    left: 0 !important;
+    top: 0;
+    padding: 0;
+    margin-left: 0 !important;
+    width: auto !important;
+    background-image: none !important;
+    box-shadow: 0 0 0 0 transparent !important;
+    -webkit-box-shadow: 0 0 0 0 transparent !important;
+  }
+  #Top_bar #menu ul li ul li {
+    width: 100% !important;
+  }
+  #Top_bar #menu ul li ul li a {
+    padding: 0 20px 0 35px;
+  }
+  #Top_bar #menu ul li ul li a .menu-arrow {
+    display: none;
+  }
+  #Top_bar #menu ul li ul li a span {
+    padding: 0;
+  }
+  #Top_bar #menu ul li ul li a span:after {
+    display: none !important;
+  }
+  #Top_bar .menu > li > ul.mfn-megamenu a.mfn-megamenu-title {
+    text-transform: uppercase;
+    font-weight: 400;
+  }
+  #Top_bar .menu > li > ul.mfn-megamenu > li > ul {
+    display: block !important;
+    position: inherit;
+    left: auto;
+    top: auto;
+  }
+  #Top_bar #menu ul li ul li ul {
+    border-left: 0 !important;
+    padding: 0;
+    top: 0;
+  }
+  #Top_bar #menu ul li ul li ul li a {
+    padding: 0 20px 0 45px;
+  }
+  .rtl #Top_bar #menu {
+    left: 1px;
+    right: auto;
+  }
+  .rtl #Top_bar a.responsive-menu-toggle {
+    left: 20px;
+    right: auto;
+  }
+  .rtl #Top_bar #menu ul li.submenu .menu-toggle {
+    left: 15px;
+    right: auto;
+    border-left: none;
+    border-right: 1px solid #eee;
+    transform: unset;
+  }
+  .rtl #Top_bar #menu ul li ul {
+    left: auto !important;
+    right: 0 !important;
+  }
+  .rtl #Top_bar #menu ul li ul li a {
+    padding: 0 30px 0 20px;
+  }
+  .rtl #Top_bar #menu ul li ul li ul li a {
+    padding: 0 40px 0 20px;
+  }
+  .header-stack .menu_wrapper a.responsive-menu-toggle {
+    position: static !important;
+    margin: 11px 0 !important;
+  }
+  .header-stack .menu_wrapper #menu {
+    left: 0;
+    right: auto;
+  }
+  .rtl.header-stack #Top_bar #menu {
+    left: auto;
+    right: 0;
+  }
+  .admin-bar #Header_creative {
+    top: 32px;
+  }
+  .header-creative.layout-boxed {
+    padding-top: 85px;
+  }
+  .header-creative.layout-full-width #Wrapper {
+    padding-top: 60px;
+  }
+  #Header_creative {
+    position: fixed;
+    width: 100%;
+    left: 0 !important;
+    top: 0;
+    z-index: 1001;
+  }
+  #Header_creative .creative-wrapper {
+    display: block !important;
+    opacity: 1 !important;
+  }
+  #Header_creative .creative-menu-toggle,
+  #Header_creative .creative-social {
+    display: none !important;
+    opacity: 1 !important;
+  }
+  #Header_creative #Top_bar {
+    position: static;
+    width: 100%;
+  }
+  #Header_creative #Top_bar .one {
+    display: flex;
+  }
+  #Header_creative #Top_bar #logo,
+  #Header_creative #Top_bar .custom-logo-link {
+    height: 50px;
+    line-height: 50px;
+    padding: 5px 0;
+  }
+  #Header_creative #Top_bar #logo img.logo-sticky {
+    max-height: 40px !important;
+  }
+  #Header_creative #logo img.logo-main {
+    display: none;
+  }
+  #Header_creative #logo img.logo-sticky {
+    display: inline-block;
+  }
+  .logo-no-sticky-padding #Header_creative #Top_bar #logo {
+    height: 60px;
+    line-height: 60px;
+    padding: 0;
+  }
+  .logo-no-sticky-padding #Header_creative #Top_bar #logo img.logo-sticky {
+    max-height: 60px !important;
+  }
+  #Header_creative #Action_bar {
+    display: none;
+  }
+  #Header_creative #Top_bar .top_bar_right:before {
+    content: none;
+  }
+  #Header_creative.scroll {
+    overflow: visible !important;
+  }
+}
+body {
+  --mfn-clients-tiles-hover: #7ae7c7;
+  --mfn-icon-box-icon: #7ae7c7;
+  --mfn-sliding-box-bg: #7ae7c7;
+  --mfn-woo-body-color: #626262;
+  --mfn-woo-heading-color: #7ae7c7;
+  --mfn-woo-themecolor: #7ae7c7;
+  --mfn-woo-bg-themecolor: #7ae7c7;
+  --mfn-woo-border-themecolor: #7ae7c7;
+}
+#Header_wrapper,
+#Intro {
+  background-color: #112429;
+}
+#Subheader {
+  background-color: rgba(17, 36, 41, 1);
+}
+.header-classic #Action_bar,
+.header-fixed #Action_bar,
+.header-plain #Action_bar,
+.header-split #Action_bar,
+.header-shop #Action_bar,
+.header-shop-split #Action_bar,
+.header-stack #Action_bar {
+  background-color: #101015;
+}
+#Sliding-top {
+  background-color: #545454;
+}
+#Sliding-top a.sliding-top-control {
+  border-right-color: #545454;
+}
+#Sliding-top.st-center a.sliding-top-control,
+#Sliding-top.st-left a.sliding-top-control {
+  border-top-color: #545454;
+}
+#Footer {
+  background-color: #112429;
+}
+.grid .post-item,
+.masonry:not(.tiles) .post-item,
+.photo2 .post .post-desc-wrapper {
+  background-color: transparent;
+}
+.portfolio_group .portfolio-item .desc {
+  background-color: transparent;
+}
+.woocommerce ul.products li.product,
+.shop_slider .shop_slider_ul li .item_wrapper .desc {
+  background-color: transparent;
+}
+body,
+ul.timeline_items,
+.icon_box a .desc,
+.icon_box a:hover .desc,
+.feature_list ul li a,
+.list_item a,
+.list_item a:hover,
+.widget_recent_entries ul li a,
+.flat_box a,
+.flat_box a:hover,
+.story_box .desc,
+.content_slider.carousel ul li a .title,
+.content_slider.flat.description ul li .desc,
+.content_slider.flat.description ul li a .desc,
+.post-nav.minimal a i {
+  color: #626262;
+}
+.post-nav.minimal a svg {
+  fill: #626262;
+}
+.themecolor,
+.opening_hours .opening_hours_wrapper li span,
+.fancy_heading_icon .icon_top,
+.fancy_heading_arrows .icon-right-dir,
+.fancy_heading_arrows .icon-left-dir,
+.fancy_heading_line .title,
+.button-love a.mfn-love,
+.format-link .post-title .icon-link,
+.pager-single > span,
+.pager-single a:hover,
+.widget_meta ul,
+.widget_pages ul,
+.widget_rss ul,
+.widget_mfn_recent_comments ul li:after,
+.widget_archive ul,
+.widget_recent_comments ul li:after,
+.widget_nav_menu ul,
+.woocommerce ul.products li.product .price,
+.shop_slider .shop_slider_ul li .item_wrapper .price,
+.woocommerce-page ul.products li.product .price,
+.widget_price_filter .price_label .from,
+.widget_price_filter .price_label .to,
+.woocommerce ul.product_list_widget li .quantity .amount,
+.woocommerce .product div.entry-summary .price,
+.woocommerce .product .woocommerce-variation-price .price,
+.woocommerce .star-rating span,
+#Error_404 .error_pic i,
+.style-simple #Filters .filters_wrapper ul li a:hover,
+.style-simple #Filters .filters_wrapper ul li.current-cat a,
+.style-simple .quick_fact .title,
+.mfn-cart-holder .mfn-ch-content .mfn-ch-product .woocommerce-Price-amount,
+.woocommerce .comment-form-rating p.stars a:before,
+.wishlist .wishlist-row .price,
+.search-results .search-item .post-product-price {
+  color: #7ae7c7;
+}
+.mfn-wish-button.loved:not(.link) .path {
+  fill: #7ae7c7;
+  stroke: #7ae7c7;
+}
+.themebg,
+#comments .commentlist > li .reply a.comment-reply-link,
+#Filters .filters_wrapper ul li a:hover,
+#Filters .filters_wrapper ul li.current-cat a,
+.fixed-nav .arrow,
+.offer_thumb .slider_pagination a:before,
+.offer_thumb .slider_pagination a.selected:after,
+.pager .pages a:hover,
+.pager .pages a.active,
+.pager .pages span.page-numbers.current,
+.pager-single span:after,
+.portfolio_group.exposure .portfolio-item .desc-inner .line,
+.Recent_posts ul li .desc:after,
+.Recent_posts ul li .photo .c,
+.slider_pagination a.selected,
+.slider_pagination .slick-active a,
+.slider_pagination a.selected:after,
+.slider_pagination .slick-active a:after,
+.testimonials_slider .slider_images,
+.testimonials_slider .slider_images a:after,
+.testimonials_slider .slider_images:before,
+#Top_bar .header-cart-count,
+#Top_bar .header-wishlist-count,
+.mfn-footer-stickymenu ul li a .header-wishlist-count,
+.mfn-footer-stickymenu ul li a .header-cart-count,
+.widget_categories ul,
+.widget_mfn_menu ul li a:hover,
+.widget_mfn_menu ul li.current-menu-item:not(.current-menu-ancestor) > a,
+.widget_mfn_menu ul li.current_page_item:not(.current_page_ancestor) > a,
+.widget_product_categories ul,
+.widget_recent_entries ul li:after,
+.woocommerce-account table.my_account_orders .order-number a,
+.woocommerce-MyAccount-navigation ul li.is-active a,
+.style-simple .accordion .question:after,
+.style-simple .faq .question:after,
+.style-simple .icon_box .desc_wrapper .title:before,
+.style-simple #Filters .filters_wrapper ul li a:after,
+.style-simple .trailer_box:hover .desc,
+.tp-bullets.simplebullets.round .bullet.selected,
+.tp-bullets.simplebullets.round .bullet.selected:after,
+.tparrows.default,
+.tp-bullets.tp-thumbs .bullet.selected:after {
+  background-color: #7ae7c7;
+}
+.Latest_news ul li .photo,
+.Recent_posts.blog_news ul li .photo,
+.style-simple .opening_hours .opening_hours_wrapper li label,
+.style-simple .timeline_items li:hover h3,
+.style-simple .timeline_items li:nth-child(even):hover h3,
+.style-simple .timeline_items li:hover .desc,
+.style-simple .timeline_items li:nth-child(even):hover,
+.style-simple .offer_thumb .slider_pagination a.selected {
+  border-color: #7ae7c7;
+}
+a {
+  color: #7ae7c7;
+}
+a:hover {
+  color: #70ffd5;
+}
+*::-moz-selection {
+  background-color: #7ae7c7;
+  color: black;
+}
+
+*::selection {
+  background-color: #7ae7c7;
+  color: black;
+}
+.blockquote p.author span,
+.counter .desc_wrapper .title,
+.article_box .desc_wrapper p,
+.team .desc_wrapper p.subtitle,
+.pricing-box .plan-header p.subtitle,
+.pricing-box .plan-header .price sup.period,
+.chart_box p,
+.fancy_heading .inside,
+.fancy_heading_line .slogan,
+.post-meta,
+.post-meta a,
+.post-footer,
+.post-footer a span.label,
+.pager .pages a,
+.button-love a .label,
+.pager-single a,
+#comments .commentlist > li .comment-author .says,
+.fixed-nav .desc .date,
+.filters_buttons li.label,
+.Recent_posts ul li a .desc .date,
+.widget_recent_entries ul li .post-date,
+.tp_recent_tweets .twitter_time,
+.widget_price_filter .price_label,
+.shop-filters .woocommerce-result-count,
+.woocommerce ul.product_list_widget li .quantity,
+.widget_shopping_cart ul.product_list_widget li dl,
+.product_meta .posted_in,
+.woocommerce .shop_table .product-name .variation > dd,
+.shipping-calculator-button:after,
+.shop_slider .shop_slider_ul li .item_wrapper .price del,
+.woocommerce
+  .product
+  .entry-summary
+  .woocommerce-product-rating
+  .woocommerce-review-link,
+.woocommerce .product.style-default .entry-summary .product_meta .tagged_as,
+.woocommerce .tagged_as,
+.wishlist .sku_wrapper,
+.woocommerce .column_product_rating .woocommerce-review-link,
+.woocommerce
+  #reviews
+  #comments
+  ol.commentlist
+  li
+  .comment-text
+  p.meta
+  .woocommerce-review__verified,
+.woocommerce
+  #reviews
+  #comments
+  ol.commentlist
+  li
+  .comment-text
+  p.meta
+  .woocommerce-review__dash,
+.woocommerce
+  #reviews
+  #comments
+  ol.commentlist
+  li
+  .comment-text
+  p.meta
+  .woocommerce-review__published-date,
+.testimonials_slider .testimonials_slider_ul li .author span,
+.testimonials_slider .testimonials_slider_ul li .author span a,
+.Latest_news ul li .desc_footer,
+.share-simple-wrapper .icons a {
+  color: #a8a8a8;
+}
+h1,
+h1 a,
+h1 a:hover,
+.text-logo #logo {
+  color: #7ae7c7;
+}
+h2,
+h2 a,
+h2 a:hover {
+  color: #7ae7c7;
+}
+h3,
+h3 a,
+h3 a:hover {
+  color: #7ae7c7;
+}
+h4,
+h4 a,
+h4 a:hover,
+.style-simple .sliding_box .desc_wrapper h4 {
+  color: #7ae7c7;
+}
+h5,
+h5 a,
+h5 a:hover {
+  color: #07242c;
+}
+h6,
+h6 a,
+h6 a:hover,
+a.content_link .title {
+  color: #7ae7c7;
+}
+.woocommerce #customer_login h2 {
+  color: #7ae7c7;
+}
+.woocommerce .woocommerce-order-details__title,
+.woocommerce .wc-bacs-bank-details-heading,
+.woocommerce .woocommerce-customer-details h2,
+.woocommerce #respond .comment-reply-title,
+.woocommerce
+  #reviews
+  #comments
+  ol.commentlist
+  li
+  .comment-text
+  p.meta
+  .woocommerce-review__author {
+  color: #7ae7c7;
+}
+.dropcap,
+.highlight:not(.highlight_image) {
+  background-color: #7ae7c7;
+}
+.button-default .button_theme,
+.button-default button,
+.button-default input[type="button"],
+.button-default input[type="reset"],
+.button-default input[type="submit"],
+.button-flat .button_theme,
+.button-flat button,
+.button-flat input[type="button"],
+.button-flat input[type="reset"],
+.button-flat input[type="submit"],
+.button-round .button_theme,
+.button-round button,
+.button-round input[type="button"],
+.button-round input[type="reset"],
+.button-round input[type="submit"],
+.woocommerce #respond input#submit,
+.woocommerce a.button:not(.default),
+.woocommerce button.button,
+.woocommerce input.button,
+.woocommerce #respond input#submit:hover,
+.woocommerce a.button:not(.default):hover,
+.woocommerce button.button:hover,
+.woocommerce input.button:hover {
+  background-color: #7ae7c7;
+}
+.button-stroke .button_theme,
+.button-stroke .button_theme .button_icon i,
+.button-stroke button,
+.button-stroke input[type="submit"],
+.button-stroke input[type="reset"],
+.button-stroke input[type="button"],
+.button-stroke .woocommerce #respond input#submit,
+.button-stroke .woocommerce a.button:not(.default),
+.button-stroke .woocommerce button.button,
+.button-stroke.woocommerce input.button {
+  border-color: #7ae7c7;
+  color: #7ae7c7 !important;
+}
+.button-stroke .button_theme:hover,
+.button-stroke button:hover,
+.button-stroke input[type="submit"]:hover,
+.button-stroke input[type="reset"]:hover,
+.button-stroke input[type="button"]:hover {
+  background-color: #7ae7c7;
+}
+.button-default .single_add_to_cart_button,
+.button-flat .single_add_to_cart_button,
+.button-round .single_add_to_cart_button,
+.button-default .woocommerce .button:disabled,
+.button-flat .woocommerce .button:disabled,
+.button-round .woocommerce .button:disabled,
+.button-default .woocommerce .button.alt,
+.button-flat .woocommerce .button.alt,
+.button-round .woocommerce .button.alt {
+  background-color: #7ae7c7 !important;
+}
+.button-stroke .single_add_to_cart_button:hover,
+.button-stroke #place_order:hover {
+  background-color: #7ae7c7 !important;
+}
+a.mfn-link {
+  color: #656b6f;
+}
+a.mfn-link-2 span,
+a:hover.mfn-link-2 span:before,
+a.hover.mfn-link-2 span:before,
+a.mfn-link-5 span,
+a.mfn-link-8:after,
+a.mfn-link-8:before {
+  background: #7ae7c7;
+}
+a:hover.mfn-link {
+  color: #7ae7c7;
+}
+a.mfn-link-2 span:before,
+a:hover.mfn-link-4:before,
+a:hover.mfn-link-4:after,
+a.hover.mfn-link-4:before,
+a.hover.mfn-link-4:after,
+a.mfn-link-5:before,
+a.mfn-link-7:after,
+a.mfn-link-7:before {
+  background: #7ae7c7;
+}
+a.mfn-link-6:before {
+  border-bottom-color: #7ae7c7;
+}
+a.mfn-link svg .path {
+  stroke: #7ae7c7;
+}
+.column_column ul,
+.column_column ol,
+.the_content_wrapper:not(.is-elementor) ul,
+.the_content_wrapper:not(.is-elementor) ol {
+  color: #737e86;
+}
+hr.hr_color,
+.hr_color hr,
+.hr_dots span {
+  color: #7ae7c7;
+  background: #7ae7c7;
+}
+.hr_zigzag i {
+  color: #7ae7c7;
+}
+.highlight-left:after,
+.highlight-right:after {
+  background: #7ae7c7;
+}
+@media only screen and (max-width: 767px) {
+  .highlight-left .wrap:first-child,
+  .highlight-right .wrap:last-child {
+    background: #7ae7c7;
+  }
+}
+#Header .top_bar_left,
+.header-classic #Top_bar,
+.header-plain #Top_bar,
+.header-stack #Top_bar,
+.header-split #Top_bar,
+.header-shop #Top_bar,
+.header-shop-split #Top_bar,
+.header-fixed #Top_bar,
+.header-below #Top_bar,
+#Header_creative,
+#Top_bar #menu,
+.sticky-tb-color #Top_bar.is-sticky {
+  background-color: #182f35;
+}
+#Top_bar .wpml-languages a.active,
+#Top_bar .wpml-languages ul.wpml-lang-dropdown {
+  background-color: #182f35;
+}
+#Top_bar .top_bar_right:before {
+  background-color: #e3e3e3;
+}
+#Header .top_bar_right {
+  background-color: #f5f5f5;
+}
+#Top_bar .top_bar_right .top-bar-right-icon,
+#Top_bar .top_bar_right .top-bar-right-icon svg .path {
+  color: #333333;
+  stroke: #333333;
+}
+#Top_bar .menu > li > a,
+#Top_bar #menu ul li.submenu .menu-toggle {
+  color: #6d8386;
+}
+#Top_bar .menu > li.current-menu-item > a,
+#Top_bar .menu > li.current_page_item > a,
+#Top_bar .menu > li.current-menu-parent > a,
+#Top_bar .menu > li.current-page-parent > a,
+#Top_bar .menu > li.current-menu-ancestor > a,
+#Top_bar .menu > li.current-page-ancestor > a,
+#Top_bar .menu > li.current_page_ancestor > a,
+#Top_bar .menu > li.hover > a {
+  color: #7ae7c7;
+}
+#Top_bar .menu > li a:not(.menu-toggle):after {
+  background: #7ae7c7;
+}
+.menuo-arrows #Top_bar .menu > li.submenu > a > span:not(.description)::after {
+  border-top-color: #6d8386;
+}
+#Top_bar
+  .menu
+  > li.current-menu-item.submenu
+  > a
+  > span:not(.description)::after,
+#Top_bar
+  .menu
+  > li.current_page_item.submenu
+  > a
+  > span:not(.description)::after,
+#Top_bar
+  .menu
+  > li.current-menu-parent.submenu
+  > a
+  > span:not(.description)::after,
+#Top_bar
+  .menu
+  > li.current-page-parent.submenu
+  > a
+  > span:not(.description)::after,
+#Top_bar
+  .menu
+  > li.current-menu-ancestor.submenu
+  > a
+  > span:not(.description)::after,
+#Top_bar
+  .menu
+  > li.current-page-ancestor.submenu
+  > a
+  > span:not(.description)::after,
+#Top_bar
+  .menu
+  > li.current_page_ancestor.submenu
+  > a
+  > span:not(.description)::after,
+#Top_bar .menu > li.hover.submenu > a > span:not(.description)::after {
+  border-top-color: #7ae7c7;
+}
+.menu-highlight #Top_bar #menu > ul > li.current-menu-item > a,
+.menu-highlight #Top_bar #menu > ul > li.current_page_item > a,
+.menu-highlight #Top_bar #menu > ul > li.current-menu-parent > a,
+.menu-highlight #Top_bar #menu > ul > li.current-page-parent > a,
+.menu-highlight #Top_bar #menu > ul > li.current-menu-ancestor > a,
+.menu-highlight #Top_bar #menu > ul > li.current-page-ancestor > a,
+.menu-highlight #Top_bar #menu > ul > li.current_page_ancestor > a,
+.menu-highlight #Top_bar #menu > ul > li.hover > a {
+  background: #f2f2f2;
+}
+.menu-arrow-bottom #Top_bar .menu > li > a:after {
+  border-bottom-color: #7ae7c7;
+}
+.menu-arrow-top #Top_bar .menu > li > a:after {
+  border-top-color: #7ae7c7;
+}
+.header-plain #Top_bar .menu > li.current-menu-item > a,
+.header-plain #Top_bar .menu > li.current_page_item > a,
+.header-plain #Top_bar .menu > li.current-menu-parent > a,
+.header-plain #Top_bar .menu > li.current-page-parent > a,
+.header-plain #Top_bar .menu > li.current-menu-ancestor > a,
+.header-plain #Top_bar .menu > li.current-page-ancestor > a,
+.header-plain #Top_bar .menu > li.current_page_ancestor > a,
+.header-plain #Top_bar .menu > li.hover > a,
+.header-plain #Top_bar .wpml-languages:hover,
+.header-plain #Top_bar .wpml-languages ul.wpml-lang-dropdown {
+  background: #f2f2f2;
+  color: #7ae7c7;
+}
+.header-plain #Top_bar .top_bar_right .top-bar-right-icon:hover {
+  background: #f2f2f2;
+}
+.header-plain #Top_bar,
+.header-plain #Top_bar .menu > li > a span:not(.description),
+.header-plain #Top_bar .top_bar_right .top-bar-right-icon,
+.header-plain #Top_bar .top_bar_right .top-bar-right-button,
+.header-plain #Top_bar .top_bar_right .top-bar-right-input,
+.header-plain #Top_bar .wpml-languages {
+  border-color: #f2f2f2;
+}
+#Top_bar .menu > li ul {
+  background-color: #f2f2f2;
+}
+#Top_bar .menu > li ul li a {
+  color: #5f5f5f;
+}
+#Top_bar .menu > li ul li a:hover,
+#Top_bar .menu > li ul li.hover > a {
+  color: #2e2e2e;
+}
+.overlay-menu-toggle {
+  color: #7ae7c7 !important;
+  background: transparent;
+}
+#Overlay {
+  background: rgba(122, 231, 199, 0.95);
+}
+#overlay-menu ul li a,
+.header-overlay .overlay-menu-toggle.focus {
+  color: #ffffff;
+}
+#overlay-menu ul li.current-menu-item > a,
+#overlay-menu ul li.current_page_item > a,
+#overlay-menu ul li.current-menu-parent > a,
+#overlay-menu ul li.current-page-parent > a,
+#overlay-menu ul li.current-menu-ancestor > a,
+#overlay-menu ul li.current-page-ancestor > a,
+#overlay-menu ul li.current_page_ancestor > a {
+  color: #b1dcfb;
+}
+#Top_bar .responsive-menu-toggle,
+#Header_creative .creative-menu-toggle,
+#Header_creative .responsive-menu-toggle {
+  color: #7ae7c7;
+  background: transparent;
+}
+.mfn-footer-stickymenu {
+  background-color: #182f35;
+}
+.mfn-footer-stickymenu ul li a,
+.mfn-footer-stickymenu ul li a .path {
+  color: #333333;
+  stroke: #333333;
+}
+#Side_slide {
+  background-color: #182f35;
+  border-color: #182f35;
+}
+#Side_slide,
+#Side_slide #menu ul li.submenu .menu-toggle,
+#Side_slide .search-wrapper input.field,
+#Side_slide a:not(.action_button) {
+  color: #ffffff;
+}
+#Side_slide .extras .extras-wrapper a svg .path {
+  stroke: #ffffff;
+}
+#Side_slide #menu ul li.hover > .menu-toggle,
+#Side_slide a.active,
+#Side_slide a:not(.action_button):hover {
+  color: #7ae7c7;
+}
+#Side_slide .extras .extras-wrapper a:hover svg .path {
+  stroke: #7ae7c7;
+}
+#Side_slide #menu ul li.current-menu-item > a,
+#Side_slide #menu ul li.current_page_item > a,
+#Side_slide #menu ul li.current-menu-parent > a,
+#Side_slide #menu ul li.current-page-parent > a,
+#Side_slide #menu ul li.current-menu-ancestor > a,
+#Side_slide #menu ul li.current-page-ancestor > a,
+#Side_slide #menu ul li.current_page_ancestor > a,
+#Side_slide #menu ul li.hover > a,
+#Side_slide #menu ul li:hover > a {
+  color: #7ae7c7;
+}
+#Action_bar .contact_details {
+  color: #bbbbbb;
+}
+#Action_bar .contact_details a {
+  color: #7ae7c7;
+}
+#Action_bar .contact_details a:hover {
+  color: #70ffd5;
+}
+#Action_bar .social li a,
+#Header_creative .social li a,
+#Action_bar:not(.creative) .social-menu a {
+  color: #ffffff;
+}
+#Action_bar .social li a:hover,
+#Header_creative .social li a:hover,
+#Action_bar:not(.creative) .social-menu a:hover {
+  color: #70ffd5;
+}
+#Subheader .title {
+  color: #7ae7c7;
+}
+#Subheader ul.breadcrumbs li,
+#Subheader ul.breadcrumbs li a {
+  color: rgba(122, 231, 199, 0.6);
+}
+#Footer,
+#Footer .widget_recent_entries ul li a {
+  color: #ffffff;
+}
+#Footer a:not(.button) {
+  color: #ffffff;
+}
+#Footer a:not(.button):hover {
+  color: #7ae7c7;
+}
+#Footer h1,
+#Footer h1 a,
+#Footer h1 a:hover,
+#Footer h2,
+#Footer h2 a,
+#Footer h2 a:hover,
+#Footer h3,
+#Footer h3 a,
+#Footer h3 a:hover,
+#Footer h4,
+#Footer h4 a,
+#Footer h4 a:hover,
+#Footer h5,
+#Footer h5 a,
+#Footer h5 a:hover,
+#Footer h6,
+#Footer h6 a,
+#Footer h6 a:hover {
+  color: #7ae7c7;
+}
+#Footer .themecolor,
+#Footer .widget_meta ul,
+#Footer .widget_pages ul,
+#Footer .widget_rss ul,
+#Footer .widget_mfn_recent_comments ul li:after,
+#Footer .widget_archive ul,
+#Footer .widget_recent_comments ul li:after,
+#Footer .widget_nav_menu ul,
+#Footer .widget_price_filter .price_label .from,
+#Footer .widget_price_filter .price_label .to,
+#Footer .star-rating span {
+  color: #7ae7c7;
+}
+#Footer .themebg,
+#Footer .widget_categories ul,
+#Footer .Recent_posts ul li .desc:after,
+#Footer .Recent_posts ul li .photo .c,
+#Footer .widget_recent_entries ul li:after,
+#Footer .widget_mfn_menu ul li a:hover,
+#Footer .widget_product_categories ul {
+  background-color: #7ae7c7;
+}
+#Footer .Recent_posts ul li a .desc .date,
+#Footer .widget_recent_entries ul li .post-date,
+#Footer .tp_recent_tweets .twitter_time,
+#Footer .widget_price_filter .price_label,
+#Footer .shop-filters .woocommerce-result-count,
+#Footer ul.product_list_widget li .quantity,
+#Footer .widget_shopping_cart ul.product_list_widget li dl {
+  color: #a8a8a8;
+}
+#Footer .footer_copy .social li a,
+#Footer .footer_copy .social-menu a {
+  color: #ffffff;
+}
+#Footer .footer_copy .social li a:hover,
+#Footer .footer_copy .social-menu a:hover {
+  color: #7ae7c7;
+}
+#Footer .footer_copy {
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+#Sliding-top,
+#Sliding-top .widget_recent_entries ul li a {
+  color: #cccccc;
+}
+#Sliding-top a {
+  color: #7ae7c7;
+}
+#Sliding-top a:hover {
+  color: #70ffd5;
+}
+#Sliding-top h1,
+#Sliding-top h1 a,
+#Sliding-top h1 a:hover,
+#Sliding-top h2,
+#Sliding-top h2 a,
+#Sliding-top h2 a:hover,
+#Sliding-top h3,
+#Sliding-top h3 a,
+#Sliding-top h3 a:hover,
+#Sliding-top h4,
+#Sliding-top h4 a,
+#Sliding-top h4 a:hover,
+#Sliding-top h5,
+#Sliding-top h5 a,
+#Sliding-top h5 a:hover,
+#Sliding-top h6,
+#Sliding-top h6 a,
+#Sliding-top h6 a:hover {
+  color: #ffffff;
+}
+#Sliding-top .themecolor,
+#Sliding-top .widget_meta ul,
+#Sliding-top .widget_pages ul,
+#Sliding-top .widget_rss ul,
+#Sliding-top .widget_mfn_recent_comments ul li:after,
+#Sliding-top .widget_archive ul,
+#Sliding-top .widget_recent_comments ul li:after,
+#Sliding-top .widget_nav_menu ul,
+#Sliding-top .widget_price_filter .price_label .from,
+#Sliding-top .widget_price_filter .price_label .to,
+#Sliding-top .star-rating span {
+  color: #7ae7c7;
+}
+#Sliding-top .themebg,
+#Sliding-top .widget_categories ul,
+#Sliding-top .Recent_posts ul li .desc:after,
+#Sliding-top .Recent_posts ul li .photo .c,
+#Sliding-top .widget_recent_entries ul li:after,
+#Sliding-top .widget_mfn_menu ul li a:hover,
+#Sliding-top .widget_product_categories ul {
+  background-color: #7ae7c7;
+}
+#Sliding-top .Recent_posts ul li a .desc .date,
+#Sliding-top .widget_recent_entries ul li .post-date,
+#Sliding-top .tp_recent_tweets .twitter_time,
+#Sliding-top .widget_price_filter .price_label,
+#Sliding-top .shop-filters .woocommerce-result-count,
+#Sliding-top ul.product_list_widget li .quantity,
+#Sliding-top .widget_shopping_cart ul.product_list_widget li dl {
+  color: #a8a8a8;
+}
+blockquote,
+blockquote a,
+blockquote a:hover {
+  color: #444444;
+}
+.portfolio_group.masonry-hover
+  .portfolio-item
+  .masonry-hover-wrapper
+  .hover-desc,
+.masonry.tiles .post-item .post-desc-wrapper .post-desc .post-title:after,
+.masonry.tiles .post-item.no-img,
+.masonry.tiles .post-item.format-quote,
+.blog-teaser li .desc-wrapper .desc .post-title:after,
+.blog-teaser li.no-img,
+.blog-teaser li.format-quote {
+  background: #ffffff;
+}
+.image_frame .image_wrapper .image_links a {
+  background: #ffffff;
+  color: #161922;
+  border-color: transparent;
+}
+.image_frame .image_wrapper .image_links a.loading:after {
+  border-color: #161922;
+}
+.image_frame .image_wrapper .image_links a .path {
+  stroke: #161922;
+}
+.image_frame .image_wrapper .image_links a.mfn-wish-button.loved .path {
+  fill: #161922;
+  stroke: #161922;
+}
+.image_frame .image_wrapper .image_links a.mfn-wish-button.loved:hover .path {
+  fill: #0089f7;
+  stroke: #0089f7;
+}
+.image_frame .image_wrapper .image_links a:hover {
+  background: #ffffff;
+  color: #0089f7;
+  border-color: transparent;
+}
+.image_frame .image_wrapper .image_links a:hover .path {
+  stroke: #0089f7;
+}
+.image_frame {
+  border-color: #f8f8f8;
+  border-width: medium;
+  padding-top: 20px;
+}
+.image_frame .image_wrapper .mask::after {
+  background: rgba(0, 0, 0, 0.15);
+}
+.counter .icon_wrapper i {
+  color: #7ae7c7;
+}
+.quick_fact .number-wrapper .number {
+  color: #7ae7c7;
+}
+.progress_bars .bars_list li .bar .progress {
+  background-color: #7ae7c7;
+}
+a:hover.icon_bar {
+  color: #7ae7c7 !important;
+}
+a.content_link,
+a:hover.content_link {
+  color: #7ae7c7;
+}
+a.content_link:before {
+  border-bottom-color: #7ae7c7;
+}
+a.content_link:after {
+  border-color: #7ae7c7;
+}
+.mcb-item-contact_box-inner,
+.mcb-item-info_box-inner,
+.column_column .get_in_touch,
+.google-map-contact-wrapper {
+  background-color: #7ae7c7;
+}
+.google-map-contact-wrapper .get_in_touch:after {
+  border-top-color: #7ae7c7;
+}
+.timeline_items li h3:before,
+.timeline_items:after,
+.timeline .post-item:before {
+  border-color: #7ae7c7;
+}
+.how_it_works .image_wrapper .number {
+  background: #7ae7c7;
+}
+.trailer_box .desc .subtitle,
+.trailer_box.plain .desc .line {
+  background-color: #7ae7c7;
+}
+.trailer_box.plain .desc .subtitle {
+  color: #7ae7c7;
+}
+.icon_box .icon_wrapper,
+.icon_box a .icon_wrapper,
+.style-simple .icon_box:hover .icon_wrapper {
+  color: #7ae7c7;
+}
+.icon_box:hover .icon_wrapper:before,
+.icon_box a:hover .icon_wrapper:before {
+  background-color: #7ae7c7;
+}
+.list_item.lists_1 .list_left {
+  background-color: #7ae7c7;
+}
+.list_item .list_left {
+  color: #7ae7c7;
+}
+.feature_list ul li .icon i {
+  color: #7ae7c7;
+}
+.feature_list ul li:hover,
+.feature_list ul li:hover a {
+  background: #7ae7c7;
+}
+.ui-tabs .ui-tabs-nav li a,
+.accordion .question > .title,
+.faq .question > .title,
+table th,
+.fake-tabs > ul li a {
+  color: #444444;
+}
+.ui-tabs .ui-tabs-nav li.ui-state-active a,
+.accordion .question.active > .title > .acc-icon-plus,
+.accordion .question.active > .title > .acc-icon-minus,
+.accordion .question.active > .title,
+.faq .question.active > .title > .acc-icon-plus,
+.faq .question.active > .title,
+.fake-tabs > ul li.active a {
+  color: #7ae7c7;
+}
+.ui-tabs .ui-tabs-nav li.ui-state-active a:after,
+.fake-tabs > ul li a:after,
+.fake-tabs > ul li a .number {
+  background: #7ae7c7;
+}
+body.table-hover:not(.woocommerce-page) table tr:hover td {
+  background: #7ae7c7;
+}
+.pricing-box .plan-header .price sup.currency,
+.pricing-box .plan-header .price > span {
+  color: #7ae7c7;
+}
+.pricing-box .plan-inside ul li .yes {
+  background: #7ae7c7;
+}
+.pricing-box-box.pricing-box-featured {
+  background: #7ae7c7;
+}
+.alert_warning {
+  background: #fef8ea;
+}
+.alert_warning,
+.alert_warning a,
+.alert_warning a:hover,
+.alert_warning a.close .icon {
+  color: #8a5b20;
+}
+.alert_warning .path {
+  stroke: #8a5b20;
+}
+.alert_error {
+  background: #fae9e8;
+}
+.alert_error,
+.alert_error a,
+.alert_error a:hover,
+.alert_error a.close .icon {
+  color: #962317;
+}
+.alert_error .path {
+  stroke: #962317;
+}
+.alert_info {
+  background: #efefef;
+}
+.alert_info,
+.alert_info a,
+.alert_info a:hover,
+.alert_info a.close .icon {
+  color: #57575b;
+}
+.alert_info .path {
+  stroke: #57575b;
+}
+.alert_success {
+  background: #eaf8ef;
+}
+.alert_success,
+.alert_success a,
+.alert_success a:hover,
+.alert_success a.close .icon {
+  color: #3a8b5b;
+}
+.alert_success .path {
+  stroke: #3a8b5b;
+}
+input[type="date"],
+input[type="email"],
+input[type="number"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="text"],
+input[type="url"],
+select,
+textarea,
+.woocommerce .quantity input.qty,
+.wp-block-search input[type="search"],
+.dark input[type="email"],
+.dark input[type="password"],
+.dark input[type="tel"],
+.dark input[type="text"],
+.dark select,
+.dark textarea {
+  color: #5d5650;
+  background-color: rgba(255, 255, 255, 1);
+  border-color: #dcdcdc;
+}
+::-webkit-input-placeholder {
+  color: #5d5650;
+}
+::-moz-placeholder {
+  color: #5d5650;
+}
+:-ms-input-placeholder {
+  color: #5d5650;
+}
+input[type="date"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="text"]:focus,
+input[type="url"]:focus,
+select:focus,
+textarea:focus {
+  color: #5d5650;
+  background-color: rgba(255, 255, 255, 1) !important;
+  border-color: #7ae7c7;
+}
+select:focus {
+  background-color: #ffffff !important;
+}
+:focus::-webkit-input-placeholder {
+  color: #7ae7c7;
+}
+:focus::-moz-placeholder {
+  color: #7ae7c7;
+}
+.select2-container--default .select2-selection--single {
+  background-color: rgba(255, 255, 255, 1);
+  border-color: #dcdcdc;
+}
+.select2-dropdown {
+  background-color: #ffffff;
+  border-color: #dcdcdc;
+}
+.select2-container--default
+  .select2-selection--single
+  .select2-selection__rendered {
+  color: #5d5650;
+}
+.select2-container--default.select2-container--open .select2-selection--single {
+  border-color: #dcdcdc;
+}
+.select2-container--default .select2-search--dropdown .select2-search__field {
+  color: #5d5650;
+  background-color: rgba(255, 255, 255, 1);
+  border-color: #dcdcdc;
+}
+.select2-container--default
+  .select2-search--dropdown
+  .select2-search__field:focus {
+  color: #5d5650;
+  background-color: rgba(255, 255, 255, 1) !important;
+  border-color: #7ae7c7;
+}
+.select2-container--default .select2-results__option[data-selected="true"],
+.select2-container--default
+  .select2-results__option--highlighted[data-selected] {
+  background-color: #7ae7c7;
+  color: black;
+}
+.woocommerce span.onsale,
+.shop_slider .shop_slider_ul li .item_wrapper span.onsale {
+  background-color: #7ae7c7;
+}
+.woocommerce .widget_price_filter .ui-slider .ui-slider-handle {
+  border-color: #7ae7c7 !important;
+}
+.woocommerce
+  div.product
+  div.images
+  .woocommerce-product-gallery__wrapper
+  .zoomImg {
+  background-color: #112429;
+}
+.mfn-wish-button .path {
+  stroke: rgba(0, 0, 0, 0.15);
+}
+.mfn-wish-button:hover .path {
+  stroke: rgba(0, 0, 0, 0.3);
+}
+.mfn-wish-button.loved:not(.link) .path {
+  stroke: rgba(0, 0, 0, 0.3);
+  fill: rgba(0, 0, 0, 0.3);
+}
+.woocommerce div.product div.images .woocommerce-product-gallery__trigger,
+.woocommerce div.product div.images .mfn-wish-button,
+.woocommerce .mfn-product-gallery-grid .woocommerce-product-gallery__trigger,
+.woocommerce .mfn-product-gallery-grid .mfn-wish-button {
+  background-color: #ffffff;
+}
+.woocommerce div.product div.images .woocommerce-product-gallery__trigger:hover,
+.woocommerce div.product div.images .mfn-wish-button:hover,
+.woocommerce
+  .mfn-product-gallery-grid
+  .woocommerce-product-gallery__trigger:hover,
+.woocommerce .mfn-product-gallery-grid .mfn-wish-button:hover {
+  background-color: #ffffff;
+}
+.woocommerce
+  div.product
+  div.images
+  .woocommerce-product-gallery__trigger:before,
+.woocommerce
+  .mfn-product-gallery-grid
+  .woocommerce-product-gallery__trigger:before {
+  border-color: #161922;
+}
+.woocommerce div.product div.images .woocommerce-product-gallery__trigger:after,
+.woocommerce
+  .mfn-product-gallery-grid
+  .woocommerce-product-gallery__trigger:after {
+  background-color: #161922;
+}
+.woocommerce div.product div.images .mfn-wish-button path,
+.woocommerce .mfn-product-gallery-grid .mfn-wish-button path {
+  stroke: #161922;
+}
+.woocommerce
+  div.product
+  div.images
+  .woocommerce-product-gallery__trigger:hover:before,
+.woocommerce
+  .mfn-product-gallery-grid
+  .woocommerce-product-gallery__trigger:hover:before {
+  border-color: #0089f7;
+}
+.woocommerce
+  div.product
+  div.images
+  .woocommerce-product-gallery__trigger:hover:after,
+.woocommerce
+  .mfn-product-gallery-grid
+  .woocommerce-product-gallery__trigger:hover:after {
+  background-color: #0089f7;
+}
+.woocommerce div.product div.images .mfn-wish-button:hover path,
+.woocommerce .mfn-product-gallery-grid .mfn-wish-button:hover path {
+  stroke: #0089f7;
+}
+.woocommerce div.product div.images .mfn-wish-button.loved path,
+.woocommerce .mfn-product-gallery-grid .mfn-wish-button.loved path {
+  stroke: #0089f7;
+  fill: #0089f7;
+}
+
+@media only screen and (min-width: 768px) {
+  .header-semi #Top_bar:not(.is-sticky) {
+    background-color: rgba(24, 47, 53, 0.8);
+  }
+}
+@media only screen and (max-width: 767px) {
+  #Top_bar {
+    background-color: #182f35 !important;
+  }
+  #Action_bar {
+    background-color: #ffffff !important;
+  }
+  #Action_bar .contact_details {
+    color: #222222;
+  }
+  #Action_bar .contact_details a {
+    color: #7ae7c7;
+  }
+  #Action_bar .contact_details a:hover {
+    color: #70ffd5;
+  }
+  #Action_bar .social li a,
+  #Action_bar .social-menu a {
+    color: #bbbbbb !important;
+  }
+  #Action_bar .social li a:hover,
+  #Action_bar .social-menu a:hover {
+    color: #777777 !important;
+  }
+}
+
+
+#slider-1-slide-1-layer-15 span:last-child {
+  font-family: 'Courgette', cursive;
+  font-weight: 400;
+  font-style: normal;
+  font-size: clamp(20px, 4vw, 27px); /* keeps your increased size */
+  line-height: 1.2;
+}
+
+form input.display-none{display:none!important}
+        </style>
+<style>
+        
+  /* Reset wrapper in Offers (removes black outside box) */
+        </style>
+<link href="https://fonts.googleapis.com/css?family=Montserrat%3A400%2C500&amp;display=swap&amp;ver=6.8.2" id="Montserrat-css" media="all" rel="stylesheet" type="text/css"/>
+<link href="wp-content/plugins/be-demo/css/style6c2d.css?ver=6.8.2" id="be-demo-css" media="all" rel="stylesheet" type="text/css"/>
+<script id="jquery-core-js" src="wp-includes/js/jquery/jquery.minf43b.js?ver=3.7.1" type="text/javascript"></script>
+<script id="jquery-migrate-js" src="wp-includes/js/jquery/jquery-migrate.min5589.js?ver=3.4.1" type="text/javascript"></script>
+<link href="wp-json/index.html" rel="https://api.w.org/"/>
+<link href="wp-json/wp/v2/pages/7.json" rel="alternate" title="JSON" type="application/json"/>
+<link href="xmlrpc0db0.php?rsd" rel="EditURI" title="RSD" type="application/rsd+xml"/>
+<meta content="WordPress 6.8.2" name="generator"/>
+<link href="index.html" rel="canonical"/>
+<link href="index.html" rel="shortlink"/>
+<link href="wp-json/oembed/1.0/embede922.json?url=https%3A%2F%2Fthemes.muffingroup.com%2Fbe%2Fcoaching3%2F" rel="alternate" title="oEmbed (JSON)" type="application/json+oembed"/>
+<link href="wp-json/oembed/1.0/embedf989?url=https%3A%2F%2Fthemes.muffingroup.com%2Fbe%2Fcoaching3%2F&amp;format=xml" rel="alternate" title="oEmbed (XML)" type="text/xml+oembed"/>
+<style type="text/css">
+        
+body,td,th {
+	font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+
+        </style>
+<meta content="Powered by Slider Revolution 6.5.20 - responsive, Mobile-Friendly Slider Plugin for WordPress with comfortable drag and drop interface." name="generator"/>
+<script>
+        function setREVStartSize(e){
+			//window.requestAnimationFrame(function() {
+				window.RSIW = window.RSIW===undefined ? window.innerWidth : window.RSIW;
+				window.RSIH = window.RSIH===undefined ? window.innerHeight : window.RSIH;
+				try {
+					var pw = document.getElementById(e.c).parentNode.offsetWidth,
+						newh;
+					pw = pw===0 || isNaN(pw) ? window.RSIW : pw;
+					e.tabw = e.tabw===undefined ? 0 : parseInt(e.tabw);
+					e.thumbw = e.thumbw===undefined ? 0 : parseInt(e.thumbw);
+					e.tabh = e.tabh===undefined ? 0 : parseInt(e.tabh);
+					e.thumbh = e.thumbh===undefined ? 0 : parseInt(e.thumbh);
+					e.tabhide = e.tabhide===undefined ? 0 : parseInt(e.tabhide);
+					e.thumbhide = e.thumbhide===undefined ? 0 : parseInt(e.thumbhide);
+					e.mh = e.mh===undefined || e.mh=="" || e.mh==="auto" ? 0 : parseInt(e.mh,0);
+					if(e.layout==="fullscreen" || e.l==="fullscreen")
+						newh = Math.max(e.mh,window.RSIH);
+					else{
+						e.gw = Array.isArray(e.gw) ? e.gw : [e.gw];
+						for (var i in e.rl) if (e.gw[i]===undefined || e.gw[i]===0) e.gw[i] = e.gw[i-1];
+						e.gh = e.el===undefined || e.el==="" || (Array.isArray(e.el) && e.el.length==0)? e.gh : e.el;
+						e.gh = Array.isArray(e.gh) ? e.gh : [e.gh];
+						for (var i in e.rl) if (e.gh[i]===undefined || e.gh[i]===0) e.gh[i] = e.gh[i-1];
+											
+						var nl = new Array(e.rl.length),
+							ix = 0,
+							sl;
+						e.tabw = e.tabhide>=pw ? 0 : e.tabw;
+						e.thumbw = e.thumbhide>=pw ? 0 : e.thumbw;
+						e.tabh = e.tabhide>=pw ? 0 : e.tabh;
+						e.thumbh = e.thumbhide>=pw ? 0 : e.thumbh;
+						for (var i in e.rl) nl[i] = e.rl[i]<window.RSIW ? 0 : e.rl[i];
+						sl = nl[0];
+						for (var i in nl) if (sl>nl[i] && nl[i]>0) { sl = nl[i]; ix=i;}
+						var m = pw>(e.gw[ix]+e.tabw+e.thumbw) ? 1 : (pw-(e.tabw+e.thumbw)) / (e.gw[ix]);
+						newh =  (e.gh[ix] * m) + (e.tabh + e.thumbh);
+					}
+					var el = document.getElementById(e.c);
+					if (el!==null && el) el.style.height = newh+"px";
+					el = document.getElementById(e.c+"_wrapper");
+					if (el!==null && el) {
+						el.style.height = newh+"px";
+						el.style.display = "block";
+					}
+				} catch(e){
+					console.log("Failure at Presize of Slider:" + e)
+				}
+			//});
+		  };
+        </script>
+</link><meta content="Yangerila is a guitar-focused academy in Delhi NCR offering engaging online classes worldwide. Multi-teacher system, structured grading, Smart Sheets, and performance‑oriented training for rapid progress." name="description"/><meta content="website" property="og:type"/><meta content="Yangerila Creative Studio | Guitar Academy – Online &amp; Delhi NCR" property="og:title"/><meta content="Yangerila is a guitar-focused academy in Delhi NCR offering engaging online classes worldwide. Multi-teacher system, structured grading, Smart Sheets, and performance‑oriented training for rapid progress." property="og:description"/><meta content="wp-content/uploads/2022/04/Yangerila.png" property="og:image"/><meta content="summary_large_image" name="twitter:card"/><meta content="Yangerila Creative Studio | Guitar Academy – Online &amp; Delhi NCR" name="twitter:title"/><meta content="Yangerila is a guitar-focused academy in Delhi NCR offering engaging online classes worldwide. Multi-teacher system, structured grading, Smart Sheets, and performance‑oriented training for rapid progress." name="twitter:description"/><meta content="wp-content/uploads/2022/04/Yangerila.png" name="twitter:image"/><script type="application/ld+json">{"@context":"https://schema.org","@type":"MusicSchool","name":"Yangerila Creative Studio","description":"Yangerila is a guitar-focused academy in Delhi NCR offering engaging online classes worldwide. Multi-teacher system, structured grading, Smart Sheets, and performance‑oriented training for rapid progress.","areaServed":"IN","address":{"@type":"PostalAddress","addressLocality":"Delhi NCR","addressCountry":"IN"},"image":"wp-content/uploads/2022/04/Yangerila.png"}</script><script type="application/ld+json">{"@context":"https://schema.org","@type":"Course","name":"Guitar Courses (Rhythm, Lead, Fingerpicking, Musicianship)","description":"Structured multi-grade guitar curriculum with a multi-teacher system, Smart Sheets, and performance-focused training.","provider":{"@type":"Organization","name":"Yangerila Creative Studio"}}</script></head>
+<body class="home wp-singular page-template-default page page-id-7 wp-theme-betheme template-slider color-custom content-brightness-dark input-brightness-light style-simple button-custom layout-full-width one-page if-zoom no-content-padding no-shadows header-creative header-open sticky-header sticky-tb-color ab-hide subheader-both-center menu-link-color mobile-tb-center mobile-side-slide mobile-mini-mr-lc mobile-header-mini mobile-icon-user-ss mobile-icon-wishlist-ss mobile-icon-search-ss mobile-icon-wpml-ss mobile-icon-action-ss be-page-7 be-reg-26321">
+<!--mfn_hook_top-->
+<!--mfn_hook_top-->
+<div class="" id="Header_creative">
+<a class="creative-menu-toggle" href="#">
+<i aria-label="menu toggle icon" class="icon-menu-fine"></i>
+</a>
+<div class="creative-social">
+<ul aria-label="Social Menu" class="social" role="navigation">
+<li class="skype">
+<a href="#" title="Skype">
+<i aria-label="Skype icon" class="icon-skype"></i>
+</a>
+</li>
+<li class="whatsapp">
+<a href="#" title="WhatsApp">
+<i aria-label="WhatsApp icon" class="icon-whatsapp"></i>
+</a>
+</li>
+<li class="facebook">
+<a href="#" title="Facebook">
+<i aria-label="Facebook icon" class="icon-facebook"></i>
+</a>
+</li>
+<li class="twitter">
+<a href="#" title="Twitter">
+<i aria-label="Twitter icon" class="icon-twitter"></i>
+</a>
+</li>
+</ul>
+</div>
+<div class="creative-wrapper">
+<!--.header_placeholder 4sticky-->
+<div class="header_placeholder"></div>
+<div id="Top_bar">
+<div class="one clearfix">
+<div class="top_bar_left">
+<!--Logo-->
+<div class="logo">
+<a data-height="100" data-padding="50" href="https://www.yangerila.com" id="logo" title="BeCoaching 3 - Betheme">
+<img alt="coaching3" class="logo-main scale-with-grid svg" data-height="" data-no-retina="" data-retina="" src="wp-content/uploads/2022/04/Yangerila.png"/>
+<img alt="coaching3" class="logo-sticky scale-with-grid svg" data-height="" data-no-retina="" data-retina="" src="wp-content/uploads/2022/04/Yangerila.png"/>
+<img alt="coaching3" class="logo-mobile scale-with-grid svg" data-height="" data-no-retina="" data-retina="" src="wp-content/uploads/2022/04/Yangerila.png"/>
+<img alt="coaching3" class="logo-mobile-sticky scale-with-grid svg" data-height="" data-no-retina="" data-retina="" src="wp-content/uploads/2022/04/Yangerila.png"/>
+</a>
+</div>
+<div class="menu_wrapper">
+<nav aria-expanded="false" aria-label="Main Menu" id="menu" role="navigation">
+<ul class="menu menu-main" id="menu-main-menu">
+<li class="menu-item menu-item-type-custom menu-item-object-custom" id="menu-item-66">
+<a href="#Header_wrapper">
+<span>Home</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom" id="menu-item-67">
+<a href="#about">
+<span>About</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom" id="menu-item-68">
+<a href="#courses">
+<span>Our Courses</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom" id="menu-item-69">
+<a href="#admission">
+<span>Admission</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom" id="menu-item-70">
+<a href="#faqs">
+<span>FAQs</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom" id="menu-item-70">
+<a href="#discounts">
+<span>Discounts</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom" id="menu-item-70">
+<a href="#gallery">
+<span>Gallery</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom" id="menu-item-71">
+<a href="#testimonials">
+<span>Testimonials</span>
+</a>
+</li>
+<li class="menu-item menu-item-type-custom menu-item-object-custom" id="menu-item-72">
+<a href="#contact">
+<span>Contact</span>
+</a>
+</li>
+</ul>
+</nav>
+<a class="responsive-menu-toggle" href="#">
+<i aria-label="menu toggle icon" class="icon-menu-fine"></i>
+</a>
+</div>
+<div class="search_wrapper">
+<!--#searchform-->
+<form action="https://www.yangerila.com" id="searchform" method="get">
+<i aria-hidden="true" class="icon_search icon-search-fine"></i>
+<a class="icon_close" href="#">
+<i aria-label="search form close icon" class="icon-cancel-fine"></i>
+</a>
+<input autocomplete="off" class="field" id="s" name="s" placeholder="Enter your search" type="text"/>
+<input class="submit" style="display:none;" type="submit" value=""/>
+</form>
+</div>
+</div>
+<div class="top_bar_right">
+<div class="top_bar_right_wrapper">
+<a class="action_button top-bar-right-button" href="tel:+918076530550">Call me</a>
+</div>
+</div>
+<div class="banner_wrapper">
+<span style="color:#FFF">
+<!--Yangerila Creative Studio
+                                <br />
+                                <br />
+                                India-->
+</span>
+</div>
+</div>
+</div>
+<!--<div class="creative" id="Action_bar">
+                    <ul aria-label="Social Menu" class="social" role="navigation">
+                        <li class="skype">
+                            <a href="#" title="Skype">
+                                <i aria-label="Skype icon" class="icon-skype"></i>
+                            </a>
+                        </li>
+                        <li class="whatsapp">
+                            <a href="#" title="WhatsApp">
+                                <i aria-label="WhatsApp icon" class="icon-whatsapp"></i>
+                            </a>
+                        </li>
+                        <li class="facebook">
+                            <a href="#" title="Facebook">
+                                <i aria-label="Facebook icon" class="icon-facebook"></i>
+                            </a>
+                        </li>
+                        <li class="twitter">
+                            <a href="#" title="Twitter">
+                                <i aria-label="Twitter icon" class="icon-twitter"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>-->
+</div>
+</div>
+<div id="Wrapper">
+<div id="popup-overlay" style="display:none;"></div>
+<div id="course-popup" style="display:flex;">
+<!--display stays flex, but hidden via CSS left:-100%-->
+<div id="popup-content">
+<button id="popup-close" title="Close">x</button>
+<div id="popup-toggle">⮞</div>
+<!--added arrow-->
+<iframe allowtransparency="true" frameborder="0" id="popup-iframe" src=""></iframe>
+</div>
+</div>
+<div class="" id="Header_wrapper">
+<header id="Header">
+<div class="mfn-main-slider mfn-rev-slider">
+<!--START Home Coaching3 REVOLUTION SLIDER 6.5.20-->
+<p class="rs-p-wp-fix"></p>
+<rs-module-wrap data-source="gallery" id="rev_slider_1_1_wrapper" style="visibility:hidden;background:transparent;padding:0;margin:0px auto;margin-top:0;margin-bottom:0;">
+<rs-module data-version="6.5.20" id="rev_slider_1_1" style="">
+<rs-slides>
+<rs-slide data-in="o:0;" data-key="rs-1" data-out="a:false;" data-title="Slide" style="position: absolute;">
+<img alt="Slide" class="rev-slidebg tp-rs-img rs-lazyload" data-lazyload="wp-content/plugins/revslider/public/assets/assets/transparent.png" data-no-retina="" src="wp-content/plugins/revslider/public/assets/assets/dummy.png" title="Home"/>
+<!-- -->
+<rs-layer data-basealign="slide" data-dim="w:691px,691px,420px,420px;h:1112px,1112px,676px,676px;" data-frame_999="o:0;st:w;" data-rsp_ch="on" data-text="w:normal;s:20,20,11,11;l:0,0,14,14;" data-type="image" data-xy="x:c;xo:350px,350px,0,350px;y:m,m,b,b;yo:0,0,-30px,-30px;" id="slider-1-slide-1-layer-0" style="z-index:11;">
+<img alt="" class="tp-rs-img rs-lazyload" data-lazyload="wp-content/uploads/2022/04/coaching3-slider-pic1.webp" data-no-retina="" height="1112" src="wp-content/uploads/2022/04/coaching3-slider-pic1.webp" width="691"/>
+</rs-layer>
+<!-- -->
+<rs-layer data-basealign="slide" data-dim="w:358px,358px,207px,207px;h:93px,93px,53px,53px;" data-frame_0="y:50,50,28,28;" data-frame_1="sp:1000;" data-frame_999="o:0;st:w;" data-rsp_ch="on" data-text="w:normal;s:20,20,11,11;l:0,0,14,14;" data-type="image" data-vbility="t,t,f,t" data-xy="x:c;xo:-440px,-440px,-255px,-255px;yo:640px,640px,417px,417px;" id="slider-1-slide-1-layer-1" style="z-index:20;">
+<img alt="" class="tp-rs-img rs-lazyload" data-lazyload="wp-content/uploads/2022/04/coaching3-slider-pic7.svg" data-no-retina="" src="wp-content/uploads/2022/04/coaching3-slider-pic7.svg"/>
+</rs-layer>
+<!-- -->
+<rs-layer data-basealign="slide" data-dim="w:98px,98px,56px,56px;h:126px,126px,72px,72px;" data-frame_0="y:50,50,28,28;" data-frame_1="sp:1000;" data-frame_999="o:0;st:w;" data-rsp_ch="on" data-text="w:normal;s:20,20,11,11;l:0,0,14,14;" data-type="image" data-vbility="t,t,f,t" data-xy="x:c;xo:-100px,-100px,-57px,-57px;y:b;yo:310px,310px,179px,179px;" id="slider-1-slide-1-layer-2" style="z-index:21;">
+<img alt="" class="tp-rs-img rs-lazyload" data-lazyload="wp-content/uploads/2022/04/coaching3-slider-pic6.svg" data-no-retina="" src="wp-content/uploads/2022/04/coaching3-slider-pic6.svg"/>
+</rs-layer>
+<!-- -->
+<rs-layer data-basealign="slide" data-dim="w:115px,115px,66px,66px;h:108px,108px,62px,62px;" data-frame_999="o:0;st:w;" data-loop_999="sX:0.8;sY:0.8;o:0.8;blu:5;sp:3000;st:800;e:power0.inOut;yys:t;yyf:t;" data-rsp_ch="on" data-text="w:normal;s:20,20,11,11;l:0,0,14,14;" data-type="image" data-xy="x:c;xo:98px,98px,-179px,-179px;yo:183px,183px,397px,397px;" id="slider-1-slide-1-layer-3" style="z-index:22;">
+<img alt="" class="tp-rs-img rs-lazyload" data-lazyload="wp-content/uploads/2022/04/coaching3-slider-pic5.webp" data-no-retina="" height="108" src="wp-content/uploads/2022/04/coaching3-slider-pic5.webp" width="115"/>
+</rs-layer>
+<!-- -->
+<rs-layer data-basealign="slide" data-dim="w:233px,233px,135px,135px;h:219px,219px,126px,126px;" data-frame_999="o:0;st:w;" data-loop_999="sX:0.8;sY:0.8;o:0.8;blu:5;sp:5000;e:power0.inOut;yys:t;yyf:t;" data-rsp_ch="on" data-text="w:normal;s:20,20,11,11;l:0,0,14,14;" data-type="image" data-xy="x:c;xo:517px,517px,96px,96px;y:t,t,b,b;yo:578px,578px,198px,198px;" id="slider-1-slide-1-layer-4" style="z-index:23;">
+<img alt="" class="tp-rs-img rs-lazyload" data-lazyload="wp-content/uploads/2022/04/coaching3-slider-pic5.webp" data-no-retina="" height="108" src="wp-content/uploads/2022/04/coaching3-slider-pic5.webp" width="115"/>
+</rs-layer>
+<!-- -->
+<rs-layer data-basealign="slide" data-dim="w:719px,719px,417px,417px;h:719px,719px,417px,417px;" data-ford="frame_0;frame_1;frame_2;frame_999;" data-frame_2="rZ:100deg;oX:50%;oY:50%;oZ:0;tp:600;st:400;sp:400;" data-frame_999="o:0;st:w;" data-loop_999="rZ:360;sp:99999;" data-rsp_ch="on" data-text="w:normal;s:20,20,11,11;l:0,0,14,14;" data-type="image" data-xy="x:c;xo:350px,350px,0,350px;y:t,t,b,b;yo:150px,150px,200px,200px;" id="slider-1-slide-1-layer-5" style="z-index:8;">
+<img alt="" class="tp-rs-img rs-lazyload" data-lazyload="wp-content/uploads/2022/04/coaching3-slider-pic2.svg" data-no-retina="" src="wp-content/uploads/2022/04/coaching3-slider-pic2.svg"/>
+</rs-layer>
+<!-- -->
+<rs-layer data-frame_999="o:0;st:w;" data-rsp_ch="on" data-text="w:normal;s:20,20,11,11;l:0,0,14,14;" data-type="object" data-xy="xo:50px,50px,28px,28px;yo:50px,50px,28px,28px;" id="slider-1-slide-1-layer-8" style="z-index:10;font-family:'Roboto';"></rs-layer>
+<!-- -->
+<rs-layer data-basealign="slide" data-border="bor:5px,5px,5px,5px;" data-color="#7ae7c7" data-frame_0="y:-50,-50,-28,-28;" data-frame_1="sp:1000;" data-frame_999="o:0;st:w;" data-padding="t:5,5,3,3;r:20,20,11,11;b:5,5,3,3;l:20,20,11,11;" data-rsp_ch="on" data-text="w:normal;s:18,18,24,24;l:28,28,38,38;fw:500;" data-type="text" data-xy="x:c;xo:-550px,-550px,0,-550px;yo:170px,170px,50px,50px;" id="slider-1-slide-1-layer-14" style="z-index:16;background-color:#182f35;font-family:'Space Grotesk';">
+  Welcome to
+</rs-layer>
+<!-- -->
+<rs-layer data-basealign="slide" data-color="#7ae7c7" data-dim="w:600px;" data-frame_0="y:-50,-50,-28,-28;" data-frame_1="sp:1000;" data-frame_999="o:0;st:w;" data-rsp_ch="on" data-text="w:normal;s:70,70,60,60;l:74,74,65,65;fw:500;a:left,left,center,center;" data-type="text" data-xy="x:c;xo:-320px,-320px,0,-320px;yo:230px,230px,100px,100px;" id="slider-1-slide-1-layer-15" style="z-index:18;font-family:'Space Grotesk'; padding-bottom: 0.8rem;">
+<span style="color:#FFF;">YANGERILA</span>
+                                            CREATIVE STUDIO<div style="margin-bottom: -1.55em;"></div>
+<span style="color:#7ae7c7; font-size:clamp(20px, 4vw, 27px); font-weight:normal;">
+                                              A Guitar Speciality Academy
+                                            </span>
+</rs-layer>
+<!-- -->
+<rs-layer class="rev-btn" data-basealign="slide" data-border="bor:70px,70px,70px,70px;" data-color="#262828" data-dim="minh:0px,0px,none,0px;" data-frame_0="x:-50,-50,-28,-28;" data-frame_1="sp:1000;" data-frame_999="o:0;st:w;" data-frame_hover="c:#262828;bgc:#70ffd5;bor:70px,70px,70px,70px;" data-padding="t:10,10,8,8;r:30,30,20,20;b:10,10,8,8;l:30,30,20,20;" data-rsp_ch="on" data-text="w:normal;s:22,22,26,26;l:32;fw:700;" data-type="button" data-xy="x:c;xo:-490px,-490px,0,-490px;yo:470px,470px,289px,580px;" id="slider-1-slide-1-layer-17" style="z-index:19;background-color:#7ae7c7;font-family:'Space Grotesk';cursor:pointer;">
+                                            Know more
+                                            <span style="font-weight:900;">→</span>
+</rs-layer>
+<script>
+                                        
+document.getElementById("slider-1-slide-1-layer-17").addEventListener("click", function() {
+    document.querySelector("#Content").scrollIntoView({ behavior: "smooth" });
+});
+                                        </script>
+<!-- -->
+<rs-layer data-basealign="slide" data-dim="w:706px,706px,409px,409px;h:706px,706px,409px,409px;" data-frame_999="o:0;st:w;" data-rsp_ch="on" data-text="w:normal;s:20,20,11,11;l:0,0,14,14;" data-type="image" data-xy="xo:-349px,-349px,-202px,-202px;yo:-350px,-350px,-202px,-202px;" id="slider-1-slide-1-layer-18" style="z-index:9;">
+<img alt="" class="tp-rs-img rs-lazyload" data-lazyload="wp-content/uploads/2022/04/coaching3-slider-pic3.svg" data-no-retina="" src="wp-content/uploads/2022/04/coaching3-slider-pic3.svg"/>
+</rs-layer>
+<!-- -->
+</rs-slide>
+</rs-slides>
+</rs-module>
+<script>
+                            
+					setREVStartSize({c: 'rev_slider_1_1',rl:[1240,1240,778,778],el:[1120,1120,960,960],gw:[1340,1340,778,778],gh:[1120,1120,960,960],type:'standard',justify:'',layout:'fullwidth',mh:"0"});if (window.RS_MODULES!==undefined && window.RS_MODULES.modules!==undefined && window.RS_MODULES.modules["revslider11"]!==undefined) {window.RS_MODULES.modules["revslider11"].once = false;window.revapi1 = undefined;if (window.RS_MODULES.checkMinimal!==undefined) window.RS_MODULES.checkMinimal()}
+                            </script>
+</rs-module-wrap>
+<!--END REVOLUTION SLIDER-->
+</div>
+</header>
+</div>
+<!--mfn_hook_content_before-->
+<!--mfn_hook_content_before-->
+<div id="Content" role="main">
+<div class="content_wrapper clearfix">
+<div class="sections_group">
+<div class="entry-content" itemprop="mainContentOfPage">
+<div class="mfn-builder-content">
+<div class="section mcb-section mcb-section-jdg78v52p default-width" style="margin-bottom: 5rem;">
+<div class="section_wrapper mcb-section-inner">
+<div class="wrap mcb-wrap mcb-wrap-faqvk8i09 one tablet-one mobile-one clearfix" data-desktop-col="one" data-mobile-col="mobile-one" data-tablet-col="tablet-one" style="">
+<div class="mcb-wrap-inner">
+<div class="column mcb-column mcb-item-3p728qre three-fourth tablet-three-fourth mobile-one column_icon_box_2" style="">
+<div class="mcb-column-inner mcb-item-icon_box_2-inner">
+<div class="mfn-icon-box mfn-icon-box-left mfn-icon-box-mobile-top mfn-icon-box-start mfn-icon-box-mobile-center">
+<div class="icon-wrapper">
+<img alt="fontisto_quote-right" class="scale-with-grid" height="" src="wp-content/uploads/2022/04/fontisto_quote-right.svg" width=""/>
+</div>
+<div class="desc-wrapper">
+<h2 class="title">ALWAYS PERFORMANCE READY</h2>
+<div aria-hidden="true" class="demo-text-wrapper">
+<p class="demo-quote">
+                                                                      Our Motto, <br/> <span class="highlight">"Always Performance Ready"</span> defines our teaching approach, ensuring every student learns with <span class="highlight">performance in mind</span>. From the very first weeks, students are guided to apply what they learn into <span class="highlight">real songs</span> and <span class="highlight">musical pieces</span>. Within just a couple of months, most students can <span class="highlight">confidently perform</span>.
+                                                                    </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section mcb-section mcb-section-c833f11f8 default-width" id="about">
+<div class="section_wrapper mcb-section-inner">
+<div class="wrap mcb-wrap mcb-wrap-ca035eac5 one-second tablet-one-second mobile-one clearfix" data-desktop-col="one-second" data-mobile-col="mobile-one" data-tablet-col="tablet-one-second" style="">
+<div class="mcb-wrap-inner">
+<div class="column mcb-column mcb-item-a620edc94 one tablet-one mobile-one column_image" style="">
+<div class="mcb-column-inner mcb-item-image-inner">
+<div class="image_frame element_classes image_item no_link scale-with-grid alignnone no_border">
+<div class="image_wrapper">
+<!-- overlay heading (add this) -->
+<div class="iframe-heading">
+    Amazing Guitar Courses
+  </div>
+<!-- existing iframe -->
+<iframe class="scale-with-grid" frameborder="0" height="696" src="3dguitar2.html" width="440">
+</iframe>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="wrap mcb-wrap mcb-wrap-d6a755a44 one-second tablet-one-second mobile-one clearfix" data-desktop-col="one-second" data-mobile-col="mobile-one" data-tablet-col="tablet-one-second">
+<div class="mcb-wrap-inner">
+<!-- heading column — unchanged classes/order -->
+<div class="column mcb-column mcb-item-cac643a53 one tablet-one mobile-one column_heading">
+<div class="mcb-column-inner mcb-item-heading-inner">
+<h3 class="title">
+          About the Academy
+          <br/>
+</h3>
+</div>
+</div>
+<!-- content column -->
+<div class="column mcb-column one tablet-one mobile-one column_column">
+<div class="mcb-column-inner">
+<div class="column_attr clearfix">
+<!-- About copy with live-site “Y angerila” styling -->
+<p class="about-lead">
+<span class="drop-y">Y</span><span class="y-tight">angerila</span> Creative Studio is a guitar-specialty academy based in Indirapuram. We offer <strong>carefully designed courses</strong> that cover multiple aspects of guitar playing — from foundational skills to advanced performance.
+          </p>
+<p>
+            Our  <strong>online classes</strong> are redefining the way guitar is taught, combining live interactive sessions, structured courses, and constant teacher support to make learning engaging and effective.
+          </p>
+<p>
+              At <u class="u-acc">Yangerila</u>, we believe music is more than just a talent — it’s a <strong>life skill</strong> that everyone can and should learn. With this vision, we are proud to serve students across India as well as Indian students in <u class="u-acc">12+ countries worldwide.</u>
+</p>
+<!-- Timeline -->
+<h4 class="title">Academy's Timeline</h4>
+<div class="accordion">
+<h3>Past</h3>
+<div class="panel">
+<p>
+                  Yangerila Creative Studio was born from a teacher's vision to make guitar learning more effective, progressive, and enjoyable for everyone. With this vision, our head guitar coach <strong>Micky Dixit</strong>, after teaching at multiple institutes, started his own guitar classes, <strong>'Rockford Academy Of Music'</strong>, in 2011. In 2017, the academy was rebranded as a Guitar Specialty academy, giving birth to the new identity: <strong>'Yangerila Creative Studio'</strong>. With over two decades of teaching experience, we have developed innovative teaching styles and our own courses to ensure students receive the best learning experience and care.
+              </p>
+</div>
+<h3>Present</h3>
+<div class="panel">
+<p>
+                  This year, in 2025, Yangerila brings over 20 years of experience not just in teaching guitar, but in exploring and experimenting to make guitar learning an amazing journey for everyone. We have developed our <strong>'Advanced Modular Grading Structure'</strong>, a structured course system that accelerates learning and helps students make guitar a part of their life. Whether a school student, working professional, or homemaker, our courses are designed so everyone can learn, enjoy, and fall in love with this instrument.
+              </p>
+</div>
+<h3>Future</h3>
+<div class="panel">
+<p>
+                  Looking ahead, we will soon launch our <strong>learning app,</strong> which will not only host classes but also serve as a hub for students and musicians to interact, creating a thriving community of excellence. We are adding more graded courses for different instruments with the finest teachers. In the future, we dream of Yangerila being a <strong>one-stop hub for all music learning,</strong> offering courses for every aspect of music. Our vision is for students to experience the most advanced learning through our <strong>innovative and creative</strong> teaching methods.
+              </p>
+</div>
+</div>
+<!-- /accordion -->
+</div>
+</div>
+</div>
+<!-- /content column -->
+</div>
+</div>
+<div class="desktop-spacer" style="padding:7px 0; display:block;"></div>
+<div class="wrap mcb-wrap mcb-wrap-e3b0f22e4 one tablet-one mobile-one clearfix" data-desktop-col="one" data-mobile-col="mobile-one" data-tablet-col="tablet-one" style=""></div>
+</div>
+</div>
+<div class="section mcb-section mcb-section-9e14e6eec default-width" style="">
+<div class="section_wrapper mcb-section-inner">
+<div class="wrap mcb-wrap mcb-wrap-ae091f3d5 one-second tablet-one-second mobile-one clearfix" data-desktop-col="one-second" data-mobile-col="mobile-one" data-tablet-col="tablet-one-second" style="">
+<div class="mcb-wrap-inner">
+<div class="column mcb-column mcb-item-f37cd21f5 three-fourth tablet-one mobile-one column_image" style="">
+<div class="mcb-column-inner mcb-item-image-inner">
+<div class="image_frame element_classes image_item no_link scale-with-grid alignnone no_border">
+<div class="image_wrapper">
+<img alt="coaching3-pic6" class="scale-with-grid" height="1152" src="wp-content/uploads/2022/04/coaching3-pic6.webp" title="" width="780"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="wrap mcb-wrap mcb-wrap-9d33c5ea7 one-second tablet-one-second mobile-one clearfix" data-desktop-col="one-second" data-mobile-col="mobile-one" data-tablet-col="tablet-one-second" style="margin bottom: 15rem;">
+<div class="mcb-wrap-inner">
+<div class="column mcb-column mcb-item-38eead131 one tablet-one mobile-one column_heading" style="">
+<div class="mcb-column-inner mcb-item-heading-inner">
+<h2 class="title">A NOTE</h2>
+<h4 class="title" style="font-weight: bold; line-height: 0.8;">
+                                                          FROM THE FOUNDER
+                                                        </h4>
+</div>
+</div>
+<div class="column mcb-column mcb-item-646c12ec3 five-sixth tablet-five-sixth mobile-one column_heading" style="">
+<div class="mcb-column-inner mcb-item-heading-inner">
+<div class="column_attr mfn-inline-editor clearfix" style="white-space: normal;
+                                                            overflow-wrap: break-word;
+                                                            word-break: break-word;
+                                                            word-wrap: break-word;
+                                                            box-sizing: border-box;">
+<p style="
+                                                            font-size: clamp(16px, 2.7vw, 18px);
+
+
+                                                            color: #000000;
+                                                            line-height: 1.4;
+                                                            margin: 0;
+                                                            word-wrap: break-word;
+                                                            overflow-wrap: break-word;
+                                                            white-space: normal;
+                                                            text-align: justify;
+                                                            text-justify: inter-word;
+                                                            font-family: Arial, sans-serif;
+                                                          ">  
+                                                            I am among the <span style="color: #11242a; font-weight: bold;">lucky few</span> who have had the opportunity to learn and pursue music since childhood. During this time, I explored multiple instruments—but in 2003, when the <span style="color: #11242a; font-weight: bold;">guitar entered my life</span>, my journey changed forever. In my <span style="color: #11242a; font-weight: bold;">20+ years as a guitarist</span>, I’ve learned, played, performed, and composed—but teaching has always had my heart. Helping students became my true passion. I’ve always had a zeal for improving my lessons and experimenting with new methods to make sure students get the <span style="color: #11242a; font-weight: bold;">best possible learning experience</span>.<br/><br/></p>
+</div>
+</div>
+</div>
+<div class="column mcb-column mcb-item-c97da1201 five-sixth tablet-one mobile-one column_image" style="">
+<div class="mcb-column-inner mcb-item-image-inner">
+<div class="image_frame element_classes image_item no_link scale-with-grid alignnone no_border svg">
+<div class="image_wrapper">
+<!-- replace the <img ...coaching3-pic7.svg> with: -->
+<!-- replace <img ...coaching3-pic7.svg> with: -->
+<div class="founder-quote">
+<em>“Music gave me wings, teaching gave me roots, and Yangerila is where we help students find both.”</em>
+<img alt="" aria-hidden="true" class="founder-quote-badge" decoding="async" loading="lazy" src="wp-content/uploads/2022/04/1.png"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="column mcb-column mcb-item-caeb07b09 one tablet-one mobile-one column_column" style="">
+<div class="mcb-column-inner mcb-item-column-inner">
+<div class="column_attr mfn-inline-editor clearfix" style="">
+<p style="
+                                                            font-size: clamp(16px, 2.7vw, 18px);
+                                                            color: #000000;
+                                                            line-height: 1.4;
+                                                            margin: 0;
+                                                            word-wrap: break-word;
+                                                            overflow-wrap: break-word;
+                                                            white-space: normal;
+                                                            text-align: justify;
+                                                            text-justify: inter-word;
+                                                            font-family: Arial, sans-serif;
+                                                          ">   At Yangerila, <span style="color: #11242a; font-weight: bold;"> with so much experience in teaching</span>, we were able to design unique programs and grading structures that make learning accessible for everyone. Whether you want to simply play your favourite songs, or pursue mastery of the instrument, our teaching style and courses adapt to your needs. Often my students tell me how our classes feel <span style="color: #11242a; font-weight: bold;">lively, interactive, and even more connected</span> than many offline sessions. I am confident in what we’ve created and in what we deliver. Give us the opportunity to serve you, and I promise it will be one of the best decisions in your musical journey.<br/><br/>
+<span style="display: block; margin-top: 1rem; font-weight: bold; font-size: 1.1rem; color: #11242a;">— Micky Dixit</span>
+<span style="display: block; font-style: italic; font-size: 0.95rem; color: #11242a;">Founder &amp; Head Guitar Coach</span>
+<div class="hr_narrow" style="opacity:.35; margin:25px auto; width:60%;"></div>
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Spacer -->
+<div class="hr_narrow" style="opacity:0; margin:25px auto; width:60%;"></div>
+<div class="section mcb-section mcb-section-2198f1ed9 custom-width courses" id="guides" style="">
+<div class="section_wrapper mcb-section-inner">
+<div class="wrap mcb-wrap mcb-wrap-42790f7f0 one tablet-one mobile-one clearfix" data-desktop-col="one" data-mobile-col="mobile-one" data-tablet-col="tablet-one" style="">
+<div class="mcb-wrap-inner">
+<div class="column mcb-column mcb-item-46f5efa84 one tablet-one mobile-one column_heading" id="courses" style="">
+<div class="mcb-column-inner mcb-item-heading-inner">
+<h2 class="title">Our Courses</h2>
+</div>
+</div>
+</div>
+</div>
+<!--Rhythm Grades Card-->
+<div class="wrap mcb-wrap mcb-wrap-9b4d8629f one-fourth tablet-one-second mobile-one clearfix course-card" data-url="hobby-courses-popup.html" style="">
+<div class="mcb-wrap-inner">
+<div class="column mcb-column mcb-item-7eb26cbca one tablet-one mobile-one column_heading" style="">
+<div class="mcb-column-inner mcb-item-heading-inner">
+<h4 class="title course-title">
+                                                            Hobby
+                                                            <br/>
+                                                            Courses
+                                                            <br/>
+                                                             
+                                                        </h4>
+</div>
+</div>
+<div class="column mcb-column mcb-item-a093ee800 one-second tablet-one-second mobile-one-second column_icon_box_2 mfn-item-inline" style="">
+<div class="mcb-column-inner mcb-item-icon_box_2-inner">
+<div class="mfn-icon-box mfn-icon-box-left mfn-icon-box-center">
+<div class="icon-wrapper">
+<i aria-hidden="true" class="fas fa-dot-circle"></i>
+</div>
+<div class="desc-wrapper">
+<h6 class="title course-fee">₹3200/Mo Onwards</h6>
+</div>
+</div>
+</div>
+</div>
+<div class="column mcb-column mcb-item-c97527086 one-second tablet-one-second mobile-one-second column_icon_box_2 mfn-item-inline" style="">
+<div class="mcb-column-inner mcb-item-icon_box_2-inner">
+<div class="mfn-icon-box mfn-icon-box-left mfn-icon-box-center">
+<div class="icon-wrapper">
+<i aria-hidden="true" class="fas fa-dot-circle"></i>
+</div>
+<div class="desc-wrapper">
+<h6 class="title course-students">2500+ Students</h6>
+</div>
+</div>
+</div>
+</div>
+<div class="column mcb-column mcb-item-f148fdd1b one tablet-one mobile-one column_divider" style="">
+<div class="mcb-column-inner mcb-item-divider-inner">
+<hr class="" style="margin:0 auto 20px;background-color:rgba(255,255,255,0.3)"/>
+</div>
+</div>
+<div class="column mcb-column mcb-item-2c0deb57e one tablet-one mobile-one column_column" style="">
+<div class="mcb-column-inner mcb-item-column-inner">
+<div class="column_attr mfn-inline-editor clearfix" style="">
+<div class="progress_icons" data-active="5" data-color="#7AE7C7">
+<span class="progress_icon">
+<i aria-label="progress icon" class="fa fa-star"></i>
+</span>
+<span class="progress_icon">
+<i aria-label="progress icon" class="fa fa-star"></i>
+</span>
+<span class="progress_icon">
+<i aria-label="progress icon" class="fa fa-star"></i>
+</span>
+<span class="progress_icon">
+<i aria-label="progress icon" class="fa fa-star"></i>
+</span>
+<span class="progress_icon">
+<i aria-label="progress icon" class="fa fa-star"></i>
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!--Lead Grades Card-->
+<div class="wrap mcb-wrap mcb-wrap-17d2e868a one-fourth tablet-one-second mobile-one clearfix course-card" data-url="rhythm-grades-popup.html" style="">
+<div class="mcb-wrap-inner">
+<div class="column mcb-column mcb-item-c7229002e one tablet-one mobile-one column_heading" style="">
+<div class="mcb-column-inner mcb-item-heading-inner">
+<h4 class="title course-title">
+                                                            Rhythm
+                                                            <br/>
+                                                            Grades
+                                                            <br/>
+                                                             
+                                                        </h4>
+</div>
+</div>
+<div class="column mcb-column mcb-item-8642b4ae7 one tablet-one-second mobile-one-second column_icon_box_2 mfn-item-inline" style="">
+<div class="mcb-column-inner mcb-item-icon_box_2-inner">
+<div class="mfn-icon-box mfn-icon-box-left mfn-icon-box-center">
+<div class="icon-wrapper">
+<i aria-hidden="true" class="fas fa-dot-circle"></i>
+</div>
+<div class="desc-wrapper">
+<h6 class="title course-fee">₹3200/Mo Onwards</h6>
+</div>
+</div>
+</div>
+</div>
+<div class="column mcb-column mcb-item-8ee64e0a2 one tablet-one-second mobile-one-second column_icon_box_2 mfn-item-inline" style="">
+<div class="mcb-column-inner mcb-item-icon_box_2-inner">
+<div class="mfn-icon-box mfn-icon-box-left mfn-icon-box-center">
+<div class="icon-wrapper">
+<i aria-hidden="true" class="fas fa-dot-circle"></i>
+</div>
+<div class="desc-wrapper">
+<h6 class="title course-students">2000+ Students</h6>
+</div>
+</div>
+</div>
+</div>
+<div class="column mcb-column mcb-item-65933d685 one tablet-one mobile-one column_divider" style="">
+<div class="mcb-column-inner mcb-item-divider-inner">
+<hr class="" style="margin:0 auto 20px;background-color:rgba(255,255,255,0.3)"/>
+</div>
+</div>
+<div class="column mcb-column mcb-item-108523ea6 one tablet-one mobile-one column_column" style="">
+<div class="mcb-column-inner mcb-item-column-inner">
+<div class="column_attr mfn-inline-editor clearfix" style="">
+<div class="progress_icons" data-active="5" data-color="#7AE7C7">
+<span class="progress_icon">
+<i aria-label="progress icon" class="fa fa-star"></i>
+</span>
+<span class="progress_icon">
+<i aria-label="progress icon" class="fa fa-star"></i>
+</span>
+<span class="progress_icon">
+<i aria-label="progress icon" class="fa fa-star"></i>
+</span>
+<span class="progress_icon">
+<i aria-label="progress icon" class="fa fa-star"></i>
+</span>
+<span class="progress_icon">
+<i aria-label="progress icon" class="fa fa-star"></i>
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!--Fingerpicking Grades Card-->
+<div class="wrap mcb-wrap mcb-wrap-94981ae8f one-fourth tablet-one-second mobile-one clearfix course-card" data-url="lead-grades-popup.html" style="">
+<div class="mcb-wrap-inner">
+<div class="column mcb-column mcb-item-2deda20c7 one tablet-one mobile-one column_heading" style="">
+<div class="mcb-column-inner mcb-item-heading-inner">
+<h4 class="title course-title">
+                                                            Lead
+                                                            <br/>
+                                                            Grades
+                                                            <br>
+                                                             
+                                                        </br></h4>
+</div>
+</div>
+<div class="column mcb-column mcb-item-2e5bbc3dd one tablet-one-second mobile-one-second column_icon_box_2 mfn-item-inline" style="">
+<div class="mcb-column-inner mcb-item-icon_box_2-inner">
+<div class="mfn-icon-box mfn-icon-box-left mfn-icon-box-center">
+<div class="icon-wrapper">
+<i aria-hidden="true" class="fas fa-dot-circle"></i>
+</div>
+<div class="desc-wrapper">
+<h6 class="title course-fee">₹3600/Mo Onwards</h6>
+</div>
+</div>
+</div>
+</div>
+<div class="column mcb-column mcb-item-5ff30475b one tablet-one-second mobile-one-second column_icon_box_2 mfn-item-inline" style="">
+<div class="mcb-column-inner mcb-item-icon_box_2-inner">
+<div class="mfn-icon-box mfn-icon-box-left mfn-icon-box-center">
+<div class="icon-wrapper">
+<i aria-hidden="true" class="fas fa-dot-circle"></i>
+</div>
+<div class="desc-wrapper">
+<h6 class="title course-students">1800+ Students</h6>
+</div>
+</div>
+</div>
+</div>
+<div class="column mcb-column mcb-item-5fef546de one tablet-one mobile-one column_divider" style="">
+<div class="mcb-column-inner mcb-item-divider-inner">
+<hr class="" style="margin:0 auto 20px;background-color:rgba(255,255,255,0.3)"/>
+</div>
+</div>
+<div class="column mcb-column mcb-item-c3f4a3a4b one tablet-one mobile-one column_column" style="">
+<div class="mcb-column-inner mcb-item-column-inner">
+<div class="column_attr mfn-inline-editor clearfix" style="">
+<div class="progress_icons" data-active="5" data-color="#7AE7C7">
+<span class="progress_icon">
+<i aria-label="progress icon" class="fa fa-star"></i>
+</span>
+<span class="progress_icon">
+<i aria-label="progress icon" class="fa fa-star"></i>
+</span>
+<span class="progress_icon">
+<i aria-label="progress icon" class="fa fa-star"></i>
+</span>
+<span class="progress_icon">
+<i aria-label="progress icon" class="fa fa-star"></i>
+</span>
+<span class="progress_icon">
+<i aria-label="progress icon" class="fa fa-star"></i>
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="wrap mcb-wrap mcb-wrap-50210e984 one-fourth tablet-one-second mobile-one clearfix course-card" data-url="fingerpicking-grades-popup.html" style="">
+<div class="mcb-wrap-inner">
+<div class="column mcb-column mcb-item-7124155d2 one tablet-one mobile-one column_heading">
+<div class="mcb-column-inner mcb-item-heading-inner">
+<h4 class="title course-title">
+                                                            Finger-picking
+                                                            <br/>
+                                                            Grades
+                                                        </h4>
+</div>
+</div>
+<div class="column mcb-column mcb-item-7820ef8d3 one tablet-one-second mobile-one-second column_icon_box_2 mfn-item-inline" style="">
+<div class="mcb-column-inner mcb-item-icon_box_2-inner">
+<div class="mfn-icon-box mfn-icon-box-left mfn-icon-box-center">
+<div class="icon-wrapper">
+<i aria-hidden="true" class="fas fa-dot-circle"></i>
+</div>
+<div class="desc-wrapper">
+<h6 class="title course-fee">₹3600/Mo Onwards</h6>
+</div>
+</div>
+</div>
+</div>
+<div class="column mcb-column mcb-item-c1c93f31f one tablet-one-second mobile-one-second column_icon_box_2 mfn-item-inline" style="">
+<div class="mcb-column-inner mcb-item-icon_box_2-inner">
+<div class="mfn-icon-box mfn-icon-box-left mfn-icon-box-center">
+<div class="icon-wrapper">
+<i aria-hidden="true" class="fas fa-dot-circle"></i>
+</div>
+<div class="desc-wrapper">
+<h6 class="title course-students">1250+ Students</h6>
+</div>
+</div>
+</div>
+</div>
+<div class="column mcb-column mcb-item-5fef546de one tablet-one mobile-one column_divider" style="">
+<div class="mcb-column-inner mcb-item-divider-inner">
+<hr class="" style="margin:0 auto 20px;background-color:rgba(255,255,255,0.3)"/>
+</div>
+</div>
+<div class="column mcb-column mcb-item-c3f4a3a4b one tablet-one mobile-one column_column" style="">
+<div class="mcb-column-inner mcb-item-column-inner">
+<div class="column_attr mfn-inline-editor clearfix" style="">
+<div class="progress_icons" data-active="5" data-color="#7AE7C7">
+<span class="progress_icon">
+<i aria-label="progress icon" class="fa fa-star"></i>
+</span>
+<span class="progress_icon">
+<i aria-label="progress icon" class="fa fa-star"></i>
+</span>
+<span class="progress_icon">
+<i aria-label="progress icon" class="fa fa-star"></i>
+</span>
+<span class="progress_icon">
+<i aria-label="progress icon" class="fa fa-star"></i>
+</span>
+<span class="progress_icon">
+<i aria-label="progress icon" class="fa fa-star"></i>
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section mcb-section mcb-section-6aa43ef5b default-width" id="admission">
+<div class="section_wrapper mcb-section-inner">
+<div class="wrap mcb-wrap mcb-wrap-290552229 one tablet-one mobile-one clearfix" data-desktop-col="one" data-mobile-col="mobile-one" data-tablet-col="tablet-one">
+<!-- Make the whole card look like the Founder note: mint bg, dark text, rounded -->
+<div class="mcb-wrap-inner" style="background-color:#7ae7c7; color:#000000; border-radius:12px; padding:50px 8% 40px;">
+<!-- Admissions -->
+<div class="mcb-item mcb-item-3p728qre" style="width:100%; text-align:center;">
+<h3 class="title" style="text-align:center; color:#000000; margin-bottom:10px; border-bottom:2px solid #000000; display:inline-block; padding-bottom:6px;">Admissions</h3><br/>
+<div class="demo-text-wrapper" style="max-width:900px; margin:15px auto 0;">
+<p style="font-size: 22px; font-weight: 700;">Interested in joining us?</p>
+<p style="color:#11242a; line-height:1.7;">
+              Simply fill out
+              <a class="btn-cta" href="admin_form.html" onclick="openPopup(this.href); return false;">
+                THIS FORM
+              </a>
+              ,
+              and our Student Relationship Manager (SRM) will contact you to answer all your queries.
+              Every student is given a demo session first, and once that’s complete, your SRM will personally guide you through the admission process.
+            </p>
+</div>
+</div>
+<!-- Spacer -->
+<div class="hr_narrow" style="opacity:0; margin:25px auto; width:60%;"></div>
+<!-- Demo Session -->
+<div class="mcb-item mcb-item-3p728qre" style="width:100%; text-align:center;">
+<h3 class="title" style="text-align:center; color:#000000; margin-bottom:10px; border-bottom:2px solid #000000; display:inline-block; padding-bottom:6px;">Demo Session</h3>
+<div class="demo-text-wrapper" style="max-width:900px; margin:15px auto 0;">
+<p style="color:#11242a; line-height:1.7;">
+              Come and experience our uniquely designed demo session. Unlike typical trial classes, this session gives you a complete overview of guitar types, playing techniques, and all the essential information every beginner should know before starting their journey.
+              <br/><br/>
+              Best of all—it’s completely free and online. You can book your demo session right
+              <a class="btn-cta" href="demo_form.html" onclick="openPopup(this.href); return false;">
+  HERE
+</a>
+.
+            </p>
+</div>
+</div>
+</div><!-- /mcb-wrap-inner -->
+</div>
+</div>
+</div>
+<div style="padding: 20px 0; width: 100%; box-sizing: border-box;"></div>
+<div class="section mcb-section mcb-section-4e54b4332 default-width" id="faqs" style="">
+<div class="section_wrapper mcb-section-inner">
+<div class="wrap mcb-wrap mcb-wrap-9e55fe48e one-fourth tablet-one-second mobile-one-second clearfix service-wrap" data-desktop-col="one-fourth" data-mobile-col="mobile-one-second" data-tablet-col="tablet-one-second" onclick="location.href='#service1'" role="button" style="" tabindex="0">
+<div class="mcb-wrap-inner course-card" data-url="Faq1.html" style="">
+<div class="column mcb-column mcb-item-96eca4efd one tablet-one mobile-one column_icon_box_2" style="">
+<div class="mcb-column-inner mcb-item-icon_box_2-inner">
+<div class="mfn-icon-box mfn-icon-box-left mfn-icon-box-mobile-top mfn-icon-box-center mfn-icon-box-tablet-center mfn-icon-box-mobile-center">
+<div class="icon-wrapper">
+<i aria-hidden="true" class="fas fa-dot-circle"></i>
+</div>
+<div class="desc-wrapper">
+<h3 class="title">
+                                                                    About
+                                                                    <br/>
+                                                                    The
+                                                                    <br/>
+                                                                    Academy
+                                                                </h3>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="wrap mcb-wrap mcb-wrap-6e4c49b84 one-fourth tablet-one-second mobile-one-second clearfix service-wrap" data-desktop-col="one-fourth" data-mobile-col="mobile-one-second" data-tablet-col="tablet-one-second" onclick="location.href='#service2'" role="button" style="" tabindex="0">
+<div class="mcb-wrap-inner course-card" data-url="Faq2.html" style="">
+<div class="column mcb-column mcb-item-c1309295a one tablet-one mobile-one column_icon_box_2" style="">
+<div class="mcb-column-inner mcb-item-icon_box_2-inner">
+<div class="mfn-icon-box mfn-icon-box-left mfn-icon-box-mobile-top mfn-icon-box-center mfn-icon-box-mobile-center">
+<div class="icon-wrapper">
+<i aria-hidden="true" class="fas fa-dot-circle"></i>
+</div>
+<div class="desc-wrapper">
+<h3 class="title">
+                                                                    Courses
+                                                                    <br/>
+                                                                    &amp;
+                                                                    <br>
+                                                                    Features
+                                                                </br></h3>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="wrap mcb-wrap mcb-wrap-755ef6b94 one-fourth tablet-one-second mobile-one-second clearfix service-wrap" data-desktop-col="one-fourth" data-mobile-col="mobile-one-second" data-tablet-col="tablet-one-second" onclick="location.href='#service3'" role="button" style="" tabindex="0">
+<div class="mcb-wrap-inner course-card" data-url="Faq3.html" style="">
+<div class="column mcb-column mcb-item-c4b8abe07 one tablet-one mobile-one column_icon_box_2" style="">
+<div class="mcb-column-inner mcb-item-icon_box_2-inner">
+<div class="mfn-icon-box mfn-icon-box-left mfn-icon-box-mobile-top mfn-icon-box-center mfn-icon-box-mobile-center">
+<div class="icon-wrapper">
+<i aria-hidden="true" class="fas fa-dot-circle"></i>
+</div>
+<div class="desc-wrapper">
+<h3 class="title">
+                                                                    Classes
+                                                                    <br/>
+                                                                    &amp; Online
+                                                                    <br/>
+                                                                    Learning
+                                                                </h3>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="wrap mcb-wrap mcb-wrap-b11940567 one-fourth tablet-one-second mobile-one-second clearfix service-wrap" data-desktop-col="one-fourth" data-mobile-col="mobile-one-second" data-tablet-col="tablet-one-second" onclick="location.href='#service4'" role="button" style="" tabindex="0">
+<div class="mcb-wrap-inner course-card" data-url="Faq4.html" style="">
+<div class="column mcb-column mcb-item-19fae4c47 one tablet-one mobile-one column_icon_box_2" style="">
+<div class="mcb-column-inner mcb-item-icon_box_2-inner">
+<div class="mfn-icon-box mfn-icon-box-left mfn-icon-box-mobile-top mfn-icon-box-center mfn-icon-box-mobile-center">
+<div class="icon-wrapper">
+<i aria-hidden="true" class="fas fa-dot-circle"></i>
+</div>
+<div class="desc-wrapper">
+<h3 class="title">
+                                                                    Fees
+                                                                    <br/>
+                                                                    &amp;
+                                                                    <br/>
+                                                                    Enrollment
+                                                                </h3>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="hr_narrow" style="opacity:0; margin:45px auto; width:60%;"></div>
+<div class="section mcb-section mcb-section-6aa43ef5b default-width" style="">
+<div class="section_wrapper mcb-section-inner">
+<div class="wrap mcb-wrap mcb-wrap-290552229 one tablet-one mobile-one clearfix" data-desktop-col="one" data-mobile-col="mobile-one" data-tablet-col="tablet-one" style="">
+<div class="mcb-wrap-inner">
+<div class="column mcb-column mcb-item-4edcb7b06 two-third tablet-three-fourth mobile-one column_heading" style="">
+<div class="mcb-column-inner mcb-item-heading-inner">
+<h2 class="title">FUN FACT</h2>
+</div>
+</div>
+<div class="column mcb-column mcb-item-b44604f53 two-third tablet-two-third mobile-one column_column" style="">
+<div class="mcb-column-inner mcb-item-column-inner">
+<div class="column_attr mfn-inline-editor clearfix" style="">
+                                                        One of the world’s largest and most reputed guitar brands, Fender, published a study stating that about 90% of guitar students quit playing within their first year. When we read this, it only reinforced how effective our classes are—because at Yangerila, more than 90% of our students don’t quit. Instead, they continue learning and make guitar a part of their lives. This opposite statistic fills us with both happiness and confidence in our teaching methods, our course structure, and our mission.
+                                                    </div>
+</div>
+</div>
+<div class="column mcb-column mcb-item-55b0b6c86 one tablet-one mobile-one column_image" style="">
+<div class="mcb-column-inner mcb-item-image-inner">
+<div class="image_frame element_classes image_item no_link scale-with-grid alignnone no_border svg">
+<div class="image_wrapper">
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!--<div class="section mcb-section mcb-section-f64a4cf44 default-width"   style="" >
+              <div class="section_wrapper mcb-section-inner">
+
+                
+                  <div class="mcb-wrap-inner">
+
+                    <div class="column mcb-column mcb-item-d02549af5 four-fifth tablet-one mobile-one column_heading" style=""><div class="mcb-column-inner mcb-item-heading-inner"><h2>Student's gallery</h2></div></div>
+
+                    <div>
+                      <iframe src="yang_carousel.html" style="width:100vw;aspect-ratio:16/9;min-height:300px;border:none;overflow:hidden;display:block;margin:0 auto;" scrolling="no"></iframe>
+
+                    </div>
+                    
+
+                  </div>
+                
+              </div>
+            </div>-->
+<div class="section mcb-section mcb-section-f64a4cf44 default-width" style="">
+<div class="section_wrapper mcb-section-inner">
+<div class="wrap mcb-wrap mcb-wrap-d7d115bf9 one tablet-one mobile-one clearfix" data-desktop-col="one" data-mobile-col="mobile-one" data-tablet-col="tablet-one" style="">
+<div class="mcb-wrap-inner">
+<div class="column mcb-column mcb-item-a04064c33 two-fifth tablet-one-second mobile-one column_heading" style="">
+<div class="mcb-column-inner mcb-item-heading-inner">
+<h3 style="margin-bottom: -1rem !important;">Some figures</h3>
+<br/><h4 class="title">
+<span style="color:#FFF;"> to showcase our progress towards our goal</span>
+</h4>
+</div>
+</div>
+<div class="column mcb-column mcb-item-1992a866c three-fifth tablet-one-second mobile-one column_progress_bars" style="">
+<div class="mcb-column-inner mcb-item-progress_bars-inner">
+<div class="progress_bars">
+<ul class="bars_list">
+<ul>
+<li>
+<h6>
+                                                                            YEARS OF EXPERIENCE
+                                                                            <span class="label">
+                                                                                20+
+                                                                                <em>YEARS</em>
+</span>
+</h6>
+<div class="bar" style="height:2px">
+<span class="progress" style="width:80%;"></span>
+</div>
+</li>
+<li>
+<h6>
+                                                                            STUDENTS TAUGHT
+                                                                            <span class="label">
+                                                                                4000+
+                                                                                <em>STUDENTS</em>
+</span>
+</h6>
+<div class="bar" style="height:2px">
+<span class="progress" style="width:88%;"></span>
+</div>
+</li>
+<li>
+<h6>
+                                                                            SERVING WORLDWIDE
+                                                                            <span class="label">
+                                                                                12
+                                                                                <em>COUNTRIES</em>
+</span>
+</h6>
+<div class="bar" style="height:2px">
+<span class="progress" style="width:100%;"></span>
+</div>
+</li>
+</ul>
+<ul class="pb-desc"></ul>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!--Your existing courses section-->
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section mcb-section mcb-section-4e54b4343 default-width" id="discounts">
+<div class="section_wrapper mcb-section-inner">
+<!--Coupon 1-->
+<div class="wrap mcb-wrap mcb-wrap-9e55fe48e one-fourth tablet-one-second mobile-one-second clearfix service-wrap" data-desktop-col="one-fourth" data-mobile-col="mobile-one-second" data-tablet-col="tablet-one-second">
+<div class="mcb-wrap-inner course-card" data-url="ref.html">
+<div class="coupon-box-content">
+<h3 class="title">Referral Reward</h3>
+<h5 class="offer">INR 1,000 Amazon Gift Card</h5>
+<span class="valid">Valid till: Always Active</span>
+</div>
+</div>
+</div>
+<!--Coupon 2-->
+<div class="wrap mcb-wrap mcb-wrap-6e4c49b84 one-fourth tablet-one-second mobile-one-second clearfix service-wrap" data-desktop-col="one-fourth" data-mobile-col="mobile-one-second" data-tablet-col="tablet-one-second">
+<div class="mcb-wrap-inner course-card" data-url="uni.html">
+<div class="coupon-box-content">
+<h3 class="title">United We Stand</h3>
+<h5 class="offer">30% OFF – Group Discount</h5>
+<span class="valid">Valid till: Always Active</span>
+</div>
+</div>
+</div>
+<!--Coupon 3-->
+<div class="wrap mcb-wrap mcb-wrap-755ef6b94 one-fourth tablet-one-second mobile-one-second clearfix service-wrap" data-desktop-col="one-fourth" data-mobile-col="mobile-one-second" data-tablet-col="tablet-one-second">
+<div class="mcb-wrap-inner course-card" data-url="sref.html">
+<div class="coupon-box-content">
+<h3 class="title">Student Referral</h3>
+<h5 class="offer">50% OFF – Next Fee</h5>
+<span class="valid">Valid till: Always Active</span>
+</div>
+</div>
+</div>
+<!--Coupon 4-->
+<div class="wrap mcb-wrap mcb-wrap-b11940567 one-fourth tablet-one-second mobile-one-second clearfix service-wrap" data-desktop-col="one-fourth" data-mobile-col="mobile-one-second" data-tablet-col="tablet-one-second">
+<div class="mcb-wrap-inner course-card" data-url="fdis.html">
+<div class="coupon-box-content">
+<h3 class="title">Festive Discount</h3>
+<h5 class="offer">Diwali 2025</h5>
+<span class="valid">Valid till: Limited Period.</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section mcb-section mcb-section-f64a4cf44 default-width" style="">
+<div class="section_wrapper mcb-section-inner">
+<div class="mcb-wrap-inner">
+<div class="column mcb-column mcb-item-d02549af5 four-fifth tablet-one mobile-one column_heading" style="">
+<div class="mcb-column-inner mcb-item-heading-inner">
+<h2 class="title"></h2>
+</div>
+</div>
+<div>
+</div>
+</div>
+</div>
+</div>
+<div class="section mcb-section mcb-section-e270afaab default-width" id="testimonials" style="margin-top: -10rem;">
+<div class="section_wrapper mcb-section-inner">
+<div class="wrap mcb-wrap mcb-wrap-a7c48ce7d one tablet-one mobile-one clearfix" data-desktop-col="one" data-mobile-col="mobile-one" data-tablet-col="tablet-one">
+<div class="mcb-wrap-inner">
+<div class="column mcb-column mcb-item-53bfb6b3d one tablet-one mobile-one column_heading" style="">
+<div class="mcb-column-inner mcb-item-heading-inner">
+<h2 class="title">TESTIMONIALS</h2>
+<br/>
+<h5 style="width: 70%; margin: 0 auto; text-align: center;">
+<span style="color:#FFF;">
+                                        “Out of the hundreds of testimonials we’ve received over the years, we’ve handpicked a few that highlight our core belief — that Yangerila’s classes are for anyone, anywhere.”
+                                    </span>
+</h5>
+<br/>
+</div>
+</div>
+<div class="column mcb-column mcb-item-c9fa4e83f one tablet-one mobile-one column_testimonials" style="">
+<div class="mcb-column-inner mcb-item-testimonials-inner">
+<div class="testimonials_slider">
+<div class="slider_pager slider_images"></div>
+<ul class="testimonials_slider_ul">
+<!--Testimonial 1-->
+<li>
+<div class="single-photo-img">
+<img alt="" class="scale-with-grid wp-post-image" height="100" src="wp-content/uploads/2022/04/1test.jpg" width="100"/>
+</div>
+<div class="bq_wrapper">
+<div class="author">
+<h5>
+<a href="#" target="_blank">Amit Gulati</a>
+</h5>
+<span class="company">Banker - Mati (UP)</span>
+</div>
+<div class="blockquote">
+<span class="mfn-blockquote-icon">
+<i aria-hidden="true" class="icon-quote"></i>
+</span>
+<blockquote>
+                                                        “I work as a banker in a small rural town, and there are no proper music academies around here. I wanted to do something but it was impossible in my area. The online guitar classes helped me fill that gap. Now, I have something to do. I have wanted to learn guitar since college. I am happy to have joined. The group classes make me feel I am a part of something. I surprised my wife with a song when she visited me. It was nice. Honestly, I never thought this would be possible where I live.”
+                                                    </blockquote>
+</div>
+</div>
+<div class="hr_dots">
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+</div>
+</li>
+<!--Testimonial 2-->
+<li>
+<div class="single-photo-img">
+<img alt="" class="scale-with-grid wp-post-image" height="100" src="wp-content/uploads/2022/04/2test.jpg" width="100"/>
+</div>
+<div class="bq_wrapper">
+<div class="author">
+<h5>
+<a href="#" target="_blank">Maj. Amit Bhusan</a>
+</h5>
+<span class="company">Indian Army</span>
+</div>
+<div class="blockquote">
+<span class="mfn-blockquote-icon">
+<i aria-hidden="true" class="icon-quote"></i>
+</span>
+<blockquote>
+                                                        “I wanted my son to enroll for music classes but I had to relocate a lot due to transfers. It didn’t work out for quite some time. Then I got him into Yangerila. That problem is gone. No matter where we move, the classes stay consistent. My son doesn’t lose track anymore, and the backup classes are helpful too. I’m thankful that he can continue his learning smoothly without interruption. He enjoys the classes a lot. Many of my colleagues and their kids have also enrolled. Overall, a very satisfactory experience with Micky Sir and his team.”
+                                                    </blockquote>
+</div>
+</div>
+<div class="hr_dots">
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+</div>
+</li>
+<!--Testimonial 3-->
+<li>
+<div class="single-photo-img">
+<img alt="" class="scale-with-grid wp-post-image" height="100" src="wp-content/uploads/2022/04/3test.jpg" width="100"/>
+</div>
+<div class="bq_wrapper">
+<div class="author">
+<h5>
+<a href="#" target="_blank">Aarav Menon</a>
+</h5>
+<span class="company">Student, Canada</span>
+</div>
+<div class="blockquote">
+<span class="mfn-blockquote-icon">
+<i aria-hidden="true" class="icon-quote"></i>
+</span>
+<blockquote>
+                                                        “I joined during my uni break for about two months when I was visiting home. Didn’t expect much in such a short time, but I had a blast. Since then I have continued my classes even after coming to campus. I tried taking classes here in Canada but couldn’t connect with the western teaching style. The best part about these classes is the progress. Sir really pushed me but in a fun way. I look forward to joining again offline when I get back. But online classes work great too.”
+                                                    </blockquote>
+</div>
+</div>
+<div class="hr_dots">
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+</div>
+</li>
+<!--Testimonial 4-->
+<li>
+<div class="single-photo-img">
+<img alt="" class="scale-with-grid wp-post-image" height="100" src="wp-content/uploads/2022/04/4test.jpg" width="100"/>
+</div>
+<div class="bq_wrapper">
+<div class="author">
+<h5>
+<a href="#" target="_blank">Tanvi Verma</a>
+</h5>
+<span class="company">Working Professional, Bangalore</span>
+</div>
+<div class="blockquote">
+<span class="mfn-blockquote-icon">
+<i aria-hidden="true" class="icon-quote"></i>
+</span>
+<blockquote>
+                                                        “The demo class itself made me realize this was different. Micky Sir actually explained what to expect, the struggles, and how long it might take—it felt honest. Classes are super interactive, and everything’s neatly organized for you. Sheets and recordings are shared. I usually don’t stick to things for long, but here I’ve been consistent. I enjoy taking the guitar on trips and playing for others. I’ve started my own Instagram within a year of joining.”
+                                                    </blockquote>
+</div>
+</div>
+<div class="hr_dots">
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+</div>
+</li>
+<!--Testimonial 5-->
+<li>
+<div class="single-photo-img">
+<img alt="" class="scale-with-grid wp-post-image" height="100" src="wp-content/uploads/2022/04/5test.jpg" width="100"/>
+</div>
+<div class="bq_wrapper">
+<div class="author">
+<h5>
+<a href="#" target="_blank">Saloni Sanjay Khanna</a>
+</h5>
+<span class="company">Homemaker, Lucknow</span>
+</div>
+<div class="blockquote">
+<span class="mfn-blockquote-icon">
+<i aria-hidden="true" class="icon-quote"></i>
+</span>
+<blockquote>
+                                                        “I’m a homemaker in my 30s and had plenty of free time during the day. I wanted to do something creative for myself, and learning guitar was always a dream. Yangerila’s online classes fit perfectly into my routine. I can attend from home and practice in my free time. Now, I can confidently play and sing songs. It feels amazing. I’m also planning to start my son’s classes soon. The easy monthly fee made me comfortable to begin, as I wasn’t sure at first. I’m so glad I joined.”
+                                                    </blockquote>
+</div>
+</div>
+<div class="hr_dots">
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 
+<div class="section mcb-section mcb-section-f64a4cf44 default-width"   style="" >
+              <div class="section_wrapper mcb-section-inner">
+
+                
+                  <div class="mcb-wrap-inner">
+
+                    <div class="column mcb-column mcb-item-d02549af5 four-fifth tablet-one mobile-one column_heading" style=""><div class="mcb-column-inner mcb-item-heading-inner"><h2>Yangerila Blogs</h2></div></div><a class="yc-viewall" href="/blog/" aria-label="View all blogs">View all blogs</a>
+
+                    <div>
+           <iframe 
+  src="/blog/fullscreen-carousel.html"
+  title="Yangerila — Blog Carousel"
+  loading="lazy"
+  referrerpolicy="no-referrer-when-downgrade"
+  allowfullscreen
+  frameborder="0"
+  class="blog-carousel"
+  style="width:100vw; aspect-ratio:16/9; min-height:300px; border:none; overflow:hidden; display:block; margin:0 auto;"
+  scrolling="no">
+</iframe>
+
+                    
+
+                  </div>
+                
+              </div>
+            </div>
+
+<div class="mobile-space-for-contact" aria-hidden="true"></div>-->
+
+
+
+<div class="section mcb-section mcb-section-496605150 default-width" id="contact" style="">
+<div class="section_wrapper mcb-section-inner">
+<div class="wrap mcb-wrap mcb-wrap-f2b7a3f67 one tablet-one mobile-one column-reverse clearfix" data-desktop-col="one" data-mobile-col="mobile-one" data-tablet-col="tablet-one" style="">
+<div class="mcb-wrap-inner">
+<div class="column mcb-column mcb-item-8137a9951 one-third tablet-one-third mobile-one column_image" style="">
+<div class="mcb-column-inner mcb-item-image-inner">
+<div class="image_frame element_classes image_item no_link scale-with-grid alignnone no_border">
+<div class="image_wrapper">
+<!--<h3>
+                                            Head Office
+                                            <br />
+                                        </h3>
+                                        <h4>( Indirapuram )</h4>-->
+<a href="https://maps.google.com/maps?ll=28.637105,77.362145&amp;z=15&amp;t=m&amp;hl=en&amp;gl=IN&amp;mapclient=embed&amp;cid=12354007588594740659" rel="noopener noreferrer" target="_blank">
+<img alt="Map location" class="mapfixed" height="499" src="wp-content/uploads/2022/04/map.jpg" style="border:0;" width="648"/>
+</a>
+</div>
+</div>
+</div>
+</div>
+
+<div class="column mcb-column mcb-item-2e047add7 three-fifth tablet-three-fifth mobile-one column_column" style="">
+<div class="mcb-column-inner mcb-item-column-inner">
+<div class="column_attr mfn-inline-editor clearfix" style="">
+<h4 class="cta-head">
+<span class="ready" style="color:#7ae7c7; font-size: 40px;">Ready!</span><br/>
+<span class="sub" style="color:#FFF;">Let's start your guitar journey.</span>
+</h4>
+<h4>
+<span class="material-symbols-outlined">call</span>
+<a href="tel:+918076530550">+91 8076 530 550</a>
+</h4>
+<h4>
+<span class="material-symbols-outlined">mail</span>
+<a href="mailto:care@yangerila.com">care@yangerila.com</a>
+</h4>
+<h4>
+<span class="material-symbols-outlined">home</span>
+  Indirapuram
+</h4>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="wrap mcb-wrap mcb-wrap-931facc4d one tablet-one mobile-one clearfix" data-desktop-col="one" data-mobile-col="mobile-one" data-tablet-col="tablet-one" style="">
+<div class="mcb-wrap-inner">
+<div class="column mcb-column mcb-item-d07e309cf one-third tablet-one-second mobile-one column_column" style="">
+<div class="mcb-column-inner mcb-item-column-inner">
+<div class="column_attr mfn-inline-editor clearfix" style="">
+<h4 style="color: black !important;">Need help - Let us call you.</h4>
+<div class="form-message"></div>
+<hr class="no_line" style="margin: 0 auto 10px auto"/>
+<hr class="no_line" style="margin: 0 auto 10px auto"/>
+<!--Social media links REMOVED as requested-->
+</div>
+</div>
+</div>
+<div class="column mcb-column mcb-item-4911fa109 two-third tablet-one-second mobile-one column_column" style="">
+<div class="mcb-column-inner mcb-item-column-inner">
+<div class="column_attr mfn-inline-editor clearfix" style="">
+<div class="wpcf7" dir="ltr" id="wpcf7-f62-p7-o2" lang="en-US" role="form">
+<div class="screen-reader-response">
+<p aria-atomic="true" aria-live="polite" role="status"></p>
+<ul></ul>
+</div>
+<form action="#" class="wpcf7-form init" data-status="init" method="post" novalidate="novalidate">
+<div class="column one">
+<span class="wpcf7-form-control-wrap your-name">
+<input aria-invalid="false" aria-required="true" class="wpcf7-form-control wpcf7-text wpcf7-validates-as-required" name="your-name" placeholder="Full Name *" size="40" type="text" value=""/>
+</span>
+</div>
+<div class="column one">
+<span class="wpcf7-form-control-wrap your-phone">
+<input aria-invalid="false" aria-required="true" class="wpcf7-form-control wpcf7-text wpcf7-tel wpcf7-validates-as-required wpcf7-validates-as-tel" name="your-phone" placeholder="Phone number *" size="40" type="tel" value=""/>
+</span>
+</div>
+<div class="column one">
+<span class="wpcf7-form-control-wrap your-dropdown">
+<select aria-invalid="false" aria-required="true" class="wpcf7-form-control wpcf7-select wpcf7-validates-as-required" name="your-dropdown">
+<option disabled="" selected="" value="">Select an option</option>
+<option value="General Inquiry">General Inquiry</option>
+<option value="Enrollment">Enrollment</option>
+<option value="Course Details">Course Details</option>
+</select>
+</span>
+</div>
+<div class="column one">
+<span class="wpcf7-form-control-wrap your-message">
+<textarea aria-invalid="false" class="wpcf7-form-control wpcf7-textarea" cols="40" name="your-message" placeholder="Message" rows="1"></textarea>
+</span>
+</div>
+<div class="column one">
+<input class="wpcf7-form-control has-spinner wpcf7-submit" type="submit" value="Submit"/>
+</div>
+<div aria-hidden="true" class="wpcf7-response-output"></div>
+</form>
+<script>
+// Add this script just before </form>
+                                          // Put this above your submit handler
+
+document.querySelector('.wpcf7-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  e.stopImmediatePropagation(); // ensure no other handler runs
+function getIndianTimestamp() {
+  const date = new Date();
+  const opts = { timeZone: "Asia/Kolkata", day: "numeric", month: "long", year: "numeric", hour: "numeric", minute: "2-digit", hour12: true };
+  const formatted = new Intl.DateTimeFormat("en-GB", opts).format(date);
+  const day = date.toLocaleString("en-IN", { day: "numeric", timeZone: "Asia/Kolkata" });
+  const suffix = (d => (d>3 && d<21) ? "th" : (["st","nd","rd"][d%10-1] || "th"))(parseInt(day, 10));
+  return formatted.replace(day, day + suffix);
+}
+  const submitBtn = document.querySelector('.wpcf7-submit');
+  const msgBox = document.querySelector('.form-message'); // <-- your new div under the heading
+
+  submitBtn.disabled = true;
+
+  // Optional: show "Submitting..." state
+  if (msgBox) {
+    msgBox.textContent = 'Submitting...';
+    msgBox.className = 'form-message'; // reset classes
+  }
+
+  const params = new URLSearchParams();
+  params.append('sheet', 'contact');
+  params.append('fullName', document.querySelector('[name="your-name"]').value);
+  params.append('phoneNumber', document.querySelector('[name="your-phone"]').value);
+  params.append('enquiryType', document.querySelector('[name="your-dropdown"]').value);
+  params.append('message', document.querySelector('[name="your-message"]').value);
+  params.append('timestamp', getIndianTimestamp());
+
+  try {
+    const response = await fetch("https://script.google.com/macros/s/AKfycbxgFBjXemi_Nd99ereTJ52b71eaMl-_y3I3Ypc1zfcTVZrtoQU8fOyW56xN86Ey9w4B/exec", {
+      method: 'POST',
+      body: params
+    });
+
+    if (response.ok) {
+      if (window.parent !== window) {
+        // ===== POPUP: keep your auto-close flow =====
+        document.querySelector('.wrap').innerHTML = `
+          <div style="text-align: center; padding: 60px 20px; color: #4fd1c7;">
+            <h2 style="font-size: 32px; margin-bottom: 12px;">Thank You!</h2>
+            <p style="font-size: 18px;">We have received your enquiry.<br/>Our SRM will call you at the earliest.</p>
+          </div>
+        `;
+        setTimeout(() => {
+          window.parent.postMessage('closePopup', '*');
+          try { window.close(); } catch(e) {}
+        }, 2000);
+      } else {
+        // ===== INLINE: show success in your new div =====
+        if (msgBox) {
+          msgBox.textContent = 'Thank you — we have received your enquiry.';
+          msgBox.className = 'form-message success';
+        }
+      }
+    } else {
+      throw new Error('Submission failed');
+    }
+  } catch (err) {
+    if (msgBox) {
+      msgBox.textContent = 'Error submitting form. Please try again.';
+      msgBox.className = 'form-message error';
+    }
+  } finally {
+    submitBtn.disabled = false;
+  }
+});
+
+
+
+</script>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="section the_content no_content">
+<div class="section_wrapper">
+<div class="the_content_wrapper"></div>
+</div>
+</div>
+<div class="section section-page-footer">
+<div class="section_wrapper clearfix">
+<div class="column one page-pager">
+<div class="mcb-column-inner"></div>
+</div>
+</div>
+</div>
+<!--mfn_hook_content_after-->
+<!--mfn_hook_content_after-->
+<footer class="clearfix" id="Footer" role="contentinfo">
+<div class="widgets_wrapper">
+<div class="container">
+<div class="column mobile-one tablet-one one">
+<div class="mcb-column-inner">
+<aside class="widget widget_block" id="block-5">
+<div class="wp-block-group">
+<div class="wp-block-group__inner-container is-layout-flow wp-block-group-is-layout-flow"></div>
+</div>
+</aside>
+<aside class="widget widget_block" id="block-6">
+<div class="wp-block-group">
+<div class="wp-block-group__inner-container is-layout-flow wp-block-group-is-layout-flow"></div>
+</div>
+</aside>
+</div>
+</div>
+</div>
+</div>
+<div class="footer_copy">
+<div class="container">
+<div class="column one mobile-one">
+<div class="mcb-column-inner">
+<a class="footer_button" href="#" id="back_to_top">
+<i aria-label="Back to top icon" class="icon-up-open-big"></i>
+</a>
+<div class="copyright">
+                                © 2025 Website by
+                                <a href="#" target="_blank">Kumar Sambhav Roy</a>
+                                | All Rights Reserved | Powered by
+                                <a href="https://wordpress.org/" target="_blank">WordPress</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Floating Call Button (phones only) -->
+<a aria-label="Call Yangerila" class="float-call-btn" href="tel:+918076530550">
+<span aria-hidden="true" class="material-symbols-outlined">call</span>
+</a>
+</footer>
+<div id="body_overlay"></div>
+<div aria-expanded="false" aria-label="Responsive menu" class="right dark" data-width="250" id="Side_slide" role="banner">
+<div class="close-wrapper">
+<a class="close" href="#">
+<i aria-label="menu close icon" class="icon-cancel-fine"></i>
+</a>
+</div>
+<div class="extras">
+<a class="action_button" href="tel:+918076530550">Call me</a>
+<div aria-label="Extras menu" class="extras-wrapper" role="navigation"></div>
+</div>
+<div aria-label="Translation Menu" class="lang-wrapper" role="navigation"></div>
+<div aria-label="Main Menu" class="menu_wrapper" role="navigation"></div>
+<ul aria-label="Social Menu" class="social" role="navigation">
+<li class="skype">
+<a href="#" title="Skype">
+<i aria-label="Skype icon" class="icon-skype"></i>
+</a>
+</li>
+<li class="whatsapp">
+<a href="#" title="WhatsApp">
+<i aria-label="WhatsApp icon" class="icon-whatsapp"></i>
+</a>
+</li>
+<li class="facebook">
+<a href="#" title="Facebook">
+<i aria-label="Facebook icon" class="icon-facebook"></i>
+</a>
+</li>
+<li class="twitter">
+<a href="#" title="Twitter">
+<i aria-label="Twitter icon" class="icon-twitter"></i>
+</a>
+</li>
+</ul>
+</div>
+<!--mfn_hook_bottom-->
+<!--mfn_hook_bottom-->
+<script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script>
+        
+			window.RS_MODULES = window.RS_MODULES || {};
+			window.RS_MODULES.modules = window.RS_MODULES.modules || {};
+			window.RS_MODULES.waiting = window.RS_MODULES.waiting || [];
+			window.RS_MODULES.defered = true;
+			window.RS_MODULES.moduleWaiting = window.RS_MODULES.moduleWaiting || {};
+			window.RS_MODULES.type = 'compiled';
+        </script>
+<script type="speculationrules">
+        
+{"prefetch":[{"source":"document","where":{"and":[{"href_matches":"\/be\/coaching3\/*"},{"not":{"href_matches":["\/be\/coaching3\/wp-*.php","\/be\/coaching3\/wp-admin\/*","\/be\/coaching3\/wp-content\/uploads\/*","\/be\/coaching3\/wp-content\/*","\/be\/coaching3\/wp-content\/plugins\/*","\/be\/coaching3\/wp-content\/themes\/betheme\/*","\/be\/coaching3\/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
+        </script>
+<link href="https://fonts.googleapis.com/css?family=Roboto:400%7CSpace+Grotesk:500%2C700&amp;display=swap" media="all" property="stylesheet" rel="stylesheet" type="text/css"/>
+<script>
+        
+		if(typeof revslider_showDoubleJqueryError === "undefined") {function revslider_showDoubleJqueryError(sliderID) {console.log("You have some jquery.js library include that comes after the Slider Revolution files js inclusion.");console.log("To fix this, you can:");console.log("1. Set 'Module General Options' -> 'Advanced' -> 'jQuery & OutPut Filters' -> 'Put JS to Body' to on");console.log("2. Find the double jQuery.js inclusion and remove it");return "Double Included jQuery Library";}}
+        </script>
+<link href="wp-content/uploads/betheme/css/post-74e8d.css?ver=1754373369" id="mfn-post-local-styles-fb83090b6-css" media="all" rel="stylesheet" type="text/css"/>
+<link href="wp-content/plugins/revslider/public/assets/css/rs6f225.css?ver=6.5.20" id="rs-plugin-settings-css" media="all" rel="stylesheet" type="text/css"/>
+<style id="rs-plugin-settings-inline-css" type="text/css">
+        
+		@font-face{font-family:'Material Icons'; font-style:normal; font-weight:400;  src:url(http://fonts.gstatic.com/s/materialicons/v41/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2) format('woff2')}rs-module .material-icons{font-family:'Material Icons'; font-weight:normal; font-style:normal;font-size:inherit; display:inline-block;  text-transform:none; letter-spacing:normal; word-wrap:normal; white-space:nowrap; direction:ltr; vertical-align:top; line-height:inherit;  font-feature-settings:'liga'; -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; -moz-osx-font-smoothing:grayscale}
+        </style>
+<script id="wp-polyfill-js" src="wp-includes/js/dist/vendor/wp-polyfill.min2c7c.js?ver=3.15.0" type="text/javascript"></script>
+<script async="" defer="" id="tp-tools-js" src="wp-content/plugins/revslider/public/assets/js/rbtools.min8331.js?ver=6.5.18" type="text/javascript"></script>
+<script async="" defer="" id="revmin-js" src="wp-content/plugins/revslider/public/assets/js/rs6.minf225.js?ver=6.5.20" type="text/javascript"></script>
+<script id="jquery-ui-core-js" src="wp-includes/js/jquery/ui/core.minb37e.js?ver=1.13.3" type="text/javascript"></script>
+<script id="jquery-ui-tabs-js" src="wp-includes/js/jquery/ui/tabs.minb37e.js?ver=1.13.3" type="text/javascript"></script>
+<script id="mfn-plugins-js-extra" type="text/javascript">
+        
+/* <![CDATA[ */
+var mfn = {"mobileInit":"1240","parallax":"translate3d","responsive":"1","sidebarSticky":"","lightbox":{"disable":false,"disableMobile":false,"title":false},"slider":{"blog":0,"clients":0,"offer":0,"portfolio":0,"shop":0,"slider":0,"testimonials":0},"livesearch":{"minChar":3,"loadPosts":10,"translation":{"pages":"Pages","categories":"Categories","portfolio":"Portfolio","post":"Posts","products":"Products"}},"home_url":"\/be\/coaching3","site_url":"https:\/\/themes.muffingroup.com\/be\/coaching3","ajax":"https:\/\/themes.muffingroup.com\/be\/coaching3\/wp-admin\/admin-ajax.php"};
+/* ]]> */
+        </script>
+<script id="mfn-plugins-js" src="wp-content/themes/betheme/js/plugins3eb3.js?ver=26.3.2.1" type="text/javascript"></script>
+<script id="mfn-menu-js" src="wp-content/themes/betheme/js/menu3eb3.js?ver=26.3.2.1" type="text/javascript"></script>
+<script id="mfn-animations-js" src="wp-content/themes/betheme/assets/animations/animations.min3eb3.js?ver=26.3.2.1" type="text/javascript"></script>
+<script id="mfn-jplayer-js" src="wp-content/themes/betheme/assets/jplayer/jplayer.min3eb3.js?ver=26.3.2.1" type="text/javascript"></script>
+<script id="mfn-parallax-js" src="wp-content/themes/betheme/js/parallax/translate3d3eb3.js?ver=26.3.2.1" type="text/javascript"></script>
+<script id="mfn-scripts-js" src="wp-content/themes/betheme/js/scripts3eb3.js?ver=26.3.2.1" type="text/javascript"></script>
+<script id="mfn-nicescroll-js" src="wp-content/plugins/be-demo/js/nicescroll.min6c2d.js?ver=6.8.2" type="text/javascript"></script>
+<script id="be-demo-js" src="wp-content/plugins/be-demo/js/scripts6c2d.js?ver=6.8.2" type="text/javascript"></script>
+<script id="rs-initialisation-scripts">
+        
+		var	tpj = jQuery;
+
+		var	revapi1;
+
+		if(window.RS_MODULES === undefined) window.RS_MODULES = {};
+		if(RS_MODULES.modules === undefined) RS_MODULES.modules = {};
+		RS_MODULES.modules["revslider11"] = {once: RS_MODULES.modules["revslider11"]!==undefined ? RS_MODULES.modules["revslider11"].once : undefined, init:function() {
+			window.revapi1 = window.revapi1===undefined || window.revapi1===null || window.revapi1.length===0  ? document.getElementById("rev_slider_1_1") : window.revapi1;
+			if(window.revapi1 === null || window.revapi1 === undefined || window.revapi1.length==0) { window.revapi1initTry = window.revapi1initTry ===undefined ? 0 : window.revapi1initTry+1; if (window.revapi1initTry<20) requestAnimationFrame(function() {RS_MODULES.modules["revslider11"].init()}); return;}
+			window.revapi1 = jQuery(window.revapi1);
+			if(window.revapi1.revolution==undefined){ revslider_showDoubleJqueryError("rev_slider_1_1"); return;}
+			revapi1.revolutionInit({
+					revapi:"revapi1",
+					DPR:"dpr",
+					visibilityLevels:"1240,1240,778,778",
+					gridwidth:"1340,1340,778,778",
+					gridheight:"1120,1120,960,960",
+					lazyType:"smart",
+					perspective:600,
+					perspectiveType:"global",
+					editorheight:"1120,768,960,720",
+					responsiveLevels:"1240,1240,778,778",
+					progressBar:{disableProgressBar:true},
+					navigation: {
+						onHoverStop:false
+					},
+					viewPort: {
+						global:true,
+						globalDist:"-200px",
+						enable:false
+					},
+					fallbacks: {
+						allowHTML5AutoPlayOnAndroid:true
+					},
+			});
+			
+		}} // End of RevInitScript
+
+		if (window.RS_MODULES.checkMinimal!==undefined) { window.RS_MODULES.checkMinimal();};
+        </script>
+<script>
+// === Popup: fixed to the right of the 250px menu, above content, blur OK, no background scroll ===
+const popup     = document.getElementById('course-popup');
+const overlay   = document.getElementById('popup-overlay');   // already in your HTML
+const iframe    = document.getElementById('popup-iframe');
+const closeBtn  = document.getElementById('popup-close');
+const toggleBtn = document.getElementById('popup-toggle');
+
+let isVisible = false;
+let savedScrollY = 0;
+
+// 0) Move overlay & popup to <body> so they escape any stacking contexts below (no HTML edits needed)
+(function relocateToBody() {
+  if (overlay && overlay.parentElement !== document.body) document.body.appendChild(overlay);
+  if (popup   && popup.parentElement   !== document.body) document.body.appendChild(popup);
+})();
+
+// helpers — prevent layout shift when we hide the scrollbar
+function scrollbarWidth() { return window.innerWidth - document.documentElement.clientWidth; }
+function restoreScrollSoon(y) {
+  window.scrollTo(0, y);
+  requestAnimationFrame(() => window.scrollTo(0, y));
+}
+
+// Guards: block wheel/touch that start outside the popup; allow iframe to handle its own scroll
+const blockOutsidePopup = (e) => {
+  if (!isVisible) return;
+  const content = document.getElementById('popup-content');
+  if (!content.contains(e.target)) { e.preventDefault(); e.stopPropagation(); }
+};
+
+// Proxy wheel/touch on the blurred “glass” to the iframe so users can scroll there too
+let touchStartY = null;
+const proxyWheelToIframe = (e) => {
+  if (!isVisible) return;
+  const content = document.getElementById('popup-content');
+  if (content.contains(e.target) && e.target !== iframe) {
+    e.preventDefault();
+    try { iframe.contentWindow?.scrollBy({ top: e.deltaY, left: 0, behavior: 'auto' }); } catch {}
+  }
+};
+const onGlassTouchStart = (e) => {
+  if (!isVisible) return;
+  const content = document.getElementById('popup-content');
+  if (content.contains(e.target) && e.target !== iframe) touchStartY = e.touches[0].clientY;
+};
+const onGlassTouchMove = (e) => {
+  if (!isVisible || touchStartY === null) return;
+  const content = document.getElementById('popup-content');
+  if (content.contains(e.target) && e.target !== iframe) {
+    const dy = touchStartY - e.touches[0].clientY;
+    e.preventDefault();
+    try { iframe.contentWindow?.scrollBy({ top: dy, left: 0, behavior: 'auto' }); } catch {}
+    touchStartY = e.touches[0].clientY;
+  }
+};
+const onGlassTouchEnd = () => { touchStartY = null; };
+
+function enableGuards() {
+  document.addEventListener('wheel',     blockOutsidePopup, { passive: false });
+  document.addEventListener('touchmove', blockOutsidePopup, { passive: false });
+
+  const content = document.getElementById('popup-content');
+  content.addEventListener('wheel',      proxyWheelToIframe, { passive: false });
+  content.addEventListener('touchstart', onGlassTouchStart,  { passive: true  });
+  content.addEventListener('touchmove',  onGlassTouchMove,   { passive: false });
+  content.addEventListener('touchend',   onGlassTouchEnd,    { passive: true  });
+}
+function disableGuards() {
+  document.removeEventListener('wheel',     blockOutsidePopup);
+  document.removeEventListener('touchmove', blockOutsidePopup);
+
+  const content = document.getElementById('popup-content');
+  content.removeEventListener('wheel',      proxyWheelToIframe);
+  content.removeEventListener('touchstart', onGlassTouchStart);
+  content.removeEventListener('touchmove',  onGlassTouchMove);
+  content.removeEventListener('touchend',   onGlassTouchEnd);
+}
+
+// Keyboard guard: stop page scrolling via keys when popup is open
+const keysThatScroll = new Set(['Space','PageUp','PageDown','Home','End','ArrowUp','ArrowDown']);
+document.addEventListener('keydown', (e) => {
+  if (!isVisible) return;
+  if (keysThatScroll.has(e.code)) {
+    const content = document.getElementById('popup-content');
+    if (!content.contains(document.activeElement)) e.preventDefault();
+  }
+});
+
+// Open / Close (lock html/body overflow — no position:fixed on body, so blur stays perfect)
+function openPopup(url) {
+  if (url) iframe.src = url;
+
+  savedScrollY = window.scrollY || document.documentElement.scrollTop;
+
+  // lock scroll, compensate scrollbar, and restore scroll position (prevents jumps)
+  const sw = scrollbarWidth();
+  if (sw > 0) {
+    document.documentElement.style.paddingRight = sw + 'px';
+    document.body.style.paddingRight = sw + 'px';
+  }
+  document.documentElement.style.overflow = 'hidden';
+  document.body.style.overflow = 'hidden';
+  restoreScrollSoon(savedScrollY);
+
+  // show overlay and guards, then slide in the popup
+  overlay.style.display = 'block';
+  enableGuards();
+
+  popup.classList.add('active');
+  isVisible = true;
+
+  // focus iframe so keyboard scrolling goes there
+  setTimeout(() => { try { iframe.focus(); iframe.contentWindow?.focus(); } catch {} }, 0);
+}
+
+function closePopup() {
+  popup.classList.remove('active');
+  popup.addEventListener('transitionend', () => {
+    iframe.src = '';
+
+    // unlock & remove compensation
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+    document.documentElement.style.paddingRight = '';
+    document.body.style.paddingRight = '';
+    restoreScrollSoon(savedScrollY);
+
+    disableGuards();
+    overlay.style.display = 'none';
+  }, { once: true });
+  isVisible = false;
+}
+
+// Buttons / Toggle
+closeBtn.addEventListener('click', closePopup);
+toggleBtn.addEventListener('click', () => (isVisible ? closePopup() : openPopup(iframe.src || '')));
+
+// Course cards trigger (ignore href="#")
+document.querySelectorAll('.course-card').forEach(card => {
+  card.style.cursor = 'pointer';
+  card.addEventListener('click', (e) => {
+    const a = e.target.closest('a');
+    if (a && (a.getAttribute('href') || '').trim().startsWith('#')) { e.preventDefault(); e.stopPropagation(); }
+    const url = card.getAttribute('data-url');
+    if (url) openPopup(url);
+  });
+});
+
+// Auto-close from inside the iframe (postMessage)
+window.addEventListener('message', (event) => { if (event.data === 'closePopup') closePopup(); });
+
+// Refocus iframe after it navigates
+iframe.addEventListener('load', () => { try { iframe.focus(); iframe.contentWindow?.focus(); } catch {} });
+</script>
+<script>
+        
+document.querySelectorAll(".accordion h3").forEach(header => {
+  header.addEventListener("click", () => {
+    const isActive = header.classList.contains("active");
+    
+    // Close all
+    document.querySelectorAll(".accordion h3").forEach(h => h.classList.remove("active"));
+    document.querySelectorAll(".accordion .panel").forEach(p => p.classList.remove("open"));
+    
+    // If it wasn't active, open it
+    if (!isActive) {
+      header.classList.add("active");
+      header.nextElementSibling.classList.add("open");
+    }
+  });
+});
+        </script>
+<script>
+        
+/**
+ * Set dynamic offer expiry dates
+ * @param {string} elementId - The ID of the element where date should be shown
+ * @param {number} monthsToAdd - Number of months from now
+ */
+function setOfferDate(elementId, monthsToAdd) {
+  const now = new Date();
+  const target = new Date(now.getFullYear(), now.getMonth() + monthsToAdd + 1, 0); 
+  // "+1, 0" trick gets the last day of the month
+
+  // Format: e.g. "Dec 31, 2024"
+  const formatted = target.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric"
+  });
+
+  const el = document.getElementById(elementId);
+  if (el) el.textContent = formatted;
+}
+
+// Example usage:
+// Offer 2 → 3 months from now (end of that month)
+setOfferDate("offer2-date", 3);
+
+// Offer 4 → 6 months from now
+setOfferDate("offer4-date", 6);
+
+// You can call this for as many offers as needed
+        </script>
+<script>
+        
+// Add keyboard accessibility
+document.addEventListener('keydown', function(e) {
+    if (e.target.classList.contains('service-wrap') && (e.key === 'Enter' || e.key === ' ')) {
+        e.preventDefault();
+        e.target.click();
+    }
+});
+
+<script>
+// Fallback JavaScript for browsers that don't support CSS :has()
+document.addEventListener('DOMContentLoaded', function() {
+    const section = document.querySelector('.mcb-section-4e54b4332');
+    const serviceWraps = document.querySelectorAll('.service-wrap');
+    
+    serviceWraps.forEach((wrap, index) => {
+        wrap.addEventListener('mouseenter', function() {
+            const classNames = ['hover-academy', 'hover-courses', 'hover-classes', 'hover-fees'];
+            section.classList.add(classNames[index]);
+        });
+        
+        wrap.addEventListener('mouseleave', function() {
+            section.classList.remove('hover-academy', 'hover-courses', 'hover-classes', 'hover-fees');
+        });
+    });
+});
+
+
+  function equalizeCourseCardHeights() {
+    const cards = document.querySelectorAll('.course-card');
+    let maxHeight = 0;
+
+    // Reset heights to auto first
+    cards.forEach(card => {
+      card.style.height = 'auto';
+    });
+
+    // Find max height
+    cards.forEach(card => {
+      const cardHeight = card.offsetHeight;
+      if (cardHeight > maxHeight) {
+        maxHeight = cardHeight;
+      }
+    });
+
+    // Set all cards to max height
+    cards.forEach(card => {
+      card.style.height = maxHeight + 'px';
+    });
+  }
+
+  window.addEventListener('load', equalizeCourseCardHeights);
+  window.addEventListener('resize', equalizeCourseCardHeights);
+
+
+        </script>
+<script>
+  // ✅ Listen for "closePopup" messages from child forms
+  window.addEventListener("message", function (event) {
+    if (event.data === "closePopup") {
+      closePopup(); // call your existing close function
+    }
+  });
+</script>
+</body>
+<!--Mirrored from themes.muffingroup.com/be/coaching3/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 05 Aug 2025 05:58:08 GMT-->
+</html>
