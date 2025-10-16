@@ -2292,12 +2292,22 @@ html { overflow-y: scroll; }
   min-height: 300px;
 }
 
-/* On phone screens, double the height */
-@media (max-width: 768px) {
+/* === Responsive .blog-carousel height === */
+
+/* Tablet: keep it 600px tall */
+@media (max-width: 1024px) and (min-width: 769px) {
   .blog-carousel {
-    aspect-ratio: auto;        /* disable fixed ratio */
-    min-height: 600px;         /* double the default height */
-    height: 600px;             /* optional explicit height */
+    aspect-ratio: auto !important;  /* allow flexible height */
+    min-height: 600px !important;
+    height: 600px !important;
   }
 }
 
+/* Phone: make it taller (900px) */
+@media (max-width: 768px) {
+  .blog-carousel {
+    aspect-ratio: auto !important;
+    min-height: 700px !important;
+    height: 900px !important;
+  }
+}
