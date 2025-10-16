@@ -2307,7 +2307,7 @@ html { overflow-y: scroll; }
 @media (max-width: 768px) {
   .blog-carousel {
     aspect-ratio: auto !important;
-    min-height: 700px !important;
-    height: 700px !important;
+    min-height: 750px !important;
+    height: 750px !important;
   }
 }
