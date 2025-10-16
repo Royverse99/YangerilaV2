@@ -2277,5 +2277,10 @@
 html { overflow-y: scroll; }
 
 
-.yc-viewall{color:var(--accent); text-decoration:none; font-weight:800; border:1px solid var(--accent); padding:8px 12px; border-radius:10px}
+.yc-viewall{text-decoration:none; font-weight:800; border:1px solid var(--accent); padding:22px 26px; border-radius:10px}
 .yc-viewall:hover{background:rgba(122,231,199,.12)}
+@media (max-width: 768px) {
+  .yc-viewall {
+    margin-top: 15px;
+  }
+}
