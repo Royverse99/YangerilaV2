@@ -1,49 +1,550 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Yangerila — Blog Carousel</title>
-  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="./fullscreen-carousel.css">
-  <meta name="theme-color" content="#0d1e20">
-</head>
-<body class="yc-fullscreen">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog Carousel</title>
+<style>
+:root{
+  --accent:#7ae7c7; 
+  --accent-2:#35cbbb;
+  --bg1:#112429;
+  --text:#e6fffb; 
+  --muted:#b7deda;
+  --dark:#0a1517;
+}
 
-  <!-- Header -->
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg1);
+  padding: 40px 20px;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+}
+
+#yc-fs-carousel {
+  width: 100%;
+  max-width: 1200px;
+  position: relative;
+}
+
+.yc-carousel-box {
+  background: var(--accent);
+  border-radius: 20px;
+  padding: 0;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  position: relative;
+  overflow: hidden;
+  min-height: 500px;
+}
+
+#ycDots {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+}
+
+.yc-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #000;
+  opacity: 0.3;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  padding: 0;
+}
+
+.yc-dot.active {
+  opacity: 1;
+  transform: scale(1.3);
+}
+
+.yc-dot:hover {
+  opacity: 0.7;
+}
+
+#ycTrack {
+  display: flex;
+  transition: none;
+  position: relative;
+}
+
+.yc-card {
+  display: flex;
+  min-height: 500px;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeIn 0.6s ease forwards;
+}
+
+.yc-card.active {
+  display: flex;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.yc-cover {
+  flex: 0 0 50%;
+  width: 50%;
+  height: 100%;
+  min-height: 500px;
+  object-fit: cover;
+  display: block;
+  background: linear-gradient(135deg, #5fc9a8, #4ab392);
+}
+
+.yc-cover:not(img) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 64px;
+}
+
+.yc-body {
+  flex: 0 0 50%;
+  width: 50%;
+  padding: 50px 40px;
+  color: var(--dark);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow-y: auto;
+}
+
+.yc-title {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  line-height: 1.2;
+  color: var(--dark);
+}
+
+.yc-meta {
+  font-size: 14px;
+  color: #1a3a3f;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+
+.yc-excerpt {
+  font-size: 17px;
+  line-height: 1.7;
+  margin-bottom: 24px;
+  color: #0d2125;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 6;
+  -webkit-box-orient: vertical;
+}
+
+.yc-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.yc-tag {
+  background: rgba(17, 36, 41, 0.15);
+  color: var(--dark);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+#ycReadbar {
+  margin-top: auto;
+}
+
+#ycReadbar[hidden] {
+  display: none;
+}
+
+.yc-read {
+  background: var(--bg1);
+  color: var(--accent);
+  border: none;
+  padding: 16px 36px;
+  border-radius: 10px;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.yc-read:hover {
+  background: #0a1517;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.yc-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(122, 231, 199, 0.9);
+  color: var(--bg1);
+  border: none;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  font-size: 28px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.yc-nav:hover {
+  background: var(--accent);
+  transform: translateY(-50%) scale(1.1);
+  box-shadow: 0 4px 12px rgba(122, 231, 199, 0.5);
+}
+
+.yc-prev {
+  left: -75px;
+}
+
+.yc-next {
+  right: -75px;
+}
+
+.yc-status {
+  text-align: center;
+  color: var(--dark);
+  font-size: 20px;
+  padding: 80px 40px;
+}
+
+/* Responsive Design */
+@media (max-width: 1300px) {
+  .yc-prev {
+    left: 15px;
+  }
   
+  .yc-next {
+    right: 15px;
+  }
+}
 
-  <!-- Fullscreen Carousel -->
-  <main id="yc-fs-carousel" class="yc-fs">
-    <div class="yc-track-wrap">
-      <button class="yc-nav yc-prev" aria-label="Previous slide">
-        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none"><path stroke-width="2" d="M15 6l-6 6 6 6"/></svg>
-      </button>
+@media (max-width: 968px) {
+  .yc-body {
+    padding: 40px 35px;
+  }
+  
+  .yc-title {
+    font-size: 32px;
+  }
+  
+  .yc-excerpt {
+    font-size: 16px;
+    -webkit-line-clamp: 5;
+  }
+  
+  .yc-nav {
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+  }
+}
 
-      <ul class="yc-track" id="ycTrack">
-        <!-- Slides injected by JS -->
-        <li class="yc-status">Loading latest posts…</li>
-      </ul>
+@media (max-width: 768px) {
+  body {
+    padding: 20px 15px;
+  }
+  
+  .yc-carousel-box {
+    min-height: auto;
+  }
+  
+  .yc-card {
+    flex-direction: column;
+    min-height: auto;
+  }
+  
+  .yc-cover {
+    flex: 0 0 auto;
+    width: 100%;
+    height: 300px;
+    min-height: 300px;
+  }
+  
+  .yc-body {
+    flex: 0 0 auto;
+    width: 100%;
+    padding: 35px 30px;
+  }
+  
+  .yc-title {
+    font-size: 28px;
+  }
+  
+  .yc-excerpt {
+    font-size: 15px;
+    -webkit-line-clamp: 4;
+  }
+  
+  #ycDots {
+    top: 15px;
+    right: 15px;
+    gap: 8px;
+  }
+  
+  .yc-dot {
+    width: 12px;
+    height: 12px;
+  }
+  
+  .yc-nav {
+    width: 45px;
+    height: 45px;
+    font-size: 22px;
+  }
+  
+  .yc-prev {
+    left: 10px;
+  }
+  
+  .yc-next {
+    right: 10px;
+  }
+}
 
-      <button class="yc-nav yc-next" aria-label="Next slide">
-        <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" fill="none"><path stroke-width="2" d="M9 6l6 6-6 6"/></svg>
-      </button>
-    </div>
+@media (max-width: 480px) {
+  .yc-cover {
+    height: 250px;
+    min-height: 250px;
+    font-size: 48px;
+  }
+  
+  .yc-body {
+    padding: 30px 25px;
+  }
+  
+  .yc-title {
+    font-size: 24px;
+  }
+  
+  .yc-excerpt {
+    font-size: 14px;
+    -webkit-line-clamp: 3;
+  }
+  
+  .yc-read {
+    padding: 14px 28px;
+    font-size: 16px;
+  }
+  
+  .yc-tag {
+    font-size: 13px;
+    padding: 6px 14px;
+  }
+  
+  .yc-nav {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+}
+</style>
+</head>
+<body>
 
-    <!-- Appears only when a card is clicked (engaged mode) -->
-    <div class="yc-readbar" id="ycReadbar" hidden>
-      <a class="yc-read" href="/blog/" aria-label="Open blog index">
-        View blog
-        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" fill="none">
-          <path stroke-width="2" d="M5 12h14M13 5l7 7-7 7"/>
-        </svg>
-      </a>
-    </div>
+<div id="yc-fs-carousel">
+  <button class="yc-nav yc-prev" aria-label="Previous">‹</button>
+  
+  <div class="yc-carousel-box">
+    <div id="ycDots"></div>
+    <ul id="ycTrack" style="list-style: none;"></ul>
+    <div id="ycReadbar" hidden></div>
+  </div>
+  
+  <button class="yc-nav yc-next" aria-label="Next">›</button>
+</div>
 
-    <div class="yc-dots" id="ycDots"></div>
-  </main>
+<script type="module">
+import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import { getFirestore, collection, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
-  <!-- Firebase + Carousel logic -->
-  <script type="module" src="./fullscreen-carousel.js"></script>
+/* Firebase */
+const firebaseConfig = {
+  apiKey: "AIzaSyDHDjHrnQ2IwvetQoV6cWAGnkMzANerVDE",
+  authDomain: "yangerila-studio.firebaseapp.com",
+  projectId: "yangerila-studio"
+};
+const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+/* DOM */
+const root     = document.getElementById('yc-fs-carousel');
+const track    = document.getElementById('ycTrack');
+const dotsEl   = document.getElementById('ycDots');
+const readbar  = document.getElementById('ycReadbar');
+const prev     = root.querySelector('.yc-prev');
+const next     = root.querySelector('.yc-next');
+
+/* State */
+let posts = [];
+let active = 0;
+let timer  = 0;
+const interval = 5000; // 5 seconds auto-rotation
+const LIMIT    = 10;
+
+/* Helpers */
+const esc = s => String(s||'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const ts  = t => (t?.seconds ? t.seconds * 1000 : 0);
+const fmt = t => t?.seconds ? new Date(t.seconds*1000).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}) : '';
+
+/* Data */
+async function fetchLatest(limit=LIMIT){
+  try{
+    const qRef = query(collection(db,'blogs'), where('published','==',true));
+    const snap = await getDocs(qRef);
+    const arr = []; 
+    snap.forEach(d => arr.push({ id:d.id, ...d.data() }));
+    arr.sort((a,b)=> ts(b.publishedAt||b.updatedAt) - ts(a.publishedAt||a.updatedAt));
+    return arr.slice(0, limit);
+  }catch(e){
+    console.error('Failed to load blogs:', e);
+    return [];
+  }
+}
+
+/* Render */
+function renderSlides(list){
+  if(!list.length){
+    track.innerHTML = `<li class="yc-status">No posts found. Publish a post in the editor.</li>`;
+    return;
+  }
+  
+  track.innerHTML = list.map((p, idx) => `
+    <li class="yc-card ${idx === 0 ? 'active' : ''}" data-id="${p.id}" style="display: ${idx === 0 ? 'flex' : 'none'};">
+      ${p.imageUrl 
+        ? `<img class="yc-cover" src="${esc(p.imageUrl)}" alt="${esc(p.title||'')}" loading="lazy">` 
+        : `<div class="yc-cover">📝</div>`}
+      <div class="yc-body">
+        <h2 class="yc-title">${esc(p.title || 'Untitled')}</h2>
+        <div class="yc-meta">${fmt(p.publishedAt || p.updatedAt)}</div>
+        <p class="yc-excerpt">${esc(p.shortText || '')}</p>
+        <div class="yc-tags">${(p.tags||[]).slice(0,4).map(t=>`<span class="yc-tag">${esc(t)}</span>`).join('')}</div>
+        <div id="ycReadbar">
+          <a href="blog/index.html?id=${p.id}" target="_blank" class="yc-read">Read More</a>
+        </div>
+      </div>
+    </li>
+  `).join('');
+}
+
+function renderDots(n){
+  dotsEl.innerHTML = Array.from({length:n}, (_,i)=>`<button class="yc-dot ${i === 0 ? 'active' : ''}" data-i="${i}" aria-label="Go to slide ${i+1}"></button>`).join('');
+  dotsEl.querySelectorAll('.yc-dot').forEach(d => d.addEventListener('click', e => {
+    e.stopPropagation();
+    setActive(+e.currentTarget.dataset.i);
+    restart();
+  }));
+}
+
+/* Behavior */
+function setActive(i, smooth=true){
+  if(!posts.length) return;
+  active = (i + posts.length) % posts.length;
+  
+  // Hide all cards, show only active
+  Array.from(track.children).forEach((el,j)=> {
+    el.classList.toggle('active', j===active);
+    el.style.display = j===active ? 'flex' : 'none';
+  });
+  
+  dotsEl.querySelectorAll('.yc-dot').forEach((d,j)=> d.classList.toggle('active', j===active));
+  restart();
+}
+
+function auto(){ 
+  if(interval > 0){ 
+    stop(); 
+    timer = setInterval(()=> setActive(active+1), interval); 
+  } 
+}
+
+function stop(){ 
+  if(timer){ 
+    clearInterval(timer); 
+    timer=0; 
+  } 
+}
+
+function restart(){ 
+  stop();
+  auto(); 
+}
+
+/* Prev/Next */
+prev.addEventListener('click', (e)=>{ 
+  e.stopPropagation(); 
+  setActive(active-1); 
+});
+
+next.addEventListener('click', (e)=>{ 
+  e.stopPropagation(); 
+  setActive(active+1); 
+});
+
+/* Keyboard */
+function onKey(e){
+  if(e.key === 'ArrowLeft')  setActive(active-1);
+  if(e.key === 'ArrowRight') setActive(active+1);
+}
+window.addEventListener('keydown', onKey);
+
+/* Touch/Swipe */
+let touchX=0;
+track.addEventListener('touchstart', e => touchX = e.touches[0].clientX, {passive:true});
+track.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchX;
+  if(Math.abs(dx) > 40) setActive(active + (dx < 0 ? 1 : -1));
+}, {passive:true});
+
+/* Pause on hover */
+const carouselBox = document.querySelector('.yc-carousel-box');
+carouselBox.addEventListener('mouseenter', stop);
+carouselBox.addEventListener('mouseleave', auto);
+
+/* Init */
+(async function init(){
+  posts = await fetchLatest(LIMIT);
+  renderSlides(posts);
+  renderDots(posts.length);
+  setActive(0, false);
+  auto();
+})();
+</script>
+
 </body>
 </html>
