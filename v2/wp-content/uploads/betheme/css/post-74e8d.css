@@ -2282,6 +2282,7 @@ html { overflow-y: scroll; }
 @media (max-width: 768px) {
   .yc-viewall {
     margin-top: 15px;
+    padding: 1px 20px;
   }
 }
 
@@ -2299,3 +2300,4 @@ html { overflow-y: scroll; }
     height: 600px;             /* optional explicit height */
   }
 }
+

@@ -1465,3 +1465,27 @@ html,body{overflow-x:hidden}
   }
 }
 
+/* Mobile-only — scope strictly to the blog carousel section */
+@media (max-width: 767px) {
+  /* Very specific selector to avoid affecting other sections */
+  .mcb-section-f64a4cf44 .section_wrapper .mcb-wrap-inner iframe.blog-carousel {
+    position: relative !important;    /* stay in document flow so it pushes content down */
+    display: block !important;
+    width: 100% !important;           /* use container width — avoids horizontal overflow */
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    height: auto !important;          /* allow iframe to grow naturally */
+    min-height: 300px !important;
+    z-index: 2 !important;            /* visually above overlapping elements if needed */
+    border: none !important;
+    overflow: visible !important;
+  }
+
+  /* Ensure the immediate wrapper that actually contains the iframe participates in flow */
+  .mcb-section-f64a4cf44 .section_wrapper,
+  .mcb-section-f64a4cf44 .mcb-wrap-inner {
+    position: relative !important;
+    z-index: 1 !important;
+    padding-bottom: 16px !important;  /* small buffer so following content moves down */
+  }
+}
