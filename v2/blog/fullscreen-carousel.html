@@ -455,7 +455,7 @@ function renderSlides(list){
         <p class="yc-excerpt">${esc(p.shortText || '')}</p>
         <div class="yc-tags">${(p.tags||[]).slice(0,4).map(t=>`<span class="yc-tag">${esc(t)}</span>`).join('')}</div>
         <div id="ycReadbar">
-          <a href="/index.html?id=${p.id}" target="_blank" class="yc-read">Read More</a>
+          <a href="blog/index.html?id=${p.id}" target="_blank" class="yc-read">Read More</a>
         </div>
       </div>
     </li>
