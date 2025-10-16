@@ -4,13 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>YaneGrila Temp</title>
-  <script>
-
-  window.onload = () => {
-       document.body.innerHTML = '<iframe src="/temp.html" style="border:0;width:100%;height:100vh"></iframe>';
-   }
-  </script>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden; /* remove any scrollbars from wrapper */
+      background: transparent;
+    }
+    iframe {
+      position: fixed; /* covers entire viewport */
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      border: none;
+      margin: 0;
+      padding: 0;
+      display: block;
+    }
+  </style>
 </head>
 <body>
+  <iframe src="/temp.html" title="YaneGrila Temp"></iframe>
 </body>
 </html>
