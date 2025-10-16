@@ -2284,3 +2284,18 @@ html { overflow-y: scroll; }
     margin-top: 15px;
   }
 }
+
+/* Default desktop/tablet styles */
+.blog-carousel {
+  aspect-ratio: 16 / 9;
+  min-height: 300px;
+}
+
+/* On phone screens, double the height */
+@media (max-width: 768px) {
+  .blog-carousel {
+    aspect-ratio: auto;        /* disable fixed ratio */
+    min-height: 600px;         /* double the default height */
+    height: 600px;             /* optional explicit height */
+  }
+}
