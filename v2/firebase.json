@@ -1,12 +1,29 @@
 {
-  "hosting": {
-    "public": "public",
-    "redirects": [
-      {
-        "source": "/**",
-        "destination": "https://www.yangerila.com",
-        "type": 301
-      }
-    ]
-  }
+  "hosting": [
+    {
+      "target": "main",
+      "public": ".",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ]
+    },
+    {
+      "target": "redirects",
+      "public": ".",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "redirects": [
+        {
+          "source": "/**",
+          "destination": "https://www.yangerila.com",
+          "type": 301
+        }
+      ]
+    }
+  ]
 }
