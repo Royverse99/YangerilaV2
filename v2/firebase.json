@@ -1,15 +1,16 @@
 {
   "hosting": {
-    "public": ".",
+    "public": "v2",
     "ignore": [
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
     ],
-    "rewrites": [
+    "redirects": [
       {
-        "source": "**",
-        "destination": "/index.html"
+        "source": "/**",
+        "destination": "https://www.yangerila.com",
+        "type": 301
       }
     ]
   }
