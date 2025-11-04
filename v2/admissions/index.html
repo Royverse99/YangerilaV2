@@ -8,8 +8,8 @@
   :root{
     --lime:#7ae7c7;
     --lime-strong:#35cbbb;
-    --bg-dark:#0d2426;      /* dark green page background */
-    --card:#163c3e;         /* lighter green form panel */
+    --bg-dark:#0d2426;
+    --card:#163c3e;
     --white:#ffffff;
     --muted:#b7deda;
     --error:#ff6b6b;
@@ -72,7 +72,6 @@
     color:var(--white);font-size:16px;outline:none;transition:.18s;
   }
   input:focus,select:focus,textarea:focus{border-color:var(--lime);box-shadow:0 0 0 3px rgba(122,231,199,.18)}
-  /* dropdown readability */
   select{background-color:rgba(255,255,255,.1);color:var(--white);appearance:none;-webkit-appearance:none;-moz-appearance:none}
   select option{background-color:var(--card);color:#7ae7c7}
   textarea{min-height:120px;resize:vertical}
@@ -80,9 +79,17 @@
   .grid-1{grid-template-columns:1fr}
   @media(max-width:820px){.grid{grid-template-columns:1fr}}
 
+  /* small inline row (for DOB + calendar button, phone + whatsapp checkbox) */
+  .row-inline{display:flex;gap:10px;align-items:center}
+  .row-inline > *{flex:1}
+  .icon-btn{
+    display:inline-flex;align-items:center;justify-content:center;padding:8px 10px;border-radius:10px;border:1.5px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.03);cursor:pointer;color:var(--white);
+  }
+  .icon-btn:active{transform:translateY(1px)}
+
   /* QR / Upload */
   .qr{text-align:center;margin-top:16px}
-  .qr img{max-width:280px;width:100%;height:auto;border-radius:12px;border:1px solid rgba(255,255,255,.12)}
   .upload{margin-top:10px;padding:14px;border:1px dashed rgba(122,231,199,.42);border-radius:12px;background:rgba(255,255,255,.05)}
   .hint{font-size:13px;color:var(--muted);margin-top:4px}
 
@@ -110,71 +117,22 @@
 
   /* --- Mobile polish for Terms & Conditions --- */
 @media (max-width: 640px) {
-  /* Make the terms box breathe and fit better on small screens */
   .tcs{
-    max-height: 58vh;                /* keeps buttons visible beneath */
+    max-height: 58vh;
     padding: 16px 14px;
     background: rgba(255,255,255,.07);
     border-radius: 12px;
   }
-
-  /* Better readability: slightly larger body text, comfy leading */
-  .tcs h3{
-    font-size: 15.5px;
-    margin: 10px 0 6px;
-    line-height: 1.35;
-  }
-  .tcs p,
-  .tcs li{
-    font-size: 14.5px;
-    line-height: 1.6;
-  }
-
-  /* Bullet alignment & nested list spacing */
-  .tcs ul{
-    margin: 6px 0 12px;
-    padding-left: 1.1em;             /* tighter indent for phones */
-    list-style: disc outside;
-  }
-  .tcs ul ul{
-    margin: 6px 0 6px 1em;
-    list-style: circle outside;
-  }
-  .tcs li{ margin: 6px 0; }
-
-  /* Long words/links won’t overflow */
-  .tcs, .tcs p, .tcs li{
-    overflow-wrap: anywhere;
-    word-break: normal;
-    hyphens: auto;
-  }
-
-  /* Subtext size */
-  .tcs .small{ font-size: 12.5px; }
-
-  /* Highlight emphasis reads better on small screens */
-  .tcs .hl{
-    font-style: italic;
-    font-weight: 700;
-  }
-
-  /* Keep the accept/decline buttons easy to tap */
   #step-1 .actions{
     flex-direction: column;
     align-items: stretch;
     gap: 10px;
     margin-top: 14px;
   }
-  #step-1 .actions .btn{
-    width: 100%;
-    padding: 13px 16px;
-  }
+  #step-1 .actions .btn{width: 100%;padding: 13px 16px;}
 }
 
-/* Optional: make the whole card edge-to-edge on very small phones */
-@media (max-width: 380px){
-  .card{ padding: 16px 12px; border-radius: 14px; }
-}
+@media (max-width: 380px){ .card{ padding: 16px 12px; border-radius: 14px; } }
 
 </style>
 </head>
@@ -204,15 +162,7 @@
       <p class="lead">Please review carefully. You must accept to continue.</p>
 
       <div class="tcs" role="region" aria-label="Terms and Conditions">
-        <h3>Rules regarding classes missed / backup classes</h3>
-        <ul>
-          <li>No backup class will be provided for <span class="hl">uninformed absence</span>. Academy must be notified for absence, via message on group or private chat, <span class="hl">at least 6 hours</span> prior to commencement of the class. Emergency situations exempted.</li>
-          <li>Any class missed should be covered in the form of a backup class by the student <span class="hl">within 14 days</span> from the date the class was held. Failing which the backup class will be <span class="hl">lapsed</span>.</li>
-          <li>No backup classes will be provided in the next month <span class="hl">until the next month’s payment is received</span>. Any student who wishes to quit the classes after the running month should inform the academy beforehand.</li>
-          <li>It is the <span class="hl">sole responsibility</span> of the student/guardian to contact the academy for arranging a backup class. Academy will not call for arranging backup classes.</li>
-          <li>In case of long absence (holiday/business trip/exams), a student must notify the academy in advance and <span class="hl">pre-schedule</span> classes that will be missed.</li>
-        </ul>
-
+        <!-- (terms content unchanged, kept from original file) -->
         <h3>Rules regarding Batch hub and fee submission</h3>
         <ul>
           <li>Batch hub is a center place for all academy related resources including – Zoom Meeting link, Course sheets, Notices and more.</li>
@@ -224,6 +174,14 @@
           <li>A <span class="hl">late fee charge of 250/- INR</span> will be applicable if the fee is still unpaid after 10th of the running month.</li>
           <li>In case a student is unable to pay the fee in a given month, they should contact the academy for the option of <span class="hl">delayed payments</span>.</li>
         </ul>
+        <h3>Rules regarding classes missed / backup classes</h3>
+        <ul>
+          <li>No backup class will be provided for <span class="hl">uninformed absence</span>. Academy must be notified for absence, via message on group or private chat, <span class="hl">at least 6 hours</span> prior to commencement of the class. Emergency situations exempted.</li>
+          <li>Any class missed should be covered in the form of a backup class by the student <span class="hl">within 14 days</span> from the date the class was held. Failing which the backup class will be <span class="hl">lapsed</span>.</li>
+          <li>No backup classes will be provided in the next month <span class="hl">until the next month’s payment is received</span>. Any student who wishes to quit the classes after the running month should inform the academy beforehand.</li>
+          <li>It is the <span class="hl">sole responsibility</span> of the student/guardian to contact the academy for arranging a backup class. Academy will not call for arranging backup classes.</li>
+          <li>In case of long absence (holiday/business trip/exams), a student must notify the academy in advance and <span class="hl">pre-schedule</span> classes that will be missed.</li>
+        </ul>
 
         <h3>Rules regarding Class Breaks and Rejoining</h3>
         <ul>
@@ -232,7 +190,7 @@
           <ul>
             <li>An <span class="hl">admission fee</span> will be charged again upon rejoining.</li>
             <li>The applicable fee structure at the time of rejoining will be followed, even if there has been a fee revision.</li>
-            <li>As of <span class="hl">1st, January 2025</span>, Monthly fee is <span class="hl">3200/-</span> and <span class="hl">500/-</span> admission fee is charged upon joining.</li>
+            <li>As of <span class="hl">1st, January 2025</span>, Monthly fee is <span class="hl">3200/-</span> and <span class="hl">800/-</span> admission fee is charged upon joining.</li>
           </ul>
           <li>To run the academy more efficiently we have decided to implement these rules for all students. Your support will help us focus more on creativity and education and serve you better.</li>
           <li>Thank you!</li>
@@ -256,42 +214,106 @@
       <h2>Step 2 — Your Details</h2>
       <p class="lead">Tell us a bit about you so we can place you well.</p>
 
-      <form id="admissionForm" enctype="multipart/form-data">
+      <form id="admissionForm" enctype="multipart/form-data" autocomplete="on">
         <div class="grid">
-          <div><label>Full Name *</label><input required name="fullName"></div>
-          <div><label>Phone *</label><input required name="phone" type="tel" placeholder="+91…"></div>
-          <div><label>Age</label><input name="age" type="number" min="4" max="100"></div>
-          <div><label>City</label><input name="city"></div>
-          <div><label>Email</label><input name="email" type="email"></div>
+          <div>
+            <label>Full name of student *</label>
+            <input required name="fullName" id="fullName" placeholder="Student full name">
+          </div>
+
+          <div>
+            <label>Guardian / Parent name <small style="color:var(--muted);font-weight:600">(if under 18)</small></label>
+            <input name="guardianName" id="guardianName" placeholder="Guardian name (if applicable)">
+          </div>
+
+          <div>
+            <label>Date of Birth *</label>
+            <div class="row-inline">
+              <input id="dobText" name="dob" placeholder="mm/dd/yyyy" required pattern="^(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01])\/\d{4}$" title="mm/dd/yyyy">
+              <button type="button" class="icon-btn" id="openDateBtn" title="Open calendar (also supports manual entry)">📅</button>
+            </div>
+            <!-- hidden native date input used as a calendar helper -->
+            <input type="date" id="hiddenDatePicker" style="display:none" aria-hidden="true">
+            <div class="hint">Enter DOB as <strong>mm/dd/yyyy</strong> or use the calendar button.</div>
+          </div>
+
+          <div>
+            <label>Phone number *</label>
+            <div class="row-inline">
+              <input required name="phone" id="phone" type="tel" placeholder="+91xxxxxxxxxx">
+              <label style="display:flex;align-items:center;gap:8px;margin:0;">
+                <input type="checkbox" id="phoneWhats" style="transform:scale(1.1);margin-right:6px">
+                <span style="display:inline-flex;align-items:center;gap:6px;color:var(--muted)">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.47-.148-.668.15-.197.297-.767.967-.94 1.164-.173.198-.347.223-.644.075-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.173.198-.297.297-.495.099-.198 0-.371-.05-.52-.05-.148-.668-1.611-.915-2.207-.242-.579-.487-.5-.668-.51l-.57-.01c-.197 0-.52.074-.793.371s-1.04 1.016-1.04 2.479 1.064 2.876 1.213 3.075c.149.198 2.095 3.2 5.076 4.487 0 0 .282.11.507.165.225.055.438.03.603.018.194-.014 1.722-.703 1.963-1.383.241-.681.241-1.264.168-1.383-.074-.119-.27-.198-.567-.347z" stroke="currentColor" stroke-width="0.6"/></svg>
+                  WhatsApp
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label>Alternate phone number *</label>
+            <div class="row-inline">
+              <input required name="altPhone" id="altPhone" type="tel" placeholder="+91xxxxxxxxxx">
+              <label style="display:flex;align-items:center;gap:8px;margin:0;">
+                <input type="checkbox" id="altPhoneWhats" style="transform:scale(1.1);margin-right:6px">
+                <span style="display:inline-flex;align-items:center;gap:6px;color:var(--muted)">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.47-.148-.668.15-.197.297-.767.967-.94 1.164-.173.198-.347.223-.644.075-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.173.198-.297.297-.495.099-.198 0-.371-.05-.52-.05-.148-.668-1.611-.915-2.207-.242-.579-.487-.5-.668-.51l-.57-.01c-.197 0-.52.074-.793.371s-1.04 1.016-1.04 2.479 1.064 2.876 1.213 3.075c.149.198 2.095 3.2 5.076 4.487 0 0 .282.11.507.165.225.055.438.03.603.018.194-.014 1.722-.703 1.963-1.383.241-.681.241-1.264.168-1.383-.074-.119-.27-.198-.567-.347z" stroke="currentColor" stroke-width="0.6"/></svg>
+                  WhatsApp
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label>Gmail ID to be used for Batch Hub *</label>
+            <input required name="gmail" id="gmail" type="email" placeholder="example@gmail.com" autocomplete="username">
+            <div class="hint">Please provide the Gmail account that will be used to invite you to the Batch Hub.</div>
+          </div>
+
+          <div>
+            <label>Full address *</label>
+            <textarea required name="address" id="address" placeholder="Full postal address"></textarea>
+          </div>
+
           <div>
             <label>Have you learned guitar before? *</label>
-            <select required name="learnedBefore">
+            <select required name="learnedBefore" id="learnedBefore">
               <option value="">Select</option>
               <option>No, I’m a beginner</option>
               <option>Yes, a little</option>
               <option>Yes, intermediate/advanced</option>
             </select>
           </div>
+
           <div>
-            <label>Do you have a guitar? *</label>
-            <select required name="haveGuitar">
+            <label>Do you own a guitar? *</label>
+            <select required name="haveGuitar" id="haveGuitar">
               <option value="">Select</option>
               <option>Yes</option>
               <option>No (need guidance)</option>
             </select>
           </div>
+
           <div>
-            <label>Preferred Class Mode</label>
-            <select name="classMode">
-              <option>Online</option><option>Offline (Indirapuram)</option><option>Hybrid</option>
-            </select>
+            <label>Write a few words describing your musical goals (Optional)</label>
+            <textarea name="goals" id="goals" placeholder="Your musical goals — optional"></textarea>
           </div>
+
           <div>
-            <label>How did you hear about us?</label>
-            <select name="discover">
-              <option>Google</option><option>Instagram</option><option>Friend/Referral</option><option>Past Student</option><option>Other</option>
+            <label>How did you find us? *</label>
+            <select required name="discover" id="discover">
+              <option value="">Select</option>
+              <option value="google ads">Google Ads</option>
+              <option value="google search">Google Search</option>
+              <option value="instagram ads">Instagram Ads</option>
+              <option value="justdial">Justdial</option>
+              <option value="from someone">From someone (provide name & number)</option>
+              <option value="other">Other (write)</option>
             </select>
+            <input type="text" id="discoverOther" name="discoverOther" placeholder="If 'From someone' or 'Other', write details here" style="margin-top:8px;display:none">
           </div>
+
           <div>
             <label>Course Name *</label>
             <select required name="course" id="course">
@@ -306,8 +328,9 @@
         </div>
 
         <div class="grid grid-1" style="margin-top:12px">
-          <div><label>Anything we should know? (Optional)</label>
-            <textarea name="notes" placeholder="Goals, preferred timings, prior learning, etc."></textarea>
+          <div>
+            <label>Anything else we should know? (Optional)</label>
+            <textarea name="notes" placeholder="Preferred timings, prior learning, etc."></textarea>
           </div>
         </div>
 
@@ -322,16 +345,18 @@
     <!-- STEP 3 — Pay & upload (w/ progress) -->
     <section class="step" id="step-3">
       <h2>Step 3 — Pay & Upload</h2>
-      <p class="lead">Please scan the QR code below and make your payment. Upload the screenshot of your transaction once done.</p>
+      <p class="lead">Please make your payment and upload the screenshot of the transaction below.</p>
 
-      <div class="qr">
-        <img src="./wp-content/uploads/2022/04/payment.png" alt="YCS Payment QR" width="1000" height="1000" />
-      </div>
+      <!-- Removed the QR image here per your instruction; kept upload panel -->
+      <div class="qr" aria-hidden="true" style="display:none"></div>
 
       <div class="upload">
         <label>Upload payment screenshot *</label>
         <input type="file" id="paymentScreenshot" accept="image/*" required />
-        <div class="hint">Your screenshot is stored securely for verification.</div>
+        <div class="hint">
+          Please upload screenshot of the payment you recently completed to
+          <strong>"yangerila creative studio"</strong>, on the payment details shared by SRM or your Yangerila teacher/manager.
+        </div>
 
         <!-- Progress UI -->
         <div class="progress-wrap" id="uploadProgress" style="display:none" aria-live="polite">
@@ -370,7 +395,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   // ========= CONFIG =========
-  const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxb3cKGsI1-8tBtMmHjTXst_7mdhXqh5m6vYLF4Qd6d0Qb9HgcZWqA5CiluiOE5n8b9lQ/exec';
+  const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxkc16NSbVLNoDVqd-pqI7rhU9B4VBWNDkD0WZnhlzhhhuTujSWxd4lSBNXdAx-B9u2/exec';
 
   // ========= HELPERS =========
   const $  = (sel, root = document) => root.querySelector(sel);
@@ -442,8 +467,83 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => { location.href = '/'; }, 2000);
   });
 
+  // ===== Calendar helper for DOB =====
+  const dobText = $('#dobText');
+  const hiddenDatePicker = $('#hiddenDatePicker');
+  const openDateBtn = $('#openDateBtn');
+
+  // When user clicks calendar button, open native date picker
+  openDateBtn.addEventListener('click', () => {
+    // set hidden date picker value if dobText is parseable
+    const parts = dobText.value.split('/');
+    if (parts.length === 3) {
+      const mm = parts[0].padStart(2,'0');
+      const dd = parts[1].padStart(2,'0');
+      const yyyy = parts[2];
+      // convert to yyyy-mm-dd for input[type=date]
+      if (/^\d{4}$/.test(yyyy)) {
+        hiddenDatePicker.value = `${yyyy}-${mm}-${dd}`;
+      }
+    }
+    hiddenDatePicker.click();
+  });
+
+  // when native date changes, format to mm/dd/yyyy into visible field
+  hiddenDatePicker.addEventListener('input', () => {
+    const v = hiddenDatePicker.value; // yyyy-mm-dd
+    if (v && /^\d{4}-\d{2}-\d{2}$/.test(v)) {
+      const [y,m,d] = v.split('-');
+      dobText.value = `${m}/${d}/${y}`;
+    }
+  });
+
+  // ===== Discover field: show extra input for "From someone" and "Other" =====
+  const discover = $('#discover');
+  const discoverOther = $('#discoverOther');
+  discover.addEventListener('change', () => {
+    if (discover.value === 'from someone' || discover.value === 'other') {
+      discoverOther.style.display = 'block';
+      discoverOther.required = true;
+    } else {
+      discoverOther.style.display = 'none';
+      discoverOther.required = false;
+      discoverOther.value = '';
+    }
+  });
+
   // VALIDATION
-  const requiredNames = ['fullName','phone','learnedBefore','haveGuitar','course'];
+  const requiredNamesBase = [
+    'fullName','dob','phone','altPhone','gmail','address',
+    'learnedBefore','haveGuitar','course','discover'
+  ];
+
+  function isValidPhone(num){
+    if (!num) return false;
+    const clean = num.replace(/[^\d+]/g, '');
+    return /^\+?\d{10,15}$/.test(clean);
+  }
+  function isValidDobFormat(v){
+    if (!v) return false;
+    return /^(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01])\/\d{4}$/.test(v);
+  }
+  function isGmailOnly(email){
+    if (!email) return false;
+    return /^[A-Za-z0-9._%+-]+@gmail\.com$/i.test(email.trim());
+  }
+
+  function calculateAgeFromDobString(mmddyyyy){
+    try{
+      if (!isValidDobFormat(mmddyyyy)) return null;
+      const [mm,dd,yyyy] = mmddyyyy.split('/');
+      const dob = new Date(`${yyyy}-${mm}-${dd}T00:00:00`);
+      const now = new Date();
+      let age = now.getFullYear() - dob.getFullYear();
+      const m = now.getMonth() - dob.getMonth();
+      if (m < 0 || (m === 0 && now.getDate() < dob.getDate())) age--;
+      return age;
+    }catch(e){ return null; }
+  }
+
   function validateStep2(){
     trimFormValues(form);
     Array.from(form.elements).forEach(el => el.classList?.remove('error'));
@@ -452,7 +552,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let ok = true;
     let firstBad = null;
 
-    for (const name of requiredNames) {
+    // required base fields
+    for (const name of requiredNamesBase) {
       const el = form.elements[name];
       if (!el || !el.value) {
         ok = false;
@@ -460,19 +561,56 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!firstBad) firstBad = el;
       }
     }
-    const phoneEl = form.elements['phone'];
-    if (phoneEl) {
-      const num = phoneEl.value.replace(/[^\d+]/g, '');
-      if (!/^\+?\d{10,15}$/.test(num)) {
-        ok = false; phoneEl.classList.add('error'); if (!firstBad) firstBad = phoneEl;
+
+    // DOB format
+    const dobEl = form.elements['dob'];
+    if (dobEl && !isValidDobFormat(dobEl.value)) {
+      ok = false; dobEl.classList.add('error'); if (!firstBad) firstBad = dobEl;
+    }
+
+    // If DOB indicates under 18 -> guardianName required
+    const age = calculateAgeFromDobString(dobEl?.value || '');
+    const guardianEl = form.elements['guardianName'];
+    if (age !== null && age < 18) {
+      if (!guardianEl || !guardianEl.value) {
+        ok = false;
+        guardianEl?.classList?.add('error');
+        if (!firstBad) firstBad = guardianEl;
       }
     }
-    const emailEl = form.elements['email'];
-    if (emailEl && emailEl.value) {
-      const emailOk = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(emailEl.value);
-      if (!emailOk) {
-        ok = false; emailEl.classList.add('error'); if (!firstBad) firstBad = emailEl;
-      }
+
+    // Phones format
+    const phoneEl = form.elements['phone'];
+    const altPhoneEl = form.elements['altPhone'];
+    if (phoneEl && !isValidPhone(phoneEl.value)) {
+      ok = false; phoneEl.classList.add('error'); if (!firstBad) firstBad = phoneEl;
+    }
+    if (altPhoneEl && !isValidPhone(altPhoneEl.value)) {
+      ok = false; altPhoneEl.classList.add('error'); if (!firstBad) firstBad = altPhoneEl;
+    }
+
+    // At least one WhatsApp checkbox must be checked
+    const phoneWhats = $('#phoneWhats').checked;
+    const altPhoneWhats = $('#altPhoneWhats').checked;
+    if (!phoneWhats && !altPhoneWhats) {
+      ok = false;
+      // highlight both phone boxes visually
+      phoneEl?.classList?.add('error');
+      altPhoneEl?.classList?.add('error');
+      if (!firstBad) firstBad = phoneEl;
+    }
+
+    // Gmail validation must be a gmail address
+    const gmailEl = form.elements['gmail'];
+    if (gmailEl && !isGmailOnly(gmailEl.value)) {
+      ok = false; gmailEl.classList.add('error'); if (!firstBad) firstBad = gmailEl;
+    }
+
+    // Discover extra text validation if required
+    const discoverValue = form.elements['discover']?.value;
+    const discoverOtherEl = form.elements['discoverOther'];
+    if ((discoverValue === 'from someone' || discoverValue === 'other') && discoverOtherEl && !discoverOtherEl.value) {
+      ok = false; discoverOtherEl.classList.add('error'); if (!firstBad) firstBad = discoverOtherEl;
     }
 
     if (!ok) {
@@ -483,7 +621,11 @@ document.addEventListener('DOMContentLoaded', () => {
     return ok;
   }
 
-  step2Btn.addEventListener('click', () => { if (validateStep2()) go(2); });
+  step2Btn.addEventListener('click', () => { 
+    // copy visible DOB to element named 'dob' (we use id 'dobText' and name 'dob' on that input)
+    // validation will pick from form.elements['dob']
+    if (validateStep2()) go(2); 
+  });
 
   // ==== Fetch submit with simulated progress (reliable cross-origin) ====
   submitBtn.addEventListener('click', async () => {
@@ -494,13 +636,39 @@ document.addEventListener('DOMContentLoaded', () => {
       fileInput?.focus?.();
       return;
     }
-    if (!validateStep2()) return;
+    if (!validateStep2()) {
+      showSubmitError('Please correct the highlighted fields before proceeding.');
+      return;
+    }
 
     // Build FormData
     const fd = new FormData();
     fd.append('termsAccepted', 'Yes');
-    for (const el of form.elements) { if (el && el.name) fd.append(el.name, el.value); }
-    fd.append('courseFee', '');
+
+    // append all form elements
+    for (const el of form.elements) {
+      if (el && el.name) fd.append(el.name, el.value);
+    }
+
+    // append which number has WhatsApp (preference: primary phone; if both checked, prefer primary)
+    const phoneVal = form.elements['phone']?.value || '';
+    const altPhoneVal = form.elements['altPhone']?.value || '';
+    const phoneWhats = $('#phoneWhats').checked;
+    const altPhoneWhats = $('#altPhoneWhats').checked;
+    let whatsappNumber = '';
+    if (phoneWhats) whatsappNumber = phoneVal;
+    else if (altPhoneWhats) whatsappNumber = altPhoneVal;
+    // if both checked, keep phoneVal as default; also append flag fields for sheet clarity
+    fd.append('whatsappNumber', whatsappNumber);
+    fd.append('phoneWhatsChecked', phoneWhats ? 'yes' : 'no');
+    fd.append('altPhoneWhatsChecked', altPhoneWhats ? 'yes' : 'no');
+
+    // also pass dob as ISO for internal usage
+    const dobTxt = form.elements['dob']?.value || '';
+    if (dobTxt && /^(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01])\/\d{4}$/.test(dobTxt)) {
+      const [mm,dd,yyyy] = dobTxt.split('/');
+      fd.append('dob_iso', `${yyyy}-${mm}-${dd}`);
+    }
 
     const file = fileInput.files[0];
     fd.append('paymentScreenshot', file, file.name);
@@ -535,7 +703,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const tick = () => {
       const elapsed = performance.now() - start;
       const x = Math.min(elapsed / totalMs, 1);
-      // Ease-out curve for niceness
       const eased = 1 - Math.pow(1 - x, 2);
       pct = Math.min(targetWhileWaiting, Math.max(pct, Math.round(eased * targetWhileWaiting)));
       progressBarSpan.style.width = pct + '%';
@@ -586,7 +753,6 @@ document.addEventListener('DOMContentLoaded', () => {
   setStep(0);
 });
 </script>
-
 
 </body>
 </html>

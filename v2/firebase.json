@@ -7,6 +7,19 @@
         "firebase.json",
         "**/.*",
         "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "/",
+          "destination": "/index.html"
+        }
+      ],
+      "redirects": [
+        {
+          "source": "https://yangerila.com/**",
+          "destination": "https://www.yangerila.com",
+          "type": 301
+        }
       ]
     },
     {
