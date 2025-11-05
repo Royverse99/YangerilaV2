@@ -1,197 +1,156 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Yangerila — Admin</title>
-  <link rel="stylesheet" href="./style.css" />
-  <style>
-    /* small view tweaks for this admin shell */
-    .admin-top{display:flex;align-items:center;gap:12px;padding:14px;background:transparent;border-bottom:1px solid rgba(255,255,255,.03)}
-    .admin-top .brand{display:flex;align-items:center;gap:10px}
-    .admin-nav{display:flex;gap:8px;padding:12px;flex-wrap:wrap}
-    .stack{padding:18px;max-width:1100px;margin:0 auto}
-    .block{background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.03);padding:14px;border-radius:12px;margin-bottom:16px}
-    .small-muted{font-size:13px;color:var(--muted)}
-    .batch-card{padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.04);background:transparent}
-    .mc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
-    .table-actions{display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
-    .table-wrap{overflow:auto;border-radius:8px;border:1px solid rgba(255,255,255,.03);padding:8px;background:rgba(255,255,255,.01)}
-    table.admin-table{width:100%;border-collapse:collapse}
-    table.admin-table th, table.admin-table td{padding:8px;border-bottom:1px solid rgba(255,255,255,.03);text-align:left}
-    table.admin-table th{position:sticky;top:0;background:rgba(255,255,255,.02)}
-    .filter-row input{width:100%;padding:6px;border-radius:6px;border:1px solid rgba(255,255,255,.06);background:transparent;color:inherit}
-    .row-actions .btn{margin-right:6px}
-    .pagination{display:flex;gap:8px;align-items:center;margin-top:10px}
-    @media (max-width:760px){ .admin-top,.admin-nav{flex-direction:column} .table-actions{flex-direction:column;align-items:stretch} }
-  </style>
+  <link rel="stylesheet" href="/admin/style.css?v=8"/>
 </head>
-<body class="admin-shell">
+<body class="admin-page style-solid">
 
-  <header class="admin-top">
-    <div class="brand">
-      <img src="../wp-content/uploads/2022/04/coaching3-slider-pic1.webp" alt="logo" style="width:36px;height:36px;border-radius:8px">
-      <div>
-        <strong>Yangerila Creative Studio</strong><br>
-        <span class="small-muted">Admin Panel (simple)</span>
-      </div>
-    </div>
+  <div id="loading">Checking login…</div>
 
-    <div style="flex:1"></div>
-
-    <div id="auth-area" style="display:flex;align-items:center;gap:10px">
-      <span id="admin-email" class="small-muted">Not signed in</span>
-      <button id="signoutBtn" class="btn">Sign out</button>
+  <header class="topbar">
+    <img src="/wp-content/uploads/2022/04/coaching3-slider-pic1.webp" alt="Yangerila" class="logo"/>
+    <h1 class="brand">Yangerila Creative Studio - Admin Panel</h1>
+    <div class="top-actions">
+      <span class="user" id="user-email">Loading…</span>
+      <button class="btn primary has-tip" id="signout" data-tip="Sign out of the admin dashboard">Sign out</button>
     </div>
   </header>
 
-  <nav class="admin-nav" aria-label="Admin navigation">
-    <button class="btn ghost" data-view="dashboard">Dashboard</button>
-    <button class="btn ghost" data-view="website-forms">Website Form Data</button>
-    <button class="btn ghost" data-view="external-ycs">External Form Data</button>
-    <button class="btn ghost" data-view="master-control">Master Control</button>
-    <button class="btn ghost" data-view="blogs">Blog</button>
-    <a class="btn ghost" href="./blog-editor.html" target="_blank">Blog Editor</a>
-  </nav>
+  <main class="stack">
 
-  <main class="stack" id="app-root">
-    <!-- Dashboard -->
-    <section data-view="dashboard" class="view active">
-      <h2>Overview</h2>
+    <!-- ================== Yangerila Web CRM ================== -->
+    <section aria-labelledby="h-web">
+      <div class="h2-row"><h2 id="h-web">Yangerila Web CRM</h2></div>
+
+      <!-- Coupon Forms Data -->
       <div class="block">
-        <p class="small-muted">Quick overview. Use the navigation to open specific datasets.</p>
-        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px">
-          <div style="flex:1;min-width:220px" class="block">
-            <h4>Website forms</h4><div id="quick-website-count" class="small-muted">loading…</div>
-          </div>
-          <div style="flex:1;min-width:220px" class="block">
-            <h4>External (YCS)</h4><div id="quick-ycs-count" class="small-muted">loading…</div>
-          </div>
-          <div style="flex:1;min-width:220px" class="block">
-            <h4>Master control</h4><div id="quick-master" class="small-muted">ready</div>
+        <div class="subhead">
+          <h3>Coupon Forms Data</h3>
+          <div class="sub-actions">
+            <details class="cols has-tip" data-tip="Show/hide table columns to reduce clutter">
+              <summary class="btn tiny ghost" aria-label="Toggle column visibility">Columns</summary>
+              <form class="col-filter" data-table="table-coupon"></form>
+            </details>
+            <button class="btn tiny has-tip" id="refresh-coupon" data-tip="Reload the latest Coupon Forms data">Refresh</button>
           </div>
         </div>
-      </div>
-    </section>
-
-    <!-- Website Form Data with sub-tabs -->
-    <section data-view="website-forms" class="view" style="display:none">
-      <h2>Website Form Data</h2>
-      <div class="block" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-        <div>
-          <button class="btn tiny" data-sub="student-ref">Student Reference</button>
-          <button class="btn tiny" data-sub="adm-demo">Admission & Demo</button>
-          <button class="btn tiny" data-sub="contact">Contact Us</button>
+        <div class="table-wrap">
+          <table id="table-coupon"><thead></thead><tbody><tr><td class="muted center">Loading…</td></tr></tbody></table>
         </div>
-        <div style="flex:1"></div>
-        <button id="refresh-website" class="btn">Refresh</button>
       </div>
 
-      <div id="sub-student-ref" class="block" style="display:none">
-        <h3>Student Reference</h3>
-        <div id="table-student-ref">No data loaded</div>
-      </div>
-      <div id="sub-adm-demo" class="block" style="display:none">
-        <h3>Admission & Demo</h3>
-        <div id="table-adm-demo">No data loaded</div>
-      </div>
-      <div id="sub-contact" class="block" style="display:none">
-        <h3>Contact Us</h3>
-        <div id="table-contact">No data loaded</div>
-      </div>
-    </section>
-
-    <!-- External YCS -->
-    <section data-view="external-ycs" class="view" style="display:none">
-      <h2>External Form Data — Admission & Registration (YCS)</h2>
+      <!-- Admission & Demo -->
       <div class="block">
-        <button id="refresh-ycs" class="btn">Refresh</button>
-        <div id="table-ycs" style="margin-top:12px">No data loaded</div>
-      </div>
-    </section>
-
-    <!-- Master Control -->
-    <section data-view="master-control" class="view" style="display:none">
-      <h2>Master Control</h2>
-      <div class="block">
-        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-          <label style="font-weight:700">Registration Form Controls</label>
-          <select id="mc-numBtns">
-            <option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option>
-          </select>
-
-          <div style="flex:1"></div>
-          <button id="mc-load" class="btn">Load</button>
-          <button id="mc-save" class="btn primary">Save</button>
-        </div>
-
-        <div id="mc-batches" class="mc-grid" style="margin-top:12px"></div>
-        <div id="mc-status" class="small-muted" style="margin-top:8px"></div>
-      </div>
-
-      <div class="block" style="margin-top:12px">
-        <h3>Website control</h3>
-        <p class="small-muted">Coming soon</p>
-      </div>
-    </section>
-
-    <!-- Blog Area (NEW) -->
-    <section data-view="blogs" class="view" style="display:none">
-      <h2>Blog — Posts</h2>
-
-      <div class="block">
-        <div class="table-actions">
-          <div style="display:flex;gap:8px;align-items:center">
-            <input id="blog-global-search" placeholder="Search posts..." style="padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,.04);min-width:220px" />
-            <button id="blog-refresh" class="btn">Refresh</button>
-            <button id="blog-export" class="btn">Export CSV</button>
-            <a id="open-blog-editor" class="btn primary" href="./blog-editor.html" target="_blank">New Post</a>
-          </div>
-
-          <div style="flex:1"></div>
-
-          <div style="display:flex;gap:8px;align-items:center">
-            <label class="small-muted">Rows</label>
-            <select id="blog-rows-per" style="padding:6px;border-radius:6px">
-              <option>10</option><option>25</option><option>50</option>
-            </select>
+        <div class="subhead">
+          <h3>Admission &amp; Demo Form Data</h3>
+          <div class="sub-actions">
+            <details class="cols has-tip" data-tip="Choose which fields to display in this table">
+              <summary class="btn tiny ghost" aria-label="Toggle column visibility">Columns</summary>
+              <form class="col-filter" data-table="table-admDemo"></form>
+            </details>
+            <button class="btn tiny has-tip" id="refresh-admDemo" data-tip="Reload the latest Admission & Demo data">Refresh</button>
           </div>
         </div>
-
-        <div class="table-wrap" id="blog-table-wrap" style="margin-top:8px">
-          <table class="admin-table" id="blog-table">
-            <thead>
-              <tr>
-                <th style="width:40px">#</th>
-                <th data-col="title">Title</th>
-                <th data-col="author">Author</th>
-                <th data-col="category">Category</th>
-                <th data-col="date">Published</th>
-                <th style="width:240px">Actions</th>
-              </tr>
-              <tr class="filter-row">
-                <th></th>
-                <th><input data-filter="title" placeholder="Filter title"/></th>
-                <th><input data-filter="author" placeholder="Filter author"/></th>
-                <th><input data-filter="category" placeholder="Filter category"/></th>
-                <th><input data-filter="date" placeholder="Filter date"/></th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody id="blog-tbody">
-              <tr><td colspan="6" class="center muted">No posts loaded</td></tr>
-            </tbody>
-          </table>
+        <div class="table-wrap">
+          <table id="table-admDemo"><thead></thead><tbody><tr><td class="muted center">Loading…</td></tr></tbody></table>
         </div>
+      </div>
 
-        <div class="pagination" id="blog-pagination" style="margin-top:10px"></div>
+      <!-- Contact Us -->
+      <div class="block">
+        <div class="subhead">
+          <h3>Contact Us Form Data</h3>
+          <div class="sub-actions">
+            <details class="cols has-tip" data-tip="Select columns to show/hide for a cleaner view">
+              <summary class="btn tiny ghost" aria-label="Toggle column visibility">Columns</summary>
+              <form class="col-filter" data-table="table-contact"></form>
+            </details>
+            <button class="btn tiny has-tip" id="refresh-contact" data-tip="Reload the latest Contact submissions">Refresh</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table id="table-contact"><thead></thead><tbody><tr><td class="muted center">Loading…</td></tr></tbody></table>
+        </div>
       </div>
     </section>
 
+    <!-- ================== Form CRM ================== -->
+    <section aria-labelledby="h-form">
+      <div class="h2-row"><h2 id="h-form">Form CRM</h2></div>
+      <div class="block">
+        <div class="subhead">
+          <h3>YCS Admissions</h3>
+          <div class="sub-actions">
+            <details class="cols has-tip" data-tip="Toggle visibility of any column in this sheet">
+              <summary class="btn tiny ghost" aria-label="Toggle column visibility">Columns</summary>
+              <form class="col-filter" data-table="table-ycs"></form>
+            </details>
+            <button class="btn tiny has-tip" id="refresh-ycs" data-tip="Reload the latest YCS Admissions data">Refresh</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table id="table-ycs"><thead></thead><tbody><tr><td class="muted center">Loading…</td></tr></tbody></table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================== Blogs ================== -->
+    <section aria-labelledby="h-blogs">
+      <div class="h2-row">
+        <h2 id="h-blogs">Blogs</h2>
+        <div class="h2-actions">
+          <a class="btn blog-editor-btn has-tip" href="/admin/blog-editor.html" title="Open Blog Editor" data-tip="Create or edit blog posts">Blog Editor</a>
+          <a class="btn blog-view-btn has-tip" href="/blog/index.html" title="Open public blog listing" data-tip="View your live Blogs page">View Blogs</a>
+        </div>
+      </div>
+      <div class="block">
+        <div class="subhead"><h3>Recent posts</h3></div>
+        <div class="blog-list" id="blog-list"></div>
+      </div>
+    </section>
   </main>
 
-  <div id="modal" style="display:none"></div>
+  <div class="img-modal" id="imgModal" aria-hidden="true">
+    <button class="close has-tip" aria-label="Close image preview" data-tip="Close the image preview">Close</button>
+    <img src="" alt="preview">
+  </div>
 
-  <script type="module" src="./adminapp.js"></script>
+  <div class="toast" id="toast">Copied</div>
+
+  <!-- Column Filter Script (no change) -->
+  <script>
+    const tables=['table-coupon','table-admDemo','table-contact','table-ycs'];
+    const styleBucket=document.createElement('style');
+    styleBucket.id='col-hide-rules';
+    document.head.appendChild(styleBucket);
+    function applyHiddenColumns(id,s){const p=[];s.forEach(i=>p.push(`#${id} th:nth-child(${i}),#${id} td:nth-child(${i}){display:none;}`));
+      const all=styleBucket.textContent.split('\n').filter(l=>!l.includes(`#${id} th:nth-child(`));all.push(p.join('\n'));styleBucket.textContent=all.join('\n');}
+    function buildFilterFor(id){const t=document.getElementById(id),f=document.querySelector(`.col-filter[data-table="${id}"]`);
+      if(!t||!f)return;const ths=[...t.querySelectorAll('thead th')];if(!ths.length)return;
+      const cur=[...f.querySelectorAll('input[type="checkbox"]')].map(i=>i.dataset.key),hdr=ths.map(th=>th.textContent.trim());
+      if(cur.length===hdr.length&&cur.every((k,i)=>k===hdr[i]))return;
+      f.innerHTML='';ths.forEach((th,i)=>{const l=th.textContent.trim()||`Column ${i+1}`,idc=`${id}-col-${i+1}`;
+        const w=document.createElement('label');w.className='col-check';
+        w.innerHTML=`<input type="checkbox" id="${idc}" data-key="${l}" data-idx="${i+1}" checked><span>${l}</span>`;f.appendChild(w);});
+      const h=new Set();applyHiddenColumns(id,h);
+      f.addEventListener('change',e=>{const cb=e.target;if(cb.matches('input[type="checkbox"]')){const i=+cb.dataset.idx;
+        if(cb.checked)h.delete(i);else h.add(i);applyHiddenColumns(id,h);}});}
+    const obs=new MutationObserver(()=>tables.forEach(buildFilterFor));obs.observe(document.body,{childList:true,subtree:true});
+    document.addEventListener('DOMContentLoaded',()=>tables.forEach(buildFilterFor));
+  </script>
+
+  <!-- Tooltip show-once -->
+  <script>
+    document.addEventListener('mouseenter',e=>{
+      const el=e.target.closest('.has-tip[data-tip]');if(!el)return;
+      if(!el.__tipSeen){el.__tipSeen=true;
+        el.addEventListener('mouseleave',function once(){el.removeAttribute('data-tip');el.classList.remove('has-tip');el.removeEventListener('mouseleave',once);},{once:true});}
+    },{capture:true});
+  </script>
+
+  <script type="module" src="/admin/adminapp.js?v=4"></script>
 </body>
 </html>
