@@ -81,12 +81,37 @@
 
   /* small inline row (for DOB + calendar button, phone + whatsapp checkbox) */
   .row-inline{display:flex;gap:10px;align-items:center}
+  /* default: children expand; we will explicitly set flex on specific children where needed */
   .row-inline > *{flex:1}
+  .row-inline .no-flex{flex:0 0 auto} /* helper to stop stretching (used for checkbox label) */
+
   .icon-btn{
     display:inline-flex;align-items:center;justify-content:center;padding:8px 10px;border-radius:10px;border:1.5px solid rgba(255,255,255,.12);
     background:rgba(255,255,255,.03);cursor:pointer;color:var(--white);
   }
   .icon-btn:active{transform:translateY(1px)}
+
+  /* small calendar popup (positioned relative to .row-inline container) */
+  .calendar {
+    position: absolute;
+    z-index: 9999;
+    background: var(--card);
+    border: 1px solid rgba(122,231,199,.18);
+    box-shadow: 0 12px 30px rgba(0,0,0,.5);
+    border-radius: 10px;
+    padding: 10px;
+    width: 320px;
+    color: var(--white);
+  }
+  .calendar .cal-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; gap:8px; }
+  .calendar .cal-head .nav { display:flex; align-items:center; gap:8px; }
+  .calendar .cal-head button { background:transparent; border:0; color:var(--lime); font-weight:800; cursor:pointer; padding:6px; border-radius:6px;}
+  .calendar .cal-head select { padding:6px 8px; border-radius:8px; min-width:120px; font-weight:700; }
+  .calendar .cal-grid { display:grid; grid-template-columns: repeat(7,1fr); gap:6px; }
+  .calendar .cal-grid .day { text-align:center; padding:8px 6px; border-radius:6px; cursor:pointer; user-select:none; font-weight:600; }
+  .calendar .cal-grid .day.disabled { opacity: .28; cursor:not-allowed; }
+  .calendar .cal-grid .day.today { box-shadow: inset 0 0 0 2px rgba(122,231,199,.12); }
+  .calendar .dow { text-align:center; font-size:12px; opacity:.7; padding-bottom:6px; }
 
   /* QR / Upload */
   .qr{text-align:center;margin-top:16px}
@@ -115,24 +140,12 @@
   .progress-meta{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:13px;color:var(--muted)}
   .progress-meta .percent{font-weight:800;color:var(--lime)}
 
-  /* --- Mobile polish for Terms & Conditions --- */
-@media (max-width: 640px) {
-  .tcs{
-    max-height: 58vh;
-    padding: 16px 14px;
-    background: rgba(255,255,255,.07);
-    border-radius: 12px;
+  /* responsive tweaks */
+  @media (max-width: 520px) {
+    .calendar { width: 92vw; left:4vw !important; right:4vw !important; }
+    .row-inline > *{flex:1 1 100%}
+    .row-inline .no-flex{flex:0 0 auto}
   }
-  #step-1 .actions{
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-    margin-top: 14px;
-  }
-  #step-1 .actions .btn{width: 100%;padding: 13px 16px;}
-}
-
-@media (max-width: 380px){ .card{ padding: 16px 12px; border-radius: 14px; } }
 
 </style>
 </head>
@@ -162,7 +175,7 @@
       <p class="lead">Please review carefully. You must accept to continue.</p>
 
       <div class="tcs" role="region" aria-label="Terms and Conditions">
-        <!-- (identical to original file — full terms restored) -->
+        <!-- Full terms exactly as before -->
         <h3>Rules regarding Batch hub and fee submission</h3>
         <ul>
           <li>Batch hub is a center place for all academy related resources including – Zoom Meeting link, Course sheets, Notices and more.</li>
@@ -209,7 +222,7 @@
       </p>
     </section>
 
-    <!-- STEP 2 — Your details (modified per your requests) -->
+    <!-- STEP 2 — Your details (modified) -->
     <section class="step" id="step-2">
       <h2>Step 2 — Your Details</h2>
       <p class="lead">Tell us a bit about you so we can place you well.</p>
@@ -228,43 +241,73 @@
 
           <div>
             <label>Date of Birth *</label>
-            <div class="row-inline">
-              <!-- keep mm/dd/yyyy format as original; we open native date input positioned next to button -->
-              <input id="dobText" name="dob" placeholder="mm/dd/yyyy" required pattern="^(0[1-9]|1[0-2])\/(0[1-9]|[12]\d|3[01])\/\d{4}$" title="mm/dd/yyyy">
+            <div class="row-inline" style="position:relative">
+              <!-- visible DOB expects dd/mm/yyyy now -->
+              <input id="dobText" name="dob" placeholder="dd/mm/yyyy" required pattern="^([0-3]\d)\/(0[1-9]|1[0-2])\/(\d{4}|\d{2})$" title="dd/mm/yyyy or dd/mm/yy" autocomplete="off">
               <button type="button" class="icon-btn" id="openDateBtn" title="Open calendar (also supports manual entry)">📅</button>
+
+              <!-- Calendar popup (positioned absolute relative to .row-inline container) -->
+              <div id="calendarPopup" class="calendar" style="display:none" aria-hidden="true" role="dialog" aria-label="Date picker">
+                <div class="cal-head">
+                  <div class="nav">
+                    <button type="button" id="prevMonth">&lt;</button>
+                  </div>
+                  <div style="display:flex;gap:8px;align-items:center">
+                    <select id="calMonthSelect" aria-label="Select month"></select>
+                    <select id="calYearSelect" aria-label="Select year"></select>
+                  </div>
+                  <div class="nav">
+                    <button type="button" id="nextMonth">&gt;</button>
+                  </div>
+                </div>
+                <div class="cal-grid" id="calDow">
+                  <!-- dow labels injected -->
+                </div>
+                <div class="cal-grid" id="calDays" style="margin-top:6px">
+                  <!-- days injected -->
+                </div>
+                <div style="margin-top:8px;text-align:center">
+                  <button type="button" id="calToday" class="btn ghost" style="padding:6px 10px;font-size:13px">Today</button>
+                </div>
+              </div>
             </div>
-            <!-- native date input (hidden by default) — it will be displayed next to the button when opened -->
-            <input type="date" id="hiddenDatePicker" style="position:absolute;left:-9999px;top:-9999px;" aria-hidden="true">
-            <div class="hint">Enter DOB as <strong>mm/dd/yyyy</strong> or use the calendar button.</div>
+
+            <div class="hint">Enter DOB as <strong>dd/mm/yyyy</strong> (or dd/mm/yy). Example: 05/11/2006 or 05/11/06</div>
           </div>
 
           <div>
             <label>Phone number *</label>
+            <!-- group phone input + checkbox label so checkbox stays next to input -->
             <div class="row-inline">
-              <input required name="phone" id="phone" type="tel" placeholder="+91xxxxxxxxxx" value="+91">
-              <label style="display:flex;align-items:center;gap:8px;margin:0;">
-                <!-- WhatsApp checkbox: NOT mutually exclusive; both may be checked -->
-                <input type="checkbox" id="phoneWhats" style="transform:scale(1.1);margin-right:6px">
-                <span style="display:inline-flex;align-items:center;gap:6px;color:var(--muted)">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.47-.148-.668.15-.197.297-.767.967-.94 1.164-.173.198-.347.223-.644.075-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.173.198-.297.297-.495.099-.198 0-.371-.05-.52-.05-.148-.668-1.611-.915-2.207-.242-.579-.487-.5-.668-.51l-.57-.01c-.197 0-.52.074-.793.371s-1.04 1.016-1.04 2.479 1.064 2.876 1.213 3.075c.149.198 2.095 3.2 5.076 4.487 0 0 .282.11.507.165.225.055.438.03.603.018.194-.014 1.722-.703 1.963-1.383.241-.681.241-1.264.168-1.383-.074-.119-.27-.198-.567-.347z" stroke="currentColor" stroke-width="0.6"/></svg>
-                  WhatsApp
-                </span>
+              <input required name="phone" id="phone" type="tel" placeholder="+91xxxxxxxxxx" value="+91" style="flex:1;">
+              <!-- label will not stretch because of .no-flex -->
+              <label class="no-flex" style="display:inline-flex;align-items:center;gap:8px;margin:0 0 0 8px;">
+                <input type="checkbox" id="phoneWhats" aria-label="WhatsApp number" title="WhatsApp" style="transform:scale(1.12);margin:0 6px 0 0;">
+                <!-- enlarged WhatsApp icon (2.5x) next to checkbox -->
+                <svg aria-hidden="true" width="55" height="55" viewBox="0 0 24 24" fill="none" style="color:#25D366;display:block;">
+                  <path fill="currentColor" d="M12.004 2.003a9.995 9.995 0 00-8.08 15.926l-1.01 3.692 3.785-1.006A10 10 0 1012.004 2.003zm0 1.8a8.2 8.2 0 11-5.812 14.02l-.405.108.254-.928A8.2 8.2 0 0112.004 3.803z"/>
+                  <path fill="#fff" d="M17.16 14.03c-.29-.15-1.7-.86-1.97-.96-.27-.1-.46-.15-.66.15-.19.29-.74.96-.91 1.16-.18.2-.36.22-.64.08-.27-.14-1.13-.46-2.16-1.49-.81-.72-1.36-1.62-1.51-1.91-.16-.29-.02-.45.12-.59.12-.12.29-.33.44-.5.16-.17.21-.29.31-.49.09-.2 0-.38-.04-.51-.04-.13-.66-1.61-.91-2.21-.24-.6-.48-.52-.66-.53l-.56-.01c-.19 0-.49.07-.75.36-.26.28-1.03 1.02-1.03 2.47 0 1.45 1.07 2.87 1.22 3.07.15.19 2.09 3.19 5.07 4.48 0 0 .28.11.51.16.22.05.44.03.6.02.19-.01 1.72-.7 1.96-1.38.24-.68.24-1.26.17-1.38-.07-.12-.27-.2-.56-.35z"/>
+                </svg>
               </label>
             </div>
           </div>
 
           <div>
-            <label>Alternate phone number *</label>
+            <label>Alternate phone number</label>
             <div class="row-inline">
-              <input required name="altPhone" id="altPhone" type="tel" placeholder="+91xxxxxxxxxx" value="+91">
-              <label style="display:flex;align-items:center;gap:8px;margin:0;">
-                <input type="checkbox" id="altPhoneWhats" style="transform:scale(1.1);margin-right:6px">
-                <span style="display:inline-flex;align-items:center;gap:6px;color:var(--muted)">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.47-.148-.668.15-.197.297-.767.967-.94 1.164-.173.198-.347.223-.644.075-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.173.198-.297.297-.495.099-.198 0-.371-.05-.52-.05-.148-.668-1.611-.915-2.207-.242-.579-.487-.5-.668-.51l-.57-.01c-.197 0-.52.074-.793.371s-1.04 1.016-1.04 2.479 1.064 2.876 1.213 3.075c.149.198 2.095 3.2 5.076 4.487 0 0 .282.11.507.165.225.055.438.03.603.018.194-.014 1.722-.703 1.963-1.383.241-.681.241-1.264.168-1.383-.074-.119-.27-.198-.567-.347z" stroke="currentColor" stroke-width="0.6"/></svg>
-                  WhatsApp
-                </span>
+              <!-- ALT phone is OPTIONAL (no required attribute) -->
+<input name="altPhone" id="altPhone" type="tel" placeholder="+91xxxxxxxxxx" style="flex:1;">
+
+              <label class="no-flex" style="display:inline-flex;align-items:center;gap:8px;margin:0 0 0 8px;">
+                <input type="checkbox" id="altPhoneWhats" aria-label="Alternate WhatsApp number" title="WhatsApp" style="transform:scale(1.12);margin:0 6px 0 0;">
+                <!-- enlarged WhatsApp icon (2.5x) next to checkbox -->
+                <svg aria-hidden="true" width="55" height="55" viewBox="0 0 24 24" fill="none" style="color:#25D366;display:block;">
+                  <path fill="currentColor" d="M12.004 2.003a9.995 9.995 0 00-8.08 15.926l-1.01 3.692 3.785-1.006A10 10 0 1012.004 2.003zm0 1.8a8.2 8.2 0 11-5.812 14.02l-.405.108.254-.928A8.2 8.2 0 0112.004 3.803z"/>
+                  <path fill="#fff" d="M17.16 14.03c-.29-.15-1.7-.86-1.97-.96-.27-.1-.46-.15-.66.15-.19.29-.74.96-.91 1.16-.18.2-.36.22-.64.08-.27-.14-1.13-.46-2.16-1.49-.81-.72-1.36-1.62-1.51-1.91-.16-.29-.02-.45.12-.59.12-.12.29-.33.44-.5.16-.17.21-.29.31-.49.09-.2 0-.38-.04-.51-.04-.13-.66-1.61-.91-2.21-.24-.6-.48-.52-.66-.53l-.56-.01c-.19 0-.49.07-.75.36-.26.28-1.03 1.02-1.03 2.47 0 1.45 1.07 2.87 1.22 3.07.15.19 2.09 3.19 5.07 4.48 0 0 .28.11.51.16.22.05.44.03.6.02.19-.01 1.72-.7 1.96-1.38.24-.68.24-1.26.17-1.38-.07-.12-.27-.2-.56-.35z"/>
+                </svg>
               </label>
             </div>
+            <div class="hint small-muted">Optional.</div>
           </div>
 
           <div>
@@ -320,6 +363,7 @@
         </div>
 
         <input type="hidden" name="course" value="">
+        <input type="hidden" name="dob_iso" id="dob_iso" value="">
 
         <div class="grid grid-1" style="margin-top:12px">
           <div>
@@ -385,21 +429,19 @@
 
 <script>
 'use strict';
-
 document.addEventListener('DOMContentLoaded', () => {
-  // <-- Use the Apps Script URL you provided -->
+
+  // Apps Script URL (keeps same)
   const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxkc16NSbVLNoDVqd-pqI7rhU9B4VBWNDkD0WZnhlzhhhuTujSWxd4lSBNXdAx-B9u2/exec';
 
-  // shorthand
   const $ = (s, r = document) => r.querySelector(s);
   const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
 
-  // elements
+  /* basic UI refs */
   const steps = $$('.step');
   const dots = $$('.dot');
   const acceptBtn = $('#acceptBtn');
   const declineBtn = $('#declineBtn');
-  const byeMsg = $('#byeMsg');
   const backBtns = $$('[data-back]');
   const toStep3Btn = $('#toStep3');
   const submitBtn = $('#submitAll');
@@ -408,10 +450,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const step2Error = $('#step2Error');
   const submitError = $('#submitError');
 
-  // step form elements
   const dobText = $('#dobText');
-  const hiddenDatePicker = $('#hiddenDatePicker');
+  const dobIsoInput = $('#dob_iso'); // hidden iso
   const openDateBtn = $('#openDateBtn');
+  const calendarPopup = $('#calendarPopup');
+  const prevMonthBtn = $('#prevMonth');
+  const nextMonthBtn = $('#nextMonth');
+  const calTitle = $('#calTitle');
+  const calDow = $('#calDow');
+  const calDays = $('#calDays');
+  const calTodayBtn = $('#calToday');
+  const calMonthSelect = $('#calMonthSelect');
+  const calYearSelect = $('#calYearSelect');
 
   const phone = $('#phone');
   const altPhone = $('#altPhone');
@@ -420,8 +470,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const guardianName = $('#guardianName');
   const discover = $('#discover');
   const discoverOther = $('#discoverOther');
-  const refName = $('#refName');
-  const refNumber = $('#refNumber'); // may not exist in this version; fine if null
 
   const paymentScreenshot = $('#paymentScreenshot');
   const uploadProgress = $('#uploadProgress');
@@ -429,6 +477,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const progressPercent = $('#progressPercent');
   const progressStatus = $('#progressStatus');
 
+  /* steps control (unchanged behaviour) */
   let stepIndex = 0;
   function setStep(i){
     steps.forEach((s,idx)=> s.classList.toggle('active', idx===i));
@@ -436,19 +485,16 @@ document.addEventListener('DOMContentLoaded', () => {
     stepIndex = i;
     window.scrollTo({ top:0, behavior:'smooth' });
   }
-
-  // initial
   setStep(0);
-
   acceptBtn?.addEventListener('click', ()=> setStep(1));
   declineBtn?.addEventListener('click', ()=> {
+    const byeMsg = $('#byeMsg');
     if (byeMsg) byeMsg.style.display = 'block';
-    // preserve original behaviour (you had a friendly message)
-    setTimeout(()=> location.href = '/', 1500);
+    setTimeout(()=> location.href = '/', 1200);
   });
   backBtns.forEach(b=> b.addEventListener('click', ()=> setStep(Math.max(0, stepIndex-1))));
 
-  // Discover select toggles
+  // discover toggles (unchanged)
   discover?.addEventListener('change', ()=>{
     if (!discoverOther) return;
     if (discover.value === 'from someone' || discover.value === 'other') {
@@ -461,86 +507,218 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Set max on date picker (today) and prepare positioning logic
-  (function setMaxDate(){
-    const d = new Date();
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth()+1).padStart(2,'0');
-    const dd = String(d.getDate()).padStart(2,'0');
-    hiddenDatePicker.max = `${yyyy}-${mm}-${dd}`;
-  })();
+  /* --------------- Custom Calendar Popup --------------- */
+  // State for calendar
+  const now = new Date();
+  let calYear = now.getFullYear();
+  let calMonth = now.getMonth(); // 0-11
 
-  // When calendar button clicked, position the hidden date input next to the button then focus it.
-  openDateBtn?.addEventListener('click', (ev) => {
-    try {
-      // position next to button for better UX (avoid top-left)
-      const btnRect = openDateBtn.getBoundingClientRect();
-      const docEl = document.documentElement;
-      // calculate absolute page coords
-      const left = Math.max(8, btnRect.left + window.scrollX);
-      const top = Math.max(8, btnRect.bottom + window.scrollY + 4);
-      hiddenDatePicker.style.position = 'absolute';
-      hiddenDatePicker.style.left = left + 'px';
-      hiddenDatePicker.style.top = top + 'px';
-      hiddenDatePicker.style.zIndex = 9999;
-      hiddenDatePicker.style.display = 'block';
+  // Max date = today
+  const maxDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  function isSameDate(a,b){ return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate(); }
 
-      // sync value if dobText parseable (mm/dd/yyyy)
-      const parts = (dobText.value || '').split('/');
-      if (parts.length === 3) {
-        const mm = parts[0].padStart(2,'0');
-        const dd = parts[1].padStart(2,'0');
-        const yyyy = parts[2];
-        if (/^\d{4}$/.test(yyyy)) hiddenDatePicker.value = `${yyyy}-${mm}-${dd}`;
+  function pad(n){ return String(n).padStart(2,'0'); }
+
+  function renderDow(){
+    const labels = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    calDow.innerHTML = '';
+    labels.forEach(l=>{
+      const el = document.createElement('div');
+      el.className = 'dow';
+      el.textContent = l;
+      calDow.appendChild(el);
+    });
+  }
+
+  // populate month and year selects
+  function populateMonthYearSelectors(year, month){
+    // months
+    const monthNames = Array.from({length:12}, (_,i)=> new Date(0, i).toLocaleString(undefined,{month:'long'}));
+    calMonthSelect.innerHTML = '';
+    monthNames.forEach((m, idx)=>{
+      const opt = document.createElement('option');
+      opt.value = idx;
+      opt.textContent = m;
+      calMonthSelect.appendChild(opt);
+    });
+    calMonthSelect.value = month;
+
+    // years: 1900 .. currentYear
+    calYearSelect.innerHTML = '';
+    const currentYear = now.getFullYear();
+    for(let y = currentYear; y >= 1900; y--){
+      const opt = document.createElement('option');
+      opt.value = y;
+      opt.textContent = y;
+      calYearSelect.appendChild(opt);
+    }
+    calYearSelect.value = year;
+  }
+
+  function renderCalendar(year,month){
+    calDays.innerHTML = '';
+    // title shown in month/year selectors instead of calTitle
+    // set calTitle for legacy but we use selectors primarily
+    if (calTitle) calTitle.textContent = `${new Date(year,month,1).toLocaleString(undefined,{month:'long'})} ${year}`;
+
+    // first day of month weekday
+    const first = new Date(year, month, 1);
+    const startDow = first.getDay(); // 0-6
+    // days in month
+    const daysInMonth = new Date(year, month+1, 0).getDate();
+
+    // fill blanks for previous month slots
+    for(let i=0;i<startDow;i++){
+      const blank = document.createElement('div');
+      blank.className = 'day.disabled';
+      blank.className = 'day disabled';
+      calDays.appendChild(blank);
+    }
+
+    for(let d=1; d<=daysInMonth; d++){
+      const dt = new Date(year, month, d);
+      const dayEl = document.createElement('div');
+      dayEl.className = 'day';
+      dayEl.textContent = d;
+      // disable future dates
+      if (dt.getTime() > maxDate.getTime()) {
+        dayEl.classList.add('disabled');
+      } else {
+        // clickable
+        dayEl.addEventListener('click', (ev)=>{
+          ev.stopPropagation();
+          chooseDate(dt);
+        });
       }
-
-      hiddenDatePicker.focus();
-      // some browsers have showPicker()
-      if (typeof hiddenDatePicker.showPicker === 'function') try { hiddenDatePicker.showPicker(); } catch(e){}
-    } catch (e) {
-      // fallback: just focus
-      hiddenDatePicker.style.display = 'block';
-      hiddenDatePicker.focus();
+      // mark today
+      if (isSameDate(dt, now)) dayEl.classList.add('today');
+      calDays.appendChild(dayEl);
     }
-  });
+  }
 
-  // When hidden date changed, write to visible dobText in mm/dd/yyyy format then hide native input
-  hiddenDatePicker?.addEventListener('change', ()=>{
-    const v = hiddenDatePicker.value; // yyyy-mm-dd
-    if (v && /^\d{4}-\d{2}-\d{2}$/.test(v)) {
-      const [y,m,d] = v.split('-');
-      dobText.value = `${m}/${d}/${y}`;
-    }
-    // hide and reset position to off-screen
-    hiddenDatePicker.style.display = 'none';
-    hiddenDatePicker.style.left = '-9999px';
-    hiddenDatePicker.style.top = '-9999px';
+  function chooseDate(dt){
+    // fill visible dd/mm/yyyy and iso hidden
+    dobText.value = `${pad(dt.getDate())}/${pad(dt.getMonth()+1)}/${dt.getFullYear()}`;
+    dobIsoInput.value = `${dt.getFullYear()}-${pad(dt.getMonth()+1)}-${pad(dt.getDate())}`;
+    closeCalendar();
     handleDobChange();
+  }
+
+  function openCalendar(){
+    // since calendarPopup is inside the .row-inline (position:relative)
+    // position it directly below the dob input
+    try {
+      const container = dobText.closest('.row-inline');
+      if (container) {
+        // show first to calculate dimensions
+        calendarPopup.style.display = 'block';
+        calendarPopup.style.left = `${dobText.offsetLeft}px`;
+        const topPos = dobText.offsetTop + dobText.offsetHeight + 8;
+        calendarPopup.style.top = `${topPos}px`;
+      } else {
+        // fallback to visible
+        calendarPopup.style.display = 'block';
+      }
+    } catch (e) {
+      calendarPopup.style.display = 'block';
+    }
+
+    // set selectors
+    populateMonthYearSelectors(calYear, calMonth);
+    renderDow();
+    renderCalendar(calYear, calMonth);
+
+    // add document click handler to close when clicking outside
+    setTimeout(()=> { document.addEventListener('pointerdown', outsideCalendarHandler); }, 10);
+  }
+  function closeCalendar(){
+    calendarPopup.style.display = 'none';
+    document.removeEventListener('pointerdown', outsideCalendarHandler);
+  }
+  function outsideCalendarHandler(ev){
+    if (!calendarPopup.contains(ev.target) && ev.target !== openDateBtn && ev.target !== dobText) closeCalendar();
+  }
+
+  // prev/next month
+  prevMonthBtn?.addEventListener('click', ()=>{
+    calMonth--;
+    if (calMonth < 0) { calMonth = 11; calYear--; }
+    if (calYear < 1900) calYear = 1900;
+    populateMonthYearSelectors(calYear, calMonth);
+    renderCalendar(calYear, calMonth);
+  });
+  nextMonthBtn?.addEventListener('click', ()=>{
+    calMonth++;
+    if (calMonth > 11) { calMonth = 0; calYear++; }
+    if (calYear > now.getFullYear()) calYear = now.getFullYear();
+    populateMonthYearSelectors(calYear, calMonth);
+    renderCalendar(calYear, calMonth);
   });
 
-  // hide native picker on blur (in case)
-  hiddenDatePicker?.addEventListener('blur', ()=>{
-    setTimeout(()=> {
-      hiddenDatePicker.style.display = 'none';
-      hiddenDatePicker.style.left = '-9999px';
-      hiddenDatePicker.style.top = '-9999px';
-      handleDobChange();
-    }, 150);
+  // month/year select change handlers
+  calMonthSelect?.addEventListener('change', (e)=>{
+    const m = Number(e.target.value);
+    calMonth = m;
+    renderCalendar(calYear, calMonth);
+  });
+  calYearSelect?.addEventListener('change', (e)=>{
+    const y = Number(e.target.value);
+    calYear = y;
+    // clamp month/year if future
+    if (calYear === now.getFullYear() && calMonth > now.getMonth()) calMonth = now.getMonth();
+    renderCalendar(calYear, calMonth);
   });
 
-  // parse helper for mm/dd/yyyy or mm/d/yyyy etc.
+  // Today button
+  calTodayBtn?.addEventListener('click', ()=>{
+    chooseDate(now);
+  });
+
+  // Open calendar on button click
+  openDateBtn?.addEventListener('click', (ev)=>{
+    ev.preventDefault();
+    // set to currently entered date if valid, else to today
+    const parsed = parseDobString(dobText.value || '');
+    if (parsed) { calYear = parsed.year; calMonth = parsed.month - 1; }
+    else { calYear = now.getFullYear(); calMonth = now.getMonth(); }
+    openCalendar();
+  });
+
+  // When user manually types and leaves field, normalize and set hidden iso
   function parseDobString(s){
     if (!s) return null;
-    const m = String(s).trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    s = s.trim();
+    const m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2}|\d{4})$/);
     if (!m) return null;
-    const mm = Number(m[1]), dd = Number(m[2]), yyyy = Number(m[3]);
+    let dd = Number(m[1]), mm = Number(m[2]), yy = m[3];
     if (mm < 1 || mm > 12 || dd < 1 || dd > 31) return null;
+    let yyyy = (yy.length === 2) ? ((Number(yy) > 30) ? 1900 + Number(yy) : 2000 + Number(yy)) : Number(yy);
     return { day: dd, month: mm, year: yyyy };
   }
+  function handleDobChange(){
+    const p = parseDobString(dobText.value || '');
+    if (p) {
+      const dt = new Date(p.year, p.month -1, p.day);
+      // if future, mark error and clear iso
+      if (dt.getTime() > maxDate.getTime()) {
+        dobIsoInput.value = '';
+      } else {
+        dobIsoInput.value = `${p.year}-${pad(p.month)}-${pad(p.day)}`;
+      }
+    } else {
+      dobIsoInput.value = '';
+    }
+    // Guardian required only if <18
+    const age = dobToAge(dobText.value || '');
+    if (age !== null && age < 18) guardianName.required = true;
+    else guardianName.required = false;
+  }
+
+  // helper to compute age (dd/mm/yyyy or dd/mm/yy)
   function dobToAge(dstr){
     const p = parseDobString(dstr);
     if (!p) return null;
-    const dob = new Date(p.year, p.month - 1, p.day);
+    const dob = new Date(p.year, p.month -1, p.day);
     const now = new Date();
     let age = now.getFullYear() - dob.getFullYear();
     const m = now.getMonth() - dob.getMonth();
@@ -548,19 +726,16 @@ document.addEventListener('DOMContentLoaded', () => {
     return age;
   }
 
-  function handleDobChange(){
-    const age = dobToAge(dobText.value || '');
-    if (age !== null && age < 18) guardianName.required = true;
-    else guardianName.required = false;
-  }
-  dobText?.addEventListener('blur', ()=> {
-    // normalize format to mm/dd/yyyy if possible
-    const p = parseDobString(dobText.value);
-    if (p) dobText.value = `${String(p.month).padStart(2,'0')}/${String(p.day).padStart(2,'0')}/${p.year}`;
+  // When user edits dob text manually and blurs, normalize format
+  dobText?.addEventListener('blur', ()=>{
+    const p = parseDobString(dobText.value || '');
+    if (p) {
+      dobText.value = `${pad(p.day)}/${pad(p.month)}/${p.year}`;
+    }
     handleDobChange();
   });
 
-  // Phone inputs default +91 behavior
+  /* -------------- phone auto + basic validation (untouched except small improvements) -------------- */
   function wirePhoneAuto(el){
     if (!el) return;
     el.addEventListener('focus', ()=>{
@@ -572,13 +747,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   wirePhoneAuto(phone);
   wirePhoneAuto(altPhone);
-  if (refNumber) wirePhoneAuto(refNumber);
 
-  // Validation for Step 2: (only changed step 2 logic per your request)
   function isValidPhone(num){
     if (!num) return false;
     const cleaned = String(num).replace(/[^\d+]/g,'');
-    // allow country code or just digits; require at least 10 digits
     const digits = cleaned.replace(/[^\d]/g,'');
     return digits.length >= 10 && digits.length <= 15;
   }
@@ -587,15 +759,16 @@ document.addEventListener('DOMContentLoaded', () => {
     return /^[A-Za-z0-9._%+-]+@gmail\.com$/i.test(email.trim());
   }
 
+  /* Ensure altPhone is explicitly optional (safety) */
+  if (altPhone) altPhone.required = false;
+
+  /* -------------- Step 2 validation rules (updated: alt phone optional and checkbox handling) -------------- */
   function validateStep2(){
-    // clear errors
     step2Error.style.display = 'none';
     Array.from(form.elements).forEach(el => el.classList?.remove('error'));
-
     let ok = true;
 
-    // required fields: follow original plus your requirements (altPhone required)
-    const requiredNames = ['fullName','dob','phone','altPhone','gmail','address','learnedBefore','haveGuitar','discover'];
+    const requiredNames = ['fullName','dob','phone','gmail','address','learnedBefore','haveGuitar','discover'];
     for (const name of requiredNames){
       const el = form.elements[name];
       if (!el || !el.value || String(el.value).trim() === '') {
@@ -604,17 +777,16 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // DOB format and not future
+    // dob parse and not future
     const dobVal = form.elements['dob']?.value || '';
     const parsed = parseDobString(dobVal);
     if (!parsed) { dobText.classList.add('error'); ok = false; }
     else {
-      // ensure not in future
       const dobIso = new Date(parsed.year, parsed.month - 1, parsed.day);
       if (dobIso.getTime() > Date.now()) { dobText.classList.add('error'); ok = false; }
     }
 
-    // guardian required if under 18
+    // guardian required only if under 18
     const age = dobToAge(dobVal);
     if (age !== null && age < 18) {
       if (!guardianName.value || guardianName.value.trim() === '') {
@@ -622,25 +794,25 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // phone formats
+    // phone formats: primary is required and validated; alt optional (if filled validate)
     if (!isValidPhone(phone.value)) { phone.classList.add('error'); ok = false; }
-    if (!isValidPhone(altPhone.value)) { altPhone.classList.add('error'); ok = false; }
+    if (altPhone && altPhone.value && altPhone.value.trim() !== '' && !isValidPhone(altPhone.value)) { altPhone.classList.add('error'); ok = false; }
 
-    // WhatsApp: at least one must be checked — both allowed
+    // WhatsApp: at least one must be checked (both allowed)
     if (!phoneWhats.checked && !altPhoneWhats.checked) {
-      // mark phones as error visually
-      phone.classList.add('error'); altPhone.classList.add('error');
-      step2Error.textContent = 'Please select at least one WhatsApp number. Your YCS updates will be sent there.';
+      // highlight only primary phone to indicate area to act on; do not force altPhone to be filled
+      phone.classList.add('error');
+      step2Error.textContent = 'Please select at least one WhatsApp number (primary or alternate).';
       step2Error.style.display = 'block';
       ok = false;
     }
 
-    // Gmail must be a gmail address
+    // Gmail check
     if (!isGmail(form.elements['gmail']?.value || '')) {
       (form.elements['gmail'])?.classList.add('error'); ok = false;
     }
 
-    // discover extra required if selected
+    // discover details if required
     const disc = discover?.value || '';
     if ((disc === 'from someone' || disc === 'other') && (!discoverOther || !discoverOther.value || discoverOther.value.trim() === '')) {
       discoverOther.classList.add('error'); ok = false;
@@ -653,12 +825,11 @@ document.addEventListener('DOMContentLoaded', () => {
     return ok;
   }
 
-  // Move to step 3 on continue click (only after validation)
   toStep3Btn?.addEventListener('click', ()=> {
     if (validateStep2()) setStep(2);
   });
 
-  // helper: read file as base64
+  /* -------------- Submission (unchanged behaviour, adds dob_iso already present) -------------- */
   function readAsBase64(file){ return new Promise((res, rej)=>{
     const r = new FileReader();
     r.onload = () => {
@@ -670,32 +841,24 @@ document.addEventListener('DOMContentLoaded', () => {
     r.readAsDataURL(file);
   }); }
 
-  // Submit handler (Step 3 -> POST to Apps Script) with progress animation and in-page final message (same as original)
   submitBtn?.addEventListener('click', async () => {
-    // clear errors
     submitError.style.display = 'none';
     submitError.textContent = '';
 
-    // require screenshot
     if (!paymentScreenshot.files || !paymentScreenshot.files.length) {
       submitError.textContent = 'Please upload the payment screenshot.';
       submitError.style.display = 'block';
       return;
     }
 
-    // re-validate Step 2 before submit (in case user jumped)
-    if (!validateStep2()) {
-      return;
-    }
+    if (!validateStep2()) return;
 
-    // build FormData
     const fd = new FormData();
 
-    // append form fields (only inputs with name)
+    // append form fields
     for (const el of form.elements) {
       if (!el || !el.name) continue;
       if (el.type === 'checkbox') {
-        // send yes/no flags for WhatsApp checkboxes
         if (el.id === 'phoneWhats') fd.set('phoneWhatsChecked', el.checked ? 'yes' : 'no');
         else if (el.id === 'altPhoneWhats') fd.set('altPhoneWhatsChecked', el.checked ? 'yes' : 'no');
         else fd.set(el.name, el.checked ? (el.value || 'on') : 'off');
@@ -704,26 +867,24 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // sanitize phone values (keep + and digits)
+    // sanitize phones
     function sanitizePhone(v){ if (!v) return ''; return (''+v).replace(/[^\d+]/g,''); }
     fd.set('phone', sanitizePhone(phone.value));
     fd.set('altPhone', sanitizePhone(altPhone.value));
 
-    // pick whatsappNumber: prefer primary phone if checked, else alt
+    // whatsappNumber (prefer primary if checked else alt)
     let whatsappNumber = '';
     if (phoneWhats.checked) whatsappNumber = sanitizePhone(phone.value);
     else if (altPhoneWhats.checked) whatsappNumber = sanitizePhone(altPhone.value);
     fd.set('whatsappNumber', whatsappNumber);
 
-    // set dob_iso for Apps Script from mm/dd/yyyy to yyyy-mm-dd
-    const dobVal = form.elements['dob']?.value || '';
-    const pd = parseDobString(dobVal);
-    if (pd) fd.set('dob_iso', `${pd.year}-${String(pd.month).padStart(2,'0')}-${String(pd.day).padStart(2,'0')}`);
+    // dob_iso already set by calendar or manual parse
+    if (!fd.has('dob_iso')) {
+      fd.set('dob_iso', dobIsoInput.value || '');
+    }
 
-    // ensure course param exists (empty) so Apps Script keeps column order
     if (!fd.has('course')) fd.set('course', '');
 
-    // attach file and base64 fallback
     const file = paymentScreenshot.files[0];
     fd.append('paymentScreenshot', file, file.name || 'upload.jpg');
     try {
@@ -731,9 +892,7 @@ document.addEventListener('DOMContentLoaded', () => {
       fd.set('paymentScreenshot_b64', b64);
       fd.set('paymentScreenshot_name', file.name || '');
       fd.set('paymentScreenshot_type', file.type || 'image/jpeg');
-    } catch (e) {
-      console.warn('Base64 conversion failed', e);
-    }
+    } catch (e) { console.warn('Base64 conversion failed', e); }
 
     // UI: progress
     uploadProgress.style.display = 'block';
@@ -744,7 +903,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const oldBtnText = submitBtn.textContent;
     submitBtn.textContent = 'Uploading…';
 
-    // simulate smooth progress while waiting (cap)
+    // simulate progress
     let simulated = 0;
     let running = true;
     const start = performance.now();
@@ -767,7 +926,7 @@ document.addEventListener('DOMContentLoaded', () => {
         throw new Error(json.message || 'Submission failed');
       }
 
-      // finish progress to 100
+      // finish to 100 and show step 4
       running = false;
       let pct = simulated;
       function finish(){
@@ -777,23 +936,12 @@ document.addEventListener('DOMContentLoaded', () => {
         progressStatus.textContent = pct < 100 ? 'Processing…' : 'Done ✓';
         if (pct < 100) requestAnimationFrame(finish);
         else {
-          // success -> show step 4 message (same as original)
-          // if server returned fileUrl include view link (non-invasive)
-          const fileUrl = json.fileUrl || json.file_url || '';
-          if (fileUrl) {
-            // we keep Step 4 content same; but provide a view link above it (non-intrusive)
-            // show the next step
-            setStep(3);
-            // optionally show small link inside step 4 (not required)
-          } else {
-            setStep(3);
-          }
           submitBtn.disabled = false;
           submitBtn.textContent = oldBtnText;
+          setStep(3);
         }
       }
       requestAnimationFrame(finish);
-
     } catch (err) {
       running = false;
       console.error(err);
@@ -805,6 +953,11 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
   });
+
+  // initialize calendar (render once)
+  populateMonthYearSelectors(calYear, calMonth);
+  renderDow();
+  renderCalendar(calYear, calMonth);
 
 });
 </script>
