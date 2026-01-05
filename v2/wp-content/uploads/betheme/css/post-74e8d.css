@@ -1700,7 +1700,7 @@
 .mcb-section-f64a4cf44 .progress_bars .bars_list li h6 .label,
 .mcb-section-f64a4cf44 .progress_bars .bars_list li h6 .label em {
   color: rgb(122, 231, 199) !important; /* mint green */
-  font-size: 13px !important;           /* subtle bump (was 11px) */
+  font-size: 11px !important;           /* subtle bump (was 11px) */
   line-height: 19px !important;
   font-weight: 700 !important;
 }
@@ -1847,7 +1847,8 @@
   
   padding: 10px 0 6px !important;
   margin: 0 0 6px !important;
-  line-height: 1.22 !important;
+  line-height: 1 !important;
+  font-size: 18px;
 
 }
 
@@ -2310,4 +2311,142 @@ html { overflow-y: scroll; }
     min-height: 750px !important;
     height: 750px !important;
   }
+}
+
+/* =====================================================
+   GLOBAL TYPOGRAPHY — FINAL, HERO-SAFE
+   ===================================================== */
+
+/* 1. Main font */
+:root {
+  --font-main: "Inter", -apple-system, BlinkMacSystemFont,
+               "Segoe UI", Roboto, Oxygen-Sans, Ubuntu,
+               Cantarell, "Helvetica Neue", sans-serif;
+}
+
+/* =====================================================
+   2. APPLY FONT ONLY TO NORMAL SITE CONTENT
+   (Hero / Slider automatically excluded)
+   ===================================================== */
+
+#Content,
+.mcb-section,
+.mcb-column,
+.mcb-wrap,
+#Content p,
+#Content li,
+#Content blockquote,
+#Content h1,
+#Content h2,
+#Content h3,
+#Content h4,
+#Content h5,
+#Content h6,
+#Content button,
+#Content input,
+#Content textarea,
+#Content select {
+  font-family: var(--font-main);
+}
+
+/* =====================================================
+   3. SIZE NORMALIZATION (compensates for bigger feel)
+   ===================================================== */
+
+/* Slightly smaller base text */
+#Content {
+  font-size: 15px;        /* was ~16px */
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+/* Headings scaled down proportionally */
+#Content h1 {
+  font-size: clamp(40px, 5vw, 64px);
+  line-height: 1.1;
+  font-weight: 600;
+}
+
+#Content h2 {
+  font-size: clamp(32px, 4vw, 42px);
+  line-height: 1.15;
+  font-weight: 600;
+}
+
+#Content h3 {
+ 
+  line-height: 1.2;
+  font-weight: 500;
+}
+
+#Content h4 {
+  font-size: 20px;
+  line-height: 1.3;
+  font-weight: 500;
+}
+
+#Content h5 {
+  font-size: 17px;
+  line-height: 1.4;
+}
+
+#Content h6 {
+  font-size: 12px;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* =====================================================
+   4. BUTTONS & UI TEXT (slightly tighter)
+   ===================================================== */
+
+#Content button,
+#Content .action_button,
+#Content input[type="submit"] {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* =====================================================
+   5. LONG TEXT / PARAGRAPH HEAVY SECTIONS
+   ===================================================== */
+
+#Content p {
+  margin-bottom: 0.9em;
+}
+
+/* =====================================================
+   6. ICON FONTS — NEVER TOUCH
+   ===================================================== */
+
+.material-symbols-outlined {
+  font-family: "Material Symbols Outlined" !important;
+}
+
+.fa,
+.fas,
+.far,
+.fab {
+  font-family: "Font Awesome 5 Free", "Font Awesome 5 Brands" !important;
+  font-weight: 900;
+}
+
+.mfn-icons,
+[class^="icon-"],
+[class*=" icon-"] {
+  font-family: inherit !important;
+}
+/* =====================================================
+   ACADEMY TIMELINE (ACCORDION)
+   Past / Present / Future
+   ===================================================== */
+
+/* Make Past / Present / Future smaller & underlined */
+.accordion > h3 {
+  font-size: 15px;          /* same as timeline paragraph text */
+  line-height: 1.4;
+  font-weight: 500;
+   margin-bottom: 6px;
 }
