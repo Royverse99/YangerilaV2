@@ -1833,9 +1833,9 @@
   letter-spacing: -1px;
 }
 .wrap.mcb-wrap-d6a755a44 .column_attr p {
-  font-size: clamp(15.5px, 1.35vw, 17px) !important;
-  line-height: 1.2 !important;    /* slightly tighter per request */
-  margin: 0 0 0.8em 0 !important;
+  font-size: clamp(15px, 1.25vw, 16.5px) !important;
+  line-height: 1.3 !important;    /* slightly tighter per request */
+  margin: 0 0 0.75em 0 !important;
   letter-spacing: 0.1px !important;
   text-align: left !important;
   white-space: normal !important; /* no special wrapping helpers */
@@ -2393,8 +2393,7 @@ html { overflow-y: scroll; }
 #Content h6 {
   font-size: 12px;
   line-height: 1.4;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+
 }
 
 /* =====================================================
