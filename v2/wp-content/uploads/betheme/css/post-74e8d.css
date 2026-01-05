@@ -486,8 +486,8 @@
 
 /* Updated styles for the four specific course titles: increase size and align top */
 .course-card .column_heading .title.course-title {
-  font-size: 2.5rem !important; /* close to H1 size */
-  font-weight: 900 !important;
+  font-size: 2.2rem !important; /* close to H1 size */
+  font-weight: 800 !important;
   text-align: center;
   color: #17c4b8 !important;
   margin-bottom: 0.5rem !important;
